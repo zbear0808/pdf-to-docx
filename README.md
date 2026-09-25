@@ -176,8 +176,8 @@ uv run python -m pdf_to_latex render-pages document.pdf -o ./rendered_pages
 # 3. Parse single page into PageSpec JSON with LaTeX math & crop assets (used by subagents)
 uv run python -m pdf_to_latex parse-page document.pdf --page 1 --image ./rendered_pages/page_1.png -o .conversion_workspace/page_1_spec.json --assets-dir ./assets
 
-# 4. Compile all isolated page specs into a complete LaTeX document (.tex) and PDF
-uv run python scripts/pdf_to_latex/compile_pages.py .conversion_workspace/ -o document.tex --title "Document Title" --doc-class article --pdf
+# 4. Compile all isolated page specs into a complete LaTeX document (.tex) and PDF (optionally saving merged AST)
+uv run python scripts/pdf_to_latex/compile_pages.py .conversion_workspace/ -o document.tex --title "Document Title" --doc-class article --pdf --save-ast
 
 # 4b. Compile with Exam / Quiz class (for worksheets, problem sets, and tests)
 uv run python scripts/pdf_to_latex/compile_pages.py .conversion_workspace/ -o quiz.tex --title "AP Statistics Quiz" --doc-class exam --pdf
@@ -194,8 +194,8 @@ uv run python scripts/pdf_to_latex/compile_latex.py document.tex -o output.pdf
 # 8. Visual Diff: Compare compiled LaTeX PDF against original rendered PNG
 uv run python scripts/pdf_to_latex/diff_layout.py rendered_pages/page_1.png output.pdf --page 1 -o visual_diff_p1.png
 
-# 9. Autonomous End-to-End Conversion Pipeline
-uv run python scripts/pdf_to_latex/convert.py document.pdf -o document.tex --doc-class article --pdf
+# 9. Autonomous End-to-End Conversion Pipeline (with independent workspace directory & AST export)
+uv run python scripts/pdf_to_latex/convert.py document.pdf -o document.tex --doc-class article --pdf --save-ast
 ```
 
 ### DOCX Workflow (`pdf-to-docx` CLI)
@@ -204,14 +204,14 @@ uv run python scripts/pdf_to_latex/convert.py document.pdf -o document.tex --doc
 # 1. Inspect PDF structure and page dimensions
 uv run python -m pdf_to_docx info document.pdf
 
-# 2. Render all pages to high-res PNG
+# 2. Render all pages to high-res PNG (automatically isolated per document)
 uv run python -m pdf_to_docx render-pages document.pdf -o ./rendered_pages
 
 # 3. Parse a single page into PageSpec JSON and auto-crop assets
 uv run python -m pdf_to_docx parse-page document.pdf --page 1 --image ./rendered_pages/orig_p1.png -o .conversion_workspace/page_1_spec.json --assets-dir ./assets
 
-# 4. Compile all isolated page specs in a workspace into a unified Word document
-uv run python -m pdf_to_docx compile-pages .conversion_workspace/ -o output.docx --title "Document Title"
+# 4. Compile all isolated page specs in a workspace into a unified Word document (with optional AST export)
+uv run python -m pdf_to_docx compile-pages .conversion_workspace/ -o output.docx --title "Document Title" --save-ast
 
 # 5. Fast-track single-page Markdown extraction
 uv run python -m pdf_to_docx to-markdown-page document.pdf --page 1 -o .conversion_workspace/page_1.md
@@ -219,8 +219,8 @@ uv run python -m pdf_to_docx to-markdown-page document.pdf --page 1 -o .conversi
 # 6. Merge page Markdown files into a single unified document
 uv run python -m pdf_to_docx merge-markdown .conversion_workspace/ -o document.md
 
-# 7. Autonomous End-to-End Word Conversion
-uv run python -m pdf_to_docx convert document.pdf -o output.docx --diff
+# 7. Autonomous End-to-End Word Conversion (with independent workspace & optional AST export)
+uv run python -m pdf_to_docx convert document.pdf -o output.docx --diff --save-ast
 ```
 
 ---

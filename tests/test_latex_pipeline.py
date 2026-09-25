@@ -165,8 +165,11 @@ def test_exam_quiz_compilation():
 
 
 def test_subagent_workspace_merge_and_compile():
-    workspace = Path("test_output/latex_workspace")
+    report_dir = Path("test_output/latex_subagent_report")
+    workspace = report_dir / "workspace"
+    assets_dir = report_dir / "assets"
     workspace.mkdir(parents=True, exist_ok=True)
+    assets_dir.mkdir(parents=True, exist_ok=True)
 
     # Page 1 spec (simulated subagent output)
     p1 = PageSpec(
@@ -205,9 +208,9 @@ def test_subagent_workspace_merge_and_compile():
     ]
     doc_spec = DocumentSpec(title="Assembled Subagent Report", pages=loaded_pages)
 
-    out_tex = Path("test_output/compiled_subagent_latex.tex")
+    out_tex = report_dir / "compiled_subagent_latex.tex"
     compiler = LatexCompiler(doc_spec)
-    compiled = compiler.compile(out_tex)
+    compiled = compiler.compile(out_tex, assets_dir=assets_dir)
 
     assert compiled.exists()
     content = compiled.read_text(encoding="utf-8")

@@ -109,10 +109,10 @@ uv run python -m pdf_to_latex to-latex-page path/to/document.pdf --page {k} --im
 Once all page subagents report completion:
 
 #### For Pathway 1 (Block-Based IR):
-The orchestrator compiles the assembled `page_*_spec.json` files directly into `.tex` and optionally `.pdf`:
+The orchestrator compiles the assembled `page_*_spec.json` files directly into `.tex` and optionally `.pdf` (with optional `--save-ast` to export the DocumentSpec AST):
 
 ```bash
-uv run python scripts/pdf_to_latex/compile_pages.py .conversion_workspace/ -o document.tex --title "Document Title" --doc-class article --pdf
+uv run python scripts/pdf_to_latex/compile_pages.py .conversion_workspace/ -o document.tex --title "Document Title" --doc-class article --pdf --save-ast
 ```
 
 Available document classes:

@@ -793,10 +793,14 @@ def main():
     out_docx = Path("tests/stats merged quiz unit 1.docx")
     compile_custom_docx(ast_spec, out_docx)
 
-    # Also copy to test_output for reference
-    out_copy = Path("test_output/stats merged quiz unit 1.docx")
+    # Also copy to test_output for reference in its own independent directory
+    test_dir = Path("test_output/stats_merged_quiz")
+    test_dir.mkdir(parents=True, exist_ok=True)
+    out_copy = test_dir / "stats merged quiz unit 1.docx"
     out_copy.write_bytes(out_docx.read_bytes())
-    print(f"Copied to test_output: {out_copy}")
+    ast_copy = test_dir / "stats_merged_quiz_unit_1_ast.json"
+    ast_copy.write_text(ast_spec.model_dump_json(indent=2), encoding="utf-8")
+    print(f"Copied to test_output folder: {test_dir}")
 
 
 if __name__ == "__main__":

@@ -49,13 +49,14 @@ def info(
 @app.command()
 def render_pages(
     pdf_path: Path = typer.Argument(..., help="Path to input PDF"),
-    output_dir: Path = typer.Option(Path("./rendered_pages"), "--output-dir", "-o"),
+    output_dir: Optional[Path] = typer.Option(None, "--output-dir", "-o", help="Output directory for rendered PNGs"),
     dpi: int = typer.Option(200, "--dpi", help="Rendering resolution"),
 ):
     """Renders all PDF pages to high-resolution PNG images."""
+    target_dir = output_dir or (Path("./rendered_pages") / pdf_path.stem)
     with PDFExtractor(pdf_path) as extractor:
-        paths = extractor.render_all_pages(output_dir, dpi=dpi)
-    console.print(f"[green]Successfully rendered {len(paths)} pages to {output_dir}[/]")
+        paths = extractor.render_all_pages(target_dir, dpi=dpi)
+    console.print(f"[green]Successfully rendered {len(paths)} pages to {target_dir}[/]")
 
 
 @app.command()
@@ -82,11 +83,12 @@ def parse_page(
     page: int = typer.Option(..., "--page", "-p", help="Page number (1-indexed)"),
     image: Optional[Path] = typer.Option(None, "--image", "-i", help="Path to pre-rendered page PNG"),
     output_spec: Path = typer.Option(..., "--output", "-o", help="Output PageSpec JSON path"),
-    assets_dir: Path = typer.Option(Path("./assets"), "--assets-dir", "-a", help="Directory for cropped assets"),
+    assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Directory for cropped assets"),
     dpi: int = typer.Option(200, "--dpi", help="Vision resolution if rendering"),
 ):
     """Parses a single PDF page into a PageSpec JSON and crops assets (designed for page subagents)."""
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    resolved_assets = assets_dir or (output_spec.parent / "assets")
+    resolved_assets.mkdir(parents=True, exist_ok=True)
     output_spec.parent.mkdir(parents=True, exist_ok=True)
 
     with PDFExtractor(pdf_path) as extractor:
@@ -104,7 +106,7 @@ def parse_page(
         # Crop any image/figure blocks flagged with bbox
         for b_idx, block in enumerate(page_spec.blocks):
             if getattr(block, "type", "") == "image" and block.bbox:  # type: ignore
-                crop_dest = assets_dir / f"p{page}_img{b_idx}.png"
+                crop_dest = resolved_assets / f"p{page}_img{b_idx}.png"
                 extractor.extract_region(
                     page,
                     [block.bbox.ymin, block.bbox.xmin, block.bbox.ymax, block.bbox.xmax],  # type: ignore
@@ -124,6 +126,8 @@ def compile_pages(
     title: str = typer.Option("Converted Document", "--title", "-t", help="Document title"),
     theme_hex: str = typer.Option("#1F4E79", "--theme-hex", help="Corporate theme color hex"),
     assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save the merged DocumentSpec AST JSON alongside the exported file"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path to save the DocumentSpec AST JSON"),
 ):
     """Compiles multiple PageSpec JSON files from a workspace directory into a single Word (.docx) file."""
     if pages_dir.is_dir():
@@ -155,13 +159,19 @@ def compile_pages(
 
     doc_spec = DocumentSpec(title=title, theme_hex=theme_hex, pages=pages)
 
-    # Save merged AST for inspection
-    merged_ast_path = output_docx.parent / f"{output_docx.stem}_merged_ast.json"
-    merged_ast_path.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
-    console.print(f"[dim]Merged DocumentSpec AST saved to: {merged_ast_path}[/]")
+    if save_ast or ast_path is not None:
+        target_ast = ast_path or (output_docx.parent / f"{output_docx.stem}_ast.json")
+        target_ast.parent.mkdir(parents=True, exist_ok=True)
+        target_ast.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"[dim]DocumentSpec AST saved to: {target_ast}[/]")
+
+    # Resolve assets directory if not provided
+    resolved_assets = assets_dir
+    if resolved_assets is None and pages_dir.is_dir() and (pages_dir / "assets").exists():
+        resolved_assets = pages_dir / "assets"
 
     compiler = DocxCompiler(doc_spec)
-    out = compiler.compile(output_docx, assets_dir=assets_dir)
+    out = compiler.compile(output_docx, assets_dir=resolved_assets)
     console.print(f"[bold green]Successfully compiled {len(pages)} pages to:[/] {out}")
 
 
@@ -252,12 +262,22 @@ def merge_markdown(
 def compile(
     spec_path: Path = typer.Argument(..., help="Path to AST DocumentSpec JSON file"),
     output_docx: Path = typer.Option(Path("output.docx"), "--output", "-o"),
+    assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save the DocumentSpec AST JSON alongside the exported file"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path to save the DocumentSpec AST JSON"),
 ):
     """Compiles a canonical DocumentSpec AST JSON into a formatted Word (.docx) file."""
     raw_data = json.loads(spec_path.read_text(encoding="utf-8"))
     spec = DocumentSpec.model_validate(raw_data)
+
+    if save_ast or ast_path is not None:
+        target_ast = ast_path or (output_docx.parent / f"{output_docx.stem}_ast.json")
+        target_ast.parent.mkdir(parents=True, exist_ok=True)
+        target_ast.write_text(spec.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"[dim]DocumentSpec AST saved to: {target_ast}[/]")
+
     compiler = DocxCompiler(spec)
-    out = compiler.compile(output_docx)
+    out = compiler.compile(output_docx, assets_dir=assets_dir)
     console.print(f"[bold green]Successfully compiled document to:[/] {out}")
 
 
@@ -268,7 +288,7 @@ def to_markdown(
     page: Optional[int] = typer.Option(None, "--page", "-p", help="Specific page (default: all)"),
 ):
     """Fast-track: Converts PDF pages to clean Markdown for direct docx-mcp generation."""
-    temp_dir = Path("./.temp_pages")
+    temp_dir = output_md.parent / f".temp_pages_{pdf_path.stem}"
     with PDFExtractor(pdf_path) as extractor:
         pages = [page] if page else list(range(1, extractor.page_count + 1))
         parser = LayoutParser()
@@ -288,15 +308,32 @@ def to_markdown(
 def convert(
     pdf_path: Path = typer.Argument(..., help="Path to input PDF"),
     output_docx: Path = typer.Option(Path("output.docx"), "--output", "-o"),
+    workspace_dir: Optional[Path] = typer.Option(None, "--workspace-dir", "-w", help="Independent temp workspace directory for this conversion"),
+    assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory for cropped images and charts"),
     dpi: int = typer.Option(200, "--dpi", help="Vision resolution"),
     diff: bool = typer.Option(False, "--diff", help="Perform visual diff critique"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save the DocumentSpec AST JSON alongside the exported file"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path to save the DocumentSpec AST JSON"),
 ):
     """Executes full autonomous conversion pipeline from PDF to DOCX."""
     console.print(f"[bold cyan]Starting conversion:[/] {pdf_path}")
-    temp_dir = output_docx.parent / ".conversion_workspace"
-    assets_dir = output_docx.parent / "assets"
+    target_stem = output_docx.stem if output_docx.name != "output.docx" else pdf_path.stem
+    if workspace_dir is not None:
+        temp_dir = Path(workspace_dir)
+    elif output_docx.parent.name == target_stem or output_docx.parent.name == pdf_path.stem:
+        temp_dir = output_docx.parent / "workspace"
+    else:
+        temp_dir = output_docx.parent / f".workspace_{target_stem}"
+
+    if assets_dir is not None:
+        assets_path = Path(assets_dir)
+    elif output_docx.parent.name == target_stem or output_docx.parent.name == pdf_path.stem:
+        assets_path = output_docx.parent / "assets"
+    else:
+        assets_path = temp_dir / "assets"
+
     temp_dir.mkdir(parents=True, exist_ok=True)
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    assets_path.mkdir(parents=True, exist_ok=True)
 
     with PDFExtractor(pdf_path) as extractor:
         doc_info = extractor.get_document_info()
@@ -314,7 +351,7 @@ def convert(
             # Crop any image/figure blocks flagged with bbox
             for b_idx, block in enumerate(page_spec.blocks):
                 if getattr(block, "type", "") == "image" and block.bbox:  # type: ignore
-                    crop_dest = assets_dir / f"p{p_num}_img{b_idx}.png"
+                    crop_dest = assets_path / f"p{p_num}_img{b_idx}.png"
                     extractor.extract_region(
                         p_num,
                         [block.bbox.ymin, block.bbox.xmin, block.bbox.ymax, block.bbox.xmax],  # type: ignore
@@ -325,15 +362,17 @@ def convert(
 
             doc_spec.pages.append(page_spec)
 
-    # Save AST JSON for debugging or reproducible editing
-    ast_json_path = output_docx.parent / f"{output_docx.stem}_ast.json"
-    ast_json_path.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
-    console.print(f"[dim]Intermediate Representation AST saved to: {ast_json_path}[/]")
+    # Save AST JSON if requested
+    if save_ast or ast_path is not None:
+        target_ast = ast_path or (output_docx.parent / f"{output_docx.stem}_ast.json")
+        target_ast.parent.mkdir(parents=True, exist_ok=True)
+        target_ast.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"[dim]Intermediate Representation AST saved to: {target_ast}[/]")
 
     # Compile to DOCX
     console.print("[cyan]Compiling AST into Word document (.docx)...[/]")
     compiler = DocxCompiler(doc_spec)
-    compiler.compile(output_docx, assets_dir=assets_dir)
+    compiler.compile(output_docx, assets_dir=assets_path)
     console.print(f"[bold green]Successfully created Word document:[/] {output_docx}")
 
     # Optional Visual Diff

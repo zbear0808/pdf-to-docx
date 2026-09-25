@@ -109,13 +109,13 @@ uv run python -m pdf_to_docx to-markdown-page path/to/document.pdf --page {k} --
 Once all page subagents report completion:
 
 #### For Pathway 1 (Block-Based IR):
-The orchestrator compiles the assembled `page_*_spec.json` files directly into `.docx`:
+The orchestrator compiles the assembled `page_*_spec.json` files directly into `.docx` (with optional `--save-ast` to export the merged DocumentSpec AST):
 ```bash
-uv run python -m pdf_to_docx compile-pages .conversion_workspace/ -o output.docx --title "Document Title"
+uv run python -m pdf_to_docx compile-pages .conversion_workspace/ -o output.docx --title "Document Title" --save-ast
 ```
 Or use the convenience script:
 ```bash
-uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py .conversion_workspace/ -o output.docx
+uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py .conversion_workspace/ -o output.docx --save-ast
 ```
 
 The compiler deterministically enforces OpenXML structural rules:

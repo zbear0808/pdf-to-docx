@@ -51,6 +51,8 @@ for r in nested.rows:
     for c in r.cells:
         c.text = "data"
 
-test_path = Path("test_output/test_box.docx")
+test_dir = Path("test_output/test_box")
+test_dir.mkdir(parents=True, exist_ok=True)
+test_path = test_dir / "test_box.docx"
 doc.save(str(test_path))
 print(f"Saved {test_path} ({test_path.stat().st_size} bytes)")

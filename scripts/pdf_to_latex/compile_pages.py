@@ -17,6 +17,8 @@ def main(
     theme_hex: str = typer.Option("#1F4E79", "--theme-hex", help="Primary theme color hex"),
     assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory"),
     compile_pdf: bool = typer.Option(False, "--pdf", help="Also compile generated .tex into .pdf"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save merged DocumentSpec AST JSON alongside exported LaTeX"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path for DocumentSpec AST JSON"),
 ):
     cli_compile_pages(
         pages_dir,
@@ -27,8 +29,11 @@ def main(
         theme_hex=theme_hex,
         assets_dir=assets_dir,
         compile_pdf=compile_pdf,
+        save_ast=save_ast,
+        ast_path=ast_path,
     )
 
 
 if __name__ == "__main__":
     typer.run(main)
+

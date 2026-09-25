@@ -75,9 +75,11 @@ def test_compiler():
         ],
     )
 
-    test_out = Path("test_output/sample_report.docx")
+    test_dir = Path("test_output/sample_report")
+    test_dir.mkdir(parents=True, exist_ok=True)
+    test_out = test_dir / "sample_report.docx"
     compiler = DocxCompiler(spec)
-    out_file = compiler.compile(test_out)
+    out_file = compiler.compile(test_out, assets_dir=test_dir / "assets")
     assert out_file.exists(), f"Output file does not exist: {out_file}"
     print(f"Compilation succeeded! Created: {out_file} ({out_file.stat().st_size} bytes)")
 

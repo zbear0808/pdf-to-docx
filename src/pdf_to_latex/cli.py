@@ -54,13 +54,14 @@ def info(
 @app.command()
 def render_pages(
     pdf_path: Path = typer.Argument(..., help="Path to input PDF"),
-    output_dir: Path = typer.Option(Path("./rendered_pages"), "--output-dir", "-o"),
+    output_dir: Optional[Path] = typer.Option(None, "--output-dir", "-o", help="Output directory for rendered PNGs"),
     dpi: int = typer.Option(200, "--dpi", help="Rendering resolution"),
 ):
     """Renders all PDF pages to high-resolution PNG images."""
+    target_dir = output_dir or (Path("./rendered_pages") / pdf_path.stem)
     with PDFExtractor(pdf_path) as extractor:
-        paths = extractor.render_all_pages(output_dir, dpi=dpi)
-    console.print(f"[green]Successfully rendered {len(paths)} pages to {output_dir}[/]")
+        paths = extractor.render_all_pages(target_dir, dpi=dpi)
+    console.print(f"[green]Successfully rendered {len(paths)} pages to {target_dir}[/]")
 
 
 @app.command()
@@ -87,11 +88,12 @@ def parse_page(
     page: int = typer.Option(..., "--page", "-p", help="Page number (1-indexed)"),
     image: Optional[Path] = typer.Option(None, "--image", "-i", help="Path to pre-rendered page PNG"),
     output_spec: Path = typer.Option(..., "--output", "-o", help="Output PageSpec JSON path"),
-    assets_dir: Path = typer.Option(Path("./assets"), "--assets-dir", "-a", help="Directory for cropped assets"),
+    assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Directory for cropped assets"),
     dpi: int = typer.Option(200, "--dpi", help="Vision resolution if rendering"),
 ):
     """Parses a single PDF page into a PageSpec JSON and crops assets (designed for page subagents)."""
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    resolved_assets = assets_dir or (output_spec.parent / "assets")
+    resolved_assets.mkdir(parents=True, exist_ok=True)
     output_spec.parent.mkdir(parents=True, exist_ok=True)
 
     with PDFExtractor(pdf_path) as extractor:
@@ -109,7 +111,7 @@ def parse_page(
         # Crop any image/figure blocks flagged with bbox
         for b_idx, block in enumerate(page_spec.blocks):
             if getattr(block, "type", "") == "image" and block.bbox:  # type: ignore
-                crop_dest = assets_dir / f"p{page}_img{b_idx}.png"
+                crop_dest = resolved_assets / f"p{page}_img{b_idx}.png"
                 extractor.extract_region(
                     page,
                     [block.bbox.ymin, block.bbox.xmin, block.bbox.ymax, block.bbox.xmax],  # type: ignore
@@ -157,6 +159,8 @@ def compile_pages(
     theme_hex: str = typer.Option("#1F4E79", "--theme-hex", help="Primary theme color hex"),
     assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory"),
     compile_pdf: bool = typer.Option(False, "--pdf", help="Also compile generated .tex into .pdf"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save the merged DocumentSpec AST JSON alongside the exported file"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path to save the DocumentSpec AST JSON"),
 ):
     """Compiles multiple PageSpec JSON files from a workspace into a production-grade LaTeX file and PDF."""
     if pages_dir.is_dir():
@@ -194,13 +198,19 @@ def compile_pages(
         pages=pages,
     )
 
-    # Save merged AST for inspection
-    merged_ast_path = output_tex.parent / f"{output_tex.stem}_merged_ast.json"
-    merged_ast_path.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
-    console.print(f"[dim]Merged DocumentSpec AST saved to: {merged_ast_path}[/]")
+    if save_ast or ast_path is not None:
+        target_ast = ast_path or (output_tex.parent / f"{output_tex.stem}_ast.json")
+        target_ast.parent.mkdir(parents=True, exist_ok=True)
+        target_ast.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"[dim]DocumentSpec AST saved to: {target_ast}[/]")
+
+    # Resolve assets directory if not provided
+    resolved_assets = assets_dir
+    if resolved_assets is None and pages_dir.is_dir() and (pages_dir / "assets").exists():
+        resolved_assets = pages_dir / "assets"
 
     compiler = LatexCompiler(doc_spec)
-    out = compiler.compile(output_tex, assets_dir=assets_dir)
+    out = compiler.compile(output_tex, assets_dir=resolved_assets)
     console.print(f"[bold green]Successfully compiled {len(pages)} pages to LaTeX:[/] {out}")
 
     if compile_pdf:
@@ -292,17 +302,34 @@ def compile_pdf(
 def convert(
     pdf_path: Path = typer.Argument(..., help="Path to input PDF"),
     output_tex: Path = typer.Option(Path("document.tex"), "--output", "-o"),
+    workspace_dir: Optional[Path] = typer.Option(None, "--workspace-dir", "-w", help="Independent temp workspace directory for this conversion"),
+    assets_dir: Optional[Path] = typer.Option(None, "--assets-dir", "-a", help="Assets directory for cropped images and charts"),
     doc_class: DocumentClass = typer.Option(DocumentClass.ARTICLE, "--doc-class", "-c"),
     title: Optional[str] = typer.Option(None, "--title", "-t"),
     dpi: int = typer.Option(200, "--dpi", help="Vision resolution"),
     compile_pdf: bool = typer.Option(False, "--pdf", help="Also compile generated .tex into .pdf"),
+    save_ast: bool = typer.Option(False, "--save-ast", help="Save the DocumentSpec AST JSON alongside the exported file"),
+    ast_path: Optional[Path] = typer.Option(None, "--ast-path", help="Custom path to save the DocumentSpec AST JSON"),
 ):
     """Executes full autonomous conversion pipeline from PDF to LaTeX."""
     console.print(f"[bold cyan]Starting LaTeX conversion:[/] {pdf_path}")
-    temp_dir = output_tex.parent / ".conversion_workspace"
-    assets_dir = output_tex.parent / "assets"
+    target_stem = output_tex.stem if output_tex.name != "document.tex" else pdf_path.stem
+    if workspace_dir is not None:
+        temp_dir = Path(workspace_dir)
+    elif output_tex.parent.name == target_stem or output_tex.parent.name == pdf_path.stem:
+        temp_dir = output_tex.parent / "workspace"
+    else:
+        temp_dir = output_tex.parent / f".workspace_{target_stem}"
+
+    if assets_dir is not None:
+        assets_path = Path(assets_dir)
+    elif output_tex.parent.name == target_stem or output_tex.parent.name == pdf_path.stem:
+        assets_path = output_tex.parent / "assets"
+    else:
+        assets_path = temp_dir / "assets"
+
     temp_dir.mkdir(parents=True, exist_ok=True)
-    assets_dir.mkdir(parents=True, exist_ok=True)
+    assets_path.mkdir(parents=True, exist_ok=True)
 
     with PDFExtractor(pdf_path) as extractor:
         doc_info = extractor.get_document_info()
@@ -321,7 +348,7 @@ def convert(
             # Crop any image/figure blocks flagged with bbox
             for b_idx, block in enumerate(page_spec.blocks):
                 if getattr(block, "type", "") == "image" and block.bbox:  # type: ignore
-                    crop_dest = assets_dir / f"p{p_num}_img{b_idx}.png"
+                    crop_dest = assets_path / f"p{p_num}_img{b_idx}.png"
                     extractor.extract_region(
                         p_num,
                         [block.bbox.ymin, block.bbox.xmin, block.bbox.ymax, block.bbox.xmax],  # type: ignore
@@ -332,15 +359,17 @@ def convert(
 
             doc_spec.pages.append(page_spec)
 
-    # Save AST JSON
-    ast_json_path = output_tex.parent / f"{output_tex.stem}_ast.json"
-    ast_json_path.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
-    console.print(f"[dim]Intermediate Representation AST saved to: {ast_json_path}[/]")
+    # Save AST JSON if requested
+    if save_ast or ast_path is not None:
+        target_ast = ast_path or (output_tex.parent / f"{output_tex.stem}_ast.json")
+        target_ast.parent.mkdir(parents=True, exist_ok=True)
+        target_ast.write_text(doc_spec.model_dump_json(indent=2), encoding="utf-8")
+        console.print(f"[dim]Intermediate Representation AST saved to: {target_ast}[/]")
 
     # Compile to LaTeX
     console.print("[cyan]Compiling AST into LaTeX (.tex)...[/]")
     compiler = LatexCompiler(doc_spec)
-    compiler.compile(output_tex, assets_dir=assets_dir)
+    compiler.compile(output_tex, assets_dir=assets_path)
     console.print(f"[bold green]Successfully created LaTeX document:[/] {output_tex}")
 
     if compile_pdf:

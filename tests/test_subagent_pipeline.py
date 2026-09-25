@@ -19,8 +19,11 @@ from pdf_to_docx.docx_compiler import DocxCompiler
 
 
 def test_page_specs_merge_and_compile():
-    workspace = Path("test_output/subagent_workspace")
+    report_dir = Path("test_output/subagent_report")
+    workspace = report_dir / "workspace"
+    assets_dir = report_dir / "assets"
     workspace.mkdir(parents=True, exist_ok=True)
+    assets_dir.mkdir(parents=True, exist_ok=True)
 
     # Page 1 spec (produced by Page 1 Subagent)
     p1 = PageSpec(
@@ -80,9 +83,9 @@ def test_page_specs_merge_and_compile():
         pages=loaded_pages,
     )
 
-    out_docx = Path("test_output/subagent_merged_report.docx")
+    out_docx = report_dir / "subagent_merged_report.docx"
     compiler = DocxCompiler(doc_spec)
-    compiled = compiler.compile(out_docx)
+    compiled = compiler.compile(out_docx, assets_dir=assets_dir)
 
     assert compiled.exists()
     assert compiled.stat().st_size > 0
