@@ -6,5 +6,9 @@ dist/
 wheels/
 *.egg-info
 
+/extracted_assets
+/rendered_pages
+/test_output
+
 # Virtual environments
 .venv

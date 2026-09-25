@@ -1,0 +1,1375 @@
+{
+  "title": "AP Statistics Merged Quiz Unit 1",
+  "author": "College Board / Educational Testing Service",
+  "company": null,
+  "theme_hex": "#000000",
+  "default_font": "Times New Roman",
+  "default_font_size_pt": 10.5,
+  "pages": [
+    {
+      "page_number": 1,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "2011 AP® STATISTICS FREE-RESPONSE QUESTIONS",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "2. The table below shows the political party registration by gender of all 500 registered voters in Franklin Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "PARTY REGISTRATION—FRANKLIN TOWNSHIP",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "Party W",
+            "Party X",
+            "Party Y",
+            "Total"
+          ],
+          "header_cells": null,
+          "rows": [
+            [
+              "Female",
+              "60",
+              "120",
+              "120",
+              "300"
+            ],
+            [
+              "Male",
+              "28",
+              "124",
+              "48",
+              "200"
+            ],
+            [
+              "Total",
+              "88",
+              "244",
+              "168",
+              "500"
+            ]
+          ],
+          "row_cells": null,
+          "col_widths_pct": [
+            22.0,
+            19.5,
+            19.5,
+            19.5,
+            19.5
+          ],
+          "cant_split": true,
+          "repeat_header": true,
+          "style_name": "Table Grid",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Given that a randomly selected registered voter is a male, what is the probability that he is registered for Party Y?",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Among the registered voters of Franklin Township, are the events “is a male” and “is registered for Party Y” independent? Justify your answer based on probabilities calculated from the table above.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "One way to display the data in the table is to use a segmented bar graph. The following segmented bar graph, constructed from the data in the party registration—Franklin Township table, shows party-registration distributions for males and females in Franklin Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_1_img_1_xref4.png",
+          "caption": "FRANKLIN TOWNSHIP Segmented Bar Graph",
+          "alt_text": null,
+          "width_inches": 5.8,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "In Lawrence Township, the proportions of all registered voters for Parties W, X, and Y are the same as for Franklin Township, and party registration is independent of gender. Complete the graph below to show the distributions of party registration by gender in Lawrence Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_1_img_2_xref9.png",
+          "caption": "LAWRENCE TOWNSHIP Response Graph",
+          "alt_text": null,
+          "width_inches": 5.8,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "width_pt": 594.6,
+      "height_pt": 774.2,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Begin your response to QUESTION 1 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "STATISTICS\nSECTION II\nTotal Time—1 hour and 30 minutes\n6 Questions\n\nPart A\nQuestions 1-5\nSpend about 1 hour and 5 minutes on this part of the exam.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Directions: ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Show all your work. Indicate clearly the methods you use, because you will be scored on the correctness of your methods as well as on the accuracy and completeness of your results and explanations.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "1. The length of stay in a hospital after receiving a particular treatment is of interest to the patient, the hospital, and insurance providers. Of particular interest are unusually short or long lengths of stay. A random sample of 50 patients who received the treatment was selected, and the length of stay, in number of days, was recorded for each patient. The results are summarized in the following table and are shown in the dotplot.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Length of stay (days)",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "12",
+            "21"
+          ],
+          "header_cells": null,
+          "rows": [
+            [
+              "Number of patients",
+              "4",
+              "13",
+              "14",
+              "11",
+              "6",
+              "1",
+              "1"
+            ]
+          ],
+          "row_cells": null,
+          "col_widths_pct": null,
+          "cant_split": true,
+          "repeat_header": false,
+          "style_name": "Table Grid",
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_2_img_1_xref139.png",
+          "caption": "Length of Stay Dotplot",
+          "alt_text": null,
+          "width_inches": 3.2,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Determine the five-number summary of the distribution of length of stay.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    },
+    {
+      "page_number": 3,
+      "width_pt": 594.6,
+      "height_pt": 774.2,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Continue your response to QUESTION 1 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Consider two rules for identifying outliers, method A and method B. Let method A represent the 1.5 × IQR rule, and let method B represent the 2 standard deviations rule.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(i) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Using method A, determine any data points that are potential outliers in the distribution of length of stay. Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(ii) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "The mean length of stay for the sample is 7.42 days with a standard deviation of 2.37 days. Using method B, determine any data points that are potential outliers in the distribution of length of stay. Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Explain why method A might identify more data points as potential outliers than method B for a distribution that is strongly skewed to the right.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    },
+    {
+      "page_number": 4,
+      "width_pt": 594.0,
+      "height_pt": 774.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Begin your response to QUESTION 1 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "STATISTICS\nSECTION II\nTotal Time—1 hour and 30 minutes\n6 Questions\n\nPart A\nSuggested Time—1 hour and 5 minutes\n5 Questions",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Directions: ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Show all your work. Indicate clearly the methods you use, because you will be scored on the correctness of your methods as well as on the accuracy and completeness of your results and explanations.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "1. As part of a study on the chemistry of Alaskan streams, researchers took water samples from many streams with temperatures colder than 8°C and from many streams with temperatures warmer than 8°C. For each sample, the researchers measured the dissolved oxygen concentration, in milligrams per liter (mg/l).",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_4_img_1_xref305.png",
+          "caption": "Dissolved Oxygen Concentration Histogram",
+          "alt_text": null,
+          "width_inches": 5.6,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "The researchers constructed the histogram shown for the dissolved oxygen concentration in streams from the sample with water temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "colder",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C. Based on the histogram, describe the distribution of dissolved oxygen concentration in streams with water temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "colder",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    },
+    {
+      "page_number": 5,
+      "width_pt": 594.0,
+      "height_pt": 774.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Continue your response to QUESTION 1 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Min",
+            "Q1",
+            "Median",
+            "Q3",
+            "Max",
+            "Mean",
+            "Std. Dev."
+          ],
+          "header_cells": null,
+          "rows": [
+            [
+              "2.10",
+              "4.39",
+              "5.43",
+              "6.12",
+              "13.45",
+              "5.54",
+              "1.64"
+            ]
+          ],
+          "row_cells": null,
+          "col_widths_pct": null,
+          "cant_split": true,
+          "repeat_header": false,
+          "style_name": "Table Grid",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "The researchers computed the summary statistics shown in the table for the dissolved oxygen concentration in streams from the sample with water temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "warmer",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C. Use the summary statistics to construct a box plot for the dissolved oxygen concentration in streams with water temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "warmer",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C. Do not indicate outliers.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_5_img_1_xref319.png",
+          "caption": "Box Plot Response Grid",
+          "alt_text": null,
+          "width_inches": 5.6,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "The researchers believe that streams with higher dissolved oxygen concentration are generally healthier for wildlife. Which streams are generally healthier for wildlife, those with water temperature ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "colder",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C or those with water temperature ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "warmer",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C? Using characteristics of the distribution of dissolved oxygen concentration for temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "colder",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C and characteristics of the distribution of dissolved oxygen concentration for temperatures ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "warmer",
+              "bold": false,
+              "italic": false,
+              "underline": true,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " than 8°C, justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    },
+    {
+      "page_number": 6,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Begin your response to QUESTION 2 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "2. A local elementary school decided to sell bottles printed with the school district’s logo as a fund-raiser. The students in the elementary school were asked to sell bottles in three different sizes (small, medium, and large). The relative frequencies of the number of bottles sold for each size by the elementary school were 0.5 for small bottles, 0.3 for medium bottles, and 0.2 for large bottles.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "A local middle school also decided to sell bottles as a fund-raiser, using the same three sizes (small, medium, and large). The middle school students sold three times the number of bottles that the elementary school students sold. For the middle school students, the proportion of bottles sold was equal for all three sizes.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Complete the segmented bar graphs representing the relative frequencies of the number of bottles sold for each size by students at each school.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_6_img_1_xref356.png",
+          "caption": "Elementary & Middle School Segmented Bar Graphs Template",
+          "alt_text": null,
+          "width_inches": 4.5,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "An administrator at the elementary school concluded that the elementary school students sold more small bottles than the middle school students did. Is the elementary school administrator’s conclusion correct? Explain your response.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    },
+    {
+      "page_number": 7,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "Continue your response to QUESTION 2 on this page.",
+          "runs": null,
+          "alignment": "center",
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Two high schools are also selling the bottles and are competing to see which one sold more large bottles.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "A mosaic plot for the distribution of the number of bottles sold by each of the high schools is shown here.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Distribution of the Number of Bottles Sold by High School",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "image",
+          "image_path": "extracted_assets/page_7_img_1_xref369.png",
+          "caption": "High School Bottles Sold Mosaic Plot",
+          "alt_text": null,
+          "width_inches": 4.6,
+          "height_inches": null,
+          "bbox": null,
+          "is_vector": false
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(i) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Which of the two high schools sold a greater proportion of large bottles? Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(ii) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Which of the two high schools sold a greater number of large bottles? Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": null
+        }
+      ]
+    }
+  ]
+}
