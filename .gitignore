@@ -10,5 +10,6 @@ wheels/
 /rendered_pages
 /test_output
 
+tests/.cascade_sample/
 # Virtual environments
 .venv

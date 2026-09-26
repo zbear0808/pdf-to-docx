@@ -9,7 +9,9 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "google-genai>=2.25.0",
+    "laya>=0.3.20",
     "matplotlib>=3.11.2",
+    "mcp>=2.2.0",
     "pillow>=12.3.0",
     "pydantic>=2.13.5",
     "pymupdf>=1.28.2",
