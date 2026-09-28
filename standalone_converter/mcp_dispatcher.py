@@ -232,15 +232,15 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
         normal_style.font.name = default_font
         normal_style.font.size = Pt(default_font_size_pt)
         normal_style.font.color.rgb = RGBColor(0x22, 0x22, 0x22)
-        normal_style.paragraph_format.line_spacing = 1.15
-        normal_style.paragraph_format.space_after = Pt(4)
+        normal_style.paragraph_format.line_spacing = 1.05
+        normal_style.paragraph_format.space_after = Pt(2)
 
     def add_heading(self, text: str, level: int = 1):
         lvl = max(1, min(4, level))
         p = self.doc.add_paragraph()
         p.paragraph_format.keep_with_next = True
-        p.paragraph_format.space_before = Pt(max(6, 18 - (lvl * 2)))
-        p.paragraph_format.space_after = Pt(4)
+        p.paragraph_format.space_before = Pt(max(4, 14 - (lvl * 2)))
+        p.paragraph_format.space_after = Pt(3)
 
         run = p.add_run(sanitize_xml(text))
         run.bold = True

@@ -103,6 +103,32 @@ def parse_page(
         parser = LayoutParser()
         page_spec = parser.parse_page_image(page_png, page_number=page)
 
+        # Backfill exact typography and margins from PDF content stream
+        try:
+            typo = extractor.get_page_typography(page)
+            page_spec.width_pt = typo.get("width_pt", page_spec.width_pt)
+            page_spec.height_pt = typo.get("height_pt", page_spec.height_pt)
+            page_spec.margin_top_pt = typo.get("margin_top_pt")
+            page_spec.margin_bottom_pt = typo.get("margin_bottom_pt")
+            page_spec.margin_left_pt = typo.get("margin_left_pt")
+            page_spec.margin_right_pt = typo.get("margin_right_pt")
+
+            pdf_spans = typo.get("spans", [])
+            for block in page_spec.blocks:
+                runs = getattr(block, "runs", None) or []
+                for run in runs:
+                    if getattr(run, "font_size_pt", None) is None or not getattr(run, "font_name", None):
+                        r_txt = getattr(run, "text", "").strip()
+                        for s in pdf_spans:
+                            if s["text"] in r_txt or r_txt in s["text"]:
+                                if getattr(run, "font_size_pt", None) is None:
+                                    run.font_size_pt = s["size"]
+                                if not getattr(run, "font_name", None):
+                                    run.font_name = s["font"]
+                                break
+        except Exception as typo_err:
+            console.print(f"[dim yellow]Typography backfilling skipped: {typo_err}[/]")
+
         # Crop any image/figure blocks flagged with bbox
         for b_idx, block in enumerate(page_spec.blocks):
             if getattr(block, "type", "") == "image" and block.bbox:  # type: ignore
