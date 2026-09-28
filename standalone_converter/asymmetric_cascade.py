@@ -41,6 +41,29 @@ from .pdf_extractor import PDFExtractor
 logger = logging.getLogger(__name__)
 
 
+def _get_api_key(provided_key: Optional[str] = None) -> Optional[str]:
+    if provided_key:
+        return provided_key
+    key = os.environ.get("GEMINI_API_KEY")
+    if key:
+        return key
+    # Try reading from .env in current or parent dirs
+    for check_dir in [Path.cwd(), Path(__file__).resolve().parent.parent]:
+        env_file = check_dir / ".env"
+        if env_file.exists():
+            try:
+                for line in env_file.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line.startswith("GEMINI_API_KEY="):
+                        val = line.split("=", 1)[1].strip().strip('"').strip("'")
+                        if val:
+                            os.environ["GEMINI_API_KEY"] = val
+                            return val
+            except Exception:
+                pass
+    return None
+
+
 @dataclass
 class CascadeStats:
     """Performance statistics for an asymmetric cascade conversion run."""
@@ -58,13 +81,14 @@ class AsymmetricCascadeConverter:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model_name: str = "gemini-2.0-flash-lite",
+        model_name: str = "gemini-3.5-flash-lite",
         device: Optional[str] = None,
+
         confidence_threshold: float = 0.85,
         theme_hex: str = "#1F4E79",
         dispatcher: Optional[BaseDocxDispatcher] = None,
     ):
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
+        self.api_key = _get_api_key(api_key)
         self.model_name = model_name
         self.confidence_threshold = confidence_threshold
         self.theme_hex = theme_hex
@@ -123,12 +147,87 @@ class AsymmetricCascadeConverter:
                 page_num = page_idx + 1
                 logger.info(f"--- Processing Page {page_num}/{len(doc)} ---")
 
+                if page_idx > 0:
+                    self.dispatcher.add_page_break()
+
                 # Extract raw blocks: (x0, y0, x1, y1, text, block_no, block_type)
                 # block_type 0 = text, 1 = image
                 raw_blocks = page.get_text("blocks")
                 page_rect = page.rect
 
+                # Pure image or scanned page with no text stream
+                if len(raw_blocks) == 0:
+                    logger.info(f"[Page {page_num}] No text blocks found (image-only/scanned page). Rendering page...")
+                    page_img_path = crops_dir / f"p{page_num}_fullpage.png"
+                    extractor.render_page_to_png(page_num, page_img_path, dpi=200)
+                    self.dispatcher.insert_image(page_img_path, width_inches=6.0)
+                    stats.fast_path_blocks += 1
+                    continue
+
+
+                # 2. Collect text blocks and embedded images in vertical reading order
+                page_items = []
                 for b_idx, b in enumerate(raw_blocks):
+                    x0, y0, x1, y1, text, block_no, b_type = b
+                    page_items.append({
+                        "kind": "text",
+                        "y0": y0,
+                        "x0": x0,
+                        "raw_block": b,
+                        "idx": b_idx,
+                    })
+
+                try:
+                    embedded_images = page.get_image_info(xrefs=True)
+                    for img_idx, img_info in enumerate(embedded_images):
+                        xref = img_info.get("xref")
+                        bbox = img_info.get("bbox")
+                        if xref and bbox:
+                            page_items.append({
+                                "kind": "embedded_image",
+                                "y0": bbox[1],
+                                "x0": bbox[0],
+                                "bbox": bbox,
+                                "xref": xref,
+                                "idx": img_idx,
+                            })
+                except Exception as img_err:
+                    logger.debug(f"Could not get image info for page {page_num}: {img_err}")
+
+                # Sort top-to-bottom
+                page_items.sort(key=lambda item: (item["y0"], item["x0"]))
+
+                for item in page_items:
+                    # Handle embedded raster figures (charts, plots, diagrams)
+                    if item["kind"] == "embedded_image":
+                        bbox = item["bbox"]
+                        xref = item["xref"]
+                        w_pt = bbox[2] - bbox[0]
+                        h_pt = bbox[3] - bbox[1]
+                        if w_pt < 25 or h_pt < 25:
+                            continue
+
+                        stats.total_blocks += 1
+                        img_path = crops_dir / f"p{page_num}_img_xref{xref}.png"
+                        if not img_path.exists():
+                            try:
+                                pix = doc.extract_image(xref)
+                                ext = pix.get("ext", "png")
+                                img_path = crops_dir / f"p{page_num}_img_xref{xref}.{ext}"
+                                img_path.write_bytes(pix["image"])
+                            except Exception as e:
+                                logger.warning(f"Could not extract image xref {xref}: {e}")
+                                continue
+
+                        w_in = min(6.0, max(2.5, w_pt / 72.0))
+                        self.dispatcher.insert_image(img_path, width_inches=w_in)
+                        stats.fast_path_blocks += 1
+                        logger.info(f"[Page {page_num}] Inserted embedded figure/chart: {img_path.name} ({w_in:.2f} in)")
+                        continue
+
+                    # Text block processing
+                    b = item["raw_block"]
+                    b_idx = item["idx"]
                     x0, y0, x1, y1, text, block_no, b_type = b
                     clean_text = text.strip() if isinstance(text, str) else ""
 
@@ -141,7 +240,7 @@ class AsymmetricCascadeConverter:
                     xmax = int((x1 / page_rect.width) * 1000)
                     bbox = [max(0, ymin), max(0, xmin), min(1000, ymax), min(1000, xmax)]
 
-                    # Handle native PDF image blocks
+                    # Handle native PDF inline image blocks
                     if b_type == 1 or not clean_text:
                         crop_path = crops_dir / f"p{page_num}_b{b_idx}_img.png"
                         try:
@@ -259,28 +358,45 @@ class AsymmetricCascadeConverter:
 
         tools = [types.Tool(function_declarations=function_declarations)]
 
-        try:
-            response = self.gemini_client.models.generate_content(
-                model=self.model_name,
-                contents=contents,
-                config=types.GenerateContentConfig(
-                    tools=tools,
-                    temperature=0.0,
-                ),
-            )
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = self.gemini_client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=types.GenerateContentConfig(
+                        tools=tools,
+                        temperature=0.0,
+                    ),
+                )
 
-            # Execute tool calls returned by Gemini
-            calls = response.function_calls
-            if calls:
-                for call in calls:
-                    logger.info(f"  Gemini dispatched tool: {call.name}")
-                    self.dispatcher.call_tool(call.name, dict(call.args or {}))
-            else:
-                # If model responded with text instead of a tool call, add as paragraph
-                logger.debug("Gemini returned text response without tool calls; adding as paragraph.")
+                # Execute tool calls returned by Gemini
+                calls = response.function_calls
+                if calls:
+                    for call in calls:
+                        call_args = dict(call.args or {})
+                        if call.name == "insert_image" and crop_image_path:
+                            if not call_args.get("image_path") or call_args.get("image_path") in ("CROP", "image", "", "crop"):
+                                call_args["image_path"] = str(crop_image_path)
+                        logger.info(f"  Gemini dispatched tool: {call.name}")
+                        self.dispatcher.call_tool(call.name, call_args)
+                else:
+                    # If model responded with text instead of a tool call, add as paragraph
+                    logger.debug("Gemini returned text response without tool calls; adding as paragraph.")
+                    self.dispatcher.add_paragraph(block_text, style="Normal")
+
+                # Polite pause to stay well within free tier RPM limits
+                time.sleep(1.0)
+                return
+
+            except Exception as e:
+                err_str = str(e)
+                if ("429" in err_str or "ResourceExhausted" in err_str or "quota" in err_str.lower()) and attempt < max_retries - 1:
+                    wait_sec = (attempt + 1) * 8
+                    logger.warning(f"Gemini rate limited (429). Retrying in {wait_sec}s (attempt {attempt + 1}/{max_retries})...")
+                    time.sleep(wait_sec)
+                    continue
+                logger.error(f"Gemini escalation failed ({e}). Falling back to plain paragraph.")
                 self.dispatcher.add_paragraph(block_text, style="Normal")
-
-        except Exception as e:
-            logger.error(f"Gemini escalation failed ({e}). Falling back to plain paragraph.")
-            self.dispatcher.add_paragraph(block_text, style="Normal")
+                return
 

@@ -9,8 +9,9 @@ def convert_with_cascade(
     output_path="output.docx",
     *,
     api_key=None,
-    model_name="gemini-2.0-flash-lite",
+    model_name="gemini-3.5-flash-lite",
     device=None,
+
     confidence_threshold=0.85,
     theme_hex="#1F4E79",
     workspace_dir=None,

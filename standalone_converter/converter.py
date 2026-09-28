@@ -83,7 +83,8 @@ def convert_pdf_to_docx(
     output_path: str | Path = "output.docx",
     *,
     api_key: Optional[str] = None,
-    model_name: str = "gemini-2.0-flash-lite",
+    model_name: str = "gemini-3.5-flash-lite",
+
     max_workers: int = 4,
     dpi: int = 200,
     title: Optional[str] = None,

@@ -10,6 +10,11 @@ wheels/
 /rendered_pages
 /test_output
 
+.env
+tests/.*
+tests/.workspace_sample
+tests/.cascade_sample
+
 tests/.cascade_sample/
 # Virtual environments
 .venv

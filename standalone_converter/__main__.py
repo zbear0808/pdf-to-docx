@@ -27,7 +27,8 @@ def main():
     parser.add_argument("--threshold", type=float, default=0.85, help="Laya confidence threshold for fast path (default: 0.85)")
     parser.add_argument("--device", type=str, default=None, help="Device for Laya router ('cuda' or 'cpu')")
     parser.add_argument("--api-key", type=str, default=None, help="Gemini API key (or set GEMINI_API_KEY env var)")
-    parser.add_argument("--model", type=str, default="gemini-2.0-flash-lite", help="Gemini model name")
+    parser.add_argument("--model", type=str, default="gemini-3.5-flash-lite", help="Gemini model name")
+
     parser.add_argument("--workers", type=int, default=4, help="Max parallel page parsing threads (page mode)")
     parser.add_argument("--dpi", type=int, default=200, help="Page rendering DPI")
     parser.add_argument("--title", type=str, default=None, help="Document title")
