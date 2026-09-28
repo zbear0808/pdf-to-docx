@@ -1,13 +1,11 @@
 """Chart rendering via Matplotlib with corporate palettes."""
 
 from __future__ import annotations
+import logging
 from pathlib import Path
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
 from .ir_schema import ChartBlock, ChartType
 
+logger = logging.getLogger(__name__)
 
 CORPORATE_PALETTE = [
     "#1F4E79", "#2E75B6", "#5B9BD5", "#41719C",
@@ -23,6 +21,15 @@ def render_chart_image(
     """Renders a ChartBlock into a 300 DPI PNG image."""
     out_path = Path(output_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import numpy as np
+    except ImportError:
+        logger.warning("matplotlib or numpy not available; cannot render synthetic chart")
+        return out_path
 
     fig, ax = plt.subplots(figsize=(chart.width_inches, chart.height_inches), dpi=dpi)
     ax.spines["top"].set_visible(False)

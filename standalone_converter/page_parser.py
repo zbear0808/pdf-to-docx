@@ -64,8 +64,8 @@ Rules:
    - CRITICAL: Do NOT include the header row inside 'rows'.
    - CRITICAL: Do NOT create separate ParagraphBlocks for any text, labels, numbers, or headers that belong to a TableBlock. All table content must exist strictly inside the TableBlock to avoid duplicate data.
    - Estimate col_widths_pct (must sum to ~100).
-6. CHARTS: Identify chart_type (bar/line/pie). Extract title, categories (x-axis labels), and series (name + numeric values). Provide bbox [ymin, xmin, ymax, xmax] on 0-1000 scale.
-7. IMAGES/FIGURES/LOGOS: Set type="image" with bbox [ymin, xmin, ymax, xmax] on 0-1000 scale so the image can be cropped. Add caption if visible. Leave width_inches and height_inches null so the aspect ratio is strictly preserved from the image asset.
+6. CHARTS: Use ONLY for simple, standard corporate bar, line, or pie charts with clear numeric series data. Do NOT classify complex statistical plots, mosaic plots, segmented bar charts, boxplots, dot plots, histograms, coordinate graphs, or multi-variable distributions as charts; classify them as "image" with bbox so the native high-fidelity graphic is preserved.
+7. IMAGES/FIGURES/DIAGRAMS: Set type="image" with bbox [ymin, xmin, ymax, xmax] on 0-1000 scale so the graphic asset can be preserved. Include all plots, diagrams, illustrations, and logos. Add caption if visible. Leave width_inches and height_inches null so the aspect ratio is strictly preserved from the image asset.
 8. Set page orientation to "portrait" or "landscape" based on aspect ratio.
 9. Bounding boxes use a 0-1000 normalized coordinate system: ymin=top edge, ymax=bottom edge, xmin=left edge, xmax=right edge.
 """
@@ -78,22 +78,23 @@ class PageParser:
         self,
         api_key: Optional[str] = None,
         model_name: str = "gemini-3.5-flash-lite",
-        max_retries: int = 3,
+        max_retries: int = 5,
     ):
         self.api_key = _get_api_key(api_key)
         self.model_name = model_name
         self.max_retries = max_retries
-        self._client = None
+        import threading
+        self._thread_local = threading.local()
 
-    @property
-    def client(self):
-        if self._client is None:
+    def get_client(self):
+        """Thread-isolated client to avoid shared connection closures across threads."""
+        if not hasattr(self._thread_local, "client") or self._thread_local.client is None:
             from google import genai
             if self.api_key:
-                self._client = genai.Client(api_key=self.api_key)
+                self._thread_local.client = genai.Client(api_key=self.api_key)
             else:
-                self._client = genai.Client()
-        return self._client
+                self._thread_local.client = genai.Client()
+        return self._thread_local.client
 
     def parse_page(self, image_path: str | Path, page_number: int = 1) -> PageSpec:
         """Sends a page image to Gemini Flash Lite and returns a validated PageSpec.
@@ -139,7 +140,8 @@ class PageParser:
         """Single Gemini API call with structured JSON output."""
         from google.genai import types
 
-        response = self.client.models.generate_content(
+        client = self.get_client()
+        response = client.models.generate_content(
             model=self.model_name,
             contents=[
                 types.Part.from_bytes(data=img_bytes, mime_type="image/png"),

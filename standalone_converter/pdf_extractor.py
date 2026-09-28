@@ -86,6 +86,20 @@ class PDFExtractor:
             paths.append(self.render_page_to_png(i, target, dpi=dpi))
         return paths
 
+    def resolve_asset(
+        self,
+        page_number: int,
+        bbox: List[int] | Tuple[int, int, int, int],
+        output_path: str | Path,
+        dpi: int = 300,
+    ) -> Dict[str, Any]:
+        """Resolves a visual asset to native image, vector cluster, or snapped crop."""
+        from .asset_harvester import resolve_visual_asset
+        if page_number < 1 or page_number > len(self.doc):
+            raise IndexError(f"Page {page_number} out of range (1..{len(self.doc)})")
+        page = self.doc[page_number - 1]
+        return resolve_visual_asset(self.doc, page, bbox, output_path, dpi=dpi)
+
     def extract_region(
         self,
         page_number: int,
@@ -93,29 +107,7 @@ class PDFExtractor:
         output_path: str | Path,
         dpi: int = 300,
     ) -> Path:
-        """Crops a normalized bounding box region from a page.
+        """Extracts a bounding box region using multi-modal asset resolution."""
+        res = self.resolve_asset(page_number, bbox, output_path, dpi=dpi)
+        return Path(res["image_path"])
 
-        Args:
-            page_number: 1-indexed page number.
-            bbox: [ymin, xmin, ymax, xmax] on a 0-1000 normalized scale.
-            output_path: Path to save cropped asset.
-            dpi: Rendering DPI for cropped raster image.
-        """
-        page = self.doc[page_number - 1]
-        rect = page.rect
-        ymin, xmin, ymax, xmax = bbox
-
-        x0 = (xmin / 1000.0) * rect.width
-        y0 = (ymin / 1000.0) * rect.height
-        x1 = (xmax / 1000.0) * rect.width
-        y1 = (ymax / 1000.0) * rect.height
-
-        clip_rect = fitz.Rect(x0, y0, x1, y1)
-        output_path = Path(output_path)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        zoom = dpi / 72.0
-        mat = fitz.Matrix(zoom, zoom)
-        pix = page.get_pixmap(matrix=mat, clip=clip_rect, alpha=False)
-        pix.save(str(output_path))
-        return output_path

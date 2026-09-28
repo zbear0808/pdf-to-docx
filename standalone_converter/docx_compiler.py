@@ -9,7 +9,6 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Optional
-from PIL import Image
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -324,10 +323,10 @@ class DocxCompiler:
         # Inspect true image pixel dimensions to strictly preserve aspect ratio
         aspect_ratio = None
         try:
-            with Image.open(img_path) as im:
-                px_w, px_h = im.size
-                if px_h > 0:
-                    aspect_ratio = px_w / px_h
+            import pymupdf as fitz
+            pix = fitz.Pixmap(str(img_path))
+            if pix.height > 0:
+                aspect_ratio = pix.width / pix.height
         except Exception as e:
             logger.warning(f"Could not read dimensions from {img_path}: {e}")
 

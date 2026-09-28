@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Optional
 
-from .ir_schema import DocumentSpec, PageSpec
+from .ir_schema import DocumentSpec, PageSpec, ImageBlock
 from .pdf_extractor import PDFExtractor
 from .page_parser import PageParser
 from .docx_compiler import DocxCompiler
@@ -46,31 +46,55 @@ def _process_single_page(
         logger.info(f"Parsing page {page_number}...")
         page_spec = parser.parse_page(page_png, page_number=page_number)
 
-        # Crop any image/figure blocks that have bounding boxes
+        # Resolve image and figure blocks using multi-modal asset harvester
         for block_idx, block in enumerate(page_spec.blocks):
-            if getattr(block, "type", "") == "image" and getattr(block, "bbox", None):
-                bbox = block.bbox  # type: ignore
+            b_type = getattr(block, "type", "")
+            bbox = getattr(block, "bbox", None)
+
+            if b_type == "image" and bbox:
                 crop_dest = assets_dir / f"p{page_number}_img{block_idx}.png"
                 try:
-                    extractor.extract_region(
+                    res = extractor.resolve_asset(
                         page_number,
                         [bbox.ymin, bbox.xmin, bbox.ymax, bbox.xmax],
                         output_path=crop_dest,
                         dpi=300,
                     )
-                    block.image_path = str(crop_dest)  # type: ignore
-
-                    # Calculate true physical dimensions from the PDF bounding box
-                    bw_in = (bbox.xmax - bbox.xmin) / 1000.0 * (page_spec.width_pt / 72.0)
-                    bh_in = (bbox.ymax - bbox.ymin) / 1000.0 * (page_spec.height_pt / 72.0)
-                    block.width_inches = round(min(6.5, max(0.5, bw_in)), 2)
-                    block.height_inches = round(bh_in, 2)
+                    block.image_path = res["image_path"]
+                    block.width_inches = res["width_inches"]
+                    block.height_inches = res["height_inches"]
                     logger.info(
-                        f"  Cropped asset: {crop_dest} "
-                        f"(bbox size: {block.width_inches}x{block.height_inches} in)"
+                        f"  Resolved visual asset ({res['source']}): {block.image_path} "
+                        f"({block.width_inches}x{block.height_inches} in)"
                     )
                 except Exception as crop_err:
-                    logger.warning(f"  Failed to crop asset on page {page_number}, block {block_idx}: {crop_err}")
+                    logger.warning(f"  Failed to resolve asset on page {page_number}, block {block_idx}: {crop_err}")
+
+            elif b_type == "chart" and bbox:
+                # Defensive guardrail: check if chart corresponds to a native image or vector diagram
+                crop_dest = assets_dir / f"p{page_number}_chart_asset{block_idx}.png"
+                try:
+                    res = extractor.resolve_asset(
+                        page_number,
+                        [bbox.ymin, bbox.xmin, bbox.ymax, bbox.xmax],
+                        output_path=crop_dest,
+                        dpi=300,
+                    )
+                    if res["source"] in ("native_image", "vector_cluster"):
+                        logger.info(
+                            f"  Preserving native chart graphic ({res['source']}) on page {page_number} "
+                            f"instead of synthesizing: {res['image_path']}"
+                        )
+                        page_spec.blocks[block_idx] = ImageBlock(
+                            type="image",
+                            image_path=res["image_path"],
+                            caption=getattr(block, "title", None),
+                            width_inches=res["width_inches"],
+                            height_inches=res["height_inches"],
+                            bbox=bbox,
+                        )
+                except Exception as chart_err:
+                    logger.debug(f"  Chart resolution check skipped: {chart_err}")
 
         block_count = len(page_spec.blocks)
         table_count = sum(1 for b in page_spec.blocks if getattr(b, "type", "") == "table")
