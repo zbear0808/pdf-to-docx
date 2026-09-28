@@ -19,9 +19,10 @@ from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
 
 from .ir_schema import (
-    Alignment, ChartBlock, DocumentBlock, DocumentSpec,
-    HeadingBlock, ImageBlock, ListType, PageBreakBlock,
-    PageSpec, ParagraphBlock, TableBlock, TextRun,
+    Alignment, BoxBlock, ChartBlock, CodeBlock, DocumentBlock,
+    DocumentSpec, EquationBlock, HeadingBlock, ImageBlock,
+    ListType, PageBreakBlock, PageSpec, ParagraphBlock,
+    QuestionBlock, TableBlock, TextRun,
 )
 from .chart_generator import render_chart_image
 
@@ -114,8 +115,31 @@ class DocxCompiler:
         font.name = self.spec.default_font
         font.size = Pt(self.spec.default_font_size_pt)
         font.color.rgb = RGBColor(0x22, 0x22, 0x22)
-        normal_style.paragraph_format.line_spacing = 1.15
-        normal_style.paragraph_format.space_after = Pt(4)
+        normal_style.paragraph_format.line_spacing = 1.05
+        normal_style.paragraph_format.space_after = Pt(2)
+
+    def _apply_page_geometry(self, section, page: PageSpec):
+        """Applies exact PDF page dimensions and margins to Word section."""
+        if page.width_pt and page.height_pt:
+            section.page_width = Pt(page.width_pt)
+            section.page_height = Pt(page.height_pt)
+
+        if page.orientation == "landscape":
+            from docx.enum.section import WD_ORIENTATION
+            section.orientation = WD_ORIENTATION.LANDSCAPE
+            if page.width_pt and page.height_pt and page.width_pt < page.height_pt:
+                section.page_width = Pt(page.height_pt)
+                section.page_height = Pt(page.width_pt)
+
+        top_m = page.margin_top_pt if page.margin_top_pt is not None else (self.spec.margins_in * 72 if self.spec.margins_in else 36.0)
+        btm_m = page.margin_bottom_pt if page.margin_bottom_pt is not None else (self.spec.margins_in * 72 if self.spec.margins_in else 36.0)
+        left_m = page.margin_left_pt if page.margin_left_pt is not None else (self.spec.margins_in * 72 if self.spec.margins_in else 40.0)
+        right_m = page.margin_right_pt if page.margin_right_pt is not None else (self.spec.margins_in * 72 if self.spec.margins_in else 40.0)
+
+        section.top_margin = Pt(max(18.0, float(top_m)))
+        section.bottom_margin = Pt(max(18.0, float(btm_m)))
+        section.left_margin = Pt(max(24.0, float(left_m)))
+        section.right_margin = Pt(max(24.0, float(right_m)))
 
     def compile(self, output_docx_path: str | Path, assets_dir: Optional[str | Path] = None) -> Path:
         out_path = Path(output_docx_path)
@@ -123,9 +147,23 @@ class DocxCompiler:
         assets_path = Path(assets_dir) if assets_dir else out_path.parent / "assets"
         assets_path.mkdir(parents=True, exist_ok=True)
 
+        if self.spec.pages:
+            self._apply_page_geometry(self.doc.sections[0], self.spec.pages[0])
+
         for page_idx, page in enumerate(self.spec.pages):
             if page_idx > 0:
-                self.doc.add_page_break()
+                prev_page = self.spec.pages[page_idx - 1]
+                need_new_section = (
+                    page.orientation != prev_page.orientation
+                    or abs((page.width_pt or 612) - (prev_page.width_pt or 612)) > 10
+                    or abs((page.height_pt or 792) - (prev_page.height_pt or 792)) > 10
+                )
+                if need_new_section:
+                    sec = self.doc.add_section()
+                    self._apply_page_geometry(sec, page)
+                else:
+                    self.doc.add_page_break()
+
             for block in page.blocks:
                 self._render_block(block, assets_path)
 
@@ -153,14 +191,22 @@ class DocxCompiler:
             self._render_chart(block, assets_path)
         elif b_type == "image":
             self._render_image(block)
+        elif b_type == "equation":
+            self._render_equation(block)
+        elif b_type == "box":
+            self._render_box(block)
+        elif b_type == "question":
+            self._render_question(block)
+        elif b_type == "code":
+            self._render_code(block)
         elif b_type == "page_break":
             self.doc.add_page_break()
 
     def _render_heading(self, h: HeadingBlock):
         p = self.doc.add_paragraph()
         p.paragraph_format.keep_with_next = True
-        p.paragraph_format.space_before = Pt(max(6, 18 - (h.level * 2)))
-        p.paragraph_format.space_after = Pt(4)
+        p.paragraph_format.space_before = Pt(max(4, 14 - (h.level * 2)))
+        p.paragraph_format.space_after = Pt(3)
         if h.alignment == Alignment.CENTER:
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         elif h.alignment == Alignment.RIGHT:
@@ -171,7 +217,7 @@ class DocxCompiler:
         else:
             run = p.add_run(sanitize_xml(h.text))
             run.bold = True
-            run.font.size = Pt(max(12, 20 - (h.level * 2)))
+            run.font.size = Pt(max(12, 18 - (h.level * 2)))
             if self.spec.theme_hex and self.spec.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"):
                 run.font.color.rgb = hex_to_rgb(self.spec.theme_hex)
             else:
@@ -186,8 +232,16 @@ class DocxCompiler:
         if p_block.is_callout:
             p.paragraph_format.left_indent = Inches(0.25)
             p.paragraph_format.right_indent = Inches(0.25)
-            p.paragraph_format.space_before = Pt(6)
-            p.paragraph_format.space_after = Pt(6)
+            p.paragraph_format.space_before = Pt(4)
+            p.paragraph_format.space_after = Pt(4)
+        elif p_block.space_before_pt is not None:
+            p.paragraph_format.space_before = Pt(p_block.space_before_pt)
+        if p_block.space_after_pt is not None:
+            p.paragraph_format.space_after = Pt(p_block.space_after_pt)
+        else:
+            p.paragraph_format.space_after = Pt(2)
+        if p_block.line_spacing is not None:
+            p.paragraph_format.line_spacing = p_block.line_spacing
         if p_block.alignment == Alignment.CENTER:
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         elif p_block.alignment == Alignment.RIGHT:
@@ -196,6 +250,90 @@ class DocxCompiler:
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         for r_spec in p_block.runs:
             self._apply_run(p.add_run(sanitize_xml(r_spec.text)), r_spec)
+
+    def _render_equation(self, eq: EquationBlock):
+        p = self.doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_before = Pt(3)
+        p.paragraph_format.space_after = Pt(3)
+        code = eq.latex_code.strip()
+        for delim in ("$$", "\\[", "\\]"):
+            code = code.replace(delim, "").strip()
+        run = p.add_run(code)
+        run.italic = True
+        run.font.name = "Cambria Math"
+
+    def _render_box(self, box: BoxBlock):
+        table = self.doc.add_table(rows=1, cols=1)
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        cell = table.cell(0, 0)
+        set_cell_margins(cell, top=100, bottom=100, left=140, right=140)
+        border_color = box.color_hex.lstrip("#") if box.color_hex else "444444"
+        borders = parse_xml(
+            f'<w:tcBorders {nsdecls("w")}>\n'
+            f'  <w:top w:val="single" w:sz="8" w:space="0" w:color="{border_color}"/>\n'
+            f'  <w:left w:val="single" w:sz="8" w:space="0" w:color="{border_color}"/>\n'
+            f'  <w:bottom w:val="single" w:sz="8" w:space="0" w:color="{border_color}"/>\n'
+            f'  <w:right w:val="single" w:sz="8" w:space="0" w:color="{border_color}"/>\n'
+            f'</w:tcBorders>'
+        )
+        cell._tc.get_or_add_tcPr().append(borders)
+        if box.title:
+            p0 = cell.paragraphs[0]
+            p0.paragraph_format.space_after = Pt(2)
+            r = p0.add_run(sanitize_xml(box.title))
+            r.bold = True
+        first_p = not bool(box.title)
+        for p_spec in box.content:
+            p = cell.paragraphs[0] if first_p else cell.add_paragraph()
+            first_p = False
+            p.paragraph_format.space_after = Pt(2)
+            for r_spec in p_spec.runs:
+                self._apply_run(p.add_run(sanitize_xml(r_spec.text)), r_spec)
+        if box.empty_for_response:
+            table.rows[0].height = Pt(box.height_pt or 100.0)
+
+    def _render_question(self, q: QuestionBlock):
+        q_prefix = ""
+        if q.number is not None:
+            q_prefix = f"{q.number}. "
+        if q.part:
+            q_prefix += f"({q.part}) "
+        for i, p_spec in enumerate(q.prompt):
+            p = self.doc.add_paragraph()
+            p.paragraph_format.space_after = Pt(2)
+            if i == 0 and q_prefix:
+                r_pre = p.add_run(q_prefix)
+                r_pre.bold = True
+            for r_spec in p_spec.runs:
+                self._apply_run(p.add_run(sanitize_xml(r_spec.text)), r_spec)
+        if q.choices:
+            for c in q.choices:
+                p_ch = self.doc.add_paragraph()
+                p_ch.paragraph_format.left_indent = Inches(0.25)
+                p_ch.paragraph_format.space_after = Pt(2)
+                r_lbl = p_ch.add_run(f"{c.label} ")
+                r_lbl.bold = True
+                if c.runs:
+                    for r_spec in c.runs:
+                        self._apply_run(p_ch.add_run(sanitize_xml(r_spec.text)), r_spec)
+                else:
+                    p_ch.add_run(sanitize_xml(c.text))
+        if q.response_box_height_pt and q.response_box_height_pt > 0:
+            self._render_box(BoxBlock(height_pt=q.response_box_height_pt, empty_for_response=True))
+
+    def _render_code(self, code_block: CodeBlock):
+        table = self.doc.add_table(rows=1, cols=1)
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        cell = table.cell(0, 0)
+        set_cell_background(cell, "#F4F5F7")
+        set_cell_margins(cell, top=80, bottom=80, left=120, right=120)
+        p = cell.paragraphs[0]
+        p.paragraph_format.space_before = Pt(0)
+        p.paragraph_format.space_after = Pt(0)
+        run = p.add_run(sanitize_xml(code_block.code))
+        run.font.name = "Consolas"
+        run.font.size = Pt(9.5)
 
     def _apply_run(self, docx_run, r_spec: TextRun, is_heading: bool = False, level: int = 1):
         docx_run.bold = r_spec.bold
@@ -245,6 +383,7 @@ class DocxCompiler:
             doc_row = table.rows[row_idx]
             make_row_cant_split(doc_row)
             is_header = row_idx == 0 and bool(tbl.headers)
+            is_summary_row = not is_header and bool(row_data) and row_data[0].strip().lower() in ("total", "sum", "summary", "overall")
             if is_header:
                 make_row_header(doc_row)
             for col_idx in range(num_cols):
@@ -257,12 +396,23 @@ class DocxCompiler:
                 p.paragraph_format.space_before = Pt(0)
                 p.paragraph_format.space_after = Pt(0)
                 p.paragraph_format.line_spacing = 1.0
-                if col_idx == 0 and not is_header:
+
+                # Determine alignment
+                if tbl.col_alignments and col_idx < len(tbl.col_alignments):
+                    align_val = tbl.col_alignments[col_idx]
+                    if align_val == Alignment.CENTER:
+                        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    elif align_val == Alignment.RIGHT:
+                        p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                    else:
+                        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                elif col_idx == 0 and not is_header:
                     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 elif is_header or cell_text.replace(".", "").isdigit():
                     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 else:
                     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+
                 run = p.add_run(cell_text)
                 if is_header:
                     run.bold = True
@@ -273,6 +423,10 @@ class DocxCompiler:
                         run.font.color.rgb = RGBColor(0x00, 0x00, 0x00)
                         set_cell_background(cell, "#F2F4F7")
                     run.font.size = Pt(9.5)
+                elif is_summary_row:
+                    run.bold = True
+                    run.font.size = Pt(9.5)
+                    run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
                 else:
                     run.font.size = Pt(9.5)
                     run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
@@ -280,7 +434,9 @@ class DocxCompiler:
                         set_cell_background(cell, "#FAFAFA")
 
         if tbl.col_widths_pct and len(tbl.col_widths_pct) == num_cols:
-            total_width = Inches(6.5)
+            sec = self.doc.sections[-1]
+            avail_width = sec.page_width - sec.left_margin - sec.right_margin
+            total_width = avail_width if avail_width > 0 else Inches(6.5)
             for col_idx, pct in enumerate(tbl.col_widths_pct):
                 col_w = total_width * (pct / 100.0)
                 for row in table.rows:
@@ -292,10 +448,13 @@ class DocxCompiler:
             chart_filename = f"chart_{id(chart)}.png"
             chart_img_path = str(assets_path / chart_filename)
             render_chart_image(chart, chart_img_path)
+        if not Path(chart_img_path).exists():
+            logger.warning(f"Chart image could not be created or found: {chart_img_path}")
+            return
         p = self.doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p.paragraph_format.space_before = Pt(8)
-        p.paragraph_format.space_after = Pt(8)
+        p.paragraph_format.space_before = Pt(6)
+        p.paragraph_format.space_after = Pt(6)
         shape = self.doc.add_picture(str(chart_img_path), width=Inches(min(6.0, chart.width_inches)))
         chart_alt = sanitize_xml((chart.title or "").strip() or "Data chart")
         try:

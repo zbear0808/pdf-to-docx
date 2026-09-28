@@ -111,3 +111,52 @@ class PDFExtractor:
         res = self.resolve_asset(page_number, bbox, output_path, dpi=dpi)
         return Path(res["image_path"])
 
+    def get_page_typography(self, page_number: int) -> Dict[str, Any]:
+        """Extracts exact page geometry, margins, and text spans from PDF content stream."""
+        if page_number < 1 or page_number > len(self.doc):
+            raise IndexError(f"Page {page_number} out of range (1..{len(self.doc)})")
+        page = self.doc[page_number - 1]
+        rect = page.rect
+        text_page = page.get_text("dict")
+
+        spans = []
+        min_x, min_y = rect.width, rect.height
+        max_x, max_y = 0.0, 0.0
+
+        for block in text_page.get("blocks", []):
+            if "lines" in block:
+                for line in block["lines"]:
+                    for span in line["spans"]:
+                        text = span["text"].strip()
+                        if not text:
+                            continue
+                        b = span["bbox"]
+                        min_x = min(min_x, b[0])
+                        min_y = min(min_y, b[1])
+                        max_x = max(max_x, b[2])
+                        max_y = max(max_y, b[3])
+                        spans.append({
+                            "text": text,
+                            "font": span["font"],
+                            "size": round(span["size"], 1),
+                            "flags": span["flags"],
+                            "color": f"#{span['color']:06x}" if span["color"] > 0 else None,
+                            "bbox": b,
+                        })
+
+        margin_left = max(24.0, min_x) if min_x < rect.width else 36.0
+        margin_top = max(18.0, min_y) if min_y < rect.height else 36.0
+        margin_right = max(24.0, rect.width - max_x) if max_x > 0 else 36.0
+        margin_bottom = max(18.0, rect.height - max_y) if max_y > 0 else 36.0
+
+        return {
+            "page_number": page_number,
+            "width_pt": rect.width,
+            "height_pt": rect.height,
+            "margin_left_pt": round(margin_left, 1),
+            "margin_top_pt": round(margin_top, 1),
+            "margin_right_pt": round(margin_right, 1),
+            "margin_bottom_pt": round(margin_bottom, 1),
+            "spans": spans,
+        }
+

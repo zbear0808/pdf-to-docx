@@ -24,6 +24,11 @@ from .ir_schema import PageSpec
 
 logger = logging.getLogger(__name__)
 
+# Suppress spurious AFC warnings from google_genai.models
+logging.getLogger("google_genai.models").addFilter(
+    lambda record: "automatic function calling (AFC)" not in record.getMessage()
+)
+
 def _get_api_key(api_key: Optional[str] = None) -> Optional[str]:
     """Retrieves GEMINI_API_KEY from parameter, env var, or .env file."""
     if api_key:
@@ -151,6 +156,7 @@ class PageParser:
                 response_mime_type="application/json",
                 response_schema=PageSpec,
                 temperature=0.0,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
 

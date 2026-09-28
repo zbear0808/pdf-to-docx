@@ -48,6 +48,11 @@ def main():
         datefmt="%H:%M:%S",
     )
 
+    # Suppress spurious AFC warnings from google_genai.models
+    logging.getLogger("google_genai.models").addFilter(
+        lambda record: "automatic function calling (AFC)" not in record.getMessage()
+    )
+
     # Default output path
     output = args.output or args.pdf_path.with_suffix(".docx")
 

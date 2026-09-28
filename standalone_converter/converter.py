@@ -29,6 +29,56 @@ from .docx_compiler import DocxCompiler
 logger = logging.getLogger(__name__)
 
 
+def _backfill_page_typography(page_spec: PageSpec, typo: Dict[str, Any]):
+    """Enriches PageSpec with exact PDF geometry and text span typography."""
+    page_spec.width_pt = typo.get("width_pt", page_spec.width_pt)
+    page_spec.height_pt = typo.get("height_pt", page_spec.height_pt)
+    page_spec.margin_top_pt = typo.get("margin_top_pt")
+    page_spec.margin_bottom_pt = typo.get("margin_bottom_pt")
+    page_spec.margin_left_pt = typo.get("margin_left_pt")
+    page_spec.margin_right_pt = typo.get("margin_right_pt")
+
+    pdf_spans = typo.get("spans", [])
+    if not pdf_spans:
+        return
+
+    span_lookup = {}
+    for s in pdf_spans:
+        k = s["text"].strip().lower()[:15]
+        if k and k not in span_lookup:
+            span_lookup[k] = s
+
+    for block in page_spec.blocks:
+        b_type = getattr(block, "type", "")
+        if b_type == "paragraph":
+            if getattr(block, "space_after_pt", None) is None:
+                block.space_after_pt = 2.0
+            if getattr(block, "line_spacing", None) is None:
+                block.line_spacing = 1.05
+
+        runs = getattr(block, "runs", None) or []
+        for run in runs:
+            r_text = getattr(run, "text", "").strip()
+            if not r_text:
+                continue
+            k = r_text.lower()[:15]
+            matched_span = span_lookup.get(k)
+            if not matched_span:
+                for s in pdf_spans:
+                    if s["text"] in r_text or r_text in s["text"]:
+                        matched_span = s
+                        break
+            if matched_span:
+                if getattr(run, "font_size_pt", None) is None:
+                    run.font_size_pt = matched_span["size"]
+                if not getattr(run, "font_name", None):
+                    run.font_name = matched_span["font"]
+                if matched_span.get("flags", 0) & 2:
+                    run.bold = True
+                if matched_span.get("flags", 0) & 1:
+                    run.italic = True
+
+
 def _process_single_page(
     parser: PageParser,
     extractor: PDFExtractor,
@@ -36,15 +86,17 @@ def _process_single_page(
     page_png: Path,
     assets_dir: Path,
 ) -> PageSpec:
-    """Processes a single page: parse layout via Gemini, crop assets.
-
-    This function runs in a thread pool worker. It is self-contained:
-    one page image in, one PageSpec out. Errors are caught and result
-    in an empty PageSpec with a warning.
-    """
+    """Processes a single page: parse layout via Gemini, crop assets, and backfill typography."""
     try:
         logger.info(f"Parsing page {page_number}...")
         page_spec = parser.parse_page(page_png, page_number=page_number)
+
+        # Backfill exact typography and page margins from PDF content stream
+        try:
+            typo = extractor.get_page_typography(page_number)
+            _backfill_page_typography(page_spec, typo)
+        except Exception as typo_err:
+            logger.debug(f"Typography extraction skipped for page {page_number}: {typo_err}")
 
         # Resolve image and figure blocks using multi-modal asset harvester
         for block_idx, block in enumerate(page_spec.blocks):
@@ -71,7 +123,6 @@ def _process_single_page(
                     logger.warning(f"  Failed to resolve asset on page {page_number}, block {block_idx}: {crop_err}")
 
             elif b_type == "chart" and bbox:
-                # Defensive guardrail: check if chart corresponds to a native image or vector diagram
                 crop_dest = assets_dir / f"p{page_number}_chart_asset{block_idx}.png"
                 try:
                     res = extractor.resolve_asset(
@@ -107,8 +158,24 @@ def _process_single_page(
         return page_spec
 
     except Exception as e:
-        logger.error(f"Page {page_number} failed completely: {e}. Using empty page.")
-        return PageSpec(page_number=page_number)
+        logger.error(f"Page {page_number} parsing failed: {e}. Falling back to PDF text streams.")
+        blocks = []
+        try:
+            page = extractor.doc[page_number - 1]
+            raw_blocks = page.get_text("blocks")
+            for b in raw_blocks:
+                if b[6] == 0:  # text
+                    txt = b[4].strip()
+                    if txt:
+                        from .ir_schema import ParagraphBlock, TextRun
+                        blocks.append(ParagraphBlock(
+                            type="paragraph",
+                            runs=[TextRun(text=txt)],
+                            space_after_pt=2.0,
+                        ))
+        except Exception as fb_err:
+            logger.error(f"Fallback extraction failed on page {page_number}: {fb_err}")
+        return PageSpec(page_number=page_number, blocks=blocks)
 
 
 def convert_pdf_to_docx(

@@ -40,6 +40,11 @@ from .pdf_extractor import PDFExtractor
 
 logger = logging.getLogger(__name__)
 
+# Suppress spurious AFC warnings from google_genai.models
+logging.getLogger("google_genai.models").addFilter(
+    lambda record: "automatic function calling (AFC)" not in record.getMessage()
+)
+
 
 def _get_api_key(provided_key: Optional[str] = None) -> Optional[str]:
     if provided_key:
@@ -367,6 +372,7 @@ class AsymmetricCascadeConverter:
                     config=types.GenerateContentConfig(
                         tools=tools,
                         temperature=0.0,
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
                     ),
                 )
 

@@ -71,6 +71,9 @@ class ParagraphBlock(BaseModel):
     list_level: int = 0
     is_callout: bool = False
     callout_color_hex: Optional[str] = None
+    line_spacing: Optional[float] = None
+    space_before_pt: Optional[float] = None
+    space_after_pt: Optional[float] = None
     bbox: Optional[BoundingBox] = None
 
 
@@ -80,6 +83,7 @@ class TableBlock(BaseModel):
     headers: List[str] = Field(default_factory=list)
     rows: List[List[str]] = Field(default_factory=list)
     col_widths_pct: Optional[List[float]] = None
+    col_alignments: Optional[List[Alignment]] = None
     cant_split: bool = True
     repeat_header: bool = True
     style_name: Optional[str] = "Table Grid"
@@ -115,6 +119,54 @@ class ImageBlock(BaseModel):
     bbox: Optional[BoundingBox] = None
 
 
+class EquationBlock(BaseModel):
+    """Dedicated mathematical display equation block."""
+    type: str = "equation"
+    latex_code: str
+    numbered: bool = False
+    label: Optional[str] = None
+    bbox: Optional[BoundingBox] = None
+
+
+class BoxBlock(BaseModel):
+    """Framed callout or response box."""
+    type: str = "box"
+    title: Optional[str] = None
+    content: List[ParagraphBlock] = Field(default_factory=list)
+    color_hex: str = "#000000"
+    height_pt: Optional[float] = None
+    empty_for_response: bool = False
+    bbox: Optional[BoundingBox] = None
+
+
+class QuestionChoice(BaseModel):
+    """Multiple choice option."""
+    label: str
+    text: str
+    runs: Optional[List[TextRun]] = None
+
+
+class QuestionBlock(BaseModel):
+    """Specialized block for exam / quiz problems."""
+    type: str = "question"
+    number: Optional[int] = None
+    part: Optional[str] = None
+    points: Optional[int] = None
+    prompt: List[ParagraphBlock] = Field(default_factory=list)
+    choices: Optional[List[QuestionChoice]] = None
+    response_box_height_pt: Optional[float] = None
+    solution: Optional[str] = None
+    bbox: Optional[BoundingBox] = None
+
+
+class CodeBlock(BaseModel):
+    """Verbatim or syntax-highlighted code block."""
+    type: str = "code"
+    language: Optional[str] = None
+    code: str
+    caption: Optional[str] = None
+
+
 class PageBreakBlock(BaseModel):
     """Explicit page break."""
     type: str = "page_break"
@@ -126,6 +178,10 @@ DocumentBlock = Union[
     TableBlock,
     ChartBlock,
     ImageBlock,
+    EquationBlock,
+    BoxBlock,
+    QuestionBlock,
+    CodeBlock,
     PageBreakBlock,
 ]
 
@@ -136,6 +192,10 @@ class PageSpec(BaseModel):
     width_pt: float = 612.0
     height_pt: float = 792.0
     orientation: str = "portrait"
+    margin_top_pt: Optional[float] = None
+    margin_bottom_pt: Optional[float] = None
+    margin_left_pt: Optional[float] = None
+    margin_right_pt: Optional[float] = None
     blocks: List[DocumentBlock] = Field(default_factory=list)
 
 
@@ -145,4 +205,5 @@ class DocumentSpec(BaseModel):
     theme_hex: str = "#000000"
     default_font: str = "Calibri"
     default_font_size_pt: float = 11.0
+    margins_in: Optional[float] = None
     pages: List[PageSpec] = Field(default_factory=list)

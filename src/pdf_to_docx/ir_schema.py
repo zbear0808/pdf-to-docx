@@ -94,6 +94,9 @@ class ParagraphBlock(BaseModel):
     list_level: int = 0
     is_callout: bool = False
     callout_color_hex: Optional[str] = None
+    line_spacing: Optional[float] = None
+    space_before_pt: Optional[float] = None
+    space_after_pt: Optional[float] = None
     bbox: Optional[BoundingBox] = None
 
 
@@ -235,6 +238,10 @@ class PageSpec(BaseModel):
     width_pt: float = 612.0  # Standard letter (8.5 x 11 in points)
     height_pt: float = 792.0
     orientation: str = "portrait"  # portrait | landscape
+    margin_top_pt: Optional[float] = None
+    margin_bottom_pt: Optional[float] = None
+    margin_left_pt: Optional[float] = None
+    margin_right_pt: Optional[float] = None
     blocks: List[DocumentBlock] = Field(default_factory=list)
 
 

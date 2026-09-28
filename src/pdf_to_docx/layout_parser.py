@@ -81,6 +81,10 @@ class LayoutParser:
     def client(self):
         if self._client is None:
             from google import genai
+            import logging
+            logging.getLogger("google_genai.models").addFilter(
+                lambda record: "automatic function calling (AFC)" not in record.getMessage()
+            )
             if self.api_key:
                 self._client = genai.Client(api_key=self.api_key)
             else:
@@ -107,6 +111,7 @@ class LayoutParser:
                 response_mime_type="application/json",
                 response_schema=PageSpec,
                 temperature=0.1,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
 
@@ -147,6 +152,7 @@ class LayoutParser:
             ],
             config=types.GenerateContentConfig(
                 temperature=0.1,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
         return response.text.strip()
@@ -168,6 +174,7 @@ class LayoutParser:
             ],
             config=types.GenerateContentConfig(
                 temperature=0.1,
+                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
             ),
         )
         text = response.text.strip()
