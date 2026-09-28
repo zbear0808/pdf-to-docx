@@ -59,7 +59,16 @@ def _process_single_page(
                         dpi=300,
                     )
                     block.image_path = str(crop_dest)  # type: ignore
-                    logger.info(f"  Cropped asset: {crop_dest}")
+
+                    # Calculate true physical dimensions from the PDF bounding box
+                    bw_in = (bbox.xmax - bbox.xmin) / 1000.0 * (page_spec.width_pt / 72.0)
+                    bh_in = (bbox.ymax - bbox.ymin) / 1000.0 * (page_spec.height_pt / 72.0)
+                    block.width_inches = round(min(6.5, max(0.5, bw_in)), 2)
+                    block.height_inches = round(bh_in, 2)
+                    logger.info(
+                        f"  Cropped asset: {crop_dest} "
+                        f"(bbox size: {block.width_inches}x{block.height_inches} in)"
+                    )
                 except Exception as crop_err:
                     logger.warning(f"  Failed to crop asset on page {page_number}, block {block_idx}: {crop_err}")
 

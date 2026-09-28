@@ -109,7 +109,7 @@ class ImageBlock(BaseModel):
     type: str = "image"
     image_path: str = ""
     caption: Optional[str] = None
-    width_inches: float = 5.5
+    width_inches: Optional[float] = None
     height_inches: Optional[float] = None
     alignment: Alignment = Alignment.CENTER
     bbox: Optional[BoundingBox] = None

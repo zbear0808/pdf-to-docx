@@ -386,14 +386,24 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.paragraph_format.space_before = Pt(6)
         p.paragraph_format.space_after = Pt(4)
-        self.doc.add_picture(str(img_p), width=Inches(min(6.0, width_inches)))
+        shape = self.doc.add_picture(str(img_p), width=Inches(min(6.5, width_inches)))
+
+        # Set accessibility alt text
+        alt = sanitize_xml(caption or "Document figure")
+        try:
+            docPr = shape._inline.find(qn("wp:docPr"))
+            if docPr is not None:
+                docPr.set("descr", alt)
+                docPr.set("title", alt)
+        except Exception:
+            pass
 
         if caption:
             cap_p = self.doc.add_paragraph()
             cap_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             cap_p.paragraph_format.space_before = Pt(2)
             cap_p.paragraph_format.space_after = Pt(6)
-            run = cap_p.add_run(caption)
+            run = cap_p.add_run(sanitize_xml(caption))
             run.italic = True
             run.font.size = Pt(9)
             run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)

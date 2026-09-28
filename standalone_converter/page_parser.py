@@ -65,7 +65,7 @@ Rules:
    - CRITICAL: Do NOT create separate ParagraphBlocks for any text, labels, numbers, or headers that belong to a TableBlock. All table content must exist strictly inside the TableBlock to avoid duplicate data.
    - Estimate col_widths_pct (must sum to ~100).
 6. CHARTS: Identify chart_type (bar/line/pie). Extract title, categories (x-axis labels), and series (name + numeric values). Provide bbox [ymin, xmin, ymax, xmax] on 0-1000 scale.
-7. IMAGES/FIGURES/LOGOS: Set type="image" with bbox [ymin, xmin, ymax, xmax] on 0-1000 scale so the image can be cropped. Add caption if visible.
+7. IMAGES/FIGURES/LOGOS: Set type="image" with bbox [ymin, xmin, ymax, xmax] on 0-1000 scale so the image can be cropped. Add caption if visible. Leave width_inches and height_inches null so the aspect ratio is strictly preserved from the image asset.
 8. Set page orientation to "portrait" or "landscape" based on aspect ratio.
 9. Bounding boxes use a 0-1000 normalized coordinate system: ymin=top edge, ymax=bottom edge, xmin=left edge, xmax=right edge.
 """

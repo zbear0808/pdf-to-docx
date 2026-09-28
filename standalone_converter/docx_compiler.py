@@ -9,6 +9,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Optional
+from PIL import Image
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -307,18 +308,46 @@ class DocxCompiler:
             pass
 
     def _render_image(self, img: ImageBlock):
-        if not img.image_path or not Path(img.image_path).exists():
+        img_path = Path(img.image_path) if img.image_path else None
+        if not img_path or not img_path.exists():
             return
         p = self.doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        if img.alignment == Alignment.LEFT:
+            p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        elif img.alignment == Alignment.RIGHT:
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        else:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.paragraph_format.space_before = Pt(6)
         p.paragraph_format.space_after = Pt(4)
-        w = Inches(img.width_inches) if img.width_inches else Inches(5.5)
-        h = Inches(img.height_inches) if img.height_inches else None
-        if h:
-            shape = self.doc.add_picture(img.image_path, width=w, height=h)
-        else:
-            shape = self.doc.add_picture(img.image_path, width=w)
+
+        # Inspect true image pixel dimensions to strictly preserve aspect ratio
+        aspect_ratio = None
+        try:
+            with Image.open(img_path) as im:
+                px_w, px_h = im.size
+                if px_h > 0:
+                    aspect_ratio = px_w / px_h
+        except Exception as e:
+            logger.warning(f"Could not read dimensions from {img_path}: {e}")
+
+        # Standard page printable constraints (inches)
+        MAX_PAGE_WIDTH = 6.5
+        MAX_PAGE_HEIGHT = 8.5
+
+        # Determine target display width in inches (clamped to page content width)
+        target_w = float(img.width_inches) if (img.width_inches and img.width_inches > 0) else 5.5
+        target_w = min(target_w, MAX_PAGE_WIDTH)
+
+        # If aspect ratio is known, ensure height does not overflow page content height
+        if aspect_ratio:
+            projected_h = target_w / aspect_ratio
+            if projected_h > MAX_PAGE_HEIGHT:
+                target_w = MAX_PAGE_HEIGHT * aspect_ratio
+
+        # Pass ONLY width to add_picture so python-docx computes proportional height,
+        # guaranteeing 100% exact aspect ratio preservation with zero distortion
+        shape = self.doc.add_picture(str(img_path), width=Inches(target_w))
 
         # Set accessibility alt text on DrawingML docPr
         img_alt = sanitize_xml((img.caption or "").strip() or "Document figure")
