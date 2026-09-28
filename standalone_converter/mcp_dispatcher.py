@@ -112,6 +112,38 @@ def _hex_to_rgb(hex_str: str) -> RGBColor:
     return RGBColor(int(hex_clean[0:2], 16), int(hex_clean[2:4], 16), int(hex_clean[4:6], 16))
 
 
+def sanitize_xml(text: str) -> str:
+    """Removes XML control characters that crash python-docx or Word."""
+    if not isinstance(text, str):
+        return str(text) if text is not None else ""
+    return "".join(
+        c for c in text
+        if c in ("\t", "\n", "\r")
+        or (0x20 <= ord(c) <= 0xD7FF)
+        or (0xE000 <= ord(c) <= 0xFFFD)
+        or (0x10000 <= ord(c) <= 0x10FFFF)
+    )
+
+
+def set_table_borders(table, color="444444", sz="4", val="single"):
+    """Applies crisp table borders to all outer and inner cell walls."""
+    tblPr = table._tbl.tblPr
+    existing = tblPr.find(qn("w:tblBorders"))
+    if existing is not None:
+        tblPr.remove(existing)
+    borders = parse_xml(
+        f'<w:tblBorders {nsdecls("w")}>\n'
+        f'  <w:top w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:left w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:bottom w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:right w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:insideH w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:insideV w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'</w:tblBorders>'
+    )
+    tblPr.append(borders)
+
+
 class BaseDocxDispatcher(ABC):
     """Abstract interface for DOCX tool call dispatchers."""
 
@@ -187,7 +219,7 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
     def __init__(
         self,
         title: str = "Document",
-        theme_hex: str = "#1F4E79",
+        theme_hex: str = "#000000",
         default_font: str = "Calibri",
         default_font_size_pt: float = 11.0,
     ):
@@ -210,10 +242,13 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
         p.paragraph_format.space_before = Pt(max(6, 18 - (lvl * 2)))
         p.paragraph_format.space_after = Pt(4)
 
-        run = p.add_run(text)
+        run = p.add_run(sanitize_xml(text))
         run.bold = True
-        run.font.size = Pt(max(12, 22 - (lvl * 2)))
-        run.font.color.rgb = _hex_to_rgb(self.theme_hex)
+        run.font.size = Pt(max(12, 20 - (lvl * 2)))
+        if self.theme_hex and self.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"):
+            run.font.color.rgb = _hex_to_rgb(self.theme_hex)
+        else:
+            run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
         return p
 
     def add_paragraph(self, text: str, style: str = "Normal"):
@@ -229,7 +264,7 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
             except Exception:
                 pass
 
-        p.add_run(text)
+        p.add_run(sanitize_xml(text))
         return p
 
     def add_table(
@@ -238,10 +273,20 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
         headers: Optional[List[str]] = None,
         col_widths_pct: Optional[List[float]] = None,
     ):
+        sanitized_headers = [sanitize_xml(h) for h in headers] if headers else None
+        sanitized_rows = [[sanitize_xml(c) for c in r] for r in rows] if rows else []
+
+        # Deduplicate if rows[0] is identical to headers
+        if sanitized_headers and sanitized_rows:
+            h_norm = [str(h).strip().lower() for h in sanitized_headers]
+            r0_norm = [str(c).strip().lower() for c in sanitized_rows[0]]
+            if h_norm == r0_norm:
+                sanitized_rows = sanitized_rows[1:]
+
         all_rows: List[List[str]] = []
-        if headers:
-            all_rows.append(headers)
-        all_rows.extend(rows)
+        if sanitized_headers:
+            all_rows.append(sanitized_headers)
+        all_rows.extend(sanitized_rows)
 
         if not all_rows:
             return None
@@ -250,10 +295,9 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
         num_cols = max(len(r) for r in all_rows)
         table = self.doc.add_table(rows=num_rows, cols=num_cols)
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
-        try:
-            table.style = "Table Grid"
-        except Exception:
-            pass
+        set_table_borders(table, color="444444", sz="4")
+
+        is_themed = bool(self.theme_hex and self.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"))
 
         for row_idx, row_data in enumerate(all_rows):
             doc_row = table.rows[row_idx]
@@ -263,7 +307,7 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
             if trPr.find(qn("w:cantSplit")) is None:
                 trPr.append(OxmlElement("w:cantSplit"))
 
-            is_header = row_idx == 0 and bool(headers)
+            is_header = row_idx == 0 and bool(sanitized_headers)
             if is_header:
                 if trPr.find(qn("w:tblHeader")) is None:
                     trPr.append(OxmlElement("w:tblHeader"))
@@ -277,10 +321,10 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
                 tcPr = cell._tc.get_or_add_tcPr()
                 tcMar = parse_xml(
                     f'<w:tcMar {nsdecls("w")}>'
-                    f'  <w:top w:w="120" w:type="dxa"/>'
-                    f'  <w:bottom w:w="120" w:type="dxa"/>'
-                    f'  <w:left w:w="140" w:type="dxa"/>'
-                    f'  <w:right w:w="140" w:type="dxa"/>'
+                    f'  <w:top w:w="70" w:type="dxa"/>'
+                    f'  <w:bottom w:w="70" w:type="dxa"/>'
+                    f'  <w:left w:w="100" w:type="dxa"/>'
+                    f'  <w:right w:w="100" w:type="dxa"/>'
                     f'</w:tcMar>'
                 )
                 tcPr.append(tcMar)
@@ -290,19 +334,31 @@ class InProcessDocxDispatcher(BaseDocxDispatcher):
                 p.paragraph_format.space_before = Pt(0)
                 p.paragraph_format.space_after = Pt(0)
                 p.paragraph_format.line_spacing = 1.0
+                if col_idx == 0 and not is_header:
+                    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                elif is_header or cell_text.replace(".", "").isdigit():
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                else:
+                    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 run = p.add_run(cell_text)
 
                 if is_header:
                     run.bold = True
-                    run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
-                    run.font.size = Pt(10)
-                    hex_clean = self.theme_hex.lstrip("#")
-                    shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{hex_clean}" w:val="clear"/>')
-                    tcPr.append(shd)
+                    if is_themed:
+                        run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+                        hex_clean = self.theme_hex.lstrip("#")
+                        shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{hex_clean}" w:val="clear"/>')
+                        tcPr.append(shd)
+                    else:
+                        run.font.color.rgb = RGBColor(0x00, 0x00, 0x00)
+                        shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="F2F4F7" w:val="clear"/>')
+                        tcPr.append(shd)
+                    run.font.size = Pt(9.5)
                 else:
                     run.font.size = Pt(9.5)
+                    run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
                     if row_idx % 2 == 1:
-                        shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="F7F9FB" w:val="clear"/>')
+                        shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="FAFAFA" w:val="clear"/>')
                         tcPr.append(shd)
 
         # Apply column widths

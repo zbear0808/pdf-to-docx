@@ -24,17 +24,46 @@ from .ir_schema import PageSpec
 
 logger = logging.getLogger(__name__)
 
+def _get_api_key(api_key: Optional[str] = None) -> Optional[str]:
+    """Retrieves GEMINI_API_KEY from parameter, env var, or .env file."""
+    if api_key:
+        return api_key
+    key = os.environ.get("GEMINI_API_KEY")
+    if key:
+        return key
+    cur = Path.cwd()
+    for parent in [cur] + list(cur.parents)[:3]:
+        env_file = parent / ".env"
+        if env_file.exists():
+            try:
+                for line in env_file.read_text(encoding="utf-8").splitlines():
+                    line = line.strip()
+                    if line.startswith("GEMINI_API_KEY="):
+                        val = line.split("=", 1)[1].strip().strip('"').strip("'")
+                        if val:
+                            os.environ["GEMINI_API_KEY"] = val
+                            return val
+            except Exception:
+                pass
+    return None
+
+
 # Maximally constrained prompt for Flash Lite — no reasoning, just structured extraction.
-# Each instruction is numbered and specific to reduce ambiguity.
+# Each instruction is numbered and specific to eliminate ambiguity.
 EXTRACTION_PROMPT = """\
 Extract the layout of this document page image into structured JSON matching the PageSpec schema.
 
 Rules:
 1. Output ONLY valid JSON matching the schema. No commentary, no markdown fences.
 2. Identify blocks in top-to-bottom reading order. Each block is one of: heading, paragraph, table, chart, image, page_break.
-3. HEADINGS: Set level 1-4 based on visual size. Extract exact text. Set alignment (left/center/right).
-4. PARAGRAPHS: Split text into runs. Mark bold, italic, underline, color_hex, font_size_pt per run. If it is a bullet list set list_type="bullet". If numbered list set list_type="numbered". Otherwise list_type="none".
-5. TABLES: Extract headers as a string list. Extract rows as a list of string lists. Every row must have the same number of columns as headers. Estimate col_widths_pct (must sum to ~100).
+3. HEADINGS: Use ONLY for major document or section titles (level 1-4). Do NOT classify numbered questions (e.g. "1.", "2.", "(a)", "(b)"), test instructions, or problem statements as headings; classify them as paragraphs.
+4. PARAGRAPHS: Split text into runs. Mark bold, italic, underline, font_size_pt per run. Set list_type="bullet" or "numbered" if applicable, otherwise "none". Leave color_hex null unless the original text on the page is printed in an explicit, distinct non-black color (e.g. bright red or green). For standard black or dark monochrome text, leave color_hex null.
+5. TABLES: Extract all tabular data into TableBlock.
+   - Set 'headers' to the column header string list.
+   - Set 'rows' to the 2D string list of data rows.
+   - CRITICAL: Do NOT include the header row inside 'rows'.
+   - CRITICAL: Do NOT create separate ParagraphBlocks for any text, labels, numbers, or headers that belong to a TableBlock. All table content must exist strictly inside the TableBlock to avoid duplicate data.
+   - Estimate col_widths_pct (must sum to ~100).
 6. CHARTS: Identify chart_type (bar/line/pie). Extract title, categories (x-axis labels), and series (name + numeric values). Provide bbox [ymin, xmin, ymax, xmax] on 0-1000 scale.
 7. IMAGES/FIGURES/LOGOS: Set type="image" with bbox [ymin, xmin, ymax, xmax] on 0-1000 scale so the image can be cropped. Add caption if visible.
 8. Set page orientation to "portrait" or "landscape" based on aspect ratio.
@@ -48,10 +77,10 @@ class PageParser:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model_name: str = "gemini-2.0-flash-lite",
+        model_name: str = "gemini-3.5-flash-lite",
         max_retries: int = 3,
     ):
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
+        self.api_key = _get_api_key(api_key)
         self.model_name = model_name
         self.max_retries = max_retries
         self._client = None

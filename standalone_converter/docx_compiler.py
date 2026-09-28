@@ -6,11 +6,14 @@ and twip-precise column layouts.
 """
 
 from __future__ import annotations
+import logging
 from pathlib import Path
 from typing import Optional
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+logger = logging.getLogger(__name__)
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
@@ -51,6 +54,38 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
         f'</w:tcMar>'
     )
     tcPr.append(tcMar)
+
+
+def sanitize_xml(text: str) -> str:
+    """Removes XML control characters that crash python-docx or Word."""
+    if not isinstance(text, str):
+        return str(text) if text is not None else ""
+    return "".join(
+        c for c in text
+        if c in ("\t", "\n", "\r")
+        or (0x20 <= ord(c) <= 0xD7FF)
+        or (0xE000 <= ord(c) <= 0xFFFD)
+        or (0x10000 <= ord(c) <= 0x10FFFF)
+    )
+
+
+def set_table_borders(table, color="444444", sz="4", val="single"):
+    """Applies crisp table borders to all outer and inner cell walls."""
+    tblPr = table._tbl.tblPr
+    existing = tblPr.find(qn("w:tblBorders"))
+    if existing is not None:
+        tblPr.remove(existing)
+    borders = parse_xml(
+        f'<w:tblBorders {nsdecls("w")}>\n'
+        f'  <w:top w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:left w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:bottom w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:right w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:insideH w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'  <w:insideV w:val="{val}" w:sz="{sz}" w:space="0" w:color="{color}"/>\n'
+        f'</w:tblBorders>'
+    )
+    tblPr.append(borders)
 
 
 def make_row_cant_split(row):
@@ -94,8 +129,17 @@ class DocxCompiler:
             for block in page.blocks:
                 self._render_block(block, assets_path)
 
-        self.doc.save(str(out_path))
-        return out_path
+        try:
+            self.doc.save(str(out_path))
+            return out_path
+        except PermissionError:
+            fallback = out_path.parent / f"{out_path.stem}_clean{out_path.suffix}"
+            logger.warning(
+                f"File '{out_path}' is locked by another process (e.g. Word). "
+                f"Saving to fallback path: '{fallback}'"
+            )
+            self.doc.save(str(fallback))
+            return fallback
 
     def _render_block(self, block: DocumentBlock, assets_path: Path):
         b_type = getattr(block, "type", "")
@@ -123,12 +167,15 @@ class DocxCompiler:
             p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
         if h.runs:
             for run in h.runs:
-                self._apply_run(p.add_run(run.text), run, is_heading=True, level=h.level)
+                self._apply_run(p.add_run(sanitize_xml(run.text)), run, is_heading=True, level=h.level)
         else:
-            run = p.add_run(h.text)
+            run = p.add_run(sanitize_xml(h.text))
             run.bold = True
-            run.font.size = Pt(max(12, 22 - (h.level * 2)))
-            run.font.color.rgb = hex_to_rgb(self.spec.theme_hex)
+            run.font.size = Pt(max(12, 20 - (h.level * 2)))
+            if self.spec.theme_hex and self.spec.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"):
+                run.font.color.rgb = hex_to_rgb(self.spec.theme_hex)
+            else:
+                run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
 
     def _render_paragraph(self, p_block: ParagraphBlock):
         p = self.doc.add_paragraph()
@@ -148,7 +195,7 @@ class DocxCompiler:
         elif p_block.alignment == Alignment.JUSTIFY:
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         for r_spec in p_block.runs:
-            self._apply_run(p.add_run(r_spec.text), r_spec)
+            self._apply_run(p.add_run(sanitize_xml(r_spec.text)), r_spec)
 
     def _apply_run(self, docx_run, r_spec: TextRun, is_heading: bool = False, level: int = 1):
         docx_run.bold = r_spec.bold
@@ -158,19 +205,31 @@ class DocxCompiler:
         if r_spec.font_size_pt:
             docx_run.font.size = Pt(r_spec.font_size_pt)
         elif is_heading:
-            docx_run.font.size = Pt(max(12, 22 - (level * 2)))
+            docx_run.font.size = Pt(max(12, 20 - (level * 2)))
         if r_spec.color_hex:
             docx_run.font.color.rgb = hex_to_rgb(r_spec.color_hex)
         elif is_heading:
-            docx_run.font.color.rgb = hex_to_rgb(self.spec.theme_hex)
+            if self.spec.theme_hex and self.spec.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"):
+                docx_run.font.color.rgb = hex_to_rgb(self.spec.theme_hex)
+            else:
+                docx_run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
         if r_spec.font_name:
             docx_run.font.name = r_spec.font_name
 
     def _render_table(self, tbl: TableBlock):
         all_rows = []
         if tbl.headers:
-            all_rows.append(tbl.headers)
-        all_rows.extend(tbl.rows)
+            all_rows.append([sanitize_xml(h) for h in tbl.headers])
+
+        sanitized_rows = [[sanitize_xml(c) for c in r] for r in tbl.rows]
+        # Deduplicate if rows[0] is identical to headers
+        if tbl.headers and sanitized_rows:
+            h_norm = [str(h).strip().lower() for h in tbl.headers]
+            r0_norm = [str(c).strip().lower() for c in sanitized_rows[0]]
+            if h_norm == r0_norm:
+                sanitized_rows = sanitized_rows[1:]
+        all_rows.extend(sanitized_rows)
+
         if not all_rows:
             return
 
@@ -178,39 +237,47 @@ class DocxCompiler:
         num_cols = max(len(r) for r in all_rows)
         table = self.doc.add_table(rows=num_rows, cols=num_cols)
         table.alignment = WD_TABLE_ALIGNMENT.CENTER
-        if tbl.style_name:
-            try:
-                table.style = tbl.style_name
-            except Exception:
-                table.style = "Table Grid"
+        set_table_borders(table, color="444444", sz="4")
+
+        is_themed = bool(self.spec.theme_hex and self.spec.theme_hex.upper() not in ("#000000", "#111111", "#222222", "#1F4E79"))
 
         for row_idx, row_data in enumerate(all_rows):
             doc_row = table.rows[row_idx]
-            if tbl.cant_split:
-                make_row_cant_split(doc_row)
+            make_row_cant_split(doc_row)
             is_header = row_idx == 0 and bool(tbl.headers)
-            if is_header and tbl.repeat_header:
+            if is_header:
                 make_row_header(doc_row)
             for col_idx in range(num_cols):
                 cell_text = row_data[col_idx] if col_idx < len(row_data) else ""
                 cell = doc_row.cells[col_idx]
                 cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
-                set_cell_margins(cell, top=120, bottom=120, left=140, right=140)
+                set_cell_margins(cell, top=70, bottom=70, left=100, right=100)
                 p = cell.paragraphs[0]
                 p.text = ""
                 p.paragraph_format.space_before = Pt(0)
                 p.paragraph_format.space_after = Pt(0)
                 p.paragraph_format.line_spacing = 1.0
+                if col_idx == 0 and not is_header:
+                    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+                elif is_header or cell_text.replace(".", "").isdigit():
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                else:
+                    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 run = p.add_run(cell_text)
                 if is_header:
                     run.bold = True
-                    run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
-                    run.font.size = Pt(10)
-                    set_cell_background(cell, self.spec.theme_hex)
+                    if is_themed:
+                        run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+                        set_cell_background(cell, self.spec.theme_hex)
+                    else:
+                        run.font.color.rgb = RGBColor(0x00, 0x00, 0x00)
+                        set_cell_background(cell, "#F2F4F7")
+                    run.font.size = Pt(9.5)
                 else:
                     run.font.size = Pt(9.5)
+                    run.font.color.rgb = RGBColor(0x11, 0x11, 0x11)
                     if row_idx % 2 == 1:
-                        set_cell_background(cell, "#F7F9FB")
+                        set_cell_background(cell, "#FAFAFA")
 
         if tbl.col_widths_pct and len(tbl.col_widths_pct) == num_cols:
             total_width = Inches(6.5)
@@ -229,7 +296,15 @@ class DocxCompiler:
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p.paragraph_format.space_before = Pt(8)
         p.paragraph_format.space_after = Pt(8)
-        self.doc.add_picture(str(chart_img_path), width=Inches(min(6.0, chart.width_inches)))
+        shape = self.doc.add_picture(str(chart_img_path), width=Inches(min(6.0, chart.width_inches)))
+        chart_alt = sanitize_xml((chart.title or "").strip() or "Data chart")
+        try:
+            docPr = shape._inline.find(qn("wp:docPr"))
+            if docPr is not None:
+                docPr.set("descr", chart_alt)
+                docPr.set("title", chart_alt)
+        except Exception:
+            pass
 
     def _render_image(self, img: ImageBlock):
         if not img.image_path or not Path(img.image_path).exists():
@@ -241,15 +316,26 @@ class DocxCompiler:
         w = Inches(img.width_inches) if img.width_inches else Inches(5.5)
         h = Inches(img.height_inches) if img.height_inches else None
         if h:
-            self.doc.add_picture(img.image_path, width=w, height=h)
+            shape = self.doc.add_picture(img.image_path, width=w, height=h)
         else:
-            self.doc.add_picture(img.image_path, width=w)
+            shape = self.doc.add_picture(img.image_path, width=w)
+
+        # Set accessibility alt text on DrawingML docPr
+        img_alt = sanitize_xml((img.caption or "").strip() or "Document figure")
+        try:
+            docPr = shape._inline.find(qn("wp:docPr"))
+            if docPr is not None:
+                docPr.set("descr", img_alt)
+                docPr.set("title", img_alt)
+        except Exception:
+            pass
+
         if img.caption:
             cap_p = self.doc.add_paragraph()
             cap_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             cap_p.paragraph_format.space_before = Pt(2)
             cap_p.paragraph_format.space_after = Pt(6)
-            run = cap_p.add_run(img.caption)
+            run = cap_p.add_run(sanitize_xml(img.caption))
             run.italic = True
             run.font.size = Pt(9)
             run.font.color.rgb = RGBColor(0x66, 0x66, 0x66)

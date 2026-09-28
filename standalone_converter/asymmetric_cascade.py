@@ -85,7 +85,7 @@ class AsymmetricCascadeConverter:
         device: Optional[str] = None,
 
         confidence_threshold: float = 0.85,
-        theme_hex: str = "#1F4E79",
+        theme_hex: str = "#000000",
         dispatcher: Optional[BaseDocxDispatcher] = None,
     ):
         self.api_key = _get_api_key(api_key)

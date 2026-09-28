@@ -1,0 +1,2232 @@
+{
+  "title": "stats merged quiz unit 1",
+  "theme_hex": "#1F4E79",
+  "default_font": "Calibri",
+  "default_font_size_pt": 11.0,
+  "pages": [
+    {
+      "page_number": 1,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "2011 AP® STATISTICS FREE-RESPONSE QUESTIONS",
+          "runs": [
+            {
+              "text": "2011 AP",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 14.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "®",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": true,
+              "subscript": false
+            },
+            {
+              "text": " STATISTICS FREE-RESPONSE QUESTIONS",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 14.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "bbox": {
+            "ymin": 41,
+            "xmin": 245,
+            "ymax": 53,
+            "xmax": 754
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "2. ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "The table below shows the political party registration by gender of all 500 registered voters in Franklin Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 73,
+            "xmin": 83,
+            "ymax": 102,
+            "xmax": 782
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "PARTY REGISTRATION–FRANKLIN TOWNSHIP",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 119,
+            "xmin": 304,
+            "ymax": 130,
+            "xmax": 696
+          }
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "Party W",
+            "Party X",
+            "Party Y",
+            "Total"
+          ],
+          "rows": [
+            [
+              "Female",
+              "60",
+              "120",
+              "120",
+              "300"
+            ],
+            [
+              "Male",
+              "28",
+              "124",
+              "48",
+              "200"
+            ],
+            [
+              "Total",
+              "88",
+              "244",
+              "168",
+              "500"
+            ]
+          ],
+          "col_widths_pct": [
+            20.0,
+            20.0,
+            20.0,
+            20.0,
+            20.0
+          ],
+          "cant_split": true,
+          "repeat_header": false,
+          "style_name": null,
+          "bbox": {
+            "ymin": 139,
+            "xmin": 138,
+            "ymax": 236,
+            "xmax": 863
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) Given that a randomly selected registered voter is a male, what is the probability that he is registered for Party Y?",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 254,
+            "xmin": 108,
+            "ymax": 283,
+            "xmax": 887
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) Among the registered voters of Franklin Township, are the events “is a male” and “is registered for Party Y” independent? Justify your answer based on probabilities calculated from the table above.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 293,
+            "xmin": 108,
+            "ymax": 322,
+            "xmax": 919
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) One way to display the data in the table is to use a segmented bar graph. The following segmented bar graph, constructed from the data in the party registration–Franklin Township table, shows party-registration distributions for males and females in Franklin Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 331,
+            "xmin": 108,
+            "ymax": 376,
+            "xmax": 913
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "FRANKLIN TOWNSHIP",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 393,
+            "xmin": 407,
+            "ymax": 403,
+            "xmax": 594
+          }
+        },
+        {
+          "type": "image",
+          "image_path": "tests\\.workspace_stats merged quiz unit 1\\assets\\p1_img8.png",
+          "caption": null,
+          "width_inches": 7.5,
+          "height_inches": 1.9,
+          "alignment": "center",
+          "bbox": {
+            "ymin": 412,
+            "xmin": 126,
+            "ymax": 605,
+            "xmax": 878
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "In Lawrence Township, the proportions of all registered voters for Parties W, X, and Y are the same as for Franklin Township, and party registration is independent of gender. Complete the graph below to show the distributions of party registration by gender in Lawrence Township.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 623,
+            "xmin": 106,
+            "ymax": 668,
+            "xmax": 875
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "LAWRENCE TOWNSHIP",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 677,
+            "xmin": 403,
+            "ymax": 688,
+            "xmax": 596
+          }
+        },
+        {
+          "type": "image",
+          "image_path": "tests\\.workspace_stats merged quiz unit 1\\assets\\p1_img11.png",
+          "caption": null,
+          "width_inches": 7.5,
+          "height_inches": 1.9,
+          "alignment": "center",
+          "bbox": {
+            "ymin": 692,
+            "xmin": 124,
+            "ymax": 894,
+            "xmax": 878
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2011 The College Board. Visit the College Board on the Web: www.collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 907,
+            "xmin": 325,
+            "ymax": 931,
+            "xmax": 676
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 943,
+            "xmin": 648,
+            "ymax": 956,
+            "xmax": 894
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "-7-",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 958,
+            "xmin": 489,
+            "ymax": 974,
+            "xmax": 521
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "AP® Statistics 2021 Free-Response Questions",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 13,
+            "xmin": 89,
+            "ymax": 28,
+            "xmax": 441
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Begin your response to QUESTION 1 on this page.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 54,
+            "xmin": 275,
+            "ymax": 69,
+            "xmax": 703
+          }
+        },
+        {
+          "type": "heading",
+          "level": 1,
+          "text": "STATISTICS",
+          "runs": [
+            {
+              "text": "STATISTICS",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 12.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "bbox": {
+            "ymin": 115,
+            "xmin": 435,
+            "ymax": 127,
+            "xmax": 542
+          }
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "text": "SECTION II",
+          "runs": [
+            {
+              "text": "SECTION II",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "bbox": {
+            "ymin": 139,
+            "xmin": 436,
+            "ymax": 151,
+            "xmax": 540
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Total Time—1 hour and 30 minutes",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 164,
+            "xmin": 348,
+            "ymax": 177,
+            "xmax": 628
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "6 Questions",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 189,
+            "xmin": 441,
+            "ymax": 201,
+            "xmax": 535
+          }
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Part A",
+          "runs": [
+            {
+              "text": "Part A",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "bbox": {
+            "ymin": 236,
+            "xmin": 462,
+            "ymax": 248,
+            "xmax": 514
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Questions 1-5",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 261,
+            "xmin": 435,
+            "ymax": 274,
+            "xmax": 542
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Spend about 1 hour and 5 minutes on this part of the exam.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 286,
+            "xmin": 253,
+            "ymax": 299,
+            "xmax": 724
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Directions:",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " Show all your work. Indicate clearly the methods you use, because you will be scored on the correctness of your methods as well as on the accuracy and completeness of your results and explanations.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 311,
+            "xmin": 54,
+            "ymax": 341,
+            "xmax": 917
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "1. The length of stay in a hospital after receiving a particular treatment is of interest to the patient, the hospital, and insurance providers. Of particular interest are unusually short or long lengths of stay. A random sample of 50 patients who received the treatment was selected, and the length of stay, in number of days, was recorded for each patient. The results are summarized in the following table and are shown in the dotplot.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 376,
+            "xmin": 54,
+            "ymax": 445,
+            "xmax": 918
+          }
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Length of stay (days)",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "12",
+            "21"
+          ],
+          "rows": [
+            [
+              "Number of patients",
+              "4",
+              "13",
+              "14",
+              "11",
+              "6",
+              "1",
+              "1"
+            ]
+          ],
+          "col_widths_pct": [
+            35.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            9.0,
+            10.0,
+            10.0
+          ],
+          "cant_split": true,
+          "repeat_header": false,
+          "style_name": null,
+          "bbox": {
+            "ymin": 465,
+            "xmin": 178,
+            "ymax": 503,
+            "xmax": 807
+          }
+        },
+        {
+          "type": "image",
+          "image_path": "tests\\.workspace_stats merged quiz unit 1\\assets\\p2_img12.png",
+          "caption": "Length of Stay (days)",
+          "width_inches": 3.4,
+          "height_inches": 1.7,
+          "alignment": "center",
+          "bbox": {
+            "ymin": 541,
+            "xmin": 305,
+            "ymax": 688,
+            "xmax": 678
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) Determine the five-number summary of the distribution of length of stay.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 711,
+            "xmin": 91,
+            "ymax": 724,
+            "xmax": 655
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 868,
+            "xmin": 651,
+            "ymax": 883,
+            "xmax": 930
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Use a pencil or pen with black or dark blue ink only. Do NOT write your name. Do NOT write outside the box.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 9.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 898,
+            "xmin": 90,
+            "ymax": 909,
+            "xmax": 912
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2021 College Board.\nVisit College Board on the web: collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 9.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 921,
+            "xmin": 311,
+            "ymax": 949,
+            "xmax": 690
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "4",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 9.0,
+              "font_name": "TimesNewRoman",
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 967,
+            "xmin": 495,
+            "ymax": 980,
+            "xmax": 504
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 3,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "AP",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "®",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": true,
+              "subscript": false
+            },
+            {
+              "text": " Statistics 2021 Free-Response Questions",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 14,
+            "xmin": 89,
+            "ymax": 28,
+            "xmax": 441
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Continue your response to QUESTION 1 on this page.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 54,
+            "xmin": 275,
+            "ymax": 69,
+            "xmax": 725
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) Consider two rules for identifying outliers, method A and method B. Let method A represent the ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "1.5",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " × ",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "IQR",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": " rule, and let method B represent the 2 standard deviations rule.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 85,
+            "xmin": 90,
+            "ymax": 118,
+            "xmax": 829
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(i) Using method A, determine any data points that are potential outliers in the distribution of length of",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "\nstay. Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 136,
+            "xmin": 118,
+            "ymax": 167,
+            "xmax": 874
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(ii) The mean length of stay for the sample is 7.42 days with a standard deviation of 2.37 days. Using\nmethod B, determine any data points that are potential outliers in the distribution of length of stay. Justify\nyour answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 309,
+            "xmin": 118,
+            "ymax": 361,
+            "xmax": 922
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) Explain why method A might identify more data points as potential outliers than method B for a\ndistribution that is strongly skewed to the right.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 520,
+            "xmin": 93,
+            "ymax": 553,
+            "xmax": 827
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 874,
+            "xmin": 661,
+            "ymax": 890,
+            "xmax": 941
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Use a pencil or pen with black or dark blue ink only. Do NOT write your name. Do NOT write outside the box.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 902,
+            "xmin": 91,
+            "ymax": 915,
+            "xmax": 915
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2021 College Board.\nVisit College Board on the web: collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 920,
+            "xmin": 312,
+            "ymax": 949,
+            "xmax": 688
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "5",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 968,
+            "xmin": 495,
+            "ymax": 981,
+            "xmax": 504
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 4,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": []
+    },
+    {
+      "page_number": 5,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "AP® Statistics 2023 Free-Response Questions",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 13,
+            "xmin": 90,
+            "ymax": 28,
+            "xmax": 441
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Continue your response to QUESTION 1 on this page.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 62,
+            "xmin": 274,
+            "ymax": 75,
+            "xmax": 725
+          }
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Min",
+            "Q1",
+            "Median",
+            "Q3",
+            "Max",
+            "Mean",
+            "Std. Dev."
+          ],
+          "rows": [
+            [
+              "2.10",
+              "4.39",
+              "5.43",
+              "6.12",
+              "13.45",
+              "5.54",
+              "1.64"
+            ]
+          ],
+          "col_widths_pct": [
+            14.0,
+            14.0,
+            14.0,
+            14.0,
+            14.0,
+            15.0,
+            15.0
+          ],
+          "cant_split": false,
+          "repeat_header": false,
+          "style_name": null,
+          "bbox": {
+            "ymin": 93,
+            "xmin": 312,
+            "ymax": 155,
+            "xmax": 688
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) The researchers computed the summary statistics shown in the table for the dissolved oxygen concentration in streams from the sample with water temperatures warmer than 8°C. Use the summary statistics to construct a box plot for the dissolved oxygen concentration in streams with water temperatures warmer than 8°C. Do not indicate outliers.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 168,
+            "xmin": 87,
+            "ymax": 236,
+            "xmax": 920
+          }
+        },
+        {
+          "type": "image",
+          "image_path": "tests\\.workspace_stats merged quiz unit 1\\assets\\p5_img4.png",
+          "caption": "Dissolved Oxygen Concentration (mg/l) in Streams with Temperatures Warmer than 8°C",
+          "width_inches": 6.8,
+          "height_inches": 2.1,
+          "alignment": "center",
+          "bbox": {
+            "ymin": 260,
+            "xmin": 150,
+            "ymax": 423,
+            "xmax": 894
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) The researchers believe that streams with higher dissolved oxygen concentration are generally healthier for wildlife. Which streams are generally healthier for wildlife, those with water temperature colder than 8°C or those with water temperature warmer than 8°C? Using characteristics of the distribution of dissolved oxygen concentration for temperatures colder than 8°C and characteristics of the distribution of dissolved oxygen concentration for temperatures warmer than 8°C, justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 462,
+            "xmin": 87,
+            "ymax": 554,
+            "xmax": 917
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 868,
+            "xmin": 668,
+            "ymax": 883,
+            "xmax": 947
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2023 College Board.\nVisit College Board on the web: collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 920,
+            "xmin": 312,
+            "ymax": 950,
+            "xmax": 688
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "5",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": null,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 968,
+            "xmin": 495,
+            "ymax": 981,
+            "xmax": 503
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 6,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "AP® Statistics 2024 Free-Response Questions",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 13,
+            "xmin": 88,
+            "ymax": 28,
+            "xmax": 427
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Begin your response to QUESTION 2 on this page.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 62,
+            "xmin": 300,
+            "ymax": 78,
+            "xmax": 711
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "2. ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "A local elementary school decided to sell bottles printed with the school district’s logo as a fund-raiser. The students in the elementary school were asked to sell bottles in three different sizes (small, medium, and large). The relative frequencies of the number of bottles sold for each size by the elementary school were 0.5 for small bottles, 0.3 for medium bottles, and 0.2 for large bottles.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 94,
+            "xmin": 66,
+            "ymax": 162,
+            "xmax": 921
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "A local middle school also decided to sell bottles as a fund-raiser, using the same three sizes (small, medium, and large). The middle school students sold three times the number of bottles that the elementary school students sold. For the middle school students, the proportion of bottles sold was equal for all three sizes.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 180,
+            "xmin": 88,
+            "ymax": 227,
+            "xmax": 921
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(a) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "Complete the segmented bar graphs representing the relative frequencies of the number of bottles sold for each size by students at each school.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 241,
+            "xmin": 87,
+            "ymax": 271,
+            "xmax": 907
+          }
+        },
+        {
+          "type": "image",
+          "image_path": "tests\\.workspace_stats merged quiz unit 1\\assets\\p6_img5.png",
+          "caption": "Segmented bar graphs and key",
+          "width_inches": 3.44,
+          "height_inches": 2.22,
+          "alignment": "center",
+          "bbox": {
+            "ymin": 286,
+            "xmin": 236,
+            "ymax": 432,
+            "xmax": 794
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(b) ",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            },
+            {
+              "text": "An administrator at the elementary school concluded that the elementary school students sold more small bottles than the middle school students did. Is the elementary school administrator’s conclusion correct? Explain your response.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 534,
+            "xmin": 87,
+            "ymax": 580,
+            "xmax": 921
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 861,
+            "xmin": 651,
+            "ymax": 875,
+            "xmax": 921
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2024 College Board.\nVisit College Board on the web: collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 9.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 923,
+            "xmin": 315,
+            "ymax": 950,
+            "xmax": 684
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "5",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 968,
+            "xmin": 496,
+            "ymax": 981,
+            "xmax": 504
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 7,
+      "width_pt": 612.0,
+      "height_pt": 792.0,
+      "orientation": "portrait",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "AP® Statistics 2024 Free-Response Questions",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 13,
+            "xmin": 87,
+            "ymax": 28,
+            "xmax": 427
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Continue your response to QUESTION 2 on this page.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 73,
+            "xmin": 280,
+            "ymax": 89,
+            "xmax": 718
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "Two high schools are also selling the bottles and are competing to see which one sold more large bottles.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.5,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 102,
+            "xmin": 98,
+            "ymax": 115,
+            "xmax": 851
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(c) A mosaic plot for the distribution of the number of bottles sold by each of the high schools is shown here.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.5,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 130,
+            "xmin": 99,
+            "ymax": 144,
+            "xmax": 881
+          }
+        },
+        {
+          "type": "chart",
+          "title": "Distribution of the Number of Bottles Sold by High School",
+          "chart_type": "bar",
+          "categories": [
+            "High\nSchool A",
+            "High\nSchool B"
+          ],
+          "series": [
+            {
+              "name": "Small bottles",
+              "values": [
+                0.3,
+                0.2
+              ]
+            },
+            {
+              "name": "Medium bottles",
+              "values": [
+                0.1,
+                0.15
+              ]
+            },
+            {
+              "name": "Large bottles",
+              "values": [
+                0.6,
+                0.65
+              ]
+            }
+          ],
+          "generated_image_path": null,
+          "bbox": {
+            "ymin": 160,
+            "xmin": 196,
+            "ymax": 432,
+            "xmax": 801
+          },
+          "width_inches": 5.0,
+          "height_inches": 3.0
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(i) Which of the two high schools sold a greater proportion of large bottles? Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.5,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 448,
+            "xmin": 99,
+            "ymax": 462,
+            "xmax": 792
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "(ii) Which of the two high schools sold a greater number of large bottles? Justify your answer.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.5,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "left",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 640,
+            "xmin": 99,
+            "ymax": 655,
+            "xmax": 776
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "GO ON TO THE NEXT PAGE.",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 11.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "right",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 861,
+            "xmin": 662,
+            "ymax": 875,
+            "xmax": 932
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "© 2024 College Board.\nVisit College Board on the web: collegeboard.org.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 9.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 923,
+            "xmin": 315,
+            "ymax": 951,
+            "xmax": 682
+          }
+        },
+        {
+          "type": "paragraph",
+          "runs": [
+            {
+              "text": "6",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strike": false,
+              "color_hex": null,
+              "font_size_pt": 10.0,
+              "font_name": null,
+              "superscript": false,
+              "subscript": false
+            }
+          ],
+          "alignment": "center",
+          "list_type": "none",
+          "list_level": 0,
+          "is_callout": false,
+          "callout_color_hex": null,
+          "bbox": {
+            "ymin": 968,
+            "xmin": 495,
+            "ymax": 981,
+            "xmax": 503
+          }
+        }
+      ]
+    }
+  ]
+}

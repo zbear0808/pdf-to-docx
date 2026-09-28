@@ -142,7 +142,7 @@ class PageSpec(BaseModel):
 class DocumentSpec(BaseModel):
     """Root canonical representation of the entire document."""
     title: str = "Converted Document"
-    theme_hex: str = "#1F4E79"
+    theme_hex: str = "#000000"
     default_font: str = "Calibri"
     default_font_size_pt: float = 11.0
     pages: List[PageSpec] = Field(default_factory=list)

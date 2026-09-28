@@ -88,7 +88,7 @@ def convert_pdf_to_docx(
     max_workers: int = 4,
     dpi: int = 200,
     title: Optional[str] = None,
-    theme_hex: str = "#1F4E79",
+    theme_hex: str = "#000000",
     workspace_dir: Optional[str | Path] = None,
     save_ast: bool = False,
     ast_path: Optional[str | Path] = None,
@@ -102,11 +102,11 @@ def convert_pdf_to_docx(
         pdf_path: Path to the input PDF file.
         output_path: Path for the output .docx file.
         api_key: Gemini API key. Falls back to GEMINI_API_KEY env var.
-        model_name: Gemini model to use. Default is gemini-2.0-flash-lite.
+        model_name: Gemini model to use. Default is gemini-3.5-flash-lite.
         max_workers: Max concurrent page parsing threads. Default 4.
         dpi: Resolution for page rendering. Default 200.
         title: Document title. Defaults to the PDF filename stem.
-        theme_hex: Corporate theme color hex. Default "#1F4E79".
+        theme_hex: Theme color hex (default "#000000" for neutral/source-faithful typography).
         workspace_dir: Directory for intermediate files. Auto-created if None.
         save_ast: If True, save the merged DocumentSpec AST JSON.
         ast_path: Custom path for the AST JSON (implies save_ast=True).
