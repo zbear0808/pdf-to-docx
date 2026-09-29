@@ -10,7 +10,7 @@ if env_p.exists():
 
 from standalone_converter.page_parser import PageParser
 
-parser = PageParser(model_name="gemini-3.5-flash-lite")
+parser = PageParser(model_name="gemini--flash-lite-latest")
 spec = parser.parse_page("tests/.workspace_stats merged quiz unit 1/rendered_pages/page_1.png", page_number=1)
 for i, b in enumerate(spec.blocks):
     print(f"Block {i}: type={b.type}")

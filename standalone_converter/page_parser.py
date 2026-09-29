@@ -82,7 +82,7 @@ class PageParser:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model_name: str = "gemini-3.5-flash-lite",
+        model_name: str = "gemini--flash-lite-latest",
         max_retries: int = 5,
     ):
         self.api_key = _get_api_key(api_key)

@@ -183,7 +183,7 @@ def convert_pdf_to_docx(
     output_path: str | Path = "output.docx",
     *,
     api_key: Optional[str] = None,
-    model_name: str = "gemini-3.5-flash-lite",
+    model_name: str = "gemini--flash-lite-latest",
 
     max_workers: int = 4,
     dpi: int = 200,
@@ -202,7 +202,7 @@ def convert_pdf_to_docx(
         pdf_path: Path to the input PDF file.
         output_path: Path for the output .docx file.
         api_key: Gemini API key. Falls back to GEMINI_API_KEY env var.
-        model_name: Gemini model to use. Default is gemini-3.5-flash-lite.
+        model_name: Gemini model to use. Default is gemini--flash-lite-latest.
         max_workers: Max concurrent page parsing threads. Default 4.
         dpi: Resolution for page rendering. Default 200.
         title: Document title. Defaults to the PDF filename stem.
