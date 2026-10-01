@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--model", type=str, default="gemini--flash-lite-latest", help="Gemini model name")
 
     parser.add_argument("--workers", type=int, default=4, help="Max parallel page parsing threads (page mode)")
+    parser.add_argument("--request-delay", type=float, default=0.0, help="Delay in seconds between Gemini API requests to avoid rate limiting")
     parser.add_argument("--dpi", type=int, default=200, help="Page rendering DPI")
     parser.add_argument("--title", type=str, default=None, help="Document title")
     parser.add_argument("--theme-hex", type=str, default="#1F4E79", help="Theme color hex")
@@ -65,6 +66,7 @@ def main():
                 device=args.device,
                 confidence_threshold=args.threshold,
                 theme_hex=args.theme_hex,
+                request_delay=args.request_delay,
             )
             result = converter.convert(
                 pdf_path=args.pdf_path,
@@ -77,6 +79,7 @@ def main():
                 output_path=output,
                 api_key=args.api_key,
                 model_name=args.model,
+                request_delay=args.request_delay,
                 max_workers=args.workers,
                 dpi=args.dpi,
                 title=args.title,

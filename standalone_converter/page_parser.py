@@ -84,10 +84,12 @@ class PageParser:
         api_key: Optional[str] = None,
         model_name: str = "gemini--flash-lite-latest",
         max_retries: int = 5,
+        delay_between_requests: float = 0.0,
     ):
         self.api_key = _get_api_key(api_key)
         self.model_name = model_name
         self.max_retries = max_retries
+        self.delay_between_requests = delay_between_requests
         import threading
         self._thread_local = threading.local()
 
@@ -117,6 +119,10 @@ class PageParser:
         img_path = Path(image_path)
         if not img_path.exists():
             raise FileNotFoundError(f"Image not found: {img_path}")
+
+        if self.delay_between_requests > 0:
+            logger.debug(f"Delaying {self.delay_between_requests}s before requesting page {page_number}...")
+            time.sleep(self.delay_between_requests)
 
         img_bytes = img_path.read_bytes()
         last_error: Optional[Exception] = None

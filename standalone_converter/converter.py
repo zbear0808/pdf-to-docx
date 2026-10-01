@@ -184,7 +184,7 @@ def convert_pdf_to_docx(
     *,
     api_key: Optional[str] = None,
     model_name: str = "gemini--flash-lite-latest",
-
+    request_delay: float = 0.0,
     max_workers: int = 4,
     dpi: int = 200,
     title: Optional[str] = None,
@@ -251,7 +251,7 @@ def convert_pdf_to_docx(
         logger.info(f"All {page_count} pages rendered to {renders_dir}")
 
         # ── Step 2: Parse all pages in parallel via Gemini Flash Lite ──
-        parser = PageParser(api_key=api_key, model_name=model_name)
+        parser = PageParser(api_key=api_key, model_name=model_name, delay_between_requests=request_delay)
         page_specs: List[Optional[PageSpec]] = [None] * page_count
 
         logger.info(f"Parsing {page_count} pages with {max_workers} workers using {model_name}...")

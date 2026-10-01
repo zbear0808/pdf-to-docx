@@ -88,16 +88,17 @@ class AsymmetricCascadeConverter:
         api_key: Optional[str] = None,
         model_name: str = "gemini--flash-lite-latest",
         device: Optional[str] = None,
-
         confidence_threshold: float = 0.85,
         theme_hex: str = "#000000",
         dispatcher: Optional[BaseDocxDispatcher] = None,
+        request_delay: float = 0.0,
     ):
         self.api_key = _get_api_key(api_key)
         self.model_name = model_name
         self.confidence_threshold = confidence_threshold
         self.theme_hex = theme_hex
         self.dispatcher = dispatcher or InProcessDocxDispatcher(theme_hex=theme_hex)
+        self.request_delay = request_delay
 
         # Layer 1: Laya local router
         self.laya = LayaTriageRouter(
@@ -328,6 +329,10 @@ class AsymmetricCascadeConverter:
     ):
         """Escalates complex or ambiguous blocks to Gemini Flash Lite for structured extraction."""
         from google.genai import types
+
+        if self.request_delay > 0:
+            logger.debug(f"Delaying {self.request_delay}s before Gemini escalation request...")
+            time.sleep(self.request_delay)
 
         contents: List[Any] = []
 
