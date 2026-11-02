@@ -81,6 +81,40 @@ def set_cell_padding(cell, top: int = 40, bottom: int = 40, left: int = 40, righ
     tcPr.append(tcMar)
 
 
+def clean_math_text_for_docx(text: str) -> str:
+    """Replaces common LaTeX math escape sequences with clean Unicode symbols for Word."""
+    if not text:
+        return ""
+    replacements = [
+        (r"\ell", "ℓ"),
+        (r"^{\circ}", "°"),
+        (r"^\circ", "°"),
+        (r"\circ", "°"),
+        (r"\theta", "θ"),
+        (r"\alpha", "α"),
+        (r"\beta", "β"),
+        (r"\pi", "π"),
+        (r"\le", "≤"),
+        (r"\ge", "≥"),
+        (r"\neq", "≠"),
+        (r"\approx", "≈"),
+        (r"\times", "×"),
+        (r"\div", "÷"),
+        (r"\pm", "±"),
+        (r"\parallel", "∥"),
+        (r"\perp", "⊥"),
+        (r"\angle", "∠"),
+        (r"\Delta", "Δ"),
+        (r"\triangle", "△"),
+    ]
+    out = text
+    for old, new in replacements:
+        out = out.replace(old, new)
+    import re
+    out = re.sub(r"\$([^\$]+)\$", r"\1", out)
+    return out
+
+
 class DocxWorksheetRenderer:
     """Compiles a RenderPlan into an editable, space-optimized Word (.docx) document."""
 
@@ -180,7 +214,8 @@ class DocxWorksheetRenderer:
 
         if problem.prompt_runs:
             for r_spec in problem.prompt_runs:
-                r = paragraph.add_run(r_spec.text)
+                clean_txt = clean_math_text_for_docx(r_spec.text)
+                r = paragraph.add_run(clean_txt)
                 r.bold = r_spec.bold
                 r.italic = r_spec.italic
                 r.underline = r_spec.underline
@@ -194,7 +229,8 @@ class DocxWorksheetRenderer:
             # Strip label if duplicated in raw text
             if label and text.startswith(label):
                 text = text[len(label):].strip()
-            paragraph.add_run(text)
+            clean_txt = clean_math_text_for_docx(text)
+            paragraph.add_run(clean_txt)
 
     def _apply_choices(self, container_cell, problem: Problem) -> None:
         """Appends multiple choice options to a cell."""

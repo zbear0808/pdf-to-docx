@@ -76,6 +76,26 @@ Extraction Rules:
 """
 
 
+def _load_env_api_key() -> Optional[str]:
+    """Finds and loads GEMINI_API_KEY from environment or .env file."""
+    key = os.environ.get("GEMINI_API_KEY")
+    if key:
+        return key
+    for p in [Path.cwd() / ".env", Path(__file__).resolve().parents[2] / ".env"]:
+        if p.exists():
+            try:
+                for line in p.read_text(encoding="utf-8").splitlines():
+                    clean = line.strip()
+                    if clean.startswith("GEMINI_API_KEY="):
+                        val = clean.split("=", 1)[1].strip().strip('"').strip("'")
+                        if val:
+                            os.environ["GEMINI_API_KEY"] = val
+                            return val
+            except Exception:
+                pass
+    return None
+
+
 class WorksheetParser:
     """Parses worksheet PDFs into canonical WorksheetSpec AST."""
 
@@ -89,7 +109,7 @@ class WorksheetParser:
         if not self.doc_path.exists():
             raise FileNotFoundError(f"Document file not found: {self.doc_path}")
 
-        self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
+        self.api_key = api_key or _load_env_api_key()
         self.model_name = model_name
         self.is_docx = self.doc_path.suffix.lower() == ".docx"
         self._temp_pdf: Optional[Path] = None
@@ -184,7 +204,11 @@ class WorksheetParser:
             extract_docx_media(self.doc_path, media_dir)
 
         doc_info = self.extractor.get_document_info()
-        title = doc_info.get("title") or self.doc_path.stem.replace("_", " ").title()
+        raw_title = doc_info.get("title") or ""
+        if not raw_title or raw_title.startswith(".temp_") or self.is_docx:
+            title = self.doc_path.stem.replace("_", " ").title()
+        else:
+            title = raw_title
 
         spec = WorksheetSpec(
             title=title,

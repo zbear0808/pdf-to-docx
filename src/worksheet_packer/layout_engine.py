@@ -210,6 +210,8 @@ class LayoutEngine:
 
         current_page_idx = 1
         pages: List[PlacedPage] = [PlacedPage(page_index=1)]
+        default_col_count = max(1, min(2, int(self.ws.default_columns)))
+        col_cursors = [p1_header_h] * default_col_count
 
         # Global statistics
         total_problems = 0
@@ -220,6 +222,10 @@ class LayoutEngine:
         for section in self.ws.sections:
             col_count = int(section.column_mode or self.ws.default_columns)
             col_count = max(1, min(2, col_count))  # Support 1 or 2 columns
+
+            if len(col_cursors) != col_count:
+                curr_max = max(col_cursors) if col_cursors else 0.0
+                col_cursors = [curr_max] * col_count
 
             col_gap = self.ws.column_gap_in if col_count > 1 else 0.0
             col_w = (printable_w - (col_count - 1) * col_gap) / col_count
@@ -245,20 +251,12 @@ class LayoutEngine:
             if section.ordering == SectionOrdering.FLEXIBLE:
                 problem_footprints.sort(key=lambda item: item[1][1], reverse=True)
 
-            # Initialize cursor tracking for current page
-            # col_cursors[col_idx] holds current Y coordinate in inches from page top margin
-            col_cursors = [0.0] * col_count
-            # Apply page 1 header if on page 1
-            if current_page_idx == 1:
-                for c in range(col_count):
-                    col_cursors[c] = p1_header_h
-
             # Insert section header if present
             if sec_header_h > 0:
-                # Section header spans across top of columns
+                # Align both columns to the lowest available point for a cross-column section header
                 curr_max_y = max(col_cursors)
-                if curr_max_y + sec_header_h > printable_h - 0.5:
-                    # Header doesn't fit on current page; start new page
+                if curr_max_y + sec_header_h > printable_h - 1.2:
+                    # Header doesn't fit with room for problems; start new page
                     current_page_idx += 1
                     pages.append(PlacedPage(page_index=current_page_idx))
                     col_cursors = [0.0] * col_count
