@@ -1,0 +1,382 @@
+"""2D Bin Packing and Whitespace Optimization Engine for Worksheets.
+
+Computes exact geometric footprints for problems with attached diagrams, chooses
+side-by-side vs stacked layouts, respects strict vs flexible ordering constraints,
+and packs items across pages and columns to minimize wasted whitespace.
+"""
+
+from __future__ import annotations
+import math
+from typing import Any, Dict, List, Optional, Tuple
+
+from .worksheet_ast import (
+    LayoutDecision,
+    LayoutHint,
+    PlacedPage,
+    PlacedProblem,
+    PlacedSectionHeader,
+    Problem,
+    RenderPlan,
+    SectionOrdering,
+    WorkspaceType,
+    WorksheetSection,
+    WorksheetSpec,
+)
+
+
+class LayoutEngine:
+    """Calculates spatial footprints and executes 2D bin packing for worksheets."""
+
+    def __init__(self, worksheet: WorksheetSpec):
+        self.ws = worksheet
+
+    def estimate_text_height(
+        self,
+        problem: Problem,
+        target_width_in: float,
+        font_size_pt: Optional[float] = None,
+    ) -> float:
+        """Estimates vertical text height in inches for question prompt and multiple-choice options."""
+        fs = font_size_pt or self.ws.default_font_size_pt
+        line_height_in = (fs * 1.30) / 72.0  # Approx line pitch
+        padding_in = 0.06
+
+        # Average char width in inches for proportional fonts like Calibri/Arial
+        char_width_in = (fs * 0.48) / 72.0
+        chars_per_line = max(15, int(target_width_in / char_width_in))
+
+        # 1. Main question prompt
+        full_text = problem.prompt_text or ""
+        if not full_text and problem.prompt_runs:
+            full_text = "".join(r.text for r in problem.prompt_runs)
+
+        label_prefix = problem.full_label
+        if label_prefix and not full_text.startswith(label_prefix):
+            full_text = f"{label_prefix} {full_text}"
+
+        lines = 0
+        paragraphs = full_text.split("\n")
+        for p in paragraphs:
+            p_str = p.strip()
+            if not p_str:
+                lines += 0.5
+            else:
+                lines += max(1, math.ceil(len(p_str) / chars_per_line))
+
+        # 2. Multiple choice options
+        if problem.choices:
+            for ch in problem.choices:
+                c_text = ch.text.strip()
+                ch_line_chars = max(10, chars_per_line - 5)
+                lines += max(1, math.ceil(len(c_text) / ch_line_chars))
+
+        return max(line_height_in, lines * line_height_in + padding_in)
+
+    def estimate_workspace_height(self, problem: Problem) -> float:
+        """Estimates vertical height in inches for the student work area."""
+        ws_cfg = problem.workspace
+        if ws_cfg.type == WorkspaceType.NONE:
+            return 0.0
+        if ws_cfg.height_pt is not None and ws_cfg.height_pt > 0:
+            return ws_cfg.height_pt / 72.0
+        if ws_cfg.type == WorkspaceType.LINES:
+            # 22 pt per standard college-ruled line
+            return (ws_cfg.lines * 22.0) / 72.0
+        if ws_cfg.type == WorkspaceType.GRID:
+            return 2.0  # Default 2 inches for coordinate planes
+        if ws_cfg.type == WorkspaceType.BOX:
+            return max(1.0, (ws_cfg.lines * 24.0) / 72.0)
+        if ws_cfg.type == WorkspaceType.BLANK:
+            return (ws_cfg.lines * 18.0) / 72.0
+        return 0.5
+
+    def calculate_problem_footprint(
+        self,
+        problem: Problem,
+        col_width_in: float,
+    ) -> Tuple[LayoutDecision, float, float, float, float, float, float]:
+        """Calculates layout decision and exact dimensions for a problem.
+
+        Returns:
+            Tuple of:
+              - decision (LayoutDecision)
+              - total_height_in
+              - text_render_width_in
+              - text_render_height_in
+              - image_render_width_in
+              - image_render_height_in
+              - workspace_height_in
+        """
+        ws_height = self.estimate_workspace_height(problem)
+
+        # Case 1: No image attached
+        if not problem.image:
+            text_w = col_width_in
+            text_h = self.estimate_text_height(problem, text_w)
+            total_h = text_h + ws_height + 0.08
+            return (
+                LayoutDecision.TEXT_ONLY,
+                total_h,
+                text_w,
+                text_h,
+                0.0,
+                0.0,
+                ws_height,
+            )
+
+        # Case 2: Image attached
+        ar = problem.image.aspect_ratio or 1.0
+        prompt_len = len(problem.prompt_text or "")
+        min_img_w = problem.min_rendered_width_in
+
+        # Determine Layout Decision based on hints & aspect ratio
+        decision = LayoutDecision.STACKED
+        if problem.layout_hint == LayoutHint.SIDE_BY_SIDE:
+            decision = LayoutDecision.SIDE_BY_SIDE
+        elif problem.layout_hint == LayoutHint.STACKED:
+            decision = LayoutDecision.STACKED
+        else:
+            # Auto heuristic:
+            # Square-ish or portrait diagram (0.55 <= AR <= 1.50) with moderate text -> Side-by-Side
+            if 0.55 <= ar <= 1.50 and prompt_len < 450:
+                decision = LayoutDecision.SIDE_BY_SIDE
+            else:
+                decision = LayoutDecision.STACKED
+
+        # Check if side-by-side fits comfortably within the column width
+        if decision == LayoutDecision.SIDE_BY_SIDE:
+            # Try 65% text / 35% image split
+            cand_img_w = col_width_in * 0.35
+            cand_text_w = col_width_in * 0.65
+
+            # If image width in 65/35 is below minimum legibility threshold
+            if cand_img_w < min_img_w:
+                # Can we widen image to 45% or 50% if text is short?
+                if prompt_len < 160 and col_width_in * 0.48 >= min_img_w:
+                    cand_img_w = col_width_in * 0.48
+                    cand_text_w = col_width_in * 0.52
+                else:
+                    # In narrow column where 35% is unreadable, fallback to STACKED
+                    decision = LayoutDecision.STACKED
+
+        if decision == LayoutDecision.SIDE_BY_SIDE:
+            img_w = col_width_in * 0.36
+            text_w = col_width_in - img_w - 0.08
+            img_h = img_w * ar
+            text_h = self.estimate_text_height(problem, text_w)
+            top_h = max(text_h, img_h)
+            total_h = top_h + ws_height + 0.12
+            return (
+                LayoutDecision.SIDE_BY_SIDE,
+                total_h,
+                text_w,
+                text_h,
+                img_w,
+                img_h,
+                ws_height,
+            )
+        else:
+            # STACKED
+            text_w = col_width_in
+            text_h = self.estimate_text_height(problem, text_w)
+
+            # Cap diagram dimensions for stacked layout so it doesn't swallow the whole page
+            max_stacked_w = min(col_width_in * 0.90, 4.5)
+            max_stacked_h = 3.2
+            img_w = max_stacked_w
+            img_h = img_w * ar
+            if img_h > max_stacked_h:
+                img_h = max_stacked_h
+                img_w = img_h / ar if ar > 0 else max_stacked_w
+
+            total_h = text_h + img_h + ws_height + 0.16
+            return (
+                LayoutDecision.STACKED,
+                total_h,
+                text_w,
+                text_h,
+                img_w,
+                img_h,
+                ws_height,
+            )
+
+    def pack(self) -> RenderPlan:
+        """Executes full 2D layout bin-packing across all worksheet sections."""
+        printable_w = self.ws.printable_width_in
+        printable_h = self.ws.printable_height_in
+
+        # Page 1 header reserve (title, student info line, etc.)
+        p1_header_h = 0.75 if (self.ws.title or self.ws.header_right) else 0.0
+
+        current_page_idx = 1
+        pages: List[PlacedPage] = [PlacedPage(page_index=1)]
+
+        # Global statistics
+        total_problems = 0
+        side_by_side_count = 0
+        stacked_count = 0
+        text_only_count = 0
+
+        for section in self.ws.sections:
+            col_count = int(section.column_mode or self.ws.default_columns)
+            col_count = max(1, min(2, col_count))  # Support 1 or 2 columns
+
+            col_gap = self.ws.column_gap_in if col_count > 1 else 0.0
+            col_w = (printable_w - (col_count - 1) * col_gap) / col_count
+
+            # Section Header footprint
+            sec_header_h = 0.0
+            if section.title or section.instructions:
+                sec_header_h = 0.35 + (0.20 if section.instructions else 0.0)
+
+            # Problems to pack in this section
+            prob_list = list(section.problems)
+            if not prob_list:
+                continue
+
+            # Calculate footprints
+            problem_footprints = []
+            for prob in prob_list:
+                fp = self.calculate_problem_footprint(prob, col_w)
+                problem_footprints.append((prob, fp))
+
+            # Ordering strategy:
+            # If FLEXIBLE: sort by height descending (First-Fit Decreasing) for tightest 2D packing
+            if section.ordering == SectionOrdering.FLEXIBLE:
+                problem_footprints.sort(key=lambda item: item[1][1], reverse=True)
+
+            # Initialize cursor tracking for current page
+            # col_cursors[col_idx] holds current Y coordinate in inches from page top margin
+            col_cursors = [0.0] * col_count
+            # Apply page 1 header if on page 1
+            if current_page_idx == 1:
+                for c in range(col_count):
+                    col_cursors[c] = p1_header_h
+
+            # Insert section header if present
+            if sec_header_h > 0:
+                # Section header spans across top of columns
+                curr_max_y = max(col_cursors)
+                if curr_max_y + sec_header_h > printable_h - 0.5:
+                    # Header doesn't fit on current page; start new page
+                    current_page_idx += 1
+                    pages.append(PlacedPage(page_index=current_page_idx))
+                    col_cursors = [0.0] * col_count
+                    curr_max_y = 0.0
+
+                header_item = PlacedSectionHeader(
+                    section_id=section.id,
+                    title=section.title,
+                    instructions=section.instructions,
+                    page_index=current_page_idx,
+                    y_in=curr_max_y,
+                    height_in=sec_header_h,
+                    span_all_columns=True,
+                )
+                pages[-1].items.append(header_item)
+                for c in range(col_count):
+                    col_cursors[c] = curr_max_y + sec_header_h + 0.08
+
+            # Place each problem
+            for prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h) in problem_footprints:
+                total_problems += 1
+                if decision == LayoutDecision.SIDE_BY_SIDE:
+                    side_by_side_count += 1
+                elif decision == LayoutDecision.STACKED:
+                    stacked_count += 1
+                elif decision == LayoutDecision.TEXT_ONLY:
+                    text_only_count += 1
+
+                # Select target column:
+                # In Strict mode: fill column 0 first, then column 1 (standard reading column order)
+                # In Flexible mode: choose column with lowest cursor (balanced packing)
+                target_col = 0
+                if col_count > 1:
+                    if section.ordering == SectionOrdering.FLEXIBLE:
+                        # Find column where it fits with minimum cursor
+                        valid_cols = [c for c in range(col_count) if col_cursors[c] + total_h <= printable_h]
+                        if valid_cols:
+                            target_col = min(valid_cols, key=lambda c: col_cursors[c])
+                        else:
+                            target_col = min(range(col_count), key=lambda c: col_cursors[c])
+                    else:
+                        # Strict: fill col 0, when full fill col 1
+                        if col_cursors[0] + total_h <= printable_h:
+                            target_col = 0
+                        elif col_cursors[1] + total_h <= printable_h:
+                            target_col = 1
+                        else:
+                            target_col = 0
+
+                # Check if it fits in target column on current page
+                if col_cursors[target_col] + total_h > printable_h:
+                    # Does it fit in another column on this page?
+                    other_col = 1 if target_col == 0 and col_count > 1 else None
+                    if other_col is not None and col_cursors[other_col] + total_h <= printable_h:
+                        target_col = other_col
+                    else:
+                        # Advance to new page
+                        current_page_idx += 1
+                        pages.append(PlacedPage(page_index=current_page_idx))
+                        col_cursors = [0.0] * col_count
+                        target_col = 0
+
+                # Position coordinates
+                x_pos = target_col * (col_w + col_gap)
+                y_pos = col_cursors[target_col]
+
+                placed = PlacedProblem(
+                    problem=prob,
+                    layout=decision,
+                    page_index=current_page_idx,
+                    col_index=target_col,
+                    x_in=x_pos,
+                    y_in=y_pos,
+                    width_in=col_w,
+                    height_in=total_h,
+                    image_render_width_in=img_w,
+                    image_render_height_in=img_h,
+                    text_render_width_in=text_w,
+                    text_render_height_in=text_h,
+                    workspace_height_in=ws_h,
+                )
+                pages[-1].items.append(placed)
+
+                # Advance column cursor
+                col_cursors[target_col] += total_h + 0.10
+
+        # Post-processing: Handle fill_remaining workspace
+        for page in pages:
+            # Find the bottom-most problem in each column
+            for col_idx in range(self.ws.default_columns):
+                col_problems = [
+                    item for item in page.items
+                    if isinstance(item, PlacedProblem) and item.col_index == col_idx
+                ]
+                if col_problems:
+                    last_prob = col_problems[-1]
+                    if last_prob.problem.workspace.fill_remaining:
+                        remain_h = printable_h - (last_prob.y_in + last_prob.height_in)
+                        if remain_h > 0.3:
+                            last_prob.workspace_height_in += remain_h
+                            last_prob.height_in += remain_h
+
+        stats = {
+            "total_problems": total_problems,
+            "total_pages": len(pages),
+            "side_by_side_count": side_by_side_count,
+            "stacked_count": stacked_count,
+            "text_only_count": text_only_count,
+            "density_ratio": (
+                float(side_by_side_count) / float(total_problems)
+                if total_problems > 0 else 0.0
+            ),
+        }
+
+        return RenderPlan(
+            worksheet=self.ws,
+            pages=pages,
+            total_pages=len(pages),
+            stats=stats,
+        )
+
