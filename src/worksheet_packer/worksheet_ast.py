@@ -64,6 +64,16 @@ class ProblemImage(BaseModel):
     alt_text: Optional[str] = None
     bbox: Optional[List[int]] = None  # Normalized [ymin, xmin, ymax, xmax] 0-1000 in original PDF
 
+    # Dynamic scale bounds and content classification
+    source_width_in: Optional[float] = None
+    source_height_in: Optional[float] = None
+    min_width_in: float = 1.0          # Hard legibility floor in inches
+    max_width_in: float = 3.5          # Hard aesthetic ceiling in inches
+    preferred_width_in: float = 2.0    # Target aesthetic width in inches
+    has_fine_text: bool = True         # True if diagram contains fine labels, angles, equations
+    category: str = "detailed_diagram" # "formula_icon", "compact_shape", "detailed_diagram", "wide_grid"
+    elasticity: float = 1.0            # Compressibility factor: 0.0 (rigid) to 1.0 (fully compressible)
+
 
 class Problem(BaseModel):
     """Individual question or problem on a worksheet."""
@@ -79,6 +89,13 @@ class Problem(BaseModel):
     layout_hint: LayoutHint = LayoutHint.AUTO
     min_rendered_width_in: float = 1.5  # Diagram won't be shrunk below this width
     extra_metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @property
+    def effective_min_image_width_in(self) -> float:
+        """Returns the lower legibility bound for image width in inches."""
+        if self.image and self.image.min_width_in is not None:
+            return self.image.min_width_in
+        return self.min_rendered_width_in
 
     @property
     def full_label(self) -> str:

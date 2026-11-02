@@ -32,7 +32,7 @@ from worksheet_packer.worksheet_ast import (
     WorksheetSection,
     WorksheetSpec,
 )
-from worksheet_packer.image_utils import auto_crop_image, inspect_diagram_dimensions
+from worksheet_packer.image_utils import auto_crop_image, inspect_diagram_dimensions, estimate_image_scale_bounds
 from worksheet_packer.layout_engine import LayoutEngine
 from worksheet_packer.docx_renderer import DocxWorksheetRenderer
 from worksheet_packer.latex_renderer import LatexWorksheetRenderer
@@ -382,6 +382,111 @@ class TestWorksheetPacker(unittest.TestCase):
         except RuntimeError as e:
             # If neither Word nor LibreOffice is present in the test environment, skip gracefully
             pass
+
+    def test_dynamic_scale_bounds_estimation(self):
+        """Verifies that estimate_image_scale_bounds correctly bounds formula icons and geometry diagrams."""
+        # 1. Formula Icon (e.g. sqrt[5]{x^7}) - small native dimensions, source width ~0.44 in
+        formula_bounds = estimate_image_scale_bounds(
+            image_path=self.sample_diagram,
+            native_width_px=119,
+            native_height_px=83,
+            aspect_ratio=0.70,
+            bbox=[500, 100, 530, 152],  # width ratio 52/1000 -> 0.44 in
+            page_width_in=8.5,
+            col_width_in=3.5,
+        )
+        self.assertEqual(formula_bounds.category, "formula_icon")
+        self.assertLessEqual(formula_bounds.max_width_in, 1.40)
+        self.assertGreaterEqual(formula_bounds.min_width_in, 0.35)
+
+        # 2. Detailed Geometric Diagram (fine angle text, source width ~2.2 in)
+        geom_bounds = estimate_image_scale_bounds(
+            image_path=self.sample_diagram,
+            native_width_px=450,
+            native_height_px=400,
+            aspect_ratio=0.88,
+            bbox=[200, 100, 450, 360],  # width ratio 260/1000 -> 2.21 in
+            page_width_in=8.5,
+            col_width_in=3.5,
+        )
+        self.assertIn(geom_bounds.category, ("detailed_diagram", "compact_shape"))
+        self.assertGreaterEqual(geom_bounds.min_width_in, 1.10)
+        self.assertGreaterEqual(geom_bounds.preferred_width_in, 1.50)
+
+    def test_elastic_squeeze_overflow_prevention(self):
+        """Verifies that the packing engine elastically compresses diagrams to absorb slight overflows and prevent extra pages."""
+        cropped_path, w, h, ar = auto_crop_image(self.sample_diagram)
+
+        # Create two problems in a single-column layout whose preferred heights together
+        # slightly overflow printable page height (10.0 in), but can fit if squeezed.
+        p1 = Problem(
+            id="p1",
+            number=1,
+            prompt_text="Solve the triangle problem below with all detailed steps.",
+            image=ProblemImage(
+                media_path=str(cropped_path),
+                native_width_px=w,
+                native_height_px=h,
+                aspect_ratio=1.0,
+                preferred_width_in=3.0,
+                min_width_in=1.8,
+                max_width_in=3.5,
+                elasticity=1.0,
+            ),
+            workspace=WorkspaceConfig(type=WorkspaceType.LINES, lines=3),  # ~0.9 in
+        )
+
+        p2 = Problem(
+            id="p2",
+            number=2,
+            prompt_text="Solve the second geometry proof below.",
+            image=ProblemImage(
+                media_path=str(cropped_path),
+                native_width_px=w,
+                native_height_px=h,
+                aspect_ratio=1.0,
+                preferred_width_in=3.0,
+                min_width_in=1.8,
+                max_width_in=3.5,
+                elasticity=1.0,
+            ),
+            workspace=WorkspaceConfig(type=WorkspaceType.LINES, lines=3),
+        )
+
+        ws = WorksheetSpec(
+            title="Single Page Elastic Squeeze Test",
+            default_columns=1,
+            sections=[
+                WorksheetSection(
+                    id="sec_squeeze",
+                    problems=[p1, p2],
+                )
+            ],
+        )
+
+        # Total preferred stacked height for each is ~ text (0.4) + img (3.0) + ws (0.9) + pad (0.16) = ~4.46 in
+        # Header on page 1 is 0.75 in.
+        # Two problems = 0.75 + 4.46 + 0.10 + 4.46 + 0.10 = 9.87 in (just on edge)
+        # Let's adjust workspace lines slightly to induce an overflow of 0.4 in
+        p1.workspace.lines = 6  # ~1.8 in -> total footprint ~5.36 in
+        p2.workspace.lines = 6  # ~1.8 in -> total footprint ~5.36 in
+        # Without squeeze: 0.75 + 5.36 + 0.1 + 5.36 = 11.57 in > 10.0 in printable height!
+        # With image squeeze from 3.0 in down towards 1.8 in:
+        # Can save up to 2 * (3.0 - 1.8) = 2.4 in!
+        # Overflow is ~1.57 in, so squeezing both images to ~2.2 in will allow both to fit on 1 page!
+
+        plan = LayoutEngine(ws).pack()
+
+        # Both problems must be packed onto page 1!
+        self.assertEqual(plan.total_pages, 1)
+        self.assertEqual(len(plan.pages[0].items), 2)
+        # Verify both images were compressed within valid bounds
+        item1: PlacedProblem = plan.pages[0].items[0]
+        item2: PlacedProblem = plan.pages[0].items[1]
+        self.assertLess(item1.image_render_width_in, 3.0)
+        self.assertGreaterEqual(item1.image_render_width_in, 1.8)
+        self.assertLess(item2.image_render_width_in, 3.0)
+        self.assertGreaterEqual(item2.image_render_width_in, 1.8)
 
 
 if __name__ == "__main__":

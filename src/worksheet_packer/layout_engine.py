@@ -94,8 +94,14 @@ class LayoutEngine:
         self,
         problem: Problem,
         col_width_in: float,
+        target_img_width_in: Optional[float] = None,
     ) -> Tuple[LayoutDecision, float, float, float, float, float, float]:
         """Calculates layout decision and exact dimensions for a problem.
+
+        Args:
+            problem: The problem to evaluate.
+            col_width_in: Target column width in inches.
+            target_img_width_in: Explicit image width override (for elastic squeeze or slack expansion).
 
         Returns:
             Tuple of:
@@ -125,11 +131,15 @@ class LayoutEngine:
             )
 
         # Case 2: Image attached
-        ar = problem.image.aspect_ratio or 1.0
+        img = problem.image
+        ar = img.aspect_ratio or 1.0
         prompt_len = len(problem.prompt_text or "")
-        min_img_w = problem.min_rendered_width_in
+        min_img_w = problem.effective_min_image_width_in
+        pref_img_w = getattr(img, "preferred_width_in", 2.0)
+        max_img_w = getattr(img, "max_width_in", 3.5)
+        category = getattr(img, "category", "detailed_diagram")
 
-        # Determine Layout Decision based on hints & aspect ratio
+        # Determine Layout Decision based on hints, category, & aspect ratio
         decision = LayoutDecision.STACKED
         if problem.layout_hint == LayoutHint.SIDE_BY_SIDE:
             decision = LayoutDecision.SIDE_BY_SIDE
@@ -137,30 +147,27 @@ class LayoutEngine:
             decision = LayoutDecision.STACKED
         else:
             # Auto heuristic:
-            # Square-ish or portrait diagram (0.55 <= AR <= 1.50) with moderate text -> Side-by-Side
-            if 0.55 <= ar <= 1.50 and prompt_len < 450:
-                decision = LayoutDecision.SIDE_BY_SIDE
+            # Wide grids and wide aspect ratios must be stacked
+            # Formula icons (isolated radical/expression) are best centered stacked
+            if category == "wide_grid" or ar < 0.52 or category == "formula_icon":
+                decision = LayoutDecision.STACKED
+            elif 0.55 <= ar <= 1.55 and prompt_len < 450:
+                # Check if side-by-side fits legibility floor comfortably in column
+                if min_img_w <= col_width_in * 0.46:
+                    decision = LayoutDecision.SIDE_BY_SIDE
+                else:
+                    decision = LayoutDecision.STACKED
             else:
                 decision = LayoutDecision.STACKED
 
-        # Check if side-by-side fits comfortably within the column width
         if decision == LayoutDecision.SIDE_BY_SIDE:
-            # Try 65% text / 35% image split
-            cand_img_w = col_width_in * 0.35
-            cand_text_w = col_width_in * 0.65
+            if target_img_width_in is not None:
+                img_w = max(min_img_w, min(target_img_width_in, col_width_in * 0.50))
+            else:
+                # Ideal width within side-by-side share (35% to 42% of column)
+                ideal_w = min(pref_img_w, col_width_in * 0.40)
+                img_w = max(min_img_w, min(ideal_w, max_img_w))
 
-            # If image width in 65/35 is below minimum legibility threshold
-            if cand_img_w < min_img_w:
-                # Can we widen image to 45% or 50% if text is short?
-                if prompt_len < 160 and col_width_in * 0.48 >= min_img_w:
-                    cand_img_w = col_width_in * 0.48
-                    cand_text_w = col_width_in * 0.52
-                else:
-                    # In narrow column where 35% is unreadable, fallback to STACKED
-                    decision = LayoutDecision.STACKED
-
-        if decision == LayoutDecision.SIDE_BY_SIDE:
-            img_w = col_width_in * 0.36
             text_w = col_width_in - img_w - 0.08
             img_h = img_w * ar
             text_h = self.estimate_text_height(problem, text_w)
@@ -180,14 +187,18 @@ class LayoutEngine:
             text_w = col_width_in
             text_h = self.estimate_text_height(problem, text_w)
 
-            # Cap diagram dimensions for stacked layout so it doesn't swallow the whole page
-            max_stacked_w = min(col_width_in * 0.90, 4.5)
-            max_stacked_h = 3.2
-            img_w = max_stacked_w
+            if target_img_width_in is not None:
+                img_w = max(min_img_w, min(target_img_width_in, col_width_in * 0.95))
+            else:
+                # Bound by pref_img_w and max_img_w (prevents formula icons from ballooning)
+                cand_w = min(col_width_in * 0.90, pref_img_w)
+                img_w = max(min_img_w, min(cand_w, max_img_w))
+
+            max_stacked_h = 3.4
             img_h = img_w * ar
             if img_h > max_stacked_h:
                 img_h = max_stacked_h
-                img_w = img_h / ar if ar > 0 else max_stacked_w
+                img_w = img_h / ar if ar > 0 else img_w
 
             total_h = text_h + img_h + ws_height + 0.16
             return (
@@ -199,6 +210,141 @@ class LayoutEngine:
                 img_h,
                 ws_height,
             )
+
+    def _attempt_elastic_squeeze(
+        self,
+        placed_col_items: List[PlacedProblem],
+        new_prob: Problem,
+        new_fp: Tuple[LayoutDecision, float, float, float, float, float, float],
+        overflow_in: float,
+        col_width_in: float,
+    ) -> Optional[Tuple[List[Tuple[float, float, float, float, float]], Tuple[LayoutDecision, float, float, float, float, float, float]]]:
+        """Attempts to elastically compress images in this column to eliminate overflow_in.
+
+        Returns:
+            Tuple of (updated_placed_dimensions [(height, img_w, img_h, text_w, text_h)...], new_prob_updated_fp) or None.
+        """
+        all_candidates = placed_col_items + [PlacedProblem(
+            problem=new_prob,
+            layout=new_fp[0],
+            page_index=0,
+            col_index=0,
+            x_in=0,
+            y_in=0,
+            width_in=col_width_in,
+            height_in=new_fp[1],
+            text_render_width_in=new_fp[2],
+            text_render_height_in=new_fp[3],
+            image_render_width_in=new_fp[4],
+            image_render_height_in=new_fp[5],
+            workspace_height_in=new_fp[6],
+        )]
+
+        shrink_capacities: List[float] = []
+        for cand in all_candidates:
+            if not cand.problem.image or cand.image_render_width_in <= 0:
+                shrink_capacities.append(0.0)
+                continue
+            min_w = cand.problem.effective_min_image_width_in
+            curr_w = cand.image_render_width_in
+            if curr_w <= min_w:
+                shrink_capacities.append(0.0)
+                continue
+
+            # Footprint at absolute minimum legible width
+            _, min_h, _, _, _, _, _ = self.calculate_problem_footprint(
+                cand.problem, col_width_in, target_img_width_in=min_w
+            )
+            elasticity = getattr(cand.problem.image, "elasticity", 1.0)
+            cap = max(0.0, (cand.height_in - min_h) * elasticity)
+            shrink_capacities.append(cap)
+
+        total_capacity = sum(shrink_capacities)
+        if total_capacity < overflow_in:
+            return None  # Cannot squeeze enough to absorb the overflow
+
+        squeeze_factor = min(1.0, overflow_in / total_capacity)
+
+        # Apply compression to previously placed items
+        updated_placed = []
+        for i, cand in enumerate(placed_col_items):
+            if shrink_capacities[i] > 0:
+                min_w = cand.problem.effective_min_image_width_in
+                curr_w = cand.image_render_width_in
+                target_w = curr_w - squeeze_factor * (curr_w - min_w)
+                fp = self.calculate_problem_footprint(cand.problem, col_width_in, target_img_width_in=target_w)
+                updated_placed.append((fp[1], fp[4], fp[5], fp[2], fp[3]))
+            else:
+                updated_placed.append((cand.height_in, cand.image_render_width_in, cand.image_render_height_in, cand.text_render_width_in, cand.text_render_height_in))
+
+        # Apply compression to the newly placed problem
+        last_idx = len(all_candidates) - 1
+        if shrink_capacities[last_idx] > 0:
+            min_w = new_prob.effective_min_image_width_in
+            curr_w = new_fp[4]
+            target_w = curr_w - squeeze_factor * (curr_w - min_w)
+            new_prob_fp = self.calculate_problem_footprint(new_prob, col_width_in, target_img_width_in=target_w)
+        else:
+            new_prob_fp = new_fp
+
+        return updated_placed, new_prob_fp
+
+    def _absorb_slack_expansion(
+        self,
+        page: PlacedPage,
+        col_idx: int,
+        printable_h: float,
+        col_w: float,
+    ) -> None:
+        """Expands images up to max_width_in when there is excessive trailing whitespace."""
+        col_problems = [
+            item for item in page.items
+            if isinstance(item, PlacedProblem) and item.col_index == col_idx
+        ]
+        if not col_problems:
+            return
+
+        last_prob = col_problems[-1]
+        slack = printable_h - (last_prob.y_in + last_prob.height_in)
+        if slack < 1.0:
+            return
+
+        exp_capacities = []
+        for p in col_problems:
+            if not p.problem.image or p.image_render_width_in <= 0:
+                exp_capacities.append(0.0)
+                continue
+            max_w = getattr(p.problem.image, "max_width_in", 3.5)
+            curr_w = p.image_render_width_in
+            if curr_w >= max_w:
+                exp_capacities.append(0.0)
+                continue
+            _, exp_h, _, _, _, _, _ = self.calculate_problem_footprint(
+                p.problem, col_w, target_img_width_in=max_w
+            )
+            cap = max(0.0, exp_h - p.height_in)
+            exp_capacities.append(cap)
+
+        total_exp_cap = sum(exp_capacities)
+        if total_exp_cap <= 0:
+            return
+
+        usable_slack = min(total_exp_cap, slack * 0.60)
+        exp_factor = usable_slack / total_exp_cap
+
+        curr_y = col_problems[0].y_in
+        for i, p in enumerate(col_problems):
+            if exp_capacities[i] > 0:
+                max_w = getattr(p.problem.image, "max_width_in", 3.5)
+                target_w = p.image_render_width_in + exp_factor * (max_w - p.image_render_width_in)
+                fp = self.calculate_problem_footprint(p.problem, col_w, target_img_width_in=target_w)
+                p.height_in = fp[1]
+                p.text_render_width_in = fp[2]
+                p.text_render_height_in = fp[3]
+                p.image_render_width_in = fp[4]
+                p.image_render_height_in = fp[5]
+            p.y_in = curr_y
+            curr_y += p.height_in + 0.10
 
     def pack(self) -> RenderPlan:
         """Executes full 2D layout bin-packing across all worksheet sections."""
@@ -313,11 +459,44 @@ class LayoutEngine:
                     if other_col is not None and col_cursors[other_col] + total_h <= printable_h:
                         target_col = other_col
                     else:
-                        # Advance to new page
-                        current_page_idx += 1
-                        pages.append(PlacedPage(page_index=current_page_idx))
-                        col_cursors = [0.0] * col_count
-                        target_col = 0
+                        # Attempt Elastic Squeeze before forcing a page break
+                        squeezed = False
+                        cand_placed = [
+                            item for item in pages[-1].items
+                            if isinstance(item, PlacedProblem) and item.col_index == target_col
+                        ]
+                        overflow = (col_cursors[target_col] + total_h) - printable_h
+                        if 0 < overflow <= 1.40 and cand_placed:
+                            res = self._attempt_elastic_squeeze(
+                                cand_placed, prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h),
+                                overflow, col_w
+                            )
+                            if res:
+                                updated_placed, new_prob_fp = res
+                                for idx, p_item in enumerate(cand_placed):
+                                    p_item.height_in = updated_placed[idx][0]
+                                    p_item.image_render_width_in = updated_placed[idx][1]
+                                    p_item.image_render_height_in = updated_placed[idx][2]
+                                    p_item.text_render_width_in = updated_placed[idx][3]
+                                    p_item.text_render_height_in = updated_placed[idx][4]
+
+                                # Re-anchor y positions
+                                start_y = cand_placed[0].y_in if cand_placed else 0.0
+                                curr_y = start_y
+                                for p_item in cand_placed:
+                                    p_item.y_in = curr_y
+                                    curr_y += p_item.height_in + 0.10
+                                col_cursors[target_col] = curr_y
+
+                                decision, total_h, text_w, text_h, img_w, img_h, ws_h = new_prob_fp
+                                squeezed = True
+
+                        if not squeezed:
+                            # Advance to new page
+                            current_page_idx += 1
+                            pages.append(PlacedPage(page_index=current_page_idx))
+                            col_cursors = [0.0] * col_count
+                            target_col = 0
 
                 # Position coordinates
                 x_pos = target_col * (col_w + col_gap)
@@ -342,6 +521,13 @@ class LayoutEngine:
 
                 # Advance column cursor
                 col_cursors[target_col] += total_h + 0.10
+
+        # Pass 3: Slack Absorption (Whitespace Filling across pages)
+        default_gap = self.ws.column_gap_in if self.ws.default_columns > 1 else 0.0
+        default_col_w = (printable_w - (self.ws.default_columns - 1) * default_gap) / max(1, self.ws.default_columns)
+        for page in pages:
+            for col_idx in range(self.ws.default_columns):
+                self._absorb_slack_expansion(page, col_idx, printable_h, default_col_w)
 
         # Post-processing: Handle fill_remaining workspace
         for page in pages:

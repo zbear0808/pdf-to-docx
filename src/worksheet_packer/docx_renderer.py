@@ -85,6 +85,39 @@ def clean_math_text_for_docx(text: str) -> str:
     """Replaces common LaTeX math escape sequences with clean Unicode symbols for Word."""
     if not text:
         return ""
+    import re
+
+    out = text
+    # Fix potential double-encoded UTF-8 artifacts (e.g. 180Â° -> 180°)
+    out = out.replace("Â°", "°").replace("Â", "")
+
+    # Superscript map for roots and powers
+    sup_map = {
+        "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
+        "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹",
+        "+": "⁺", "-": "⁻", "=": "⁼", "(": "⁽", ")": "⁾",
+        "n": "ⁿ", "x": "ˣ", "y": "ʸ",
+    }
+
+    # Translate \sqrt[n]{x} -> ⁿ√(x)
+    def _repl_root(m):
+        idx = "".join(sup_map.get(ch, ch) for ch in m.group(1))
+        content = m.group(2)
+        return f"{idx}√({content})"
+    out = re.sub(r"\\sqrt\[([^\]]+)\]\{([^\}]+)\}", _repl_root, out)
+
+    # Translate \sqrt{x} -> √(x)
+    out = re.sub(r"\\sqrt\{([^\}]+)\}", r"√(\1)", out)
+
+    # Translate x^{n} or x^n -> xⁿ
+    def _repl_sup(m):
+        base = m.group(1)
+        exp = m.group(2)
+        sup = "".join(sup_map.get(ch, ch) for ch in exp)
+        return f"{base}{sup}"
+    out = re.sub(r"([A-Za-z0-9\)])\^\{([^\}]+)\}", _repl_sup, out)
+    out = re.sub(r"([A-Za-z0-9\)])\^([0-9a-zA-Z\+\-])", _repl_sup, out)
+
     replacements = [
         (r"\ell", "ℓ"),
         (r"^{\circ}", "°"),
@@ -104,13 +137,18 @@ def clean_math_text_for_docx(text: str) -> str:
         (r"\parallel", "∥"),
         (r"\perp", "⊥"),
         (r"\angle", "∠"),
+        (r"\cong", "≅"),
+        (r"\sim", "∼"),
         (r"\Delta", "Δ"),
         (r"\triangle", "△"),
+        (r"\(", ""),
+        (r"\)", ""),
+        (r"\[", ""),
+        (r"\]", ""),
     ]
-    out = text
     for old, new in replacements:
         out = out.replace(old, new)
-    import re
+    out = out.replace("\\n", " ")
     out = re.sub(r"\$([^\$]+)\$", r"\1", out)
     return out
 
@@ -245,11 +283,13 @@ class DocxWorksheetRenderer:
             r_lbl.bold = True
             if ch.runs:
                 for r_spec in ch.runs:
-                    r = p.add_run(r_spec.text)
+                    clean_c = clean_math_text_for_docx(r_spec.text)
+                    r = p.add_run(clean_c)
                     r.bold = r_spec.bold
                     r.italic = r_spec.italic
             else:
-                p.add_run(ch.text)
+                clean_c = clean_math_text_for_docx(ch.text)
+                p.add_run(clean_c)
 
     def _render_workspace_in_cell(self, cell, placed: PlacedProblem) -> None:
         """Renders answer lines or response box in designated cell."""

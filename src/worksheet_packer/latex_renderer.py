@@ -184,16 +184,21 @@ class LatexWorksheetRenderer:
             if img.caption:
                 img_include += f"\\\\[2pt]{{\\scriptsize\\textit{{{escape_latex_text(img.caption)}}}}}"
 
+        tot_w = max(0.1, placed.width_in)
+        img_ratio = min(0.50, max(0.25, placed.image_render_width_in / tot_w))
+        text_ratio = round(0.96 - img_ratio, 2)
+        img_ratio = round(img_ratio, 2)
+
         lines = [
             "\\noindent",
-            "\\begin{minipage}[t]{0.62\\linewidth}",
+            f"\\begin{{minipage}}[t]{{{text_ratio:.2f}\\linewidth}}",
             f"  {prompt}",
         ]
         if choices:
             lines.append(f"  {choices}")
         lines.extend([
             "\\end{minipage}\\hfill",
-            "\\begin{minipage}[t]{0.35\\linewidth}",
+            f"\\begin{{minipage}}[t]{{{img_ratio:.2f}\\linewidth}}",
             "  \\vspace{0pt}",
             "  \\centering",
             f"  {img_include}",

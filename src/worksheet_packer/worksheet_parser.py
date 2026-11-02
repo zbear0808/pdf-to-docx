@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 
 from pdf_to_docx.ir_schema import QuestionChoice, TextRun
 from pdf_to_docx.pdf_extractor import PDFExtractor
-from .image_utils import auto_crop_image, inspect_diagram_dimensions
+from .image_utils import auto_crop_image, inspect_diagram_dimensions, estimate_image_scale_bounds
 from .docx_extractor import convert_docx_to_pdf, extract_docx_media
 from .worksheet_ast import (
     LayoutHint,
@@ -42,6 +42,18 @@ class RawProblemExtraction(BaseModel):
         description="Normalized bounding box [ymin, xmin, ymax, xmax] on a 0-1000 scale"
     )
     diagram_caption: Optional[str] = None
+    diagram_category: Optional[str] = Field(
+        None,
+        description="'formula_icon' (small math symbol), 'compact_shape' (simple shape), 'detailed_diagram' (angles/labels), or 'wide_grid'"
+    )
+    diagram_min_width_in: Optional[float] = Field(
+        None,
+        description="Minimum legible diagram width in inches before angle labels/numbers become unreadable"
+    )
+    diagram_max_width_in: Optional[float] = Field(
+        None,
+        description="Maximum sensible diagram width in inches before looking comically oversized"
+    )
     workspace_type: str = "lines"  # "lines", "box", "grid", "blank", "none"
     workspace_lines: int = 3
     workspace_height_pt: Optional[float] = None
@@ -68,6 +80,8 @@ Extraction Rules:
 3. DIAGRAMS & FIGURES:
    - If the problem refers to or contains a geometric figure, coordinate grid, graph, data table, or illustration, set has_diagram = true.
    - Provide the exact bounding box [ymin, xmin, ymax, xmax] on a 0-1000 normalized scale covering the diagram.
+   - Identify diagram_category: "formula_icon" (isolated radical/expression), "compact_shape" (small polygon/circle), "detailed_diagram" (geometry figure with angle numbers and letters), or "wide_grid" (coordinate plane/table).
+   - Estimate diagram_min_width_in (minimum width in inches to keep text legible) and diagram_max_width_in (maximum width before it looks cartoonishly blown up).
    - If the diagram is square-ish or portrait, note layout_hint = "side_by_side". If it is wide or full-width, note layout_hint = "stacked".
 4. WORKSPACE:
    - Note the student workspace under the question: "lines" (blank ruled lines), "box" (empty box), "grid" (graph paper), "blank" (empty space), or "none" (inline/multiple choice).
@@ -265,6 +279,29 @@ class WorksheetParser:
                         padding_px=4,
                     )
 
+                    # Calculate dynamic scale bounds
+                    col_width_est = (spec.printable_width_in - (default_columns - 1) * spec.column_gap_in) / max(1, default_columns)
+                    scale_bounds = estimate_image_scale_bounds(
+                        image_path=clean_crop_path,
+                        native_width_px=w_px,
+                        native_height_px=h_px,
+                        aspect_ratio=ar,
+                        bbox=raw_p.diagram_bbox,
+                        page_width_in=spec.page_width_in,
+                        col_width_in=col_width_est,
+                    )
+
+                    # Blend with LLM vision verification if provided
+                    min_w = scale_bounds.min_width_in
+                    if raw_p.diagram_min_width_in and raw_p.diagram_min_width_in > 0:
+                        min_w = max(min_w, raw_p.diagram_min_width_in)
+                    max_w = scale_bounds.max_width_in
+                    if raw_p.diagram_max_width_in and raw_p.diagram_max_width_in > 0:
+                        max_w = min(max_w, raw_p.diagram_max_width_in)
+                    max_w = max(min_w, max_w)
+
+                    category = raw_p.diagram_category or scale_bounds.category
+
                     prob_image = ProblemImage(
                         media_path=str(clean_crop_path.resolve()),
                         native_width_px=w_px,
@@ -273,6 +310,14 @@ class WorksheetParser:
                         auto_cropped=True,
                         caption=raw_p.diagram_caption,
                         bbox=raw_p.diagram_bbox,
+                        source_width_in=scale_bounds.source_width_in,
+                        source_height_in=scale_bounds.source_height_in,
+                        min_width_in=min_w,
+                        preferred_width_in=scale_bounds.preferred_width_in,
+                        max_width_in=max_w,
+                        has_fine_text=scale_bounds.has_fine_text,
+                        category=category,
+                        elasticity=scale_bounds.elasticity,
                     )
 
                 # Workspace config
