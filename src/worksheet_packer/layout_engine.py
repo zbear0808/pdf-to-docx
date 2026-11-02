@@ -72,23 +72,30 @@ class LayoutEngine:
 
         return max(line_height_in, lines * line_height_in + padding_in)
 
-    def estimate_workspace_height(self, problem: Problem) -> float:
-        """Estimates vertical height in inches for the student work area."""
+    def estimate_workspace_height(
+        self,
+        problem: Problem,
+        col_width_in: Optional[float] = None,
+    ) -> float:
+        """Estimates vertical height in inches for the student work area.
+        
+        Prioritizes explicit approximate workspace heights/areas (approx_workspace_in,
+        approx_height_in, approx_area_sq_in) or lines of empty whitespace.
+        """
         ws_cfg = problem.workspace
         if ws_cfg.type == WorkspaceType.NONE:
             return 0.0
-        if ws_cfg.height_pt is not None and ws_cfg.height_pt > 0:
-            return ws_cfg.height_pt / 72.0
-        if ws_cfg.type == WorkspaceType.LINES:
-            # 22 pt per standard college-ruled line
-            return (ws_cfg.lines * 22.0) / 72.0
-        if ws_cfg.type == WorkspaceType.GRID:
-            return 2.0  # Default 2 inches for coordinate planes
-        if ws_cfg.type == WorkspaceType.BOX:
-            return max(1.0, (ws_cfg.lines * 24.0) / 72.0)
-        if ws_cfg.type == WorkspaceType.BLANK:
-            return (ws_cfg.lines * 18.0) / 72.0
-        return 0.5
+
+        cw = col_width_in
+        if cw is None:
+            cw = self.ws.printable_width_in / max(1, self.ws.default_columns)
+
+        if problem.approx_workspace_in is not None and problem.approx_workspace_in > 0:
+            return float(problem.approx_workspace_in)
+        if problem.approx_workspace_area_sq_in is not None and problem.approx_workspace_area_sq_in > 0:
+            return float(problem.approx_workspace_area_sq_in / max(0.5, cw))
+
+        return ws_cfg.effective_height_in(cw)
 
     def calculate_problem_footprint(
         self,
@@ -113,7 +120,7 @@ class LayoutEngine:
               - image_render_height_in
               - workspace_height_in
         """
-        ws_height = self.estimate_workspace_height(problem)
+        ws_height = self.estimate_workspace_height(problem, col_width_in)
 
         # Case 1: No image attached
         if not problem.image:

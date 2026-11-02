@@ -54,9 +54,17 @@ class RawProblemExtraction(BaseModel):
         None,
         description="Maximum sensible diagram width in inches before looking comically oversized"
     )
-    workspace_type: str = "lines"  # "lines", "box", "grid", "blank", "none"
-    workspace_lines: int = 3
+    workspace_type: str = "blank"  # "blank" (default whitespace), "box", "grid", "lines", "none"
+    workspace_lines: int = 2
     workspace_height_pt: Optional[float] = None
+    approx_workspace_height_in: Optional[float] = Field(
+        None,
+        description="Approximate vertical workspace height in inches required for students to show work"
+    )
+    approx_workspace_area_sq_in: Optional[float] = Field(
+        None,
+        description="Approximate workspace area in square inches required for student work"
+    )
     layout_hint: str = "auto"      # "auto", "side_by_side", "stacked", "full_width"
 
 
@@ -83,9 +91,11 @@ Extraction Rules:
    - Identify diagram_category: "formula_icon" (isolated radical/expression), "compact_shape" (small polygon/circle), "detailed_diagram" (geometry figure with angle numbers and letters), or "wide_grid" (coordinate plane/table).
    - Estimate diagram_min_width_in (minimum width in inches to keep text legible) and diagram_max_width_in (maximum width before it looks cartoonishly blown up).
    - If the diagram is square-ish or portrait, note layout_hint = "side_by_side". If it is wide or full-width, note layout_hint = "stacked".
-4. WORKSPACE:
-   - Note the student workspace under the question: "lines" (blank ruled lines), "box" (empty box), "grid" (graph paper), "blank" (empty space), or "none" (inline/multiple choice).
-   - Estimate workspace_lines (count of visible work lines, typically 2-6) or workspace_height_pt.
+4. WORKSPACE & STUDENT ANSWER AREA:
+   - Students need clean empty whitespace to write their answers. DO NOT extract or generate blank underline rules for student work areas.
+   - Default to workspace_type = "blank" (clean whitespace gap).
+   - Estimate approx_workspace_height_in (approximate vertical height in inches needed for work, e.g. 0.5 to 2.0 inches) or workspace_lines (approx 0.3 in each).
+   - Only use "box" if the original document explicitly drew a framed response rectangle, "grid" for coordinate graphs, or "none" if multiple-choice with no extra work area needed.
 5. If there is a section header (e.g. "Part I: Multiple Choice" or "Free Response"), record section_title.
 """
 
@@ -334,20 +344,22 @@ class WorksheetParser:
 
                 # Workspace config
                 ws_type_str = raw_p.workspace_type.lower()
-                ws_type = WorkspaceType.LINES
+                ws_type = WorkspaceType.BLANK
                 if "box" in ws_type_str:
                     ws_type = WorkspaceType.BOX
                 elif "grid" in ws_type_str:
                     ws_type = WorkspaceType.GRID
-                elif "blank" in ws_type_str:
-                    ws_type = WorkspaceType.BLANK
-                elif "none" in ws_type_str or (raw_p.choices and raw_p.workspace_lines <= 0):
+                elif "none" in ws_type_str or (raw_p.choices and raw_p.workspace_lines <= 0 and not raw_p.approx_workspace_height_in):
                     ws_type = WorkspaceType.NONE
+                else:
+                    ws_type = WorkspaceType.BLANK
 
                 ws_cfg = WorkspaceConfig(
                     type=ws_type,
                     lines=max(0, raw_p.workspace_lines),
                     height_pt=raw_p.workspace_height_pt,
+                    approx_height_in=raw_p.approx_workspace_height_in,
+                    approx_area_sq_in=raw_p.approx_workspace_area_sq_in,
                 )
 
                 # Layout hint

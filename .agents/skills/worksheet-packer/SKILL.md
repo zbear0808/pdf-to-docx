@@ -20,8 +20,12 @@ Standard worksheets often waste massive horizontal whitespace—for example, pla
 **Worksheet Packer** eliminates this by:
 1. **Perception**: Extracting problem prompts, multiple-choice choices, student answer areas, and attached diagrams from PDF or existing Word (`.docx`) documents.
 2. **Auto-Cropping**: Trimming white and transparent borders from diagram images so footprint calculations reflect the true visual drawing rather than margin padding.
-3. **2D Bin-Packing Layout Engine**: Heuristically routing square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) into **Side-by-Side** (65% text / 35% diagram) containers, and wide diagrams into **Stacked** containers.
-4. **Deterministic Structural Rendering**:
+3. **Empty Space Workspaces**:
+   - **No Blank Underlines**: Never generate blank underlines (`_______` or `\hrule`) for student work areas. Blank underlines constrain handwriting, look dated, and waste vertical space.
+   - **Clean Whitespace Budgeting**: Use `WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=...)` or `approx_workspace_in=...` on `Problem`.
+   - **2D Area Budgeting**: Use `approx_area_sq_in` so student work space automatically adapts its height when toggling between 1-column and 2-column layouts.
+4. **2D Bin-Packing Layout Engine**: Heuristically routing square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) into **Side-by-Side** (65% text / 35% diagram) containers, and wide diagrams into **Stacked** containers.
+5. **Deterministic Structural Rendering**:
    - **DOCX**: Invisible borderless tables with OpenXML `w:cantSplit` on every row guarantee that diagrams, text, and workspaces stay strictly locked together without mid-problem page breaks or jumping floating anchors.
    - **LaTeX**: `minipage` environments with `multicol` and `tcolorbox`.
 
@@ -138,7 +142,7 @@ spec = WorksheetSpec(
                     number=1,
                     prompt_text="Find the rate of change of angle θ.",
                     image=ProblemImage(media_path=str(clean_path), native_width_px=w, native_height_px=h, aspect_ratio=ar),
-                    workspace=WorkspaceConfig(type=WorkspaceType.LINES, lines=3),
+                    workspace=WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=1.0),
                 )
             ]
         )

@@ -488,6 +488,60 @@ class TestWorksheetPacker(unittest.TestCase):
         self.assertLess(item2.image_render_width_in, 3.0)
         self.assertGreaterEqual(item2.image_render_width_in, 1.8)
 
+    def test_empty_workspace_budgeting_and_no_underlines(self):
+        """Verifies approx workspace budgeting and confirms no underline rules are rendered."""
+        # 1. Test AST syncing & area scaling
+        p1 = Problem(id="q1", number=1, prompt_text="Solve for x.", approx_workspace_in=1.5)
+        self.assertEqual(p1.workspace.approx_height_in, 1.5)
+        self.assertEqual(p1.workspace.effective_height_in(col_width_in=3.5), 1.5)
+
+        p2 = Problem(id="q2", number=2, prompt_text="Explain reasoning.", approx_workspace_area_sq_in=7.0)
+        self.assertEqual(p2.workspace.approx_area_sq_in, 7.0)
+        self.assertAlmostEqual(p2.workspace.effective_height_in(col_width_in=3.5), 2.0, places=2)
+
+        p3 = Problem(id="q3", number=3, prompt_text="Legacy lines question.", workspace=WorkspaceConfig(type=WorkspaceType.LINES, lines=3))
+
+        ws = WorksheetSpec(
+            title="Clean Workspace Test",
+            default_columns=1,
+            sections=[
+                WorksheetSection(
+                    id="sec_clean",
+                    problems=[p1, p2, p3],
+                )
+            ],
+        )
+
+        plan = LayoutEngine(ws).pack()
+        self.assertGreaterEqual(plan.total_pages, 1)
+
+        # Footprint of p1 must reflect 1.5 in workspace
+        placed_p1: PlacedProblem = plan.pages[0].items[0]
+        self.assertAlmostEqual(placed_p1.workspace_height_in, 1.5, places=2)
+
+        # 2. DOCX Rendering Verification: must NOT contain underscore lines
+        docx_file = self.temp_dir / "clean_workspace.docx"
+        DocxWorksheetRenderer(plan).render(docx_file)
+        self.assertTrue(docx_file.exists())
+
+        from docx import Document
+        doc = Document(str(docx_file))
+        # Ensure problem tables (tbl 1 onwards) contain no underscore strings
+        self.assertGreater(len(doc.tables), 1)
+        for tbl in doc.tables[1:]:
+            for row in tbl.rows:
+                for cell in row.cells:
+                    for p in cell.paragraphs:
+                        self.assertNotIn("____", p.text)
+
+        # 3. LaTeX Rendering Verification: must contain \vspace and NO workspace \hrule rules
+        tex_file = self.temp_dir / "clean_workspace.tex"
+        LatexWorksheetRenderer(plan).render(tex_file, compile_pdf=False)
+        self.assertTrue(tex_file.exists())
+        tex_str = tex_file.read_text(encoding="utf-8")
+        self.assertIn("\\vspace*{1.50in}", tex_str)
+        self.assertNotIn("height 0.3pt", tex_str)  # Legacy workspace rules must not be generated
+
 
 if __name__ == "__main__":
     unittest.main()

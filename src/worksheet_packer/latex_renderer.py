@@ -160,14 +160,11 @@ class LatexWorksheetRenderer:
                 f"  \\centering\\vspace*{{{h_pt / 3.0:.1f}pt}}\\textcolor{{gray!70}}{{\\scriptsize [ Graph / Grid Area ]}}\n"
                 f"\\end{{worksheetbox}}"
             )
-        elif ws_cfg.type == WorkspaceType.LINES:
-            num_lines = max(1, int(placed.workspace_height_in / 0.28))
-            rules = []
-            for _ in range(num_lines):
-                rules.append("\\vspace{14pt}\\hrule height 0.3pt")
-            return "\n".join(rules)
+        elif ws_cfg.type in (WorkspaceType.BLANK, WorkspaceType.LINES):
+            # Pure vertical whitespace for student work (no blank underlines)
+            return f"\\vspace*{{{placed.workspace_height_in:.2f}in}}"
         else:
-            return f"\\vspace{{{placed.workspace_height_in:.2f}in}}"
+            return f"\\vspace*{{{placed.workspace_height_in:.2f}in}}"
 
     def _render_side_by_side_problem(self, placed: PlacedProblem) -> str:
         """Renders side-by-side text (62%) and image (35%) via minipage."""

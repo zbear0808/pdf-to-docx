@@ -8,7 +8,7 @@ image attachments, workspace budgeting, and layout decisions for space-efficient
 from __future__ import annotations
 from enum import Enum
 from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 # Re-use foundational typography types from the core IR schema
 from pdf_to_docx.ir_schema import TextRun, QuestionChoice
@@ -38,19 +38,44 @@ class LayoutDecision(str, Enum):
 
 class WorkspaceType(str, Enum):
     """Type of student work area under a problem."""
-    LINES = "lines"          # Blank answer/work lines (underline style)
+    BLANK = "blank"          # Pure whitespace gap (recommended default - no underlines)
+    LINES = "lines"          # Blank answer/work lines (deprecated in favor of pure whitespace)
     GRID = "grid"            # Coordinate or graph grid
     BOX = "box"              # Framed empty response rectangle
-    BLANK = "blank"          # Pure whitespace gap
     NONE = "none"            # Multiple choice or inline question with no extra work space
 
 
 class WorkspaceConfig(BaseModel):
-    """Configuration for problem workspace / student answer area."""
-    type: WorkspaceType = WorkspaceType.LINES
-    lines: int = 3
+    """Configuration for problem workspace / student answer area.
+    
+    Prefers clean empty whitespace over underlines. Can specify an exact height in inches
+    (approx_height_in), a 2D area (approx_area_sq_in) that scales with column width,
+    or a number of lines (approx 22pt / 0.3in each).
+    """
+    type: WorkspaceType = WorkspaceType.BLANK
+    lines: int = 2
     height_pt: Optional[float] = None
-    fill_remaining: bool = False   # True if this problem should expand to fill trailing whitespace
+    approx_height_in: Optional[float] = None   # Approximate vertical workspace height required in inches
+    approx_area_sq_in: Optional[float] = None  # Approximate workspace area in square inches (scales by column width)
+    fill_remaining: bool = False               # True if this problem should expand to fill trailing whitespace
+
+    def effective_height_in(self, col_width_in: float = 3.5) -> float:
+        """Calculates effective workspace height in inches given column width."""
+        if self.type == WorkspaceType.NONE:
+            return 0.0
+        if self.approx_height_in is not None and self.approx_height_in > 0:
+            return float(self.approx_height_in)
+        if self.approx_area_sq_in is not None and self.approx_area_sq_in > 0:
+            cw = max(0.5, col_width_in)
+            return float(self.approx_area_sq_in / cw)
+        if self.height_pt is not None and self.height_pt > 0:
+            return float(self.height_pt / 72.0)
+        if self.type == WorkspaceType.GRID:
+            return 2.0  # Default 2 inches for coordinate planes
+        if self.type == WorkspaceType.BOX:
+            return max(1.0, (self.lines * 24.0) / 72.0)
+        # BLANK (and legacy LINES): standard ~22 pt (approx 0.30 in) per line of writing whitespace
+        return (max(1, self.lines) * 22.0) / 72.0
 
 
 class ProblemImage(BaseModel):
@@ -86,9 +111,21 @@ class Problem(BaseModel):
     image: Optional[ProblemImage] = None
     choices: Optional[List[QuestionChoice]] = None
     workspace: WorkspaceConfig = Field(default_factory=WorkspaceConfig)
+    approx_workspace_in: Optional[float] = None       # Top-level shortcut for workspace height in inches
+    approx_workspace_area_sq_in: Optional[float] = None # Top-level shortcut for workspace area in sq inches
     layout_hint: LayoutHint = LayoutHint.AUTO
     min_rendered_width_in: float = 1.5  # Diagram won't be shrunk below this width
     extra_metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _sync_workspace_dimensions(self) -> Problem:
+        if self.approx_workspace_in is not None and self.approx_workspace_in > 0:
+            if self.workspace.approx_height_in is None:
+                self.workspace.approx_height_in = self.approx_workspace_in
+        if self.approx_workspace_area_sq_in is not None and self.approx_workspace_area_sq_in > 0:
+            if self.workspace.approx_area_sq_in is None:
+                self.workspace.approx_area_sq_in = self.approx_workspace_area_sq_in
+        return self
 
     @property
     def effective_min_image_width_in(self) -> float:

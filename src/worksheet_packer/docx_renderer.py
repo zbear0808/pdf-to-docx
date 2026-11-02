@@ -328,22 +328,11 @@ class DocxWorksheetRenderer:
                 r_grid = p_grid.add_run("[ Graph / Grid Area ]")
                 r_grid.font.size = Pt(8.5)
                 r_grid.font.color.rgb = RGBColor(0x99, 0x99, 0x99)
-        elif ws_cfg.type == WorkspaceType.LINES:
-            # Clean dashed or underline work rules
-            num_lines = max(1, int(placed.workspace_height_in / 0.28))
-            # Fit underscores to cell width
-            chars_count = max(20, int(placed.width_in * 13))
-            line_str = "_" * chars_count
-            for i in range(num_lines):
-                if i > 0:
-                    p = cell.add_paragraph()
-                    p.paragraph_format.space_before = Pt(0)
-                    p.paragraph_format.space_after = Pt(2)
-                r_line = p.add_run(line_str)
-                r_line.font.size = Pt(8)
-                r_line.font.color.rgb = RGBColor(0xAA, 0xAA, 0xAA)
-        elif ws_cfg.type == WorkspaceType.BLANK:
-            p.paragraph_format.space_after = Pt(max(10.0, placed.workspace_height_in * 72.0))
+        elif ws_cfg.type == WorkspaceType.LINES or ws_cfg.type == WorkspaceType.BLANK:
+            # Clean empty whitespace for student work (no blank underlines)
+            h_pt = max(14.0, placed.workspace_height_in * 72.0)
+            p.paragraph_format.space_before = Pt(0)
+            p.paragraph_format.space_after = Pt(h_pt)
 
     def _render_side_by_side_problem(self, placed: PlacedProblem) -> None:
         """Renders Layout A: Side-by-side text (left) and diagram (right) in an invisible table."""
@@ -401,10 +390,11 @@ class DocxWorksheetRenderer:
 
         # Row 1: Workspace spanning both columns
         if has_workspace:
+            table.rows[1].height = Pt(max(14.0, placed.workspace_height_in * 72.0))
             c_work = table.cell(1, 0)
             c_work.merge(table.cell(1, 1))
             set_cell_width(c_work, col_w)
-            set_cell_padding(c_work, top=40, bottom=40, left=20, right=20)
+            set_cell_padding(c_work, top=20, bottom=20, left=20, right=20)
             self._render_workspace_in_cell(c_work, placed)
 
         # Inter-problem spacing paragraph
@@ -459,6 +449,7 @@ class DocxWorksheetRenderer:
 
         # Row 2: Workspace
         if has_workspace:
+            table.rows[2].height = Pt(max(14.0, placed.workspace_height_in * 72.0))
             c_work = table.cell(2, 0)
             self._render_workspace_in_cell(c_work, placed)
 
@@ -489,6 +480,7 @@ class DocxWorksheetRenderer:
         self._apply_choices(c_text, prob)
 
         if has_workspace:
+            table.rows[1].height = Pt(max(14.0, placed.workspace_height_in * 72.0))
             c_work = table.cell(1, 0)
             set_cell_width(c_work, col_w)
             set_cell_padding(c_work, top=20, bottom=20, left=20, right=20)

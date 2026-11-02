@@ -44,13 +44,13 @@ src/worksheet_packer/
 - `SectionOrdering.STRICT`: Preserves the author's exact problem sequence (e.g. for numbered multi-part exam problems).
 - `SectionOrdering.FLEXIBLE`: Allows the 2D bin packer to reorder problems (First-Fit Decreasing) within the section to maximize packing density.
 
-### 3. Student Workspaces
-Supports all standard math/science worksheet work areas:
-- `lines`: Blank ruled answer lines (`WorkspaceConfig(type="lines", lines=4)`).
+### 3. Student Workspaces (Clean Empty Whitespace)
+Prefers clean empty whitespace for student work over artificial underline blanks:
+- `blank` (Default): Clean whitespace gap budgeted via `approx_height_in` (e.g. `0.75`), `approx_area_sq_in` (e.g. `3.0`), or `lines` (`WorkspaceConfig(type="blank", approx_height_in=1.0)`).
 - `box`: Framed response box (`WorkspaceConfig(type="box", height_pt=80)`).
 - `grid`: Coordinate / graph grid area (`WorkspaceConfig(type="grid")`).
-- `blank`: Configurable vertical white gap.
 - `none`: Compact layout for multiple-choice or short-answer questions.
+- `lines`: Legacy ruled lines (automatically converted to clean whitespace).
 - `fill_remaining`: Automatically expands the final problem's work area to fill trailing page whitespace.
 
 ### 4. Re-packing Existing Word Documents (.docx)
