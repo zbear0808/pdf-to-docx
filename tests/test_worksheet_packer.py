@@ -542,6 +542,113 @@ class TestWorksheetPacker(unittest.TestCase):
         self.assertIn("\\vspace*{1.50in}", tex_str)
         self.assertNotIn("height 0.3pt", tex_str)  # Legacy workspace rules must not be generated
 
+    def test_column_balancing_and_even_spacing(self):
+        """Verifies that 6 questions on a 2-column page balance evenly (3 in each column) with generous spacing."""
+        mc_probs = [
+            Problem(
+                id=f"q{i}",
+                number=i,
+                prompt_text=f"Question {i}: What is the output of the following Java snippet?",
+                choices=[
+                    QuestionChoice(label="(A)", text=f"Result A{i}"),
+                    QuestionChoice(label="(B)", text=f"Result B{i}"),
+                    QuestionChoice(label="(C)", text=f"Result C{i}"),
+                    QuestionChoice(label="(D)", text=f"Result D{i}"),
+                ],
+                workspace=WorkspaceConfig(type=WorkspaceType.NONE),
+            )
+            for i in range(1, 7)
+        ]
+
+        spec = WorksheetSpec(
+            title="CodeHS Unit 1 Retake Assessment",
+            subtitle="Balanced Column Spacing Verification",
+            default_columns=2,
+            sections=[
+                WorksheetSection(
+                    id="mc_sec",
+                    title="Part I: Multiple Choice",
+                    ordering=SectionOrdering.STRICT,
+                    problems=mc_probs,
+                )
+            ],
+        )
+
+        plan = LayoutEngine(spec).pack()
+
+        # All 6 questions must fit on 1 page
+        self.assertEqual(plan.total_pages, 1)
+        page1 = plan.pages[0]
+
+        problems_placed = [it for it in page1.items if isinstance(it, PlacedProblem)]
+        self.assertEqual(len(problems_placed), 6)
+
+        col0_items = [p for p in problems_placed if p.col_index == 0]
+        col1_items = [p for p in problems_placed if p.col_index == 1]
+
+        # Crucial check: Exactly 3 in Col 0 and 3 in Col 1 (NOT 4 or 5 in Col 0 and 1 or 2 in Col 1!)
+        self.assertEqual(len(col0_items), 3, "Col 0 must have exactly 3 questions!")
+        self.assertEqual(len(col1_items), 3, "Col 1 must have exactly 3 questions!")
+
+        # Verify problem order
+        self.assertEqual([p.problem.number for p in col0_items], [1, 2, 3])
+        self.assertEqual([p.problem.number for p in col1_items], [4, 5, 6])
+
+        # Verify vertical spacing is expanded beyond base 0.10 in
+        for p in problems_placed:
+            self.assertGreater(p.spacing_after_in, 0.15, "Spacing must be expanded to make better use of page space!")
+
+        # Verify LaTeX renderer output includes \columnbreak
+        tex_path = self.temp_dir / "balanced_test.tex"
+        saved_tex = LatexWorksheetRenderer(plan).render(tex_path, compile_pdf=False)
+        tex_content = saved_tex.read_text(encoding="utf-8")
+        self.assertIn("\\columnbreak", tex_content, "LaTeX must include explicit \\columnbreak between balanced columns!")
+
+        # Verify DOCX renderer output compiles cleanly
+        docx_path = self.temp_dir / "balanced_test.docx"
+        saved_docx = DocxWorksheetRenderer(plan).render(docx_path)
+        self.assertTrue(saved_docx.exists())
+
+    def test_odd_count_column_balancing(self):
+        """Verifies that 5 questions on a 2-column page balance as 3 in left column and 2 in right column."""
+        probs = [
+            Problem(
+                id=f"q{i}",
+                number=i,
+                prompt_text=f"Short question {i} prompt text for odd count test.",
+                choices=[
+                    QuestionChoice(label="(A)", text="Choice 1"),
+                    QuestionChoice(label="(B)", text="Choice 2"),
+                ],
+                workspace=WorkspaceConfig(type=WorkspaceType.NONE),
+            )
+            for i in range(1, 6)
+        ]
+
+        spec = WorksheetSpec(
+            title="Odd Count Balance Test",
+            default_columns=2,
+            sections=[
+                WorksheetSection(
+                    id="sec_odd",
+                    ordering=SectionOrdering.STRICT,
+                    problems=probs,
+                )
+            ],
+        )
+
+        plan = LayoutEngine(spec).pack()
+        self.assertEqual(plan.total_pages, 1)
+
+        problems_placed = [it for it in plan.pages[0].items if isinstance(it, PlacedProblem)]
+        col0_items = [p for p in problems_placed if p.col_index == 0]
+        col1_items = [p for p in problems_placed if p.col_index == 1]
+
+        self.assertEqual(len(col0_items), 3, "Col 0 must have 3 questions for a 5-question set!")
+        self.assertEqual(len(col1_items), 2, "Col 1 must have 2 questions for a 5-question set!")
+        self.assertEqual([p.problem.number for p in col0_items], [1, 2, 3])
+        self.assertEqual([p.problem.number for p in col1_items], [4, 5])
+
 
 if __name__ == "__main__":
     unittest.main()

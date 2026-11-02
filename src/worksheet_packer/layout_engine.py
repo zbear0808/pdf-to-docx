@@ -351,7 +351,234 @@ class LayoutEngine:
                 p.image_render_width_in = fp[4]
                 p.image_render_height_in = fp[5]
             p.y_in = curr_y
-            curr_y += p.height_in + 0.10
+            curr_y += p.height_in + getattr(p, "spacing_after_in", 0.10)
+
+    def _attempt_squeeze_batch(
+        self,
+        batch: List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]],
+        avail_h: float,
+        col_w: float,
+        base_gap: float = 0.10,
+    ) -> Optional[List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]]]:
+        """Attempts to elastically compress diagrams in batch so total height + gaps <= avail_h."""
+        total_curr_h = sum(fp[1] for _, fp in batch) + max(0, len(batch) - 1) * base_gap
+        overflow_in = total_curr_h - avail_h
+        if overflow_in <= 0.001:
+            return batch
+        if overflow_in > 1.80:
+            return None
+
+        shrink_capacities: List[float] = []
+        min_fps = []
+        for prob, fp in batch:
+            if not prob.image or fp[4] <= 0:
+                shrink_capacities.append(0.0)
+                min_fps.append(fp)
+                continue
+            min_w = prob.effective_min_image_width_in
+            curr_w = fp[4]
+            if curr_w <= min_w:
+                shrink_capacities.append(0.0)
+                min_fps.append(fp)
+                continue
+            min_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=min_w)
+            min_fps.append(min_fp)
+            elasticity = getattr(prob.image, "elasticity", 1.0)
+            cap = max(0.0, (fp[1] - min_fp[1]) * elasticity)
+            shrink_capacities.append(cap)
+
+        total_cap = sum(shrink_capacities)
+        if total_cap < overflow_in:
+            return None
+
+        squeeze_factor = min(1.0, overflow_in / total_cap)
+        squeezed_batch = []
+        for i, (prob, fp) in enumerate(batch):
+            if shrink_capacities[i] > 0:
+                min_w = prob.effective_min_image_width_in
+                curr_w = fp[4]
+                target_w = curr_w - squeeze_factor * (curr_w - min_w)
+                new_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=target_w)
+                squeezed_batch.append((prob, new_fp))
+            else:
+                squeezed_batch.append((prob, fp))
+
+        return squeezed_batch
+
+    def _find_valid_splits_strict(
+        self,
+        batch: List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]],
+        avail_0: float,
+        avail_1: float,
+        col_w: float,
+        base_gap: float,
+        cursor_0: float,
+        cursor_1: float,
+    ) -> List[Tuple[float, int, List[Tuple[Any, Any]], List[Tuple[Any, Any]]]]:
+        """Evaluates all possible split points k in strict sequence for a subset of problems.
+        
+        Returns:
+            List of (score, k, b0_sq, b1_sq) for splits that fit within (avail_0, avail_1).
+        """
+        m = len(batch)
+        if m == 0:
+            return []
+
+        valid_splits = []
+        for k in range(1, m + 1):
+            b0 = batch[:k]
+            b1 = batch[k:]
+
+            h0 = sum(fp[1] for _, fp in b0) + max(0, len(b0) - 1) * base_gap
+            h1 = sum(fp[1] for _, fp in b1) + max(0, len(b1) - 1) * base_gap if b1 else 0.0
+
+            b0_sq = b0
+            b1_sq = b1
+            if h0 > avail_0 + 0.01:
+                res0 = self._attempt_squeeze_batch(b0, avail_0, col_w, base_gap)
+                if res0 is not None:
+                    b0_sq = res0
+                    h0 = sum(fp[1] for _, fp in b0_sq) + max(0, len(b0_sq) - 1) * base_gap
+                else:
+                    continue
+
+            if h1 > avail_1 + 0.01:
+                res1 = self._attempt_squeeze_batch(b1, avail_1, col_w, base_gap)
+                if res1 is not None:
+                    b1_sq = res1
+                    h1 = sum(fp[1] for _, fp in b1_sq) + max(0, len(b1_sq) - 1) * base_gap
+                else:
+                    continue
+
+            if h0 <= avail_0 + 0.01 and h1 <= avail_1 + 0.01:
+                end0 = cursor_0 + h0
+                end1 = cursor_1 + h1
+                h_diff = abs(end0 - end1)
+                count_diff = abs(len(b0) - len(b1))
+                score = h_diff + 0.35 * count_diff
+                if m % 2 == 1 and k == (m + 1) // 2:
+                    score -= 0.05
+                valid_splits.append((score, k, b0_sq, b1_sq))
+
+        valid_splits.sort(key=lambda x: x[0])
+        return valid_splits
+
+    def _find_valid_flex(
+        self,
+        batch: List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]],
+        avail_0: float,
+        avail_1: float,
+        col_w: float,
+        base_gap: float,
+        cursor_0: float,
+        cursor_1: float,
+    ) -> Optional[Tuple[float, List[Tuple[Any, Any]], List[Tuple[Any, Any]]]]:
+        """Partitions batch items into two balanced columns in flexible order."""
+        sorted_cand = sorted(batch, key=lambda x: x[1][1], reverse=True)
+        c0 = []
+        c1 = []
+        h0 = 0.0
+        h1 = 0.0
+
+        for prob, fp in sorted_cand:
+            h = fp[1]
+            needed_0 = h if not c0 else (h + base_gap)
+            needed_1 = h if not c1 else (h + base_gap)
+
+            if cursor_0 + h0 + needed_0 <= avail_0 + 0.01 and (
+                cursor_0 + h0 <= cursor_1 + h1 or cursor_1 + h1 + needed_1 > avail_1 + 0.01
+            ):
+                c0.append((prob, fp))
+                h0 += needed_0
+            elif cursor_1 + h1 + needed_1 <= avail_1 + 0.01:
+                c1.append((prob, fp))
+                h1 += needed_1
+            elif cursor_0 + h0 + needed_0 <= avail_0 + 0.01:
+                c0.append((prob, fp))
+                h0 += needed_0
+            else:
+                return None
+
+        # Rebalance counts if one column has significantly more items and heights allow
+        if len(c0) >= len(c1) + 2:
+            for i in reversed(range(len(c0))):
+                p, fp = c0[i]
+                needed_1 = fp[1] if not c1 else (fp[1] + base_gap)
+                if cursor_1 + h1 + needed_1 <= avail_1 + 0.01:
+                    c1.append(c0.pop(i))
+                    h1 += needed_1
+                    h0 -= (fp[1] + (base_gap if c0 else 0.0))
+                    break
+        elif len(c1) >= len(c0) + 2:
+            for i in reversed(range(len(c1))):
+                p, fp = c1[i]
+                needed_0 = fp[1] if not c0 else (fp[1] + base_gap)
+                if cursor_0 + h0 + needed_0 <= avail_0 + 0.01:
+                    c0.append(c1.pop(i))
+                    h0 += needed_0
+                    h1 -= (fp[1] + (base_gap if c1 else 0.0))
+                    break
+
+        end0 = cursor_0 + h0
+        end1 = cursor_1 + h1
+        score = abs(end0 - end1) + 0.35 * abs(len(c0) - len(c1))
+        return (score, c0, c1)
+
+    def _distribute_column_spacing(
+        self,
+        batch_items: List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]],
+        col_idx: int,
+        avail_h: float,
+        cursor_y: float,
+        base_gap: float,
+        col_w: float,
+        col_gap: float,
+        page_idx: int,
+    ) -> Tuple[float, List[PlacedProblem]]:
+        """Positions problems in a column, distributing vertical slack into gaps and workspaces."""
+        n = len(batch_items)
+        if n == 0:
+            return cursor_y, []
+
+        h_total = sum(fp[1] for _, fp in batch_items)
+        slack = max(0.0, avail_h - h_total)
+
+        if n > 1:
+            base_gaps_total = (n - 1) * base_gap
+            extra_slack = max(0.0, slack - base_gaps_total)
+            extra_gap = extra_slack / (n - 1)
+            gap = min(0.45, base_gap + extra_gap)
+            gaps_total = (n - 1) * gap
+        else:
+            gap = base_gap
+            gaps_total = 0.0
+
+        # Space out problems evenly down the column
+        x_pos = 0.0 if col_idx == 0 else (col_w + col_gap)
+        curr_y = cursor_y
+        placed_items = []
+
+        for i, (prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h)) in enumerate(batch_items):
+            placed = PlacedProblem(
+                problem=prob,
+                layout=decision,
+                page_index=page_idx,
+                col_index=col_idx,
+                x_in=x_pos,
+                y_in=curr_y,
+                width_in=col_w,
+                height_in=total_h,
+                image_render_width_in=img_w,
+                image_render_height_in=img_h,
+                text_render_width_in=text_w,
+                text_render_height_in=text_h,
+                workspace_height_in=ws_h,
+                spacing_after_in=gap,
+            )
+            placed_items.append(placed)
+            curr_y += total_h + gap
+
+        return curr_y, placed_items
 
     def pack(self) -> RenderPlan:
         """Executes full 2D layout bin-packing across all worksheet sections."""
@@ -410,7 +637,7 @@ class LayoutEngine:
                 curr_max_y = max(col_cursors)
                 if curr_max_y + sec_header_h > printable_h - 1.2:
                     # Header doesn't fit with room for problems; start new page
-                    current_page_idx += 1
+                    current_page_idx = len(pages) + 1
                     pages.append(PlacedPage(page_index=current_page_idx))
                     col_cursors = [0.0] * col_count
                     curr_max_y = 0.0
@@ -419,7 +646,7 @@ class LayoutEngine:
                     section_id=section.id,
                     title=section.title,
                     instructions=section.instructions,
-                    page_index=current_page_idx,
+                    page_index=pages[-1].page_index,
                     y_in=curr_max_y,
                     height_in=sec_header_h,
                     span_all_columns=True,
@@ -428,106 +655,159 @@ class LayoutEngine:
                 for c in range(col_count):
                     col_cursors[c] = curr_max_y + sec_header_h + 0.08
 
-            # Place each problem
-            for prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h) in problem_footprints:
-                total_problems += 1
-                if decision == LayoutDecision.SIDE_BY_SIDE:
-                    side_by_side_count += 1
-                elif decision == LayoutDecision.STACKED:
-                    stacked_count += 1
-                elif decision == LayoutDecision.TEXT_ONLY:
-                    text_only_count += 1
+            base_gap = 0.10
+            remaining = list(problem_footprints)
 
-                # Select target column:
-                # In Strict mode: fill column 0 first, then column 1 (standard reading column order)
-                # In Flexible mode: choose column with lowest cursor (balanced packing)
-                target_col = 0
-                if col_count > 1:
-                    if section.ordering == SectionOrdering.FLEXIBLE:
-                        # Find column where it fits with minimum cursor
-                        valid_cols = [c for c in range(col_count) if col_cursors[c] + total_h <= printable_h]
-                        if valid_cols:
-                            target_col = min(valid_cols, key=lambda c: col_cursors[c])
+            if col_count == 1:
+                while remaining:
+                    avail_h = printable_h - col_cursors[0]
+                    if avail_h < 1.0:
+                        current_page_idx = len(pages) + 1
+                        pages.append(PlacedPage(page_index=current_page_idx))
+                        col_cursors = [0.0]
+                        avail_h = printable_h
+
+                    count = 0
+                    curr_h = 0.0
+                    for prob, fp in remaining:
+                        needed = fp[1] if count == 0 else (fp[1] + base_gap)
+                        if curr_h + needed <= avail_h + 0.01:
+                            curr_h += needed
+                            count += 1
                         else:
-                            target_col = min(range(col_count), key=lambda c: col_cursors[c])
-                    else:
-                        # Strict: fill col 0, when full fill col 1
-                        if col_cursors[0] + total_h <= printable_h:
-                            target_col = 0
-                        elif col_cursors[1] + total_h <= printable_h:
-                            target_col = 1
+                            break
+
+                    if count < len(remaining):
+                        cand_squeeze = remaining[:count + 1]
+                        sq_res = self._attempt_squeeze_batch(cand_squeeze, avail_h, col_w, base_gap)
+                        if sq_res is not None:
+                            count += 1
+                            placed_batch = sq_res
                         else:
-                            target_col = 0
-
-                # Check if it fits in target column on current page
-                if col_cursors[target_col] + total_h > printable_h:
-                    # Does it fit in another column on this page?
-                    other_col = 1 if target_col == 0 and col_count > 1 else None
-                    if other_col is not None and col_cursors[other_col] + total_h <= printable_h:
-                        target_col = other_col
+                            placed_batch = remaining[:count]
                     else:
-                        # Attempt Elastic Squeeze before forcing a page break
-                        squeezed = False
-                        cand_placed = [
-                            item for item in pages[-1].items
-                            if isinstance(item, PlacedProblem) and item.col_index == target_col
-                        ]
-                        overflow = (col_cursors[target_col] + total_h) - printable_h
-                        if 0 < overflow <= 1.40 and cand_placed:
-                            res = self._attempt_elastic_squeeze(
-                                cand_placed, prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h),
-                                overflow, col_w
-                            )
-                            if res:
-                                updated_placed, new_prob_fp = res
-                                for idx, p_item in enumerate(cand_placed):
-                                    p_item.height_in = updated_placed[idx][0]
-                                    p_item.image_render_width_in = updated_placed[idx][1]
-                                    p_item.image_render_height_in = updated_placed[idx][2]
-                                    p_item.text_render_width_in = updated_placed[idx][3]
-                                    p_item.text_render_height_in = updated_placed[idx][4]
+                        placed_batch = remaining[:count]
 
-                                # Re-anchor y positions
-                                start_y = cand_placed[0].y_in if cand_placed else 0.0
-                                curr_y = start_y
-                                for p_item in cand_placed:
-                                    p_item.y_in = curr_y
-                                    curr_y += p_item.height_in + 0.10
-                                col_cursors[target_col] = curr_y
-
-                                decision, total_h, text_w, text_h, img_w, img_h, ws_h = new_prob_fp
-                                squeezed = True
-
-                        if not squeezed:
-                            # Advance to new page
-                            current_page_idx += 1
+                    if count == 0:
+                        if col_cursors[0] > 0.05:
+                            current_page_idx = len(pages) + 1
                             pages.append(PlacedPage(page_index=current_page_idx))
-                            col_cursors = [0.0] * col_count
-                            target_col = 0
+                            col_cursors = [0.0]
+                            continue
+                        else:
+                            count = 1
+                            placed_batch = remaining[:1]
 
-                # Position coordinates
-                x_pos = target_col * (col_w + col_gap)
-                y_pos = col_cursors[target_col]
+                    remaining = remaining[count:]
+                    col_cursors[0], placed = self._distribute_column_spacing(
+                        placed_batch, 0, avail_h, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index
+                    )
+                    pages[-1].items.extend(placed)
 
-                placed = PlacedProblem(
-                    problem=prob,
-                    layout=decision,
-                    page_index=current_page_idx,
-                    col_index=target_col,
-                    x_in=x_pos,
-                    y_in=y_pos,
-                    width_in=col_w,
-                    height_in=total_h,
-                    image_render_width_in=img_w,
-                    image_render_height_in=img_h,
-                    text_render_width_in=text_w,
-                    text_render_height_in=text_h,
-                    workspace_height_in=ws_h,
-                )
-                pages[-1].items.append(placed)
+                    for p in placed:
+                        total_problems += 1
+                        if p.layout == LayoutDecision.SIDE_BY_SIDE:
+                            side_by_side_count += 1
+                        elif p.layout == LayoutDecision.STACKED:
+                            stacked_count += 1
+                        elif p.layout == LayoutDecision.TEXT_ONLY:
+                            text_only_count += 1
 
-                # Advance column cursor
-                col_cursors[target_col] += total_h + 0.10
+                    if remaining:
+                        current_page_idx = len(pages) + 1
+                        pages.append(PlacedPage(page_index=current_page_idx))
+                        col_cursors = [0.0]
+
+            elif col_count == 2:
+                while remaining:
+                    avail_0 = printable_h - col_cursors[0]
+                    avail_1 = printable_h - col_cursors[1]
+
+                    if max(avail_0, avail_1) < 1.0:
+                        current_page_idx = len(pages) + 1
+                        pages.append(PlacedPage(page_index=current_page_idx))
+                        col_cursors = [0.0, 0.0]
+                        avail_0 = printable_h
+                        avail_1 = printable_h
+
+                    if section.ordering == SectionOrdering.STRICT:
+                        best_m = 0
+                        best_split = None
+                        for m_cand in range(1, len(remaining) + 1):
+                            splits = self._find_valid_splits_strict(
+                                remaining[:m_cand], avail_0, avail_1, col_w, base_gap, col_cursors[0], col_cursors[1]
+                            )
+                            if splits:
+                                best_m = m_cand
+                                best_split = splits[0]
+                            else:
+                                break
+
+                        if best_m == 0:
+                            if col_cursors[0] > 0.05 or col_cursors[1] > 0.05:
+                                current_page_idx = len(pages) + 1
+                                pages.append(PlacedPage(page_index=current_page_idx))
+                                col_cursors = [0.0, 0.0]
+                                continue
+                            else:
+                                col_0_items = [remaining[0]]
+                                col_1_items = []
+                                remaining = remaining[1:]
+                        else:
+                            _, k_star, col_0_items, col_1_items = best_split
+                            remaining = remaining[best_m:]
+
+                    else:
+                        best_m = 0
+                        best_c0, best_c1 = [], []
+                        for m_cand in range(1, len(remaining) + 1):
+                            res = self._find_valid_flex(
+                                remaining[:m_cand], avail_0, avail_1, col_w, base_gap, col_cursors[0], col_cursors[1]
+                            )
+                            if res is not None:
+                                best_m = m_cand
+                                _, best_c0, best_c1 = res
+                            else:
+                                break
+
+                        if best_m == 0:
+                            if col_cursors[0] > 0.05 or col_cursors[1] > 0.05:
+                                current_page_idx = len(pages) + 1
+                                pages.append(PlacedPage(page_index=current_page_idx))
+                                col_cursors = [0.0, 0.0]
+                                continue
+                            else:
+                                col_0_items = [remaining[0]]
+                                col_1_items = []
+                                remaining = remaining[1:]
+                        else:
+                            col_0_items = best_c0
+                            col_1_items = best_c1
+                            remaining = remaining[best_m:]
+
+                    col_cursors[0], placed_0 = self._distribute_column_spacing(
+                        col_0_items, 0, avail_0, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index
+                    )
+                    pages[-1].items.extend(placed_0)
+
+                    col_cursors[1], placed_1 = self._distribute_column_spacing(
+                        col_1_items, 1, avail_1, col_cursors[1], base_gap, col_w, col_gap, pages[-1].page_index
+                    )
+                    pages[-1].items.extend(placed_1)
+
+                    for p in placed_0 + placed_1:
+                        total_problems += 1
+                        if p.layout == LayoutDecision.SIDE_BY_SIDE:
+                            side_by_side_count += 1
+                        elif p.layout == LayoutDecision.STACKED:
+                            stacked_count += 1
+                        elif p.layout == LayoutDecision.TEXT_ONLY:
+                            text_only_count += 1
+
+                    if remaining:
+                        current_page_idx = len(pages) + 1
+                        pages.append(PlacedPage(page_index=current_page_idx))
+                        col_cursors = [0.0, 0.0]
 
         # Pass 3: Slack Absorption (Whitespace Filling across pages)
         default_gap = self.ws.column_gap_in if self.ws.default_columns > 1 else 0.0

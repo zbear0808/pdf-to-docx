@@ -206,6 +206,7 @@ class PlacedProblem(BaseModel):
     text_render_width_in: float = 0.0
     text_render_height_in: float = 0.0
     workspace_height_in: float = 0.0
+    spacing_after_in: float = 0.10
 
 
 class PlacedSectionHeader(BaseModel):

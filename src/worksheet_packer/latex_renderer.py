@@ -203,7 +203,8 @@ class LatexWorksheetRenderer:
         ])
         if workspace:
             lines.append(f"\\par\\vspace{{2pt}}\n{workspace}")
-        lines.append("\\vspace{8pt}")
+        space_in = getattr(placed, "spacing_after_in", 0.10)
+        lines.append(f"\\vspace{{{space_in:.2f}in}}")
         return "\n".join(lines)
 
     def _render_stacked_problem(self, placed: PlacedProblem) -> str:
@@ -234,7 +235,8 @@ class LatexWorksheetRenderer:
         if workspace:
             lines.append(workspace)
 
-        lines.append("\\vspace{8pt}")
+        space_in = getattr(placed, "spacing_after_in", 0.10)
+        lines.append(f"\\vspace{{{space_in:.2f}in}}")
         return "\n".join(lines)
 
     def _render_text_only_problem(self, placed: PlacedProblem) -> str:
@@ -252,7 +254,8 @@ class LatexWorksheetRenderer:
             lines.append(choices)
         if workspace:
             lines.append(workspace)
-        lines.append("\\vspace{8pt}")
+        space_in = getattr(placed, "spacing_after_in", 0.10)
+        lines.append(f"\\vspace{{{space_in:.2f}in}}")
         return "\n".join(lines)
 
     def _render_section_header(self, header: PlacedSectionHeader) -> str:
@@ -282,10 +285,15 @@ class LatexWorksheetRenderer:
             if use_multicols:
                 body_parts.append(f"\\begin{{multicols*}}{{{self.ws.default_columns}}}")
 
+            current_col = 0
             for item in page.items:
                 if isinstance(item, PlacedSectionHeader):
                     body_parts.append(self._render_section_header(item))
                 elif isinstance(item, PlacedProblem):
+                    if use_multicols and item.col_index > current_col:
+                        body_parts.append("\\columnbreak\n")
+                        current_col = item.col_index
+
                     if item.layout == LayoutDecision.SIDE_BY_SIDE:
                         body_parts.append(self._render_side_by_side_problem(item))
                     elif item.layout == LayoutDecision.STACKED:

@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
@@ -398,9 +398,10 @@ class DocxWorksheetRenderer:
             self._render_workspace_in_cell(c_work, placed)
 
         # Inter-problem spacing paragraph
+        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
         p_space = self.doc.add_paragraph()
         p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(4)
+        p_space.paragraph_format.space_after = Pt(space_pt)
 
     def _render_stacked_problem(self, placed: PlacedProblem) -> None:
         """Renders Layout B: Stacked text (top), diagram (middle), workspace (bottom)."""
@@ -453,9 +454,10 @@ class DocxWorksheetRenderer:
             c_work = table.cell(2, 0)
             self._render_workspace_in_cell(c_work, placed)
 
+        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
         p_space = self.doc.add_paragraph()
         p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(4)
+        p_space.paragraph_format.space_after = Pt(space_pt)
 
     def _render_text_only_problem(self, placed: PlacedProblem) -> None:
         """Renders text-only problem inside an atomic invisible table."""
@@ -486,9 +488,10 @@ class DocxWorksheetRenderer:
             set_cell_padding(c_work, top=20, bottom=20, left=20, right=20)
             self._render_workspace_in_cell(c_work, placed)
 
+        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
         p_space = self.doc.add_paragraph()
         p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(4)
+        p_space.paragraph_format.space_after = Pt(space_pt)
 
     def _render_section_header(self, header: PlacedSectionHeader) -> None:
         """Renders section title and instructions."""
@@ -525,10 +528,20 @@ class DocxWorksheetRenderer:
             if page_idx > 0:
                 self.doc.add_page_break()
 
+            current_col = 0
             for item in page.items:
                 if isinstance(item, PlacedSectionHeader):
                     self._render_section_header(item)
                 elif isinstance(item, PlacedProblem):
+                    if self.ws.default_columns > 1 and item.col_index > current_col:
+                        p_break = self.doc.add_paragraph()
+                        p_break.paragraph_format.space_before = Pt(0)
+                        p_break.paragraph_format.space_after = Pt(0)
+                        p_break.paragraph_format.line_spacing = Pt(1)
+                        run = p_break.add_run()
+                        run.add_break(WD_BREAK.COLUMN)
+                        current_col = item.col_index
+
                     if item.layout == LayoutDecision.SIDE_BY_SIDE:
                         self._render_side_by_side_problem(item)
                     elif item.layout == LayoutDecision.STACKED:

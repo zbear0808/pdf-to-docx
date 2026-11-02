@@ -24,10 +24,13 @@ Standard worksheets often waste massive horizontal whitespace—for example, pla
    - **No Blank Underlines**: Never generate blank underlines (`_______` or `\hrule`) for student work areas. Blank underlines constrain handwriting, look dated, and waste vertical space.
    - **Clean Whitespace Budgeting**: Use `WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=...)` or `approx_workspace_in=...` on `Problem`.
    - **2D Area Budgeting**: Use `approx_area_sq_in` so student work space automatically adapts its height when toggling between 1-column and 2-column layouts.
-4. **2D Bin-Packing Layout Engine**: Heuristically routing square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) into **Side-by-Side** (65% text / 35% diagram) containers, and wide diagrams into **Stacked** containers.
+4. **2D Bin-Packing & Column Balancing Layout Engine**:
+   - **Balanced Multi-Column Splits**: Automatically splits problems evenly across columns on each page (e.g. 3 questions in Column 0 and 3 questions in Column 1, instead of greedy 5-and-1 or 4-and-2 imbalances).
+   - **Even Vertical Spacing Distribution**: Calculates vertical slack in each column and distributes it into inter-problem spacing (`spacing_after_in` up to 0.45 in / ~32 pt) so questions comfortably fill the page without awkward voids.
+   - **Side-by-Side vs Stacked**: Heuristically routing square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) into **Side-by-Side** (65% text / 35% diagram) containers, and wide diagrams into **Stacked** containers.
 5. **Deterministic Structural Rendering**:
-   - **DOCX**: Invisible borderless tables with OpenXML `w:cantSplit` on every row guarantee that diagrams, text, and workspaces stay strictly locked together without mid-problem page breaks or jumping floating anchors.
-   - **LaTeX**: `minipage` environments with `multicol` and `tcolorbox`.
+   - **DOCX**: Invisible borderless tables with OpenXML `w:cantSplit` on every row guarantee that diagrams, text, and workspaces stay strictly locked together without mid-problem page breaks or jumping floating anchors. Explicit `WD_BREAK.COLUMN` breaks guarantee balanced column transitions.
+   - **LaTeX**: `minipage` environments with `multicol` and `tcolorbox`, inserting explicit `\columnbreak` to preserve balanced multi-column splits.
 
 ---
 
