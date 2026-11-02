@@ -150,6 +150,8 @@ def clean_math_text_for_docx(text: str) -> str:
         out = out.replace(old, new)
     out = out.replace("\\n", " ")
     out = re.sub(r"\$([^\$]+)\$", r"\1", out)
+    # Clean up double-encoded or mangled characters (e.g. â„“, â€, Â)
+    out = out.replace("Â°", "°").replace("Â", "").replace("â„“", "ℓ").replace("â€“", "–").replace("â€”", "—")
     return out
 
 
@@ -503,7 +505,8 @@ class DocxWorksheetRenderer:
             p_title.paragraph_format.keep_with_next = True
             p_title.paragraph_format.space_before = Pt(8)
             p_title.paragraph_format.space_after = Pt(2)
-            r = p_title.add_run(header.title)
+            clean_title = clean_math_text_for_docx(header.title)
+            r = p_title.add_run(clean_title)
             r.bold = True
             r.font.size = Pt(11.5)
             r.font.color.rgb = hex_to_rgb(self.ws.theme_hex)
@@ -513,7 +516,8 @@ class DocxWorksheetRenderer:
             p_inst.paragraph_format.keep_with_next = True
             p_inst.paragraph_format.space_before = Pt(0)
             p_inst.paragraph_format.space_after = Pt(4)
-            r = p_inst.add_run(header.instructions)
+            clean_inst = clean_math_text_for_docx(header.instructions)
+            r = p_inst.add_run(clean_inst)
             r.italic = True
             r.font.size = Pt(9.5)
             r.font.color.rgb = RGBColor(0x55, 0x55, 0x55)

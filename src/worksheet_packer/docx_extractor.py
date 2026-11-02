@@ -91,23 +91,30 @@ def convert_docx_to_pdf(docx_path: str | Path, output_pdf_path: Optional[str | P
 
     # 2. Try Windows MS Word COM
     if os.name == "nt":
-        try:
-            import win32com.client  # type: ignore
-            word = win32com.client.Dispatch("Word.Application")
-            word.Visible = False
+        import time
+        for attempt in range(3):
             try:
-                doc = word.Documents.Open(str(docx_file))
-                # 17 = wdFormatPDF
-                doc.SaveAs(str(out_pdf), FileFormat=17)
-                doc.Close()
-                if out_pdf.exists() and out_pdf.stat().st_size > 0:
+                import win32com.client  # type: ignore
+                # Use DispatchEx for an isolated instance
+                word = win32com.client.DispatchEx("Word.Application")
+                word.Visible = False
+                word.DisplayAlerts = 0  # wdAlertsNone
+                try:
+                    # Open read-only and unconfirmed
+                    doc = word.Documents.Open(str(docx_file), ReadOnly=True, ConfirmConversions=False)
+                    # 17 = wdFormatPDF
+                    doc.SaveAs(str(out_pdf), FileFormat=17)
+                    doc.Close(SaveChanges=False)
+                    if out_pdf.exists() and out_pdf.stat().st_size > 0:
+                        shutil.rmtree(temp_dir, ignore_errors=True)
+                        return out_pdf
+                finally:
+                    word.Quit()
+            except Exception as e:
+                time.sleep(1.0)
+                if attempt == 2:
                     shutil.rmtree(temp_dir, ignore_errors=True)
-                    return out_pdf
-            finally:
-                word.Quit()
-        except Exception as e:
-            shutil.rmtree(temp_dir, ignore_errors=True)
-            raise RuntimeError(f"Word COM conversion failed: {e}")
+                    raise RuntimeError(f"Word COM conversion failed: {e}")
 
     shutil.rmtree(temp_dir, ignore_errors=True)
     raise RuntimeError(

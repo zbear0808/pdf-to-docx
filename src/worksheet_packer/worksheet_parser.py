@@ -172,21 +172,33 @@ class WorksheetParser:
         img_p = Path(page_image_path)
         img_bytes = img_p.read_bytes()
 
+        import time
         from google.genai import types
 
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=[
-                types.Part.from_bytes(data=img_bytes, mime_type="image/png"),
-                WORKSHEET_VISION_PROMPT,
-            ],
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=RawPageExtraction,
-                temperature=0.1,
-                automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
-            ),
-        )
+        response = None
+        for attempt in range(4):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=[
+                        types.Part.from_bytes(data=img_bytes, mime_type="image/png"),
+                        WORKSHEET_VISION_PROMPT,
+                    ],
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        response_schema=RawPageExtraction,
+                        temperature=0.1,
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+                    ),
+                )
+                break
+            except Exception as e:
+                err_str = str(e)
+                if ("503" in err_str or "429" in err_str or "UNAVAILABLE" in err_str or "RESOURCE_EXHAUSTED" in err_str) and attempt < 3:
+                    wait_sec = 2.0 * (attempt + 1)
+                    time.sleep(wait_sec)
+                else:
+                    raise
 
         try:
             parsed = json.loads(response.text)

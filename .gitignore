@@ -18,3 +18,4 @@ tests/.cascade_sample
 tests/.cascade_sample/
 # Virtual environments
 .venv
+/lesson_1_*
