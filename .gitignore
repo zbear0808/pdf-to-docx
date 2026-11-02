@@ -6,16 +6,46 @@ dist/
 wheels/
 *.egg-info
 
-/extracted_assets
-/rendered_pages
-/test_output
+# Document Processing: Standardized Temporary & Intermediate Directories
+**/_temp/
+**/.temp/
+**/temp/
+**/_temp_*/
+**/temp_*/
+**/tmp/
+**/tmp_*/
+**/scratch/
+
+# Media extraction & page rendering artifacts
+/extracted_assets/
+/rendered_pages/
+/test_output/
+**/extracted_assets/
+**/rendered_pages/
+**/*_rendered_pages/
+**/*_pages/
+**/media_cropped/
+**/.ws_*
+
+# LaTeX build & compiler scratch files
+**/*.aux
+**/*.log
+**/*.fls
+**/*.fdb_latexmk
+**/*.synctex.gz
+**/*.out
+**/*.toc
+**/*.nav
+**/*.snm
+**/*.vrb
 
 .env
 tests/.*
 tests/.workspace_sample
 tests/.cascade_sample
-
 tests/.cascade_sample/
+
 # Virtual environments
 .venv
 /lesson_1_*
+/unit_1_review_aligned/

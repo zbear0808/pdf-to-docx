@@ -19,6 +19,15 @@ This skill performs targeted, surgical layout refinement on Word documents using
 
 ---
 
+## Directory Layout & Workspace Hygiene
+
+All refinement and visual QA tasks must store modified deliverables in `output/` and temporary page renderings or diff images in `_temp/renders/`:
+- `output/`: Refined `.docx` and converted `.pdf` deliverables.
+- `_temp/renders/`: Headless page renderings (`docx_p*.png`, `diff_p*.png`).
+- `_temp/build/`: Scratch scripts and audit logs.
+
+---
+
 ## When to Use This Skill
 
 - Refining a compiled `.docx` based on visual diff critique.

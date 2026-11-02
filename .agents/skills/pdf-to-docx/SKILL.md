@@ -31,22 +31,38 @@ This skill executes a robust, battle-tested pipeline to transform complex PDF do
 
 ---
 
+## Directory Layout & Workspace Hygiene
+
+All document conversion workflows must isolate outputs and temporary files into standard subfolders:
+```text
+<document_workspace>/
+├── output/                 # Final deliverables (.docx, .pdf)
+└── _temp/                  # ALL temporary & intermediate working files
+    ├── assets/             # Harvested/cropped images, diagrams, logos
+    ├── renders/            # High-resolution rendered page PNGs (orig_p*.png, docx_p*.png)
+    ├── specs/              # Extracted AST JSONs (page_*_spec.json, document_spec.json)
+    └── build/              # Scratch scripts and temporary build logs
+```
+This guarantees that all transient files are automatically matched by gitignore rules (`**/_temp/`).
+
+---
+
 ## Step-by-Step Execution Workflow
 
 ```
 [ Orchestrator Agent ]
        │
        ├─► 1. Inspect PDF structure (page count N, dimensions)
-       ├─► 2. Render all pages to PNGs (rendered_pages/orig_p{k}.png)
+       ├─► 2. Render all pages to PNGs (_temp/renders/orig_p{k}.png)
        │
        ├─► 3. Dispatch N Parallel Subagents (invoke_subagent)
        │         │
-       │         ├──► [Subagent Page 1] ──► Extracts page_1_spec.json & crops assets
-       │         ├──► [Subagent Page 2] ──► Extracts page_2_spec.json & crops assets
-       │         └──► [Subagent Page N] ──► Extracts page_N_spec.json & crops assets
+       │         ├──► [Subagent Page 1] ──► Extracts _temp/specs/page_1_spec.json & crops assets to _temp/assets/
+       │         ├──► [Subagent Page 2] ──► Extracts _temp/specs/page_2_spec.json & crops assets to _temp/assets/
+       │         └──► [Subagent Page N] ──► Extracts _temp/specs/page_N_spec.json & crops assets to _temp/assets/
        │
        ├─► 4. Reactive Wakeup: Receive concise completion messages (context stays clean!)
-       ├─► 5. Compile assembled specs: uv run python -m pdf_to_docx compile-pages
+       ├─► 5. Compile assembled specs: uv run python -m pdf_to_docx compile-pages _temp/specs/ -o output/final.docx
        │
        └─► 6. Optional QA: Dispatch targeted single-page refinement subagents if needed
 ```
@@ -58,13 +74,13 @@ This skill executes a robust, battle-tested pipeline to transform complex PDF do
    ```bash
    uv run python .agents/skills/pdf-to-docx/scripts/inspect_pdf.py path/to/document.pdf
    ```
-2. Render all pages to high-resolution PNG images (`200 DPI`) into a shared directory:
+2. Create standardized subfolders:
    ```bash
-   uv run python -m pdf_to_docx render-pages path/to/document.pdf -o ./rendered_pages
+   mkdir -p output _temp/renders _temp/assets _temp/specs _temp/build
    ```
-3. Prepare workspace and assets directories:
+3. Render all pages to high-resolution PNG images (`200 DPI`) into `_temp/renders`:
    ```bash
-   mkdir -p .conversion_workspace assets
+   uv run python -m pdf_to_docx render-pages path/to/document.pdf -o _temp/renders
    ```
 
 ---
@@ -81,13 +97,13 @@ The orchestrator calls `invoke_subagent` to spawn an independent subagent for ea
       "TypeName": "self",
       "Role": "Page 1 Extractor",
       "Model": "flash",
-      "Prompt": "You are the dedicated extractor for Page 1 of 'path/to/document.pdf'.\nRendered image: './rendered_pages/orig_p1.png'.\n\nYour task:\n1. Parse Page 1 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_docx parse-page path/to/document.pdf --page 1 --image ./rendered_pages/orig_p1.png -o .conversion_workspace/page_1_spec.json --assets-dir ./assets\n2. Inspect .conversion_workspace/page_1_spec.json to ensure table headers, cell values, and any charts/images are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, tables, charts, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
+      "Prompt": "You are the dedicated extractor for Page 1 of 'path/to/document.pdf'.\nRendered image: '_temp/renders/orig_p1.png'.\n\nYour task:\n1. Parse Page 1 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_docx parse-page path/to/document.pdf --page 1 --image _temp/renders/orig_p1.png -o _temp/specs/page_1_spec.json --assets-dir _temp/assets\n2. Inspect _temp/specs/page_1_spec.json to ensure table headers, cell values, and any charts/images are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, tables, charts, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
     },
     {
       "TypeName": "self",
       "Role": "Page 2 Extractor",
       "Model": "flash",
-      "Prompt": "You are the dedicated extractor for Page 2 of 'path/to/document.pdf'.\nRendered image: './rendered_pages/orig_p2.png'.\n\nYour task:\n1. Parse Page 2 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_docx parse-page path/to/document.pdf --page 2 --image ./rendered_pages/orig_p2.png -o .conversion_workspace/page_2_spec.json --assets-dir ./assets\n2. Inspect .conversion_workspace/page_2_spec.json to ensure table headers, cell values, and any charts/images are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, tables, charts, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
+      "Prompt": "You are the dedicated extractor for Page 2 of 'path/to/document.pdf'.\nRendered image: '_temp/renders/orig_p2.png'.\n\nYour task:\n1. Parse Page 2 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_docx parse-page path/to/document.pdf --page 2 --image _temp/renders/orig_p2.png -o _temp/specs/page_2_spec.json --assets-dir _temp/assets\n2. Inspect _temp/specs/page_2_spec.json to ensure table headers, cell values, and any charts/images are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, tables, charts, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
     }
   ]
 }
@@ -100,7 +116,7 @@ The orchestrator calls `invoke_subagent` to spawn an independent subagent for ea
 For text/narrative-heavy documents using Pathway 2:
 Subagent prompt command:
 ```bash
-uv run python -m pdf_to_docx to-markdown-page path/to/document.pdf --page {k} --image ./rendered_pages/orig_p{k}.png -o .conversion_workspace/page_{k}.md
+uv run python -m pdf_to_docx to-markdown-page path/to/document.pdf --page {k} --image _temp/renders/orig_p{k}.png -o _temp/specs/page_{k}.md
 ```
 
 ---
@@ -110,13 +126,13 @@ uv run python -m pdf_to_docx to-markdown-page path/to/document.pdf --page {k} --
 Once all page subagents report completion:
 
 #### For Pathway 1 (Block-Based IR):
-The orchestrator compiles the assembled `page_*_spec.json` files directly into `.docx` (with optional `--save-ast` to export the merged DocumentSpec AST):
+The orchestrator compiles the assembled `page_*_spec.json` files directly into `.docx` in `output/`:
 ```bash
-uv run python -m pdf_to_docx compile-pages .conversion_workspace/ -o output.docx --title "Document Title" --save-ast
+uv run python -m pdf_to_docx compile-pages _temp/specs/ -o output/document.docx --title "Document Title" --save-ast
 ```
 Or use the convenience script:
 ```bash
-uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py .conversion_workspace/ -o output.docx --save-ast
+uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py _temp/specs/ -o output/document.docx --save-ast
 ```
 
 The compiler deterministically enforces OpenXML structural rules:
@@ -127,11 +143,11 @@ The compiler deterministically enforces OpenXML structural rules:
 #### For Pathway 2 (Fast-Track Markdown):
 Merge page markdown files and create the document:
 ```bash
-uv run python -m pdf_to_docx merge-markdown .conversion_workspace/ -o .conversion_workspace/document.md
+uv run python -m pdf_to_docx merge-markdown _temp/specs/ -o _temp/specs/document.md
 ```
 Then use `docx-mcp`:
 ```text
-docx-mcp: create_from_markdown(markdown_path=".conversion_workspace/document.md", output_path="output.docx")
+docx-mcp: create_from_markdown(markdown_path="_temp/specs/document.md", output_path="output/document.docx")
 ```
 
 ---
@@ -141,7 +157,7 @@ docx-mcp: create_from_markdown(markdown_path=".conversion_workspace/document.md"
 If visual validation or surgical edits are required:
 1. Render output pages headlessly to compare against original rendered PNGs:
    ```bash
-   uv run python .agents/skills/pdf-to-docx/scripts/diff_layout.py rendered_pages/orig_p1.png output.docx
+   uv run python .agents/skills/pdf-to-docx/scripts/diff_layout.py _temp/renders/orig_p1.png output/document.docx
    ```
 2. If a specific page (e.g. Page 2) exhibits layout issues (column clipping, chart upgrade needed):
    **Dispatch a single-page refinement subagent** (`Role: "Page 2 Refiner"`):

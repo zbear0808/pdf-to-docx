@@ -40,19 +40,34 @@ Standard worksheets often waste massive horizontal whitespace—for example, pla
 
 ---
 
+## Directory Layout & Workspace Hygiene
+
+All worksheet packing workflows must store deliverables in `output/` and all intermediate diagrams, page renderings, and specs in `_temp/`:
+```text
+<document_workspace>/
+├── output/                 # Final packed deliverables (.docx, .pdf, .tex)
+└── _temp/                  # ALL temporary & intermediate working files
+    ├── assets/             # Extracted & auto-cropped diagrams/figures
+    ├── renders/            # Page preview images (orig_p*.png, docx_p*.png)
+    ├── specs/              # Intermediate specs & plans (spec.json, plan.json)
+    └── build/              # LaTeX compile logs (.aux, .log, .fls), temp runner scripts
+```
+
+---
+
 ## Workflow 1: End-to-End PDF Worksheet Conversion
 
 Run the autonomous CLI pipeline:
 
 ```bash
-# Convert PDF to space-optimized 2-column Word document
-uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format docx
+# Convert PDF to space-optimized 2-column Word document in output/
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format docx -o output/optimized_worksheet.docx
 
-# Convert PDF to LaTeX and compile PDF
-uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format pdf
+# Convert PDF to LaTeX and compile PDF in output/
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format pdf -o output/optimized_worksheet.pdf
 
-# Save intermediate AST (spec.json) and layout plan (plan.json)
-uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --save-ast
+# Save intermediate AST (spec.json) and layout plan (plan.json) into _temp/specs/
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --save-ast -o output/optimized_worksheet.docx --workspace-dir _temp/
 ```
 
 ---
@@ -64,32 +79,36 @@ When an existing `.docx` worksheet needs to be compacted or reformatted:
 ### Phase A: Direct Autonomous Ingestion
 `worksheet-packer` natively ingests `.docx` files:
 1. Headlessly renders `.docx` pages to high-resolution PNGs via LibreOffice or Windows Word COM.
-2. Extracts original native uncompressed assets from `word/media/` inside the `.docx` archive.
+2. Extracts original native uncompressed assets from `word/media/` inside the `.docx` archive into `_temp/assets/`.
 3. Uses Gemini multimodal vision to understand question boundaries, choices, and diagrams.
-4. Packs and outputs a new compacted `.docx` (or `.tex`):
+4. Packs and outputs a new compacted `.docx` (or `.tex`) into `output/`:
 
 ```bash
-uv run worksheet-packer convert "path/to/messy_worksheet.docx" --columns 2 --format docx
+uv run worksheet-packer convert "path/to/messy_worksheet.docx" --columns 2 --format docx -o output/optimized_worksheet.docx
 ```
 
 ### Phase B: Visual-Inspection First Workflow
 If the agent needs to inspect or critique the existing Word document before deciding on layout changes:
-1. Render all pages of the Word doc to PNGs:
+1. Prepare directories:
    ```bash
-   uv run worksheet-packer render-docx-pages "path/to/messy_worksheet.docx" -o ./rendered_pages
+   mkdir -p output _temp/renders _temp/assets _temp/specs _temp/build
    ```
-2. Inspect the rendered page images with multimodal vision to check question density.
-3. Parse and generate the editable `WorksheetSpec` JSON:
+2. Render all pages of the Word doc to PNGs in `_temp/renders`:
    ```bash
-   uv run worksheet-packer parse "path/to/messy_worksheet.docx" -o ./spec.json --columns 2
+   uv run worksheet-packer render-docx-pages "path/to/messy_worksheet.docx" -o _temp/renders
    ```
-4. Customize section ordering or hints in `spec.json`:
+3. Inspect the rendered page images with multimodal vision to check question density.
+4. Parse and generate the editable `WorksheetSpec` JSON:
+   ```bash
+   uv run worksheet-packer parse "path/to/messy_worksheet.docx" -o _temp/specs/spec.json --columns 2 --workspace-dir _temp/assets
+   ```
+5. Customize section ordering or hints in `_temp/specs/spec.json`:
    - Set `"ordering": "flexible"` on sections where problem order can be rearranged to fill columns.
    - Set `"ordering": "strict"` on sections where sequence must be preserved.
-5. Pack and compile:
+6. Pack and compile:
    ```bash
-   uv run worksheet-packer pack ./spec.json -o ./plan.json
-   uv run worksheet-packer render ./plan.json -o ./optimized_worksheet.docx --format docx
+   uv run worksheet-packer pack _temp/specs/spec.json -o _temp/specs/plan.json
+   uv run worksheet-packer render _temp/specs/plan.json -o output/optimized_worksheet.docx --format docx
    ```
 
 ---
