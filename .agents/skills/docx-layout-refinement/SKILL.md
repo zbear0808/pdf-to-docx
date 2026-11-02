@@ -25,6 +25,7 @@ This skill performs targeted, surgical layout refinement on Word documents using
 - Upgrading raster chart images to native, editable Office DrawingML charts (`insert_bar_chart`, `insert_line_chart`, `insert_pie_chart`).
 - Adjusting table columns, cell padding, or border styles.
 - Correcting page margins, section breaks, or orientation.
+- Re-packing or compacting worksheets, exams, or problem sets that waste horizontal space next to diagrams. Use the [worksheet-packer skill](../worksheet-packer/SKILL.md) (`uv run worksheet-packer convert doc.docx --columns 2`).
 
 ---
 

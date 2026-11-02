@@ -21,13 +21,14 @@ Traditional worksheet PDFs and document conversions often waste massive horizont
 src/worksheet_packer/
 ├── __init__.py           # Public exports
 ├── __main__.py           # python -m worksheet_packer entrypoint
-├── cli.py                # Typer CLI (info, parse, pack, render, convert)
+├── cli.py                # Typer CLI (info, parse, pack, render, convert, render-docx-pages)
 ├── worksheet_ast.py      # Pydantic AST: WorksheetSpec, Problem, ProblemImage, etc.
 ├── image_utils.py        # PIL-based auto-crop & whitespace perimeter trimming
 ├── layout_engine.py      # 2D bin packing & footprint calculation
 ├── docx_renderer.py      # Deterministic Word compiler using invisible tables
 ├── latex_renderer.py     # Deterministic LaTeX & PDF compiler using minipage/multicols
-└── worksheet_parser.py   # PDF extractor + Gemini multimodal vision parser
+├── docx_extractor.py     # Headless DOCX->PDF/PNG rendering & zip media extraction
+└── worksheet_parser.py   # PDF & DOCX extractor + Gemini multimodal vision parser
 ```
 
 ---
@@ -52,25 +53,37 @@ Supports all standard math/science worksheet work areas:
 - `none`: Compact layout for multiple-choice or short-answer questions.
 - `fill_remaining`: Automatically expands the final problem's work area to fill trailing page whitespace.
 
+### 4. Re-packing Existing Word Documents (.docx)
+Existing Word documents can be ingested directly:
+- **Headless Page Rendering**: Converts DOCX -> PDF -> PNG pages via LibreOffice or Windows Word COM.
+- **Embedded Media Extraction**: Extracts native PNGs/JPEGs directly from `word/media/` inside the DOCX ZIP archive.
+- **Visual Vision Parsing**: Passes rendered pages to Gemini to understand problems and diagram placements, then 2D packs into a fresh, compact document.
+
 ---
 
 ## CLI Usage
 
 ```bash
-# 1. Inspect a PDF or AST file
+# 1. Inspect a PDF, Word DOCX, or AST file
 worksheet-packer info input.pdf
+worksheet-packer info input.docx
 
-# 2. Parse PDF into WorksheetSpec JSON and crop diagram assets
+# 2. Render all pages of an existing Word doc to PNGs (for visual inspection/critique)
+worksheet-packer render-docx-pages input.docx -o ./rendered_pages
+
+# 3. Parse PDF or Word document into WorksheetSpec JSON with harvested diagrams
 worksheet-packer parse input.pdf --output spec.json --columns 2
+worksheet-packer parse input.docx --output spec.json --columns 2
 
-# 3. Pack spec into a positioned 2D RenderPlan
+# 4. Pack spec into a positioned 2D RenderPlan
 worksheet-packer pack spec.json --output plan.json --ordering flexible
 
-# 4. Render to Word (.docx) or LaTeX (.tex / .pdf)
+# 5. Render to Word (.docx) or LaTeX (.tex / .pdf)
 worksheet-packer render plan.json --output worksheet.docx --format docx
 worksheet-packer render plan.json --output worksheet.tex --format latex
 
-# 5. Full autonomous end-to-end conversion
+# 6. Full autonomous end-to-end conversion (PDF or DOCX input)
 worksheet-packer convert input.pdf --columns 2 --format both
+worksheet-packer convert sprawling_worksheet.docx --columns 2 --format docx
 ```
 

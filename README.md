@@ -64,6 +64,7 @@ This repository includes three first-class Antigravity skills in `.agents/skills
 | **`/pdf-to-docx`** | `.docx` | Full Word conversion orchestrator. Handles page inspection, multimodal layout extraction, asset cropping, compilation, and visual QA. | Spawns independent subagents per page via `invoke_subagent` to isolate context and prevent token bloat. |
 | **`/pdf-to-latex`** | `.tex` / `.pdf` | Full LaTeX conversion orchestrator. Specializes in advanced mathematics (`amsmath`), professional tables (`booktabs`), and exam/quiz worksheets (`exam` class). | Spawns independent page subagents to extract math AST specs and crop figures for `\includegraphics`. |
 | **`/docx-layout-refinement`** | `.docx` | Surgical post-conversion editing. Adjusts table column twips, borders, padding, margins, and upgrades charts to native Office DrawingML. | Dispatches targeted page-level refinement subagents for surgical fixes without polluting parent context. |
+| **`worksheet-packer`** | `.docx` / `.tex` / `.pdf` | Space-efficient worksheet, quiz, and exam packer. Extracts problems and diagrams from PDF or Word (.docx), trims whitespace, and 2D bin-packs into compact side-by-side or stacked layouts. | Ingests PDF or DOCX, harvests diagrams, computes geometric footprints, and renders via invisible tables (`w:cantSplit`) or LaTeX `minipage`. |
 
 ---
 
@@ -225,6 +226,52 @@ uv run python -m pdf_to_docx convert document.pdf -o output.docx --diff --save-a
 
 ---
 
+## Worksheet Packer: Space-Efficient Layout Engine
+
+The `worksheet-packer` subpackage specializes in eliminating wasted whitespace in worksheets, quizzes, and exams. It extracts questions and diagrams, auto-crops whitespace borders, and 2D bin-packs problems into dense 1- or 2-column layouts.
+
+### Key Capabilities
+
+1. **Side-by-Side vs. Stacked Layouts**:
+   - Square-ish diagrams ($0.55 \le AR \le 1.50$) with concise text are packed into **Side-by-Side** containers (65% prompt text / 35% diagram) with student answer lines spanning full width below.
+   - Wide diagrams or lengthy prompts are formatted as **Stacked**.
+   - Minimum scale floors (1.5 in) ensure small markings and labels remain legible.
+
+2. **Strict vs. Flexible Problem Ordering**:
+   - `SectionOrdering.STRICT`: Preserves author's exact problem sequence (e.g. for multi-part exam questions).
+   - `SectionOrdering.FLEXIBLE`: Allows the 2D bin packer to sort problems by footprint height (First-Fit Decreasing) to achieve maximum packing density and minimal page count.
+
+3. **Re-Packing Existing Word Documents (.docx)**:
+   - Ingests messy, sprawling `.docx` files by headlessly rendering them to PNG pages via LibreOffice or Windows Word COM.
+   - Extracts native uncompressed assets from `word/media/` inside the `.docx` archive.
+   - Multimodal vision parses the rendered pages, and the layout engine re-packs everything into a clean, compact Word or LaTeX document.
+
+### Worksheet Packer CLI Usage
+
+```bash
+# Autonomous end-to-end conversion (PDF or existing Word .docx -> compact DOCX)
+uv run worksheet-packer convert worksheet.pdf --columns 2 --format docx
+uv run worksheet-packer convert sprawling_worksheet.docx --columns 2 --format docx
+
+# Convert to LaTeX and compile PDF
+uv run worksheet-packer convert worksheet.pdf --columns 2 --format pdf
+
+# Render Word document pages to PNGs for visual inspection
+uv run worksheet-packer render-docx-pages sprawling_worksheet.docx -o ./rendered_pages
+
+# Inspect document or AST structure
+uv run worksheet-packer info worksheet.pdf
+uv run worksheet-packer info sprawling_worksheet.docx
+
+# Step-by-step pipeline: Parse -> Pack -> Render
+uv run worksheet-packer parse worksheet.pdf -o spec.json --columns 2 --ordering flexible
+uv run worksheet-packer pack spec.json -o plan.json
+uv run worksheet-packer render plan.json -o compact_worksheet.docx --format docx
+uv run worksheet-packer render plan.json -o compact_worksheet.tex --format latex
+```
+
+---
+
 ## Project Structure
 
 ```text
@@ -238,9 +285,11 @@ pdf-to-docx/
 │   │   ├── SKILL.md              # Instructions for page-parallel LaTeX conversion
 │   │   ├── scripts/              # Helper LaTeX scripts mirrored for skill execution
 │   │   └── references/           # LaTeX architecture, workflow playbook, math & tables spec
-│   └── docx-layout-refinement/   # Surgical styling & native charts skill
-│       ├── SKILL.md              # Instructions for page-level surgical refinement
-│       └── references/           # Native chart specs, table styling guide
+│   ├── docx-layout-refinement/   # Surgical styling & native charts skill
+│   │   ├── SKILL.md              # Instructions for page-level surgical refinement
+│   │   └── references/           # Native chart specs, table styling guide
+│   └── worksheet-packer/         # Space-efficient worksheet/exam layout packing skill
+│       └── SKILL.md              # Instructions for 2D bin packing & DOCX/LaTeX compilation
 ├── scripts/
 │   └── pdf_to_latex/             # Top-level organized LaTeX conversion scripts
 │       ├── inspect_pdf.py        # Inspect PDF & render pages
@@ -256,14 +305,24 @@ pdf-to-docx/
 │   │   ├── layout_parser.py      # Gemini Flash spatial layout extraction
 │   │   ├── chart_generator.py    # Matplotlib & DrawingML charts
 │   │   └── cli.py                # DOCX CLI commands
-│   └── pdf_to_latex/             # LaTeX conversion package
-│       ├── ir_schema.py          # LaTeX-enhanced IR (math, exam questions, booktabs)
-│       ├── latex_compiler.py     # Deterministic LaTeX compiler & engine detection
-│       ├── layout_parser.py      # Gemini Flash LaTeX vision extractor
-│       ├── chart_generator.py    # 300 DPI figure graphics
-│       ├── pdf_extractor.py      # PyMuPDF rendering & coordinate cropping
-│       └── cli.py                # LaTeX CLI commands (compile-pages, merge-latex, etc.)
+│   ├── pdf_to_latex/             # LaTeX conversion package
+│   │   ├── ir_schema.py          # LaTeX-enhanced IR (math, exam questions, booktabs)
+│   │   ├── latex_compiler.py     # Deterministic LaTeX compiler & engine detection
+│   │   ├── layout_parser.py      # Gemini Flash LaTeX vision extractor
+│   │   ├── chart_generator.py    # 300 DPI figure graphics
+│   │   ├── pdf_extractor.py      # PyMuPDF rendering & coordinate cropping
+│   │   └── cli.py                # LaTeX CLI commands (compile-pages, merge-latex, etc.)
+│   └── worksheet_packer/         # Space-efficient worksheet layout & packing package
+│       ├── worksheet_ast.py      # Problem-oriented AST with ordering constraints
+│       ├── image_utils.py        # Auto-crop whitespace perimeter trimming
+│       ├── layout_engine.py      # 2D bin packing & footprint calculations
+│       ├── docx_renderer.py      # Deterministic Word compiler (invisible tables w:cantSplit)
+│       ├── latex_renderer.py     # Deterministic LaTeX compiler (minipage side-by-side)
+│       ├── docx_extractor.py     # Headless DOCX->PDF/PNG rendering & zip media extraction
+│       ├── worksheet_parser.py   # PDF & DOCX vision parser
+│       └── cli.py                # worksheet-packer CLI commands
 ├── tests/
+│   ├── test_worksheet_packer.py  # Unit & integration tests for worksheet packing
 │   ├── test_subagent_pipeline.py # DOCX subagent merge & compile test
 │   ├── test_latex_pipeline.py    # LaTeX subagent merge & compile test
 │   └── stats merged quiz unit 1.pdf # Sample AP Statistics quiz with math & diagrams

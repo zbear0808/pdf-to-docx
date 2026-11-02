@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field
 from pdf_to_docx.ir_schema import QuestionChoice, TextRun
 from pdf_to_docx.pdf_extractor import PDFExtractor
 from .image_utils import auto_crop_image, inspect_diagram_dimensions
+from .docx_extractor import convert_docx_to_pdf, extract_docx_media
 from .worksheet_ast import (
     LayoutHint,
     Problem,
@@ -80,18 +81,37 @@ class WorksheetParser:
 
     def __init__(
         self,
-        pdf_path: str | Path,
+        doc_path: str | Path,
         api_key: Optional[str] = None,
         model_name: str = "gemini-flash-lite-latest",
     ):
-        self.pdf_path = Path(pdf_path)
+        self.doc_path = Path(doc_path)
+        if not self.doc_path.exists():
+            raise FileNotFoundError(f"Document file not found: {self.doc_path}")
+
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         self.model_name = model_name
+        self.is_docx = self.doc_path.suffix.lower() == ".docx"
+        self._temp_pdf: Optional[Path] = None
+
+        if self.is_docx:
+            # Headless conversion of existing Word doc to PDF for page rendering
+            self._temp_pdf = self.doc_path.parent / f".temp_{self.doc_path.stem}.pdf"
+            self.pdf_path = convert_docx_to_pdf(self.doc_path, self._temp_pdf)
+        else:
+            self.pdf_path = self.doc_path
+
         self.extractor = PDFExtractor(self.pdf_path)
         self._client = None
 
     def close(self):
-        self.extractor.close()
+        if hasattr(self, "extractor") and self.extractor:
+            self.extractor.close()
+        if self._temp_pdf and self._temp_pdf.exists():
+            try:
+                self._temp_pdf.unlink(missing_ok=True)
+            except Exception:
+                pass
 
     def __enter__(self):
         return self
@@ -152,16 +172,19 @@ class WorksheetParser:
         ordering: SectionOrdering = SectionOrdering.STRICT,
         default_columns: int = 2,
     ) -> WorksheetSpec:
-        """Executes end-to-end PDF parsing and diagram harvesting."""
-        ws_dir = Path(workspace_dir) if workspace_dir else self.pdf_path.parent / f".ws_{self.pdf_path.stem}"
+        """Executes end-to-end document parsing and diagram harvesting."""
+        ws_dir = Path(workspace_dir) if workspace_dir else self.doc_path.parent / f".ws_{self.doc_path.stem}"
         ws_dir.mkdir(parents=True, exist_ok=True)
         media_dir = ws_dir / "media"
         media_dir.mkdir(parents=True, exist_ok=True)
         rendered_dir = ws_dir / "rendered_pages"
         rendered_dir.mkdir(parents=True, exist_ok=True)
 
+        if self.is_docx:
+            extract_docx_media(self.doc_path, media_dir)
+
         doc_info = self.extractor.get_document_info()
-        title = doc_info.get("title") or self.pdf_path.stem.replace("_", " ").title()
+        title = doc_info.get("title") or self.doc_path.stem.replace("_", " ").title()
 
         spec = WorksheetSpec(
             title=title,

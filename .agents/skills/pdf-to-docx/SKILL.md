@@ -27,6 +27,7 @@ This skill executes a robust, battle-tested pipeline to transform complex PDF do
 | **Pathway 1: Block-Based IR (Default)** | Corporate reports, multi-column articles, financial statements, mixed text + tables + charts + images | `pdf_to_docx` CLI AST Compiler | Page subagents extract `page_{k}_spec.json`; orchestrator compiles |
 | **Pathway 2: Fast-Track Markdown** | Text-heavy papers, simple documentation, standard tables, sequential reading order | Gemini GFM extraction + `docx-mcp: create_from_markdown` | Page subagents extract `page_{k}.md`; orchestrator merges and compiles |
 | **Pathway 3: CodeAgent Sandbox** | Highly custom ad-hoc layouts, complex math formulas, dynamic data transformations | Direct executable Python scripts with `python-docx` | Dedicated subagent script execution sandbox |
+| **Pathway 4: Worksheet Packer** | Worksheets, quizzes, problem sets with diagrams and answer workspaces where whitespace packing is critical | `worksheet-packer` CLI | Extracts problems, auto-crops diagrams, 2D packs into 1- or 2-column invisible tables (`w:cantSplit`). See [worksheet-packer skill](../worksheet-packer/SKILL.md). |
 
 ---
 

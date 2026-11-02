@@ -36,6 +36,7 @@ from worksheet_packer.image_utils import auto_crop_image, inspect_diagram_dimens
 from worksheet_packer.layout_engine import LayoutEngine
 from worksheet_packer.docx_renderer import DocxWorksheetRenderer
 from worksheet_packer.latex_renderer import LatexWorksheetRenderer
+from worksheet_packer.docx_extractor import extract_docx_media, render_docx_pages
 
 
 class TestWorksheetPacker(unittest.TestCase):
@@ -334,6 +335,53 @@ class TestWorksheetPacker(unittest.TestCase):
         self.assertIn("\\begin{multicols*}{2}", tex_content)
         self.assertIn("minipage", tex_content)
         self.assertTrue("\\sin(\\theta) = \\frac{1}{2}" in tex_content or "sin(\\theta)" in tex_content)
+
+    def test_docx_media_extraction_and_rendering(self):
+        """Verifies extracting embedded images from DOCX and rendering DOCX pages to PNGs."""
+        # Compile a sample docx first
+        cropped_path, w, h, ar = auto_crop_image(self.sample_diagram)
+        spec = WorksheetSpec(
+            title="DOCX Extraction Test",
+            sections=[
+                WorksheetSection(
+                    id="s1",
+                    problems=[
+                        Problem(
+                            id="p1",
+                            number=1,
+                            prompt_text="Inspect triangle.",
+                            image=ProblemImage(
+                                media_path=str(cropped_path),
+                                native_width_px=w,
+                                native_height_px=h,
+                                aspect_ratio=ar,
+                            ),
+                        )
+                    ],
+                )
+            ],
+        )
+        plan = LayoutEngine(spec).pack()
+        docx_file = self.temp_dir / "extracted_test.docx"
+        DocxWorksheetRenderer(plan).render(docx_file)
+
+        # 1. Test zip-based media extraction
+        media_out = self.temp_dir / "media_extracted"
+        extracted = extract_docx_media(docx_file, media_out)
+        self.assertGreaterEqual(len(extracted), 1)
+        for name, p in extracted.items():
+            self.assertTrue(p.exists())
+            self.assertGreater(p.stat().st_size, 0)
+
+        # 2. Test headless page rendering (if Word COM or LibreOffice available)
+        try:
+            rendered_dir = self.temp_dir / "pages_rendered"
+            pages = render_docx_pages(docx_file, rendered_dir, dpi=150)
+            self.assertGreaterEqual(len(pages), 1)
+            self.assertTrue(pages[0].exists())
+        except RuntimeError as e:
+            # If neither Word nor LibreOffice is present in the test environment, skip gracefully
+            pass
 
 
 if __name__ == "__main__":

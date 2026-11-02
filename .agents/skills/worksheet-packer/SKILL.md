@@ -1,0 +1,156 @@
+---
+name: worksheet-packer
+description: >-
+  Parses, reorganizes, and packs worksheet and exam documents (PDF or Word .docx) into space-efficient,
+  beautifully formatted Word (.docx) and LaTeX (.tex / .pdf) files using 2D bin packing,
+  whitespace auto-cropping, and side-by-side minipage/table layouts. Use when converting, compacting, or
+  re-formatting worksheets, problem sets, quizzes, or exams with excessive whitespace.
+---
+
+# Worksheet Packer Skill
+
+This skill provides autonomous and surgical workflows for parsing, restructuring, and re-packing problem sets, worksheets, quizzes, and exams into dense, space-efficient Microsoft Word (`.docx`) and LaTeX (`.tex` / `.pdf`) documents.
+
+---
+
+## The Whitespace Problem & Solution
+
+Standard worksheets often waste massive horizontal whitespace—for example, placing a 2-inch geometric diagram on its own vertical row with 4.5 inches of blank space next to it. 
+
+**Worksheet Packer** eliminates this by:
+1. **Perception**: Extracting problem prompts, multiple-choice choices, student answer areas, and attached diagrams from PDF or existing Word (`.docx`) documents.
+2. **Auto-Cropping**: Trimming white and transparent borders from diagram images so footprint calculations reflect the true visual drawing rather than margin padding.
+3. **2D Bin-Packing Layout Engine**: Heuristically routing square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) into **Side-by-Side** (65% text / 35% diagram) containers, and wide diagrams into **Stacked** containers.
+4. **Deterministic Structural Rendering**:
+   - **DOCX**: Invisible borderless tables with OpenXML `w:cantSplit` on every row guarantee that diagrams, text, and workspaces stay strictly locked together without mid-problem page breaks or jumping floating anchors.
+   - **LaTeX**: `minipage` environments with `multicol` and `tcolorbox`.
+
+---
+
+## When to Use This Skill
+
+- When a user asks to convert an exam, quiz, or worksheet PDF into Word or LaTeX with optimal use of whitespace.
+- When an existing Word document (`.docx`) has excessive whitespace, sprawling pages, or disorganized floating images that need to be re-packed into a compact 1- or 2-column format.
+- When grouping problems where order does not matter (`SectionOrdering.FLEXIBLE`) to pack problems into the minimum possible page count.
+- When preserving exact problem sequence (`SectionOrdering.STRICT`) while still compacting diagrams side-by-side with question text.
+
+---
+
+## Workflow 1: End-to-End PDF Worksheet Conversion
+
+Run the autonomous CLI pipeline:
+
+```bash
+# Convert PDF to space-optimized 2-column Word document
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format docx
+
+# Convert PDF to LaTeX and compile PDF
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --format pdf
+
+# Save intermediate AST (spec.json) and layout plan (plan.json)
+uv run worksheet-packer convert "path/to/worksheet.pdf" --columns 2 --save-ast
+```
+
+---
+
+## Workflow 2: Re-Packing an Existing Word Document (.docx)
+
+When an existing `.docx` worksheet needs to be compacted or reformatted:
+
+### Phase A: Direct Autonomous Ingestion
+`worksheet-packer` natively ingests `.docx` files:
+1. Headlessly renders `.docx` pages to high-resolution PNGs via LibreOffice or Windows Word COM.
+2. Extracts original native uncompressed assets from `word/media/` inside the `.docx` archive.
+3. Uses Gemini multimodal vision to understand question boundaries, choices, and diagrams.
+4. Packs and outputs a new compacted `.docx` (or `.tex`):
+
+```bash
+uv run worksheet-packer convert "path/to/messy_worksheet.docx" --columns 2 --format docx
+```
+
+### Phase B: Visual-Inspection First Workflow
+If the agent needs to inspect or critique the existing Word document before deciding on layout changes:
+1. Render all pages of the Word doc to PNGs:
+   ```bash
+   uv run worksheet-packer render-docx-pages "path/to/messy_worksheet.docx" -o ./rendered_pages
+   ```
+2. Inspect the rendered page images with multimodal vision to check question density.
+3. Parse and generate the editable `WorksheetSpec` JSON:
+   ```bash
+   uv run worksheet-packer parse "path/to/messy_worksheet.docx" -o ./spec.json --columns 2
+   ```
+4. Customize section ordering or hints in `spec.json`:
+   - Set `"ordering": "flexible"` on sections where problem order can be rearranged to fill columns.
+   - Set `"ordering": "strict"` on sections where sequence must be preserved.
+5. Pack and compile:
+   ```bash
+   uv run worksheet-packer pack ./spec.json -o ./plan.json
+   uv run worksheet-packer render ./plan.json -o ./optimized_worksheet.docx --format docx
+   ```
+
+---
+
+## CLI Command Reference
+
+| Command | Purpose | Key Flags |
+| :--- | :--- | :--- |
+| `info` | Inspect PDF, DOCX, or AST JSON | `<file_path>` |
+| `parse` | Parse PDF or DOCX into `WorksheetSpec` JSON | `-o spec.json`, `-c 2`, `--ordering strict\|flexible` |
+| `pack` | Run 2D bin packer on AST to create `RenderPlan` | `-o plan.json`, `-c 1\|2`, `--ordering strict\|flexible` |
+| `render` | Compile `RenderPlan` or AST into DOCX/LaTeX | `-o output.docx`, `-f docx\|latex\|pdf` |
+| `render-docx-pages` | Render all pages of a DOCX to PNG images | `<doc.docx> -o ./pages --dpi 200` |
+| `convert` | Full autonomous pipeline (PDF/DOCX -> DOCX/LaTeX) | `--columns 2`, `--format docx\|latex\|both`, `--save-ast` |
+
+---
+
+## Python API Usage
+
+```python
+from worksheet_packer import (
+    WorksheetSpec,
+    WorksheetSection,
+    Problem,
+    ProblemImage,
+    WorkspaceConfig,
+    WorkspaceType,
+    SectionOrdering,
+    LayoutEngine,
+    DocxWorksheetRenderer,
+    LatexWorksheetRenderer,
+    auto_crop_image,
+)
+
+# 1. Clean diagram whitespace
+clean_path, w, h, ar = auto_crop_image("raw_diagram.png")
+
+# 2. Build WorksheetSpec
+spec = WorksheetSpec(
+    title="AP Calculus Quiz",
+    default_columns=2,
+    sections=[
+        WorksheetSection(
+            id="s1",
+            title="Part I: Related Rates",
+            ordering=SectionOrdering.STRICT,  # or FLEXIBLE
+            problems=[
+                Problem(
+                    id="q1",
+                    number=1,
+                    prompt_text="Find the rate of change of angle θ.",
+                    image=ProblemImage(media_path=str(clean_path), native_width_px=w, native_height_px=h, aspect_ratio=ar),
+                    workspace=WorkspaceConfig(type=WorkspaceType.LINES, lines=3),
+                )
+            ]
+        )
+    ]
+)
+
+# 3. 2D Bin-Packing Layout
+engine = LayoutEngine(spec)
+plan = engine.pack()
+
+# 4. Render to DOCX (invisible tables w:cantSplit) or LaTeX (minipage)
+DocxWorksheetRenderer(plan).render("quiz.docx")
+LatexWorksheetRenderer(plan).render("quiz.tex", compile_pdf=True)
+```
+

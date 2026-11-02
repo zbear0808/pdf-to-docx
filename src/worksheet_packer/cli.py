@@ -21,6 +21,7 @@ from .layout_engine import LayoutEngine
 from .docx_renderer import DocxWorksheetRenderer
 from .latex_renderer import LatexWorksheetRenderer
 from .worksheet_parser import WorksheetParser
+from .docx_extractor import convert_docx_to_pdf, extract_docx_media, render_docx_pages
 
 app = typer.Typer(
     name="worksheet-packer",
@@ -32,14 +33,24 @@ console = Console()
 
 @app.command()
 def info(
-    file_path: Path = typer.Argument(..., help="Path to PDF, WorksheetSpec JSON, or RenderPlan JSON")
+    file_path: Path = typer.Argument(..., help="Path to PDF, Word DOCX, WorksheetSpec JSON, or RenderPlan JSON")
 ):
-    """Inspects a PDF document or existing AST/Plan JSON file."""
+    """Inspects a PDF or Word document, or an existing AST/Plan JSON file."""
     if not file_path.exists():
         console.print(f"[red]Error:[/red] File not found: {file_path}")
         raise typer.Exit(1)
 
-    if file_path.suffix.lower() == ".pdf":
+    if file_path.suffix.lower() == ".docx":
+        from docx import Document
+        doc = Document(str(file_path))
+        media = extract_docx_media(file_path, file_path.parent / ".temp_inspect_media")
+        console.print(f"[bold cyan]Word Document (.docx):[/bold cyan] {file_path.name}")
+        console.print(f"Paragraphs: {len(doc.paragraphs)}")
+        console.print(f"Tables: {len(doc.tables)}")
+        console.print(f"Embedded Media Assets: {len(media)}")
+        shutil = __import__("shutil")
+        shutil.rmtree(file_path.parent / ".temp_inspect_media", ignore_errors=True)
+    elif file_path.suffix.lower() == ".pdf":
         from pdf_to_docx.pdf_extractor import PDFExtractor
         with PDFExtractor(file_path) as ext:
             doc_info = ext.get_document_info()
@@ -80,18 +91,18 @@ def info(
 
 @app.command()
 def parse(
-    pdf_path: Path = typer.Argument(..., help="Path to input worksheet PDF"),
+    doc_path: Path = typer.Argument(..., help="Path to input worksheet (PDF or Word .docx)"),
     output: Optional[Path] = typer.Option(None, "--output", "-o", help="Path to output WorksheetSpec JSON"),
     workspace_dir: Optional[Path] = typer.Option(None, "--workspace-dir", "-w", help="Cache directory for media assets"),
     ordering: str = typer.Option("strict", "--ordering", help="Section ordering: 'strict' or 'flexible'"),
     columns: int = typer.Option(2, "--columns", "-c", help="Default column count: 1 or 2"),
 ):
-    """Parses a worksheet PDF into a WorksheetSpec AST JSON with harvested diagrams."""
+    """Parses a worksheet PDF or Word doc (.docx) into a WorksheetSpec AST JSON with harvested diagrams."""
     sec_ordering = SectionOrdering.FLEXIBLE if ordering.lower() == "flexible" else SectionOrdering.STRICT
-    out_json = output or pdf_path.with_name(f"{pdf_path.stem}_spec.json")
+    out_json = output or doc_path.with_name(f"{doc_path.stem}_spec.json")
 
-    console.print(f"[cyan]Parsing worksheet PDF:[/cyan] {pdf_path}")
-    with WorksheetParser(pdf_path) as parser:
+    console.print(f"[cyan]Parsing worksheet document:[/cyan] {doc_path}")
+    with WorksheetParser(doc_path) as parser:
         spec = parser.parse_worksheet(
             workspace_dir=workspace_dir,
             ordering=sec_ordering,
@@ -161,41 +172,54 @@ def render(
         console.print(f"[bold green]Successfully generated LaTeX:[/bold green] {saved}")
 
 
+@app.command("render-docx-pages")
+def render_docx_pages_cmd(
+    docx_path: Path = typer.Argument(..., help="Path to input Word document (.docx)"),
+    output_dir: Path = typer.Option(..., "--output-dir", "-o", help="Output directory for rendered page PNGs"),
+    dpi: int = typer.Option(200, "--dpi", help="Rendering DPI (default 200 for vision analysis)"),
+):
+    """Renders all pages of a Word document (.docx) to PNG images via LibreOffice or Word COM."""
+    console.print(f"[cyan]Rendering Word document pages to PNGs:[/cyan] {docx_path}")
+    pages = render_docx_pages(docx_path, output_dir, dpi=dpi)
+    console.print(f"[bold green]Rendered {len(pages)} pages into:[/bold green] {output_dir}")
+
+
 @app.command()
 def convert(
-    pdf_path: Path = typer.Argument(..., help="Path to input worksheet PDF"),
+    doc_path: Path = typer.Argument(..., help="Path to input worksheet (PDF or Word .docx)"),
     output: Optional[Path] = typer.Option(None, "--output", "-o", help="Destination path (.docx or .tex)"),
     fmt: str = typer.Option("docx", "--format", "-f", help="Format: 'docx', 'latex', or 'both'"),
     columns: int = typer.Option(2, "--columns", "-c", help="Number of columns (1 or 2)"),
     ordering: str = typer.Option("strict", "--ordering", help="Ordering: 'strict' or 'flexible'"),
     save_ast: bool = typer.Option(True, "--save-ast/--no-save-ast", help="Save intermediate spec and plan JSON"),
 ):
-    """Autonomous end-to-end pipeline: PDF -> Parsing -> 2D Packing -> DOCX / LaTeX."""
+    """Autonomous end-to-end pipeline: PDF / DOCX -> Parsing -> 2D Packing -> DOCX / LaTeX."""
     sec_ordering = SectionOrdering.FLEXIBLE if ordering.lower() == "flexible" else SectionOrdering.STRICT
 
-    console.print(f"[bold cyan]Starting end-to-end worksheet conversion:[/bold cyan] {pdf_path}")
-    with WorksheetParser(pdf_path) as parser:
+    console.print(f"[bold cyan]Starting end-to-end worksheet conversion:[/bold cyan] {doc_path}")
+    with WorksheetParser(doc_path) as parser:
         spec = parser.parse_worksheet(ordering=sec_ordering, default_columns=columns)
 
     if save_ast:
-        spec_file = pdf_path.with_name(f"{pdf_path.stem}_spec.json")
+        spec_file = doc_path.with_name(f"{doc_path.stem}_spec.json")
         spec_file.write_text(spec.model_dump_json(indent=2), encoding="utf-8")
 
     engine = LayoutEngine(spec)
     plan = engine.pack()
 
     if save_ast:
-        plan_file = pdf_path.with_name(f"{pdf_path.stem}_plan.json")
+        plan_file = doc_path.with_name(f"{doc_path.stem}_plan.json")
         plan_file.write_text(plan.model_dump_json(indent=2), encoding="utf-8")
 
     fmt_lower = fmt.lower()
     if fmt_lower in ("docx", "both"):
-        docx_out = output if (output and output.suffix.lower() == ".docx") else pdf_path.with_suffix(".docx")
+        default_out = doc_path.with_name(f"{doc_path.stem}_packed.docx") if doc_path.suffix.lower() == ".docx" else doc_path.with_suffix(".docx")
+        docx_out = output if (output and output.suffix.lower() == ".docx") else default_out
         DocxWorksheetRenderer(plan).render(docx_out)
         console.print(f"[bold green]Rendered Word Document:[/bold green] {docx_out}")
 
     if fmt_lower in ("latex", "tex", "both", "pdf"):
-        tex_out = output if (output and output.suffix.lower() == ".tex") else pdf_path.with_suffix(".tex")
+        tex_out = output if (output and output.suffix.lower() == ".tex") else doc_path.with_suffix(".tex")
         LatexWorksheetRenderer(plan).render(tex_out, compile_pdf=(fmt_lower == "pdf"))
         console.print(f"[bold green]Rendered LaTeX Document:[/bold green] {tex_out}")
 

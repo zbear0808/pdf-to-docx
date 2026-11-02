@@ -24,6 +24,7 @@ from .layout_engine import LayoutEngine
 from .docx_renderer import DocxWorksheetRenderer
 from .latex_renderer import LatexWorksheetRenderer
 from .worksheet_parser import WorksheetParser
+from .docx_extractor import convert_docx_to_pdf, extract_docx_media, render_docx_pages
 from .cli import app, main
 
 __all__ = [
@@ -42,6 +43,9 @@ __all__ = [
     "RenderPlan",
     "auto_crop_image",
     "inspect_diagram_dimensions",
+    "convert_docx_to_pdf",
+    "extract_docx_media",
+    "render_docx_pages",
     "LayoutEngine",
     "DocxWorksheetRenderer",
     "LatexWorksheetRenderer",
