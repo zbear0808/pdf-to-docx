@@ -154,6 +154,7 @@ class WorksheetSection(BaseModel):
     instructions: Optional[str] = None
     ordering: SectionOrdering = SectionOrdering.STRICT
     column_mode: Optional[str] = None   # "single", "double", or None (inherits from worksheet)
+    page_break_before: bool = False     # Forces this section to start on a new page
     problems: List[Problem] = Field(default_factory=list)
 
 

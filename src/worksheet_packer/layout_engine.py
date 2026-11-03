@@ -7,6 +7,7 @@ and packs items across pages and columns to minimize wasted whitespace.
 
 from __future__ import annotations
 import math
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from .worksheet_ast import (
@@ -54,21 +55,36 @@ class LayoutEngine:
         if label_prefix and not full_text.startswith(label_prefix):
             full_text = f"{label_prefix} {full_text}"
 
+        # Clean common markup delimiters from full_text so line counting reflects actual visible text
+        cleaned_text = re.sub(r"%.*", "", full_text)
+        cleaned_text = re.sub(r"\\begin\{(?:lstlisting|enumerate|itemize)\}(?:\[.*?\])?", "", cleaned_text)
+        cleaned_text = re.sub(r"\\end\{(?:lstlisting|enumerate|itemize)\}", "", cleaned_text)
+        cleaned_text = re.sub(r"\\item\s*", "", cleaned_text)
+        cleaned_text = re.sub(r"\\qnum\{\d+\}", "", cleaned_text)
+        cleaned_text = re.sub(r"\\scriptsize", "", cleaned_text)
+        cleaned_text = re.sub(r"\\(?:textbf|texttt|textit|color)\{([^}]*)\}", r"\1", cleaned_text)
+
         lines = 0
-        paragraphs = full_text.split("\n")
+        paragraphs = cleaned_text.split("\n")
         for p in paragraphs:
             p_str = p.strip()
             if not p_str:
-                lines += 0.5
+                lines += 0.3
             else:
                 lines += max(1, math.ceil(len(p_str) / chars_per_line))
 
         # 2. Multiple choice options
         if problem.choices:
-            for ch in problem.choices:
-                c_text = ch.text.strip()
-                ch_line_chars = max(10, chars_per_line - 5)
-                lines += max(1, math.ceil(len(c_text) / ch_line_chars))
+            all_short = all(len(ch.text.strip()) <= 15 for ch in problem.choices)
+            if all_short and len(problem.choices) <= 4:
+                lines += 1.5
+            else:
+                for ch in problem.choices:
+                    c_text = ch.text.strip()
+                    c_text = re.sub(r"%.*", "", c_text)
+                    c_text = re.sub(r"\\[a-zA-Z]+(?:\{.*?\})?", "", c_text)
+                    ch_line_chars = max(10, chars_per_line - 5)
+                    lines += max(1, math.ceil(len(c_text) / ch_line_chars))
 
         return max(line_height_in, lines * line_height_in + padding_in)
 
@@ -455,7 +471,7 @@ class LayoutEngine:
                 end1 = cursor_1 + h1
                 h_diff = abs(end0 - end1)
                 count_diff = abs(len(b0) - len(b1))
-                score = h_diff + 0.35 * count_diff
+                score = h_diff + 1.25 * count_diff
                 if m % 2 == 1 and k == (m + 1) // 2:
                     score -= 0.05
                 valid_splits.append((score, k, b0_sq, b1_sq))
@@ -521,8 +537,38 @@ class LayoutEngine:
 
         end0 = cursor_0 + h0
         end1 = cursor_1 + h1
-        score = abs(end0 - end1) + 0.35 * abs(len(c0) - len(c1))
+        score = abs(end0 - end1) + 1.25 * abs(len(c0) - len(c1))
         return (score, c0, c1)
+
+    def _estimate_pages_needed_strict(
+        self,
+        remaining_items: List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]],
+        avail_0: float,
+        avail_1: float,
+        printable_h: float,
+        col_w: float,
+        base_gap: float,
+    ) -> int:
+        """Simulates strict forward packing to estimate minimum pages needed for remaining items."""
+        pages = 0
+        cur = list(remaining_items)
+        first_page = True
+        while cur:
+            pages += 1
+            cur_a0 = avail_0 if first_page else printable_h
+            cur_a1 = avail_1 if first_page else printable_h
+            first_page = False
+            m_fit = 0
+            for m in range(1, len(cur) + 1):
+                s = self._find_valid_splits_strict(cur[:m], cur_a0, cur_a1, col_w, base_gap, 0.0, 0.0)
+                if s:
+                    m_fit = m
+                else:
+                    break
+            if m_fit == 0:
+                m_fit = 1
+            cur = cur[m_fit:]
+        return max(1, pages)
 
     def _distribute_column_spacing(
         self,
@@ -600,10 +646,26 @@ class LayoutEngine:
         text_only_count = 0
 
         for section in self.ws.sections:
-            col_count = int(section.column_mode or self.ws.default_columns)
+            if section.column_mode:
+                if str(section.column_mode).lower() in ("single", "1"):
+                    col_count = 1
+                elif str(section.column_mode).lower() in ("double", "2"):
+                    col_count = 2
+                else:
+                    try:
+                        col_count = int(section.column_mode)
+                    except ValueError:
+                        col_count = int(self.ws.default_columns)
+            else:
+                col_count = int(self.ws.default_columns)
             col_count = max(1, min(2, col_count))  # Support 1 or 2 columns
 
-            if len(col_cursors) != col_count:
+            if section.page_break_before or (col_count != len(col_cursors) and max(col_cursors) > 0.05):
+                if max(col_cursors) > 0.05:
+                    current_page_idx = len(pages) + 1
+                    pages.append(PlacedPage(page_index=current_page_idx))
+                    col_cursors = [0.0] * col_count
+            elif len(col_cursors) != col_count:
                 curr_max = max(col_cursors) if col_cursors else 0.0
                 col_cursors = [curr_max] * col_count
 
@@ -731,19 +793,17 @@ class LayoutEngine:
                         avail_1 = printable_h
 
                     if section.ordering == SectionOrdering.STRICT:
-                        best_m = 0
-                        best_split = None
+                        valid_m_splits = {}
                         for m_cand in range(1, len(remaining) + 1):
                             splits = self._find_valid_splits_strict(
                                 remaining[:m_cand], avail_0, avail_1, col_w, base_gap, col_cursors[0], col_cursors[1]
                             )
                             if splits:
-                                best_m = m_cand
-                                best_split = splits[0]
+                                valid_m_splits[m_cand] = splits[0]
                             else:
                                 break
 
-                        if best_m == 0:
+                        if not valid_m_splits:
                             if col_cursors[0] > 0.05 or col_cursors[1] > 0.05:
                                 current_page_idx = len(pages) + 1
                                 pages.append(PlacedPage(page_index=current_page_idx))
@@ -754,6 +814,18 @@ class LayoutEngine:
                                 col_1_items = []
                                 remaining = remaining[1:]
                         else:
+                            max_m = max(valid_m_splits.keys())
+                            if max_m == len(remaining):
+                                best_m = max_m
+                            else:
+                                p_needed = self._estimate_pages_needed_strict(
+                                    remaining, avail_0, avail_1, printable_h, col_w, base_gap
+                                )
+                                target_m = math.ceil(len(remaining) / max(1, p_needed))
+                                candidate_ms = [m for m in valid_m_splits.keys() if m <= max_m]
+                                best_m = min(candidate_ms, key=lambda m: (abs(m - target_m), valid_m_splits[m][0]))
+
+                            best_split = valid_m_splits[best_m]
                             _, k_star, col_0_items, col_1_items = best_split
                             remaining = remaining[best_m:]
 

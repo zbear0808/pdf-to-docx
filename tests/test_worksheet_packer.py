@@ -20,6 +20,7 @@ from PIL import Image, ImageDraw
 from worksheet_packer.worksheet_ast import (
     LayoutDecision,
     LayoutHint,
+    PageMargins,
     PlacedProblem,
     Problem,
     ProblemImage,
@@ -648,6 +649,66 @@ class TestWorksheetPacker(unittest.TestCase):
         self.assertEqual(len(col1_items), 2, "Col 1 must have 2 questions for a 5-question set!")
         self.assertEqual([p.problem.number for p in col0_items], [1, 2, 3])
         self.assertEqual([p.problem.number for p in col1_items], [4, 5])
+
+    def test_multipage_balanced_distribution_and_column_balance(self):
+        """Verifies that 20 questions in a multi-page section distribute evenly (e.g. 7, 7, 6)
+
+        and that the final 6-question page splits evenly into 3 in each column.
+        """
+        probs = [
+            Problem(
+                id=f"q{i}",
+                number=i,
+                prompt_text=f"Question {i}: What is the output of running this Java program?\nint x = {i * 2};\nSystem.out.println(x);",
+                choices=[
+                    QuestionChoice(label="(A)", text=f"{i * 2}"),
+                    QuestionChoice(label="(B)", text=f"{i}"),
+                    QuestionChoice(label="(C)", text=f"{i * 4}"),
+                    QuestionChoice(label="(D)", text="0"),
+                ],
+                workspace=WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=1.15),
+            )
+            for i in range(1, 21)
+        ]
+
+        spec = WorksheetSpec(
+            title="AP Computer Science A Assessment",
+            default_columns=2,
+            margins=PageMargins(top_in=0.38, bottom_in=0.38, left_in=0.42, right_in=0.42),
+            default_font_size_pt=8.5,
+            sections=[
+                WorksheetSection(
+                    id="sec_all",
+                    ordering=SectionOrdering.STRICT,
+                    problems=probs,
+                )
+            ],
+        )
+
+        plan = LayoutEngine(spec).pack()
+        self.assertEqual(plan.total_pages, 3, "20 questions should pack into 3 pages!")
+
+        # Page 1: 7 questions (4 in col 0, 3 in col 1)
+        p1_probs = [it for it in plan.pages[0].items if isinstance(it, PlacedProblem)]
+        p1_c0 = [it for it in p1_probs if it.col_index == 0]
+        p1_c1 = [it for it in p1_probs if it.col_index == 1]
+        self.assertEqual(len(p1_c0), 4)
+        self.assertEqual(len(p1_c1), 3)
+
+        # Page 2: 7 questions (4 in col 0, 3 in col 1)
+        p2_probs = [it for it in plan.pages[1].items if isinstance(it, PlacedProblem)]
+        p2_c0 = [it for it in p2_probs if it.col_index == 0]
+        p2_c1 = [it for it in p2_probs if it.col_index == 1]
+        self.assertEqual(len(p2_c0), 4)
+        self.assertEqual(len(p2_c1), 3)
+
+        # Page 3: 6 questions (3 in col 0, 3 in col 1)
+        p3_probs = [it for it in plan.pages[2].items if isinstance(it, PlacedProblem)]
+        p3_c0 = [it for it in p3_probs if it.col_index == 0]
+        p3_c1 = [it for it in p3_probs if it.col_index == 1]
+        self.assertEqual(len(p3_c0), 3, "Page 3 Column 0 must have exactly 3 questions!")
+        self.assertEqual(len(p3_c1), 3, "Page 3 Column 1 must have exactly 3 questions!")
+        self.assertTrue(all(it.spacing_after_in > 0.15 for it in p3_probs), "Problems should be spaced out!")
 
 
 if __name__ == "__main__":
