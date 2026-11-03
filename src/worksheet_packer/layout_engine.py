@@ -118,6 +118,7 @@ class LayoutEngine:
         problem: Problem,
         col_width_in: float,
         target_img_width_in: Optional[float] = None,
+        font_size_pt: Optional[float] = None,
     ) -> Tuple[LayoutDecision, float, float, float, float, float, float]:
         """Calculates layout decision and exact dimensions for a problem.
 
@@ -125,6 +126,7 @@ class LayoutEngine:
             problem: The problem to evaluate.
             col_width_in: Target column width in inches.
             target_img_width_in: Explicit image width override (for elastic squeeze or slack expansion).
+            font_size_pt: Optional font size override in points.
 
         Returns:
             Tuple of:
@@ -141,7 +143,7 @@ class LayoutEngine:
         # Case 1: No image attached
         if not problem.image:
             text_w = col_width_in
-            text_h = self.estimate_text_height(problem, text_w)
+            text_h = self.estimate_text_height(problem, text_w, font_size_pt=font_size_pt)
             total_h = text_h + ws_height + 0.08
             return (
                 LayoutDecision.TEXT_ONLY,
@@ -193,7 +195,7 @@ class LayoutEngine:
 
             text_w = col_width_in - img_w - 0.08
             img_h = img_w * ar
-            text_h = self.estimate_text_height(problem, text_w)
+            text_h = self.estimate_text_height(problem, text_w, font_size_pt=font_size_pt)
             top_h = max(text_h, img_h)
             total_h = top_h + ws_height + 0.12
             return (
@@ -208,7 +210,7 @@ class LayoutEngine:
         else:
             # STACKED
             text_w = col_width_in
-            text_h = self.estimate_text_height(problem, text_w)
+            text_h = self.estimate_text_height(problem, text_w, font_size_pt=font_size_pt)
 
             if target_img_width_in is not None:
                 img_w = max(min_img_w, min(target_img_width_in, col_width_in * 0.95))
@@ -343,7 +345,7 @@ class LayoutEngine:
                 exp_capacities.append(0.0)
                 continue
             _, exp_h, _, _, _, _, _ = self.calculate_problem_footprint(
-                p.problem, col_w, target_img_width_in=max_w
+                p.problem, col_w, target_img_width_in=max_w, font_size_pt=p.font_size_pt
             )
             cap = max(0.0, exp_h - p.height_in)
             exp_capacities.append(cap)
@@ -360,7 +362,7 @@ class LayoutEngine:
             if exp_capacities[i] > 0:
                 max_w = getattr(p.problem.image, "max_width_in", 3.5)
                 target_w = p.image_render_width_in + exp_factor * (max_w - p.image_render_width_in)
-                fp = self.calculate_problem_footprint(p.problem, col_w, target_img_width_in=target_w)
+                fp = self.calculate_problem_footprint(p.problem, col_w, target_img_width_in=target_w, font_size_pt=p.font_size_pt)
                 p.height_in = fp[1]
                 p.text_render_width_in = fp[2]
                 p.text_render_height_in = fp[3]
@@ -375,6 +377,7 @@ class LayoutEngine:
         avail_h: float,
         col_w: float,
         base_gap: float = 0.10,
+        font_size_pt: Optional[float] = None,
     ) -> Optional[List[Tuple[Problem, Tuple[LayoutDecision, float, float, float, float, float, float]]]]:
         """Attempts to elastically compress diagrams in batch so total height + gaps <= avail_h."""
         total_curr_h = sum(fp[1] for _, fp in batch) + max(0, len(batch) - 1) * base_gap
@@ -397,7 +400,7 @@ class LayoutEngine:
                 shrink_capacities.append(0.0)
                 min_fps.append(fp)
                 continue
-            min_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=min_w)
+            min_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=min_w, font_size_pt=font_size_pt)
             min_fps.append(min_fp)
             elasticity = getattr(prob.image, "elasticity", 1.0)
             cap = max(0.0, (fp[1] - min_fp[1]) * elasticity)
@@ -414,7 +417,7 @@ class LayoutEngine:
                 min_w = prob.effective_min_image_width_in
                 curr_w = fp[4]
                 target_w = curr_w - squeeze_factor * (curr_w - min_w)
-                new_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=target_w)
+                new_fp = self.calculate_problem_footprint(prob, col_w, target_img_width_in=target_w, font_size_pt=font_size_pt)
                 squeezed_batch.append((prob, new_fp))
             else:
                 squeezed_batch.append((prob, fp))
@@ -430,6 +433,7 @@ class LayoutEngine:
         base_gap: float,
         cursor_0: float,
         cursor_1: float,
+        font_size_pt: Optional[float] = None,
     ) -> List[Tuple[float, int, List[Tuple[Any, Any]], List[Tuple[Any, Any]]]]:
         """Evaluates all possible split points k in strict sequence for a subset of problems.
         
@@ -451,7 +455,7 @@ class LayoutEngine:
             b0_sq = b0
             b1_sq = b1
             if h0 > avail_0 + 0.01:
-                res0 = self._attempt_squeeze_batch(b0, avail_0, col_w, base_gap)
+                res0 = self._attempt_squeeze_batch(b0, avail_0, col_w, base_gap, font_size_pt=font_size_pt)
                 if res0 is not None:
                     b0_sq = res0
                     h0 = sum(fp[1] for _, fp in b0_sq) + max(0, len(b0_sq) - 1) * base_gap
@@ -459,7 +463,7 @@ class LayoutEngine:
                     continue
 
             if h1 > avail_1 + 0.01:
-                res1 = self._attempt_squeeze_batch(b1, avail_1, col_w, base_gap)
+                res1 = self._attempt_squeeze_batch(b1, avail_1, col_w, base_gap, font_size_pt=font_size_pt)
                 if res1 is not None:
                     b1_sq = res1
                     h1 = sum(fp[1] for _, fp in b1_sq) + max(0, len(b1_sq) - 1) * base_gap
@@ -548,6 +552,7 @@ class LayoutEngine:
         printable_h: float,
         col_w: float,
         base_gap: float,
+        font_size_pt: Optional[float] = None,
     ) -> int:
         """Simulates strict forward packing to estimate minimum pages needed for remaining items."""
         pages = 0
@@ -560,7 +565,7 @@ class LayoutEngine:
             first_page = False
             m_fit = 0
             for m in range(1, len(cur) + 1):
-                s = self._find_valid_splits_strict(cur[:m], cur_a0, cur_a1, col_w, base_gap, 0.0, 0.0)
+                s = self._find_valid_splits_strict(cur[:m], cur_a0, cur_a1, col_w, base_gap, 0.0, 0.0, font_size_pt=font_size_pt)
                 if s:
                     m_fit = m
                 else:
@@ -580,6 +585,7 @@ class LayoutEngine:
         col_w: float,
         col_gap: float,
         page_idx: int,
+        font_size_pt: Optional[float] = None,
     ) -> Tuple[float, List[PlacedProblem]]:
         """Positions problems in a column, distributing vertical slack into gaps and workspaces."""
         n = len(batch_items)
@@ -603,6 +609,7 @@ class LayoutEngine:
         x_pos = 0.0 if col_idx == 0 else (col_w + col_gap)
         curr_y = cursor_y
         placed_items = []
+        fs = font_size_pt or self.ws.default_font_size_pt
 
         for i, (prob, (decision, total_h, text_w, text_h, img_w, img_h, ws_h)) in enumerate(batch_items):
             placed = PlacedProblem(
@@ -620,22 +627,24 @@ class LayoutEngine:
                 text_render_height_in=text_h,
                 workspace_height_in=ws_h,
                 spacing_after_in=gap,
+                font_size_pt=fs,
             )
             placed_items.append(placed)
             curr_y += total_h + gap
 
         return curr_y, placed_items
 
-    def pack(self) -> RenderPlan:
-        """Executes full 2D layout bin-packing across all worksheet sections."""
+    def _pack_page_layout(self, font_size_pt: Optional[float] = None) -> RenderPlan:
+        """Executes 2D layout bin-packing across all worksheet sections at a specific font size."""
         printable_w = self.ws.printable_width_in
         printable_h = self.ws.printable_height_in
+        active_fs = font_size_pt or self.ws.default_font_size_pt
 
         # Page 1 header reserve (title, student info line, etc.)
         p1_header_h = 0.75 if (self.ws.title or self.ws.header_right) else 0.0
 
         current_page_idx = 1
-        pages: List[PlacedPage] = [PlacedPage(page_index=1)]
+        pages: List[PlacedPage] = [PlacedPage(page_index=1, font_size_pt=active_fs)]
         default_col_count = max(1, min(2, int(self.ws.default_columns)))
         col_cursors = [p1_header_h] * default_col_count
 
@@ -663,7 +672,7 @@ class LayoutEngine:
             if section.page_break_before or (col_count != len(col_cursors) and max(col_cursors) > 0.05):
                 if max(col_cursors) > 0.05:
                     current_page_idx = len(pages) + 1
-                    pages.append(PlacedPage(page_index=current_page_idx))
+                    pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                     col_cursors = [0.0] * col_count
             elif len(col_cursors) != col_count:
                 curr_max = max(col_cursors) if col_cursors else 0.0
@@ -685,7 +694,7 @@ class LayoutEngine:
             # Calculate footprints
             problem_footprints = []
             for prob in prob_list:
-                fp = self.calculate_problem_footprint(prob, col_w)
+                fp = self.calculate_problem_footprint(prob, col_w, font_size_pt=active_fs)
                 problem_footprints.append((prob, fp))
 
             # Ordering strategy:
@@ -700,7 +709,7 @@ class LayoutEngine:
                 if curr_max_y + sec_header_h > printable_h - 1.2:
                     # Header doesn't fit with room for problems; start new page
                     current_page_idx = len(pages) + 1
-                    pages.append(PlacedPage(page_index=current_page_idx))
+                    pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                     col_cursors = [0.0] * col_count
                     curr_max_y = 0.0
 
@@ -725,7 +734,7 @@ class LayoutEngine:
                     avail_h = printable_h - col_cursors[0]
                     if avail_h < 1.0:
                         current_page_idx = len(pages) + 1
-                        pages.append(PlacedPage(page_index=current_page_idx))
+                        pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                         col_cursors = [0.0]
                         avail_h = printable_h
 
@@ -741,7 +750,7 @@ class LayoutEngine:
 
                     if count < len(remaining):
                         cand_squeeze = remaining[:count + 1]
-                        sq_res = self._attempt_squeeze_batch(cand_squeeze, avail_h, col_w, base_gap)
+                        sq_res = self._attempt_squeeze_batch(cand_squeeze, avail_h, col_w, base_gap, font_size_pt=active_fs)
                         if sq_res is not None:
                             count += 1
                             placed_batch = sq_res
@@ -753,7 +762,7 @@ class LayoutEngine:
                     if count == 0:
                         if col_cursors[0] > 0.05:
                             current_page_idx = len(pages) + 1
-                            pages.append(PlacedPage(page_index=current_page_idx))
+                            pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                             col_cursors = [0.0]
                             continue
                         else:
@@ -762,7 +771,7 @@ class LayoutEngine:
 
                     remaining = remaining[count:]
                     col_cursors[0], placed = self._distribute_column_spacing(
-                        placed_batch, 0, avail_h, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index
+                        placed_batch, 0, avail_h, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index, font_size_pt=active_fs
                     )
                     pages[-1].items.extend(placed)
 
@@ -777,7 +786,7 @@ class LayoutEngine:
 
                     if remaining:
                         current_page_idx = len(pages) + 1
-                        pages.append(PlacedPage(page_index=current_page_idx))
+                        pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                         col_cursors = [0.0]
 
             elif col_count == 2:
@@ -787,7 +796,7 @@ class LayoutEngine:
 
                     if max(avail_0, avail_1) < 1.0:
                         current_page_idx = len(pages) + 1
-                        pages.append(PlacedPage(page_index=current_page_idx))
+                        pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                         col_cursors = [0.0, 0.0]
                         avail_0 = printable_h
                         avail_1 = printable_h
@@ -796,7 +805,7 @@ class LayoutEngine:
                         valid_m_splits = {}
                         for m_cand in range(1, len(remaining) + 1):
                             splits = self._find_valid_splits_strict(
-                                remaining[:m_cand], avail_0, avail_1, col_w, base_gap, col_cursors[0], col_cursors[1]
+                                remaining[:m_cand], avail_0, avail_1, col_w, base_gap, col_cursors[0], col_cursors[1], font_size_pt=active_fs
                             )
                             if splits:
                                 valid_m_splits[m_cand] = splits[0]
@@ -806,7 +815,7 @@ class LayoutEngine:
                         if not valid_m_splits:
                             if col_cursors[0] > 0.05 or col_cursors[1] > 0.05:
                                 current_page_idx = len(pages) + 1
-                                pages.append(PlacedPage(page_index=current_page_idx))
+                                pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                                 col_cursors = [0.0, 0.0]
                                 continue
                             else:
@@ -819,7 +828,7 @@ class LayoutEngine:
                                 best_m = max_m
                             else:
                                 p_needed = self._estimate_pages_needed_strict(
-                                    remaining, avail_0, avail_1, printable_h, col_w, base_gap
+                                    remaining, avail_0, avail_1, printable_h, col_w, base_gap, font_size_pt=active_fs
                                 )
                                 target_m = math.ceil(len(remaining) / max(1, p_needed))
                                 candidate_ms = [m for m in valid_m_splits.keys() if m <= max_m]
@@ -845,7 +854,7 @@ class LayoutEngine:
                         if best_m == 0:
                             if col_cursors[0] > 0.05 or col_cursors[1] > 0.05:
                                 current_page_idx = len(pages) + 1
-                                pages.append(PlacedPage(page_index=current_page_idx))
+                                pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                                 col_cursors = [0.0, 0.0]
                                 continue
                             else:
@@ -858,12 +867,12 @@ class LayoutEngine:
                             remaining = remaining[best_m:]
 
                     col_cursors[0], placed_0 = self._distribute_column_spacing(
-                        col_0_items, 0, avail_0, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index
+                        col_0_items, 0, avail_0, col_cursors[0], base_gap, col_w, col_gap, pages[-1].page_index, font_size_pt=active_fs
                     )
                     pages[-1].items.extend(placed_0)
 
                     col_cursors[1], placed_1 = self._distribute_column_spacing(
-                        col_1_items, 1, avail_1, col_cursors[1], base_gap, col_w, col_gap, pages[-1].page_index
+                        col_1_items, 1, avail_1, col_cursors[1], base_gap, col_w, col_gap, pages[-1].page_index, font_size_pt=active_fs
                     )
                     pages[-1].items.extend(placed_1)
 
@@ -878,7 +887,7 @@ class LayoutEngine:
 
                     if remaining:
                         current_page_idx = len(pages) + 1
-                        pages.append(PlacedPage(page_index=current_page_idx))
+                        pages.append(PlacedPage(page_index=current_page_idx, font_size_pt=active_fs))
                         col_cursors = [0.0, 0.0]
 
         # Pass 3: Slack Absorption (Whitespace Filling across pages)
@@ -922,4 +931,150 @@ class LayoutEngine:
             total_pages=len(pages),
             stats=stats,
         )
+
+    def _scale_page_fonts_to_fill_slack(self, plan: RenderPlan, max_fs: float) -> None:
+        """Increases font size on individual pages that have significant unused vertical space."""
+        printable_h = self.ws.printable_height_in
+        printable_w = self.ws.printable_width_in
+        col_gap = self.ws.column_gap_in if self.ws.default_columns > 1 else 0.0
+        base_gap = 0.10
+
+        for page in plan.pages:
+            prob_items = [it for it in page.items if isinstance(it, PlacedProblem)]
+            if not prob_items:
+                continue
+
+            current_page_fs = page.font_size_pt or prob_items[0].font_size_pt or self.ws.default_font_size_pt
+            if current_page_fs >= max_fs:
+                continue
+
+            # Determine column count on this page
+            max_col_idx = max(p.col_index for p in prob_items)
+            col_count = max(1, max_col_idx + 1)
+            col_w = (printable_w - (col_count - 1) * col_gap) / col_count
+
+            # Measure trailing slack across active columns
+            col_slacks = []
+            for c in range(col_count):
+                col_probs = [p for p in prob_items if p.col_index == c]
+                if not col_probs:
+                    continue
+                bottom_y = max(p.y_in + p.height_in for p in col_probs)
+                col_slacks.append(printable_h - bottom_y)
+
+            if not col_slacks:
+                continue
+
+            min_slack = min(col_slacks)
+            # If the page already uses almost the whole page (slack < 0.60 in), don't scale further
+            if min_slack < 0.60:
+                continue
+
+            # Test higher font sizes for this page in 0.5pt steps
+            best_fs = current_page_fs
+            step = 0.5
+            cand_fs = round(current_page_fs + step, 1)
+
+            while cand_fs <= max_fs:
+                all_fit = True
+                for c in range(col_count):
+                    col_probs = [p for p in prob_items if p.col_index == c]
+                    if not col_probs:
+                        continue
+                    initial_y = col_probs[0].y_in
+                    total_h = 0.0
+                    for p in col_probs:
+                        fp = self.calculate_problem_footprint(
+                            p.problem,
+                            col_w,
+                            target_img_width_in=p.image_render_width_in if p.image_render_width_in > 0 else None,
+                            font_size_pt=cand_fs,
+                        )
+                        total_h += fp[1]
+                    # Ensure at least 0.18 in padding between problems in multi-item columns
+                    needed_total = initial_y + total_h + max(0, len(col_probs) - 1) * 0.18
+                    if needed_total > printable_h:
+                        all_fit = False
+                        break
+
+                if all_fit:
+                    best_fs = cand_fs
+                    cand_fs = round(cand_fs + step, 1)
+                else:
+                    break
+
+            if best_fs > current_page_fs:
+                page.font_size_pt = best_fs
+                new_placed_by_col = {}
+                for c in range(col_count):
+                    col_probs = [p for p in prob_items if p.col_index == c]
+                    if not col_probs:
+                        continue
+                    initial_y = col_probs[0].y_in
+                    avail_h = printable_h - initial_y
+
+                    batch = []
+                    for p in col_probs:
+                        fp = self.calculate_problem_footprint(
+                            p.problem,
+                            col_w,
+                            target_img_width_in=p.image_render_width_in if p.image_render_width_in > 0 else None,
+                            font_size_pt=best_fs,
+                        )
+                        batch.append((p.problem, fp))
+
+                    _, new_placed = self._distribute_column_spacing(
+                        batch,
+                        c,
+                        avail_h,
+                        initial_y,
+                        base_gap,
+                        col_w,
+                        col_gap,
+                        page.page_index,
+                        font_size_pt=best_fs,
+                    )
+                    new_placed_by_col[c] = list(new_placed)
+
+                # Reconstruct page.items preserving section headers and updated problems
+                new_items = []
+                col_pointers = {c: 0 for c in range(col_count)}
+                for item in page.items:
+                    if isinstance(item, PlacedProblem):
+                        c = item.col_index
+                        if c in new_placed_by_col and col_pointers[c] < len(new_placed_by_col[c]):
+                            new_items.append(new_placed_by_col[c][col_pointers[c]])
+                            col_pointers[c] += 1
+                        else:
+                            new_items.append(item)
+                    else:
+                        new_items.append(item)
+                page.items = new_items
+
+    def pack(self) -> RenderPlan:
+        """Executes full 2D layout bin-packing with adaptive font scaling to maximize page utilization."""
+        base_fs = self.ws.default_font_size_pt
+        auto_scale = getattr(self.ws, "auto_scale_font", True)
+        max_fs = getattr(self.ws, "max_font_size_pt", 14.0) or 14.0
+
+        # Baseline pack at default font size
+        plan = self._pack_page_layout(font_size_pt=base_fs)
+
+        if not auto_scale or max_fs <= base_fs:
+            return plan
+
+        # When content on any specific page doesn't use the whole page (remaining slack >= 0.60 in),
+        # try to increase font size on that page's problems to use up more of the page.
+        self._scale_page_fonts_to_fill_slack(plan, max_fs=max_fs)
+
+        # Final Slack Absorption (Expand images / fill workspace if any slack remains)
+        printable_h = self.ws.printable_height_in
+        printable_w = self.ws.printable_width_in
+        default_gap = self.ws.column_gap_in if self.ws.default_columns > 1 else 0.0
+        default_col_w = (printable_w - (self.ws.default_columns - 1) * default_gap) / max(1, self.ws.default_columns)
+        for page in plan.pages:
+            for col_idx in range(self.ws.default_columns):
+                self._absorb_slack_expansion(page, col_idx, printable_h, default_col_w)
+
+        return plan
 

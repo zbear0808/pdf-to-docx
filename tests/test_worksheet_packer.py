@@ -15,6 +15,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from docx import Document
 from PIL import Image, ImageDraw
 
 from worksheet_packer.worksheet_ast import (
@@ -709,6 +710,175 @@ class TestWorksheetPacker(unittest.TestCase):
         self.assertEqual(len(p3_c0), 3, "Page 3 Column 0 must have exactly 3 questions!")
         self.assertEqual(len(p3_c1), 3, "Page 3 Column 1 must have exactly 3 questions!")
         self.assertTrue(all(it.spacing_after_in > 0.15 for it in p3_probs), "Problems should be spaced out!")
+
+    def test_font_scaling_on_sparse_page(self):
+        """Verifies that when content doesn't use the whole page, font size is increased to fill space."""
+        probs = [
+            Problem(
+                id=f"q{i}",
+                number=i,
+                prompt_text=f"Evaluate the derivative of f(x) = {i}x^2 + {i*3}x - 5.",
+                workspace=WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=1.0),
+            )
+            for i in range(1, 4)
+        ]
+
+        spec = WorksheetSpec(
+            title="Calculus Derivatives Quiz",
+            default_columns=1,
+            default_font_size_pt=10.5,
+            max_font_size_pt=14.0,
+            auto_scale_font=True,
+            sections=[
+                WorksheetSection(
+                    id="sec_main",
+                    ordering=SectionOrdering.STRICT,
+                    problems=probs,
+                )
+            ],
+        )
+
+        plan = LayoutEngine(spec).pack()
+        self.assertEqual(plan.total_pages, 1)
+
+        placed_probs = [it for it in plan.pages[0].items if isinstance(it, PlacedProblem)]
+        self.assertEqual(len(placed_probs), 3)
+
+        # The font size should have scaled up from default 10.5 pt because there was ample space
+        scaled_fs = placed_probs[0].font_size_pt
+        self.assertIsNotNone(scaled_fs)
+        self.assertGreater(scaled_fs, 10.5, f"Font size should increase from 10.5 pt, got {scaled_fs}")
+        self.assertLessEqual(scaled_fs, 14.0)
+        self.assertEqual(plan.pages[0].font_size_pt, scaled_fs)
+
+        # Workspace height should be preserved
+        for p in placed_probs:
+            self.assertAlmostEqual(p.workspace_height_in, 1.0, places=2)
+
+        # Verify DOCX rendering applies the scaled font size
+        docx_path = self.temp_dir / "scaled_font.docx"
+        DocxWorksheetRenderer(plan).render(docx_path)
+        self.assertTrue(docx_path.exists())
+
+        from docx import Document
+        doc = Document(str(docx_path))
+        # Find runs in tables to ensure font size is set
+        found_scaled_run = False
+        for tbl in doc.tables:
+            for row in tbl.rows:
+                for cell in row.cells:
+                    for p in cell.paragraphs:
+                        for r in p.runs:
+                            if r.font.size and abs(r.font.size.pt - scaled_fs) < 0.1:
+                                found_scaled_run = True
+                                break
+        self.assertTrue(found_scaled_run, f"DOCX should contain runs with font size {scaled_fs} pt")
+
+        # Verify LaTeX rendering applies the scaled font size
+        tex_path = self.temp_dir / "scaled_font.tex"
+        LatexWorksheetRenderer(plan).render(tex_path, compile_pdf=False)
+        self.assertTrue(tex_path.exists())
+        tex_content = tex_path.read_text(encoding="utf-8")
+        self.assertIn(f"\\fontsize{{{scaled_fs:.1f}pt}}", tex_content)
+
+    def test_font_scaling_disabled_behavior(self):
+        """Verifies that auto_scale_font=False keeps default_font_size_pt."""
+        probs = [
+            Problem(
+                id=f"q{i}",
+                number=i,
+                prompt_text=f"Evaluate the limit as x approaches {i}.",
+                workspace=WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=1.0),
+            )
+            for i in range(1, 3)
+        ]
+
+        spec = WorksheetSpec(
+            title="Limits Quiz",
+            default_columns=1,
+            default_font_size_pt=10.5,
+            auto_scale_font=False,
+            sections=[
+                WorksheetSection(
+                    id="sec_main",
+                    ordering=SectionOrdering.STRICT,
+                    problems=probs,
+                )
+            ],
+        )
+
+        plan = LayoutEngine(spec).pack()
+        placed_probs = [it for it in plan.pages[0].items if isinstance(it, PlacedProblem)]
+        # When disabled, font_size_pt remains default 10.5 pt
+        self.assertEqual(placed_probs[0].font_size_pt, 10.5)
+
+    def test_multipart_problem_formatting_and_workspace_distribution(self):
+        """Verifies multi-part problems receive bold part letters and workspace redistribution."""
+        from worksheet_packer.worksheet_ast import parse_prompt_parts
+
+        # Test regex parser
+        sample_prompt = (
+            "Given triangle ABC with vertices on the coordinate plane:\n"
+            "a. Calculate the length of segment AB.\n"
+            "b. Find the midpoint of segment BC.\n"
+            "c. Determine the equation of the median to AC."
+        )
+        parts = parse_prompt_parts(sample_prompt)
+        self.assertEqual(len(parts), 4)
+        self.assertIsNone(parts[0][0])
+        self.assertEqual(parts[1][0], "a.")
+        self.assertEqual(parts[2][0], "b.")
+        self.assertEqual(parts[3][0], "c.")
+
+        # Test DOCX and LaTeX rendering with workspace redistribution
+        prob = Problem(
+            id="multi_1",
+            number=1,
+            prompt_text=sample_prompt,
+            workspace=WorkspaceConfig(type=WorkspaceType.BLANK, approx_height_in=1.2),
+        )
+        spec = WorksheetSpec(
+            title="Multi-Part Assessment",
+            default_columns=1,
+            default_font_size_pt=10.0,
+            sections=[
+                WorksheetSection(
+                    id="sec_main",
+                    ordering=SectionOrdering.STRICT,
+                    problems=[prob],
+                )
+            ],
+        )
+        plan = LayoutEngine(spec).pack()
+        placed = [it for it in plan.pages[0].items if isinstance(it, PlacedProblem)][0]
+        initial_ws = placed.workspace_height_in
+
+        # DOCX rendering
+        docx_path = self.temp_dir / "multipart_test.docx"
+        DocxWorksheetRenderer(plan).render(docx_path)
+        self.assertTrue(docx_path.exists())
+
+        doc = Document(docx_path)
+        # Find bold runs corresponding to sub-part letters
+        found_parts = []
+        for tbl in doc.tables:
+            for row in tbl.rows:
+                for cell in row.cells:
+                    for p in cell.paragraphs:
+                        for r in p.runs:
+                            if r.bold and r.text.strip() in ("a.", "b.", "c."):
+                                found_parts.append(r.text.strip())
+        self.assertEqual(found_parts, ["a.", "b.", "c."])
+
+        # LaTeX rendering
+        tex_path = self.temp_dir / "multipart_test.tex"
+        LatexWorksheetRenderer(plan).render(tex_path, compile_pdf=False)
+        self.assertTrue(tex_path.exists())
+        tex_content = tex_path.read_text(encoding="utf-8")
+        self.assertIn("textbf{\\color{PrimaryColor}{a.}}", tex_content)
+        self.assertIn("textbf{\\color{PrimaryColor}{b.}}", tex_content)
+        self.assertIn("textbf{\\color{PrimaryColor}{c.}}", tex_content)
+        self.assertIn(r"\par\vspace{", tex_content)
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ from .worksheet_ast import (
     Problem,
     RenderPlan,
     WorkspaceType,
+    parse_prompt_parts,
 )
 from pdf_to_latex.latex_compiler import (
     compile_tex_to_pdf,
@@ -102,15 +103,23 @@ class LatexWorksheetRenderer:
         ])
         return "\n".join(lines)
 
-    def _render_prompt_text(self, problem: Problem) -> str:
-        """Returns LaTeX-escaped text for problem prompt, preserving math."""
+    def _render_prompt_text(
+        self,
+        problem: Problem,
+        placed: Optional[PlacedProblem] = None,
+        font_size_pt: Optional[float] = None,
+    ) -> str:
+        """Returns LaTeX-escaped text for problem prompt, preserving math and styling sub-parts."""
+        fs = font_size_pt or self.ws.default_font_size_pt
         prefix = ""
         label = problem.full_label
         if label:
             prefix = f"\\textbf{{\\color{{PrimaryColor}}{{{escape_latex_text(label)}}}}} "
 
-        if problem.prompt_runs:
+        if problem.prompt_runs and not problem.prompt_text:
             parts = []
+            if prefix:
+                parts.append(prefix)
             for r in problem.prompt_runs:
                 if r.is_math:
                     math_txt = r.text.strip()
@@ -126,21 +135,89 @@ class LatexWorksheetRenderer:
                     elif r.italic:
                         t = f"\\textit{{{t}}}"
                     parts.append(t)
-            return prefix + "".join(parts)
-        else:
-            text = problem.prompt_text or ""
-            if label and text.startswith(label):
-                text = text[len(label):].strip()
-            return prefix + escape_latex_text(text)
+            content = "".join(parts)
+            if fs and abs(fs - self.ws.default_font_size_pt) >= 0.2:
+                leading = fs * 1.25
+                return f"{{\\fontsize{{{fs:.1f}pt}}{{{leading:.1f}pt}}\\selectfont {content}}}"
+            return content
 
-    def _render_choices(self, problem: Problem) -> str:
+        raw_text = problem.prompt_text or ""
+        if label and raw_text.startswith(label):
+            raw_text = raw_text[len(label):].strip()
+
+        segments = parse_prompt_parts(raw_text)
+        if not segments:
+            segments = [(None, "")]
+
+        sub_parts = [(lbl, txt) for lbl, txt in segments if lbl is not None]
+        num_sub_parts = len(sub_parts)
+
+        # Detect available space to include open space between parts
+        ws_h = placed.workspace_height_in if placed else 0.0
+        spacing_after = getattr(placed, "spacing_after_in", 0.10) if placed else 0.10
+
+        inter_part_space_pt = 3.0
+        if num_sub_parts >= 2 and not getattr(placed, "_sub_parts_spaced", False):
+            if ws_h >= 0.35 and placed and placed.problem.workspace.type in (WorkspaceType.BLANK, WorkspaceType.LINES):
+                # Distribute part of the student workspace between sub-parts
+                inter_space_in = min(0.40, max(0.12, (ws_h * 0.65) / num_sub_parts))
+                inter_part_space_pt = inter_space_in * 72.0
+                distributed_in = (num_sub_parts - 1) * inter_space_in
+                placed.workspace_height_in = max(0.15, ws_h - distributed_in)
+                placed._sub_parts_spaced = True
+                placed._inter_part_space_pt = inter_part_space_pt
+            elif spacing_after >= 0.30:
+                inter_part_space_pt = min(14.0, max(6.0, spacing_after * 24.0))
+                placed._sub_parts_spaced = True
+                placed._inter_part_space_pt = inter_part_space_pt
+        elif getattr(placed, "_sub_parts_spaced", False):
+            inter_part_space_pt = getattr(placed, "_inter_part_space_pt", 3.0)
+
+        lines_out = []
+        for idx, (part_lbl, content) in enumerate(segments):
+            part_line = ""
+            if idx == 0 and prefix:
+                part_line += prefix
+
+            if part_lbl:
+                part_bold = f"\\textbf{{\\color{{PrimaryColor}}{{{escape_latex_text(part_lbl)}}}}} "
+                if idx > 0:
+                    part_line += f"\\hspace*{{10pt}}{part_bold}"
+                else:
+                    part_line += part_bold
+
+            if content:
+                part_line += escape_latex_text(content)
+
+            lines_out.append(part_line)
+
+        if len(lines_out) > 1:
+            sep = f"\\par\\vspace{{{inter_part_space_pt:.1f}pt}}\n"
+            content = sep.join(lines_out)
+        else:
+            content = lines_out[0] if lines_out else ""
+
+        if fs and abs(fs - self.ws.default_font_size_pt) >= 0.2:
+            leading = fs * 1.25
+            return f"{{\\fontsize{{{fs:.1f}pt}}{{{leading:.1f}pt}}\\selectfont {content}}}"
+        return content
+
+    def _render_choices(self, problem: Problem, font_size_pt: Optional[float] = None) -> str:
         """Renders multiple choice options using enumerate."""
         if not problem.choices:
             return ""
+        font_cmd = ""
+        if font_size_pt and abs(font_size_pt - self.ws.default_font_size_pt) >= 0.2:
+            leading = font_size_pt * 1.25
+            font_cmd = f"\\fontsize{{{font_size_pt:.1f}pt}}{{{leading:.1f}pt}}\\selectfont "
+
         lines = ["\\begin{enumerate}[label=(\\Alph*),itemsep=1pt,topsep=2pt,leftmargin=18pt]"]
         for ch in problem.choices:
             c_text = escape_latex_text(ch.text)
-            lines.append(f"  \\item {c_text}")
+            if font_cmd:
+                lines.append(f"  \\item {{{font_cmd}{c_text}}}")
+            else:
+                lines.append(f"  \\item {c_text}")
         lines.append("\\end{enumerate}")
         return "\n".join(lines)
 
@@ -170,8 +247,9 @@ class LatexWorksheetRenderer:
         """Renders side-by-side text (62%) and image (35%) via minipage."""
         prob = placed.problem
         img = prob.image
-        prompt = self._render_prompt_text(prob)
-        choices = self._render_choices(prob)
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
+        prompt = self._render_prompt_text(prob, placed=placed, font_size_pt=fs)
+        choices = self._render_choices(prob, font_size_pt=fs)
         workspace = self._render_workspace(placed)
 
         img_include = ""
@@ -211,8 +289,9 @@ class LatexWorksheetRenderer:
         """Renders stacked problem: text, centered image, workspace."""
         prob = placed.problem
         img = prob.image
-        prompt = self._render_prompt_text(prob)
-        choices = self._render_choices(prob)
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
+        prompt = self._render_prompt_text(prob, placed=placed, font_size_pt=fs)
+        choices = self._render_choices(prob, font_size_pt=fs)
         workspace = self._render_workspace(placed)
 
         lines = [
@@ -242,8 +321,9 @@ class LatexWorksheetRenderer:
     def _render_text_only_problem(self, placed: PlacedProblem) -> str:
         """Renders text-only problem."""
         prob = placed.problem
-        prompt = self._render_prompt_text(prob)
-        choices = self._render_choices(prob)
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
+        prompt = self._render_prompt_text(prob, placed=placed, font_size_pt=fs)
+        choices = self._render_choices(prob, font_size_pt=fs)
         workspace = self._render_workspace(placed)
 
         lines = [

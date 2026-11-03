@@ -7,7 +7,8 @@ image attachments, workspace budgeting, and layout decisions for space-efficient
 
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+import re
+from typing import Any, Dict, List, Optional, Tuple, Union
 from pydantic import BaseModel, Field, model_validator
 
 # Re-use foundational typography types from the core IR schema
@@ -147,6 +148,42 @@ class Problem(BaseModel):
         return prefix.strip()
 
 
+PART_PREFIX_RE = re.compile(
+    r"^([a-zA-Z][\.\)]|\([a-zA-Z]\)|(?:i{1,3}|iv|v|vi{0,3}|ix|x)[\.\)]|\((?:i{1,3}|iv|v|vi{0,3}|ix|x)\))\s+(.*)$"
+)
+
+
+def parse_prompt_parts(text: str) -> List[Tuple[Optional[str], str]]:
+    """Splits a question prompt into logical paragraphs and extracts sub-part labels.
+    
+    Returns:
+        List of (part_label, text_content).
+        part_label is non-empty (e.g. 'a.', '(b)') if this line starts a sub-part,
+        or None for intro/general prompt text.
+    """
+    if not text:
+        return []
+
+    # Normalize inline sub-part breaks if not already newline-separated
+    normalized = re.sub(r'(?<=[.!?])\s+([a-zA-Z][\.\)]\s+)', r'\n\1', text)
+    lines = normalized.split("\n")
+    results = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        m = PART_PREFIX_RE.match(stripped)
+        if m:
+            label = m.group(1).strip()
+            content = m.group(2).strip()
+            results.append((label, content))
+        else:
+            results.append((None, stripped))
+
+    return results
+
+
 class WorksheetSection(BaseModel):
     """Named grouping of problems with distinct layout or ordering rules."""
     id: str
@@ -181,6 +218,8 @@ class WorksheetSpec(BaseModel):
     theme_hex: str = "#1F4E79"
     default_font: str = "Calibri"
     default_font_size_pt: float = 10.5
+    max_font_size_pt: float = 14.0
+    auto_scale_font: bool = True
     sections: List[WorksheetSection] = Field(default_factory=list)
 
     @property
@@ -208,6 +247,7 @@ class PlacedProblem(BaseModel):
     text_render_height_in: float = 0.0
     workspace_height_in: float = 0.0
     spacing_after_in: float = 0.10
+    font_size_pt: Optional[float] = None
 
 
 class PlacedSectionHeader(BaseModel):
@@ -228,6 +268,7 @@ class PlacedPage(BaseModel):
     """A single page containing positioned items."""
     page_index: int
     items: List[PlacedItem] = Field(default_factory=list)
+    font_size_pt: Optional[float] = None
 
 
 class RenderPlan(BaseModel):

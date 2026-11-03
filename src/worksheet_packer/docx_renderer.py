@@ -22,6 +22,7 @@ from .worksheet_ast import (
     Problem,
     RenderPlan,
     WorkspaceType,
+    parse_prompt_parts,
 )
 from pdf_to_docx.docx_compiler import hex_to_rgb
 
@@ -244,18 +245,33 @@ class DocxWorksheetRenderer:
         p_sep_run.font.size = Pt(8)
         p_sep_run.font.color.rgb = RGBColor(0xCC, 0xCC, 0xCC)
 
-    def _apply_prompt_text(self, paragraph, problem: Problem) -> None:
-        """Adds question number prefix and styled prompt runs to a paragraph."""
-        label = problem.full_label
-        if label:
-            r_lbl = paragraph.add_run(f"{label} ")
-            r_lbl.bold = True
-            r_lbl.font.color.rgb = hex_to_rgb(self.ws.theme_hex)
+    def _apply_prompt_text(
+        self,
+        container_or_paragraph,
+        problem: Problem,
+        placed: Optional[PlacedProblem] = None,
+        font_size_pt: Optional[float] = None,
+    ) -> None:
+        """Adds question number prefix, bold sub-part letters, and styled prompt runs to cell or paragraph."""
+        fs = font_size_pt or self.ws.default_font_size_pt
+        theme_rgb = hex_to_rgb(self.ws.theme_hex)
 
-        if problem.prompt_runs:
+        is_cell = hasattr(container_or_paragraph, "paragraphs")
+        first_p = container_or_paragraph.paragraphs[0] if is_cell else container_or_paragraph
+        cell = container_or_paragraph if is_cell else None
+
+        label = problem.full_label
+
+        if problem.prompt_runs and not problem.prompt_text:
+            if label:
+                r_lbl = first_p.add_run(f"{label} ")
+                r_lbl.bold = True
+                r_lbl.font.color.rgb = theme_rgb
+                r_lbl.font.size = Pt(fs)
+
             for r_spec in problem.prompt_runs:
                 clean_txt = clean_math_text_for_docx(r_spec.text)
-                r = paragraph.add_run(clean_txt)
+                r = first_p.add_run(clean_txt)
                 r.bold = r_spec.bold
                 r.italic = r_spec.italic
                 r.underline = r_spec.underline
@@ -264,15 +280,91 @@ class DocxWorksheetRenderer:
                     r.italic = True
                 if r_spec.color_hex:
                     r.font.color.rgb = hex_to_rgb(r_spec.color_hex)
-        else:
-            text = problem.prompt_text or ""
-            # Strip label if duplicated in raw text
-            if label and text.startswith(label):
-                text = text[len(label):].strip()
-            clean_txt = clean_math_text_for_docx(text)
-            paragraph.add_run(clean_txt)
+                r_fs = r_spec.font_size_pt or fs
+                r.font.size = Pt(r_fs)
+            return
 
-    def _apply_choices(self, container_cell, problem: Problem) -> None:
+        raw_text = problem.prompt_text or ""
+        if label and raw_text.startswith(label):
+            raw_text = raw_text[len(label):].strip()
+
+        segments = parse_prompt_parts(raw_text)
+        if not segments:
+            segments = [(None, "")]
+
+        sub_parts = [(lbl, txt) for lbl, txt in segments if lbl is not None]
+        num_sub_parts = len(sub_parts)
+
+        # Detect available space to include open space between parts
+        ws_h = placed.workspace_height_in if placed else 0.0
+        spacing_after = getattr(placed, "spacing_after_in", 0.10) if placed else 0.10
+
+        inter_part_space_pt = 3.0
+        if num_sub_parts >= 2 and cell is not None and not getattr(placed, "_sub_parts_spaced", False):
+            if ws_h >= 0.35 and placed and placed.problem.workspace.type in (WorkspaceType.BLANK, WorkspaceType.LINES):
+                # Distribute part of the student workspace between sub-parts
+                inter_space_in = min(0.40, max(0.12, (ws_h * 0.65) / num_sub_parts))
+                inter_part_space_pt = inter_space_in * 72.0
+                distributed_in = (num_sub_parts - 1) * inter_space_in
+                placed.workspace_height_in = max(0.15, ws_h - distributed_in)
+                placed._sub_parts_spaced = True
+                placed._inter_part_space_pt = inter_part_space_pt
+            elif spacing_after >= 0.30:
+                inter_part_space_pt = min(14.0, max(6.0, spacing_after * 24.0))
+                placed._sub_parts_spaced = True
+                placed._inter_part_space_pt = inter_part_space_pt
+        elif getattr(placed, "_sub_parts_spaced", False):
+            inter_part_space_pt = getattr(placed, "_inter_part_space_pt", 3.0)
+
+        for idx, (part_lbl, content) in enumerate(segments):
+            if idx == 0:
+                p = first_p
+                p.paragraph_format.space_before = Pt(0)
+                p.paragraph_format.space_after = Pt(2 if part_lbl is None else inter_part_space_pt)
+
+                if label:
+                    r_lbl = p.add_run(f"{label} ")
+                    r_lbl.bold = True
+                    r_lbl.font.color.rgb = theme_rgb
+                    r_lbl.font.size = Pt(fs)
+
+                if part_lbl:
+                    r_part = p.add_run(f"{part_lbl} ")
+                    r_part.bold = True
+                    r_part.font.color.rgb = theme_rgb
+                    r_part.font.size = Pt(fs)
+
+                if content:
+                    clean_c = clean_math_text_for_docx(content)
+                    r_txt = p.add_run(clean_c)
+                    r_txt.font.size = Pt(fs)
+            else:
+                if cell is not None:
+                    p = cell.add_paragraph()
+                else:
+                    first_p.add_run("\n")
+                    p = first_p
+
+                if part_lbl:
+                    if cell is not None:
+                        p.paragraph_format.left_indent = Inches(0.15)
+                        p.paragraph_format.space_before = Pt(2)
+                        p.paragraph_format.space_after = Pt(inter_part_space_pt if idx < len(segments) - 1 else 2)
+                    r_part = p.add_run(f"{part_lbl} ")
+                    r_part.bold = True
+                    r_part.font.color.rgb = theme_rgb
+                    r_part.font.size = Pt(fs)
+                else:
+                    if cell is not None:
+                        p.paragraph_format.space_before = Pt(1)
+                        p.paragraph_format.space_after = Pt(2)
+
+                if content:
+                    clean_c = clean_math_text_for_docx(content)
+                    r_txt = p.add_run(clean_c)
+                    r_txt.font.size = Pt(fs)
+
+    def _apply_choices(self, container_cell, problem: Problem, font_size_pt: Optional[float] = None) -> None:
         """Appends multiple choice options to a cell."""
         if not problem.choices:
             return
@@ -283,15 +375,22 @@ class DocxWorksheetRenderer:
             p.paragraph_format.space_after = Pt(1)
             r_lbl = p.add_run(f"{ch.label} ")
             r_lbl.bold = True
+            if font_size_pt:
+                r_lbl.font.size = Pt(font_size_pt)
             if ch.runs:
                 for r_spec in ch.runs:
                     clean_c = clean_math_text_for_docx(r_spec.text)
                     r = p.add_run(clean_c)
                     r.bold = r_spec.bold
                     r.italic = r_spec.italic
+                    r_fs = r_spec.font_size_pt or font_size_pt
+                    if r_fs:
+                        r.font.size = Pt(r_fs)
             else:
                 clean_c = clean_math_text_for_docx(ch.text)
-                p.add_run(clean_c)
+                r = p.add_run(clean_c)
+                if font_size_pt:
+                    r.font.size = Pt(font_size_pt)
 
     def _render_workspace_in_cell(self, cell, placed: PlacedProblem) -> None:
         """Renders answer lines or response box in designated cell."""
@@ -332,9 +431,10 @@ class DocxWorksheetRenderer:
             # Clean empty whitespace for student work (no blank underlines)
             h_pt = max(14.0, placed.workspace_height_in * 72.0)
             p.paragraph_format.space_before = Pt(0)
-            p.paragraph_format.space_after = Pt(h_pt)
+            p.paragraph_format.line_spacing = Pt(1)
+            p.paragraph_format.space_after = Pt(max(4.0, h_pt - 8.0))
 
-    def _render_side_by_side_problem(self, placed: PlacedProblem) -> None:
+    def _render_side_by_side_problem(self, placed: PlacedProblem, has_next_in_column: bool = True) -> None:
         """Renders Layout A: Side-by-side text (left) and diagram (right) in an invisible table."""
         prob = placed.problem
         img = prob.image
@@ -362,12 +462,13 @@ class DocxWorksheetRenderer:
         set_cell_padding(table.cell(0, 1), top=20, bottom=20, left=20, right=20)
 
         # Row 0, Cell 0: Question Text + Choices
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
         c_text = table.cell(0, 0)
         p_text = c_text.paragraphs[0]
         p_text.paragraph_format.space_before = Pt(0)
         p_text.paragraph_format.space_after = Pt(2)
-        self._apply_prompt_text(p_text, prob)
-        self._apply_choices(c_text, prob)
+        self._apply_prompt_text(c_text, prob, placed=placed, font_size_pt=fs)
+        self._apply_choices(c_text, prob, font_size_pt=fs)
 
         # Row 0, Cell 1: Image
         c_img = table.cell(0, 1)
@@ -397,13 +498,14 @@ class DocxWorksheetRenderer:
             set_cell_padding(c_work, top=20, bottom=20, left=20, right=20)
             self._render_workspace_in_cell(c_work, placed)
 
-        # Inter-problem spacing paragraph
-        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
-        p_space = self.doc.add_paragraph()
-        p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(space_pt)
+        # Inter-problem spacing paragraph (only between problems in the same column)
+        if has_next_in_column:
+            space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
+            p_space = self.doc.add_paragraph()
+            p_space.paragraph_format.space_before = Pt(0)
+            p_space.paragraph_format.space_after = Pt(space_pt)
 
-    def _render_stacked_problem(self, placed: PlacedProblem) -> None:
+    def _render_stacked_problem(self, placed: PlacedProblem, has_next_in_column: bool = True) -> None:
         """Renders Layout B: Stacked text (top), diagram (middle), workspace (bottom)."""
         prob = placed.problem
         img = prob.image
@@ -424,12 +526,13 @@ class DocxWorksheetRenderer:
             set_cell_padding(table.cell(r_idx, 0), top=20, bottom=20, left=20, right=20)
 
         # Row 0: Text + choices
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
         c_text = table.cell(0, 0)
         p_text = c_text.paragraphs[0]
         p_text.paragraph_format.space_before = Pt(0)
         p_text.paragraph_format.space_after = Pt(2)
-        self._apply_prompt_text(p_text, prob)
-        self._apply_choices(c_text, prob)
+        self._apply_prompt_text(c_text, prob, placed=placed, font_size_pt=fs)
+        self._apply_choices(c_text, prob, font_size_pt=fs)
 
         # Row 1: Centered diagram
         c_img = table.cell(1, 0)
@@ -454,12 +557,13 @@ class DocxWorksheetRenderer:
             c_work = table.cell(2, 0)
             self._render_workspace_in_cell(c_work, placed)
 
-        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
-        p_space = self.doc.add_paragraph()
-        p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(space_pt)
+        if has_next_in_column:
+            space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
+            p_space = self.doc.add_paragraph()
+            p_space.paragraph_format.space_before = Pt(0)
+            p_space.paragraph_format.space_after = Pt(space_pt)
 
-    def _render_text_only_problem(self, placed: PlacedProblem) -> None:
+    def _render_text_only_problem(self, placed: PlacedProblem, has_next_in_column: bool = True) -> None:
         """Renders text-only problem inside an atomic invisible table."""
         prob = placed.problem
         col_w = placed.width_in
@@ -472,14 +576,15 @@ class DocxWorksheetRenderer:
         for row in table.rows:
             make_row_cant_split(row)
 
+        fs = placed.font_size_pt or self.ws.default_font_size_pt
         c_text = table.cell(0, 0)
         set_cell_width(c_text, col_w)
         set_cell_padding(c_text, top=20, bottom=20, left=20, right=20)
         p_text = c_text.paragraphs[0]
         p_text.paragraph_format.space_before = Pt(0)
         p_text.paragraph_format.space_after = Pt(2)
-        self._apply_prompt_text(p_text, prob)
-        self._apply_choices(c_text, prob)
+        self._apply_prompt_text(c_text, prob, placed=placed, font_size_pt=fs)
+        self._apply_choices(c_text, prob, font_size_pt=fs)
 
         if has_workspace:
             table.rows[1].height = Pt(max(14.0, placed.workspace_height_in * 72.0))
@@ -488,10 +593,11 @@ class DocxWorksheetRenderer:
             set_cell_padding(c_work, top=20, bottom=20, left=20, right=20)
             self._render_workspace_in_cell(c_work, placed)
 
-        space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
-        p_space = self.doc.add_paragraph()
-        p_space.paragraph_format.space_before = Pt(0)
-        p_space.paragraph_format.space_after = Pt(space_pt)
+        if has_next_in_column:
+            space_pt = max(4.0, getattr(placed, "spacing_after_in", 0.10) * 72.0)
+            p_space = self.doc.add_paragraph()
+            p_space.paragraph_format.space_before = Pt(0)
+            p_space.paragraph_format.space_after = Pt(space_pt)
 
     def _render_section_header(self, header: PlacedSectionHeader) -> None:
         """Renders section title and instructions."""
@@ -529,7 +635,7 @@ class DocxWorksheetRenderer:
                 self.doc.add_page_break()
 
             current_col = 0
-            for item in page.items:
+            for idx, item in enumerate(page.items):
                 if isinstance(item, PlacedSectionHeader):
                     self._render_section_header(item)
                 elif isinstance(item, PlacedProblem):
@@ -539,15 +645,21 @@ class DocxWorksheetRenderer:
                         p_break.paragraph_format.space_after = Pt(0)
                         p_break.paragraph_format.line_spacing = Pt(1)
                         run = p_break.add_run()
+                        run.font.size = Pt(1)
                         run.add_break(WD_BREAK.COLUMN)
                         current_col = item.col_index
 
+                    next_in_col = any(
+                        isinstance(other, PlacedProblem) and other.col_index == item.col_index
+                        for other in page.items[idx + 1 :]
+                    )
+
                     if item.layout == LayoutDecision.SIDE_BY_SIDE:
-                        self._render_side_by_side_problem(item)
+                        self._render_side_by_side_problem(item, has_next_in_column=next_in_col)
                     elif item.layout == LayoutDecision.STACKED:
-                        self._render_stacked_problem(item)
+                        self._render_stacked_problem(item, has_next_in_column=next_in_col)
                     else:
-                        self._render_text_only_problem(item)
+                        self._render_text_only_problem(item, has_next_in_column=next_in_col)
 
         self.doc.save(str(out_path))
         return out_path
