@@ -111,10 +111,13 @@ Always record the provenance of extracted course material at the top of the comp
 
 ---
 
-## 5. Retake & Variant Problem Generation Guidelines
+## 5. Retake & Variant Problem Generation Guidelines (Exam Integrity)
 
-When adapting extracted items into a retake exam or paired practice worksheet:
-- **Mirror Problem Structure:** Keep the underlying cognitive skill and question archetype identical to the source item.
-- **Change Parameter Values:** Swap numerical constants, variable names, or context details while keeping the mathematical or logical complexity consistent.
-- **Form A / Form B Consistency:** When working with Geometry, inspect both Form A and Form B in the `Assessments` folder to see the exact pattern of variation between versions before drafting a retake or variant.
-- **Preserve Verified Keys:** Every new or adapted problem must include a verified step-by-step solution and answer key.
+> [!IMPORTANT]
+> **STRICT EXAM INTEGRITY RULE — NO VERBATIM COPYING FROM ACTUAL EXAMS:**
+> When source documents include an **actual exam** given to students (e.g. Unit Tests, Mid-Unit Exams, Semester Finals):
+> - **Never copy questions exactly or verbatim** into review packets, practice tests, or retakes.
+> - **Mirror the Cognitive Skill**: Keep the targeted standard, cognitive demand level, and question archetype identical.
+> - **Vary Parameters & Scenarios**: Substantially change numerical constants, coordinate values, geometric orientations, variable names, and contextual story problems so students cannot simply memorize answers.
+> - **Form A / Form B Consistency**: In Geometry, study both Form A and Form B in the `Assessments` folder to learn the intended variation scheme (e.g., swapping a translation vector or rotation angle) before generating parallel items.
+> - **Preserve Verified Keys**: Every adapted problem must include a verified step-by-step solution.
