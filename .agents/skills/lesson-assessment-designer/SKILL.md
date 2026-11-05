@@ -76,7 +76,30 @@ Every lesson plan, worksheet, or assessment must explicitly anchor in the follow
 
 ---
 
-### C. Official Planning Templates & Evaluation Rubrics
+### C. Multilingual Learner (MLL) Scaffolding & Disciplinary Literacy (EDTEP 575)
+* **Moschkovich (2013) — Mathematics, the Common Core, and Language**
+  * *Focus*: Language as an asset; prioritizing mathematical reasoning/meaning over grammatical form; multimodal communication.
+  * [02-jmoschkovich-math-final_bound-with-appendix-(7).pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/02-jmoschkovich-math-final_bound-with-appendix-(7).pdf)
+* **Roberts et al. (2022) — Three Ways to Enhance Tasks for Multilingual Learners**
+  * *Focus*: Connecting multiple representations, unpacking polysemous words/language obstacles, and real-world contextualization.
+  * [[23300582---mathematics-teacher_-learning-and-teaching-pk-12]-three-ways-to-enhance-tasks-for-multilingual-learners.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/%5B23300582---mathematics-teacher_-learning-and-teaching-pk-12%5D-three-ways-to-enhance-tasks-for-multilingual-learners.pdf)
+* **García et al. (2017) — The Translanguaging Classroom**
+  * *Focus*: Leveraging students' complete unitary linguistic repertoire for rough-draft talk, peer collaboration, and sense-making.
+  * [garci'a,-ibarra-johnson-&-seltzer-(2017)_ch.-1pdf.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/garci'a,-ibarra-johnson-&-seltzer-(2017)_ch.-1pdf.pdf)
+* **WIDA Framework & Can-Do Descriptors (Grades 9–12)**
+  * *Focus*: Word, Sentence, and Discourse dimensions of academic language; Recount, Explain, Argue, Discuss.
+  * [wida_features_of_academic_language.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/wida_features_of_academic_language.pdf)
+  * [cando-keyuses-gr-9-12.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/cando-keyuses-gr-9-12.pdf)
+* **Accountable Talk & Scaffolding Routines (3-Reads & Rodriguez-Mojica)**
+  * *Focus*: De-escalating reading barriers through structured word problem reading; tiered sentence frames for justification.
+  * [3-reads.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/3-reads.pdf)
+  * [accountable-talk-sourcebook_2016_pp.21---27_teacher-moves-only.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/accountable-talk-sourcebook_2016_pp.21---27_teacher-moves-only.pdf)
+  * [rodriguez-mojica-2018---sentence-stems-that-support-reading-comprehension.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/rodriguez-mojica-2018---sentence-stems-that-support-reading-comprehension.pdf)
+  * *Dedicated Skill Link*: [`mll-literacy-scaffolding`](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/mll-literacy-scaffolding/SKILL.md)
+
+---
+
+### D. Official Planning Templates & Evaluation Rubrics
 * **Math Lesson Plan Template (Three-Phase: Launch $\to$ Explore $\to$ Summarize)**:
   * [MathLessonPlanTemplateFall2026.docx](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-583-a-au-26_-teaching-mathematics-in-the-secondary-school-ii/google_drive/Fall_2026/Week_3/MathLessonPlanTemplateFall2026.docx)
 * **Backward Planning Unit Template (UbD Stages 1, 2, 3)**:
@@ -90,10 +113,10 @@ Every lesson plan, worksheet, or assessment must explicitly anchor in the follow
 
 ## 2. Classroom & Student Profile Grounding
 
-Always ground outputs in the specific course context (see [classroom-context](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/classroom-context/SKILL.md)):
+Always ground outputs in the specific course context (see [classroom-context](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/classroom-context/SKILL.md) and [mll-literacy-scaffolding](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/mll-literacy-scaffolding/SKILL.md)):
 - **Franklin High School, Room 105** (Teacher: Zubair Ahmed).
-- **Period 4 (Geometry)**: High proportion of Multilingual Learners (MLLs). Needs multimodal representations, color-coded geometric diagrams, structured talk protocols (think-pair-share, whiteboards), and explicit language scaffolds (sentence stems, word walls).
-- **Period 5 (AP Statistics)**: Advanced elective; conceptual understanding before formulas; statistical argumentation; AP CED alignment (SOCS, inference, probability modeling); contextual data literacy.
+- **Period 4 (Geometry)**: High proportion of Multilingual Learners (MLLs). Needs multimodal representations, color-coded geometric diagrams, structured talk protocols (Turn & Talk, Accountable Talk, whiteboards), translanguaging opportunities (García et al., 2017), 3-Reads routines for word problems, and explicit language scaffolds (tiered sentence frames per Rodriguez-Mojica, 2018; unpacking polysemous words per Roberts et al., 2022).
+- **Period 5 (AP Statistics)**: Advanced elective; conceptual understanding before formulas; statistical argumentation; AP CED alignment (SOCS, inference, probability modeling); contextual data literacy; WIDA-aligned disciplinary writing supports for FRQs.
 - **Period 6 (AP Computer Science A)**: Tracing, algorithm design, debugging resilience, pair programming, decomposing abstract concepts.
 
 ---
@@ -184,23 +207,8 @@ Follow the **EDTEP 583 Math Lesson Plan Framework** (`MathLessonPlanTemplateFall
 ## 4. Quality Checklist & Verification Rules
 
 Before finalizing any lesson plan, worksheet, or assessment:
-- [ ] **Exam Integrity Check**: If based on an actual active exam, verify that NO questions or numbers are copied verbatim. Problem structures must mirror the target skills with fresh parameters and contexts.
 - [ ] **Cognitive Demand Check**: Does the lesson allow students to reason mathematically, or is it merely recipe following?
 - [ ] **Equity & Access Check**: Are there multimodal scaffolds (visual, verbal, symbolic) for MLL students?
 - [ ] **Assessment Alignment**: Does every assessment item directly measure a stated Stage 1 learning objective?
 - [ ] **Distractor Audit**: Are multiple-choice distractors grounded in diagnostic student misconceptions?
 - [ ] **Rubric Clarity**: Are rubric criteria qualitative, objective, and transparent to students?
-
----
-
-## 5. Accompanying Production Skills & Multi-Agent Pipeline
-
-To build, compile, and publish classroom-ready materials into Word (`.docx`) and LaTeX (`.pdf`), pair this pedagogical skill with the accompanying production skills:
-
-- **Master Orchestrator**: [`assessment-builder`](file:///.agents/skills/assessment-builder/SKILL.md) — Coordinates the full 8-step pipeline using isolated subagents to prevent context bloat.
-- **Content Ingestion**: [`course-content-extractor`](file:///.agents/skills/course-content-extractor/SKILL.md) — Locates and ingests source exams, practice tests, and lesson keys without hallucination.
-- **Authentic Phrasing & De-fluffing**: [`authentic-writer`](file:///.agents/skills/authentic-writer/SKILL.md) & [`critical-checker`](file:///.agents/skills/critical-checker/SKILL.md) — Strips AI writing tropes, eliminates em dashes, and ensures direct human question stems.
-- **Visuals & Diagram Generation**: [`curriculum-visual-generator`](file:///.agents/skills/curriculum-visual-generator/SKILL.md) — Generates crisp 300 DPI coordinate grids, geometry figures, and stats plots using Python scripts.
-- **2D Bin-Packing Layout**: [`worksheet-packer`](file:///.agents/skills/worksheet-packer/SKILL.md) — Packs problem ASTs with side-by-side tables and clean whitespace budgeting into Word and LaTeX.
-- **Visual & Layout Audit**: [`visual-layout-checker`](file:///.agents/skills/visual-layout-checker/SKILL.md) — Critically checks rendered page PNGs for diagram legibility, alignment, column symmetry, and overflow prevention.
-

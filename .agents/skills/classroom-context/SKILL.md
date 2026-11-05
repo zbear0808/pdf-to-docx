@@ -1,65 +1,77 @@
 ---
 name: classroom-context
-description: Provides foundational classroom, school, schedule, and student demographic context for Franklin High School (Room 115, Period 4 Geometry with high MLL population, Period 5 AP Statistics, Period 6 AP Computer Science). Use whenever drafting or revising worksheets, tests, retakes, and lesson plans.
+description: Provides foundational classroom, school, schedule, and student demographic context for Franklin High School (room 105, Period 4 Geometry with high MLL population, Period 5 AP Statistics, Period 6 AP Computer Science). Use this skill whenever drafting or revising course reflections, lesson plans, unit plans, assessments, practicum logs, or coursework that requires classroom-specific context or student demographic details.
 ---
 
 # Classroom Context & Teaching Profile: Franklin High School
 
-This skill provides the factual classroom context, instructional environment, course breakdown, and student demographics for Zubair Ahmed's secondary teaching placement and classroom document creation.
+This skill provides the factual classroom context, instructional environment, course breakdown, and student demographics for Zubair Ahmed's secondary teaching placement and coursework reflections.
 
 ---
 
 ## 1. School & Classroom Details
 
-- **School:** Franklin High School
-- **Room:** Room 115
-- **Teacher:** Zubair Ahmed
-- **Role / Program:** Secondary Teacher Education Program (STEP) / Secondary Mathematics & Computer Science Teacher
+* **School:** Franklin High School
+* **Room:** room 105
+* **Teacher:** Zubair Ahmed
+* **Role / Program:** Secondary Teacher Education Program (STEP) / Secondary Mathematics Teacher
 
 ---
 
 ## 2. Daily Schedule & Course Profiles
 
-### Period 4: High School Geometry
-- **Course Material Hub:** `C:\Users\zubair\OneDrive - Seattle School District No. 1\Gatti, Julianne O's files - 00 Geometry`
-  - Unit folders (e.g., `Unit 1\`, etc.) contain `Assessments\` (Form A, Form B, Answer Keys, Progress Checks) and `Unit 1 Student Notes and Practice Problems\`.
-- **Demographics & Background:**
-  - High proportion of Multilingual Learner (MLL) students.
-  - Diverse linguistic backgrounds and varying English language proficiency.
-  - Wide range of prior formal schooling experiences and mathematical backgrounds.
-- **Instructional Focus for Documents & Worksheets:**
-  - **Linguistic Accessibility:** Low reading load, concise sentences, explicit vocabulary routines, and minimal idiom or cultural jargon.
-  - **Visual Scaffolding:** Heavy reliance on clear diagrams, labeled angle arcs, geometric manipulatives, coordinate grids, and color-coded components.
-  - **Structured Problem Solving:** Step-by-step scaffolds, labeled workspace areas, and clear question prompts that separate mathematical skill from reading complexity.
+### Period 4: Geometry
+* **Course:** High School Geometry
+* **Demographics & Student Background:**
+  * High proportion of Multilingual Learner (MLL) students.
+  * Diverse linguistic backgrounds and varying levels of English language proficiency.
+  * Wide range of prior formal schooling experiences and mathematics background.
+* **Instructional Focus & Pedagogical Scaffolds (Synthesizing EDTEP 575):**
+  * **Language Scaffolding & Disciplinary Literacy:** Explicit vocabulary routines, unpacking polysemous words (Roberts et al., 2022), word walls, tiered sentence frames (Rodriguez-Mojica, 2018), and graphic organizers (Frayer models, CER).
+  * **Translanguaging & Meaning-First Approach:** Honoring home languages as an intellectual resource (García et al., 2017; Moschkovich, 2013). Prioritizing mathematical sense-making and rough-draft talk over initial grammatical perfection.
+  * **Structured Reading Protocol (3-Reads):** Scaffolding word problems via 3-Reads (Read 1: Context/no numbers, Read 2: Quantities, Read 3: Mathematical questions) to dismantle reading barriers without diluting cognitive demand.
+  * **Multimodal Representations:** Heavy use of visual diagrams, color-coding, geometric manipulatives, interactive sketches (e.g., GeoGebra/Desmos), and physical models.
+  * **Peer Discourse & Low-Stakes Talk:** Structured partner talk (Turn & Talk, Accountable Talk teacher moves), desk whiteboards for group collaboration, and collective problem-solving to lower affective filters.
+  * **Asset-Based Mindset:** Honoring students' home languages, non-verbal geometric intuition, and collaborative cultural orientations (Hammond's collectivist framework) rather than viewing language learning as a deficit.
+  * *Canonical Reading Reference*: See [`mll-literacy-scaffolding`](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/mll-literacy-scaffolding/SKILL.md).
 
 ### Period 5: AP Statistics
-- **Course Material Hubs:**
-  - **Lesson Plans & Handouts (Math Medic):** `C:\Users\zubair\Documents\GitHub\mathmedic-extractor\export\mathmedic\ap-statistics` (`Unit_01_Analyzing_Data` through `Unit_10_Two-Variable_Data`, including `lessons/`, `lesson_keys/`, `lessons_with_quicknotes/`, `quicknotes_images/`, `additional_media/`).
-  - **Official Exam & FRQ Question Bank (Stats Archive):** `C:\Users\zubair\Documents\GitHub\stats-archive` (`02_Free_Response_Questions_by_Year\` with FRQ questions and scoring rubrics from 1997–2024; `01_Full_Official_Exams\` with released MCQ exams).
-- **Demographics & Background:**
-  - Advanced elective course (College Board CED aligned).
-  - Students have largely self-selected into the course with high academic confidence.
-- **Instructional Focus for Documents & Assessments:**
-  - **Statistical Literacy & Precision:** Formal AP-style justifications emphasizing Context, Direction, and Units (CDU).
-  - **Authentic Data Sets:** Real-world contexts (e.g., medical trials, sports performance, survey responses) with realistic sample distributions.
-  - **AP Rubric Alignment:** Multi-part Free Response Questions (FRQs) with explicit Essential / Partially / Incorrect (E / P / I) scoring rubrics.
+* **Course:** Advanced Placement Statistics (College Board aligned)
+* **Demographics & Student Background:**
+  * Advanced elective course.
+  * Students have largely self-selected into the course.
+  * Students generally have stronger academic track records and higher academic confidence.
+  * Low proportion of MLL students compared to Geometry.
+* **Instructional Focus & Pedagogical Priorities:**
+  * **Statistical Literacy & Communication:** Developing precise statistical writing and formal justifications (AP rubric standards: context, direction, units, hypotheses, conditions).
+  * **Conceptual Depth:** Moving beyond rote formula application to genuine data interpretation, simulation, and inference logic (CED Big Ideas: VAR, UNC, DAT).
+  * **Critical Thinking & Authentic Contexts:** Analyzing real-world datasets, experimental designs, and sampling bias. Addressing perfectionism or procedural dependency by fostering genuine inquiry and tolerance for ambiguity.
 
-### Period 6: AP Computer Science (CodeHS / AP CS A)
-- **Course Material Hub:** Local repository folders (e.g., `codehs_unit1_retake`, `lesson_1_21_streamlined`, `unit_1_review_aligned`, etc.).
-- **Demographics & Background:**
-  - Advanced elective course focused on Java, object-oriented design, and algorithms.
-  - Self-selected cohort with high motivation in STEM/computing.
-- **Instructional Focus for Documents & Assessments:**
-  - **Code Readability & Exact Syntax:** Standard Java conventions matching AP CS A and CodeHS unit progressions.
-  - **Code Tracing & Debugging:** Tables for tracing variable state across loops and conditional branches.
-  - **Demystifying Intimidation:** Clear, accessible problem contexts without artificial corporate jargon.
+### Period 6: AP Computer Science
+* **Course:** Advanced Placement Computer Science (AP CS A / AP CSP)
+* **Demographics & Student Background:**
+  * Advanced elective course.
+  * Self-selected cohort with high academic motivation and interest in STEM/computing.
+  * Lower proportion of MLL students.
+* **Instructional Focus & Pedagogical Priorities:**
+  * **Computational Thinking:** Algorithmic decomposition, abstraction, code tracing, and debugging persistence.
+  * **Active Problem-Solving:** Live code demonstrations, pair programming, demystifying programming syntax, and hands-on laboratory exercises.
+  * **Demystification & Access:** Actively breaking down intimidation barriers and impostor syndrome, reinforcing that computing genius belongs to everyone (Muhammad's *Unearthing Joy* framework).
 
 ---
 
-## 3. Applying Context to Worksheets & Assessments
+## 3. Coursework & Reflection Applications
 
-When creating tests, retakes, or worksheets:
-1. **Match Linguistic Load to Audience:** For Geometry, keep sentences short and diagrams prominent. For AP Stats and AP CS, maintain College Board question rigor without unnecessary AI narrative padding.
-2. **Authentic Student Scenarios:** When framing word problems, use grounded school and community settings (e.g., student club budgets, athletic game statistics, cafeteria choices) rather than canned AI tropes.
-3. **Space Budgeting:** Geometry and AP CS require substantial working space for diagrams and multi-line code implementations. Budget clean, blank workspaces using `worksheet-packer`.
+When drafting or refining assignments for teacher preparation courses (e.g., EDTEP 583 Math Methods, EDTEP 573 Assessment, EDTEP 564 Working in Schools, EDTEP 566 Creating Classrooms for All Students, EDTEP 593 Practicum/Field Experience):
+
+1. **Classroom Grounding:** Always anchor examples, vignettes, and reflections in room 105 at Franklin High School.
+2. **Pedagogical Juxtaposition:**
+   * When discussing differentiation, compare the linguistic accessibility and visual support needed in **Period 4 Geometry** with the conceptual depth and formal academic argumentation demanded in **Period 5 AP Stats** and **Period 6 AP CS**.
+   * Note how student self-selection impacts classroom culture: Period 4 represents a broad, mixed-readiness student body with significant language learning needs, while Periods 5 and 6 consist of self-selected students navigating high-stakes advanced coursework.
+3. **Assessment Alignment (EDTEP 573 & 583):**
+   * For Geometry, assessments must separate construct-relevant mathematical skills from linguistic load (using clear visuals, concise language, and scaffolding).
+   * For AP Statistics, assessments must emphasize AP rubric criteria, contextual interpretation, and statistical reasoning.
+4. **Culturally Responsive & Collectivist Framing (EDTEP 564 & 566):**
+   * Reference collaborative structures (whiteboards, group tasks) that leverage collectivist strengths, especially for MLL learners in Period 4.
+   * Frame student assets through Hammond (relational trust, processing through talk) and Muhammad (unearthing inherent genius and joy).
 
