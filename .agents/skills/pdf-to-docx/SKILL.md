@@ -72,7 +72,7 @@ This guarantees that all transient files are automatically matched by gitignore 
 ### Phase 1: Orchestrator Intake & Page Rendering
 1. Inspect the PDF structure, total page count, orientation, and vector drawings:
    ```bash
-   uv run python .agents/skills/pdf-to-docx/scripts/inspect_pdf.py path/to/document.pdf
+   uv run python scripts/pdf_to_docx/inspect_pdf.py path/to/document.pdf
    ```
 2. Create standardized subfolders:
    ```bash
@@ -132,7 +132,7 @@ uv run python -m pdf_to_docx compile-pages _temp/specs/ -o output/document.docx 
 ```
 Or use the convenience script:
 ```bash
-uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py _temp/specs/ -o output/document.docx --save-ast
+uv run python scripts/pdf_to_docx/compile_pages.py _temp/specs/ -o output/document.docx --save-ast
 ```
 
 The compiler deterministically enforces OpenXML structural rules:
@@ -157,7 +157,7 @@ docx-mcp: create_from_markdown(markdown_path="_temp/specs/document.md", output_p
 If visual validation or surgical edits are required:
 1. Render output pages headlessly to compare against original rendered PNGs:
    ```bash
-   uv run python .agents/skills/pdf-to-docx/scripts/diff_layout.py _temp/renders/orig_p1.png output/document.docx
+   uv run python scripts/pdf_to_docx/diff_layout.py _temp/renders/orig_p1.png output/document.docx
    ```
 2. If a specific page (e.g. Page 2) exhibits layout issues (column clipping, chart upgrade needed):
    **Dispatch a single-page refinement subagent** (`Role: "Page 2 Refiner"`):

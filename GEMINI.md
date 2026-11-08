@@ -75,7 +75,7 @@ When running CLI commands or dispatching subagents, always route intermediate fi
    ```
 2. **Asset Cropping / Image Harvesting**:
    ```bash
-   uv run python .agents/skills/pdf-to-docx/scripts/crop_asset.py document.pdf --page 1 --bbox 100,50,300,400 -o _temp/assets/fig1.png
+   uv run python scripts/pdf_to_docx/crop_asset.py document.pdf --page 1 --bbox 100,50,300,400 -o _temp/assets/fig1.png
    ```
 3. **Spec Extraction & Planning**:
    ```bash

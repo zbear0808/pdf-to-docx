@@ -16,8 +16,7 @@ Over the project's lifecycle, the codebase evolved through three distinct archit
 
 | Category | Script Count | Primary Finding | Status |
 | :--- | :---: | :--- | :--- |
-| **Exact Clones** | 6 | [scripts/pdf_to_latex/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-latex) is a 100% byte-for-byte duplicate of [.agents/skills/pdf-to-latex/scripts/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/.agents/skills/pdf-to-latex/scripts) | **100% Redundant Duplicate** |
-| **Skill CLI Wrappers** | 11 | Scripts in `.agents/skills/*/scripts/` are thin 25–35 line wrappers around CLI commands | **Redundant with registered CLI** (convenience entrypoints for subagents) |
+| **Consolidated CLI Scripts** | 11 | `scripts/pdf_to_docx/` and `scripts/pdf_to_latex/` provide convenient standalone runner scripts for subagents | **Consolidated at Root `scripts/`** (removed from `.agents/skills/`) |
 | **Legacy Subsystem** | 12 | [standalone_converter/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/standalone_converter) is a superseded monolithic pipeline with an outdated schema | **Deprecated / Superseded by `src/`** |
 | **External Batch Runner** | 1 | [batch_convert_stats_archive.py](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/batch_convert_stats_archive.py) targets an external machine path using `standalone_converter` | **Obsolete / Deprecated** |
 | **Orphaned Audit Suite** | 7 | [audit_tools/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/audit_tools) is unreferenced by any skill/test/CLI and imports `standalone_converter.ir_schema` | **Deprecated & Stagnant** |
@@ -30,28 +29,23 @@ Over the project's lifecycle, the codebase evolved through three distinct archit
 
 ## 2. Detailed Findings by Subsystem
 
-### 2.1 Exact Byte-for-Byte Clones: `scripts/pdf_to_latex/`
-- **Location:** [scripts/pdf_to_latex/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/scripts/pdf_to_latex)
-- **Target Mirror:** [.agents/skills/pdf-to-latex/scripts/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/.agents/skills/pdf-to-latex/scripts)
-- **Files Affected:**
-  - `compile_latex.py` (1,358 bytes) — Identical
-  - `compile_pages.py` (1,695 bytes) — Identical
-  - `convert.py` (1,631 bytes) — Identical
-  - `crop_asset.py` (1,196 bytes) — Identical
-  - `diff_layout.py` (2,370 bytes) — Identical
-  - `inspect_pdf.py` (1,960 bytes) — Identical
+### 2.1 Consolidated Runner Scripts: `scripts/pdf_to_docx/` & `scripts/pdf_to_latex/`
+- **Locations:**
+  - `scripts/pdf_to_docx/` (`compile_pages.py`, `convert.py`, `crop_asset.py`, `diff_layout.py`, `inspect_pdf.py`)
+  - `scripts/pdf_to_latex/` (`compile_latex.py`, `compile_pages.py`, `convert.py`, `crop_asset.py`, `diff_layout.py`, `inspect_pdf.py`)
 - **Analysis:**
-  There is no corresponding `scripts/pdf_to_docx/` folder at the root (it only exists inside `.agents/skills/pdf-to-docx/scripts/`). Having `scripts/pdf_to_latex/` at the repository root is an unmanaged mirror copy that creates structural asymmetry and risks code drift if modified.
-- **Verdict:** **Redundant**.
+  Previously, helper scripts lived inside `.agents/skills/pdf-to-docx/scripts/` and `.agents/skills/pdf-to-latex/scripts/`, with `scripts/pdf_to_latex/` duplicated at root.
+  To establish symmetry and keep `.agents/` clean of runnable scripts, all helper scripts were consolidated into the standard root `scripts/` folder, and the duplicate folders in `.agents/skills/` were removed.
+- **Verdict:** **Consolidated & Symmetric**.
 
 ---
 
-### 2.2 Skill Helper Scripts vs. Installed CLI Entrypoints
+### 2.2 Root Scripts vs. Installed CLI Entrypoints
 - **Locations:**
-  - [.agents/skills/pdf-to-docx/scripts/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/.agents/skills/pdf-to-docx/scripts) (`compile_pages.py`, `convert.py`, `crop_asset.py`, `diff_layout.py`, `inspect_pdf.py`)
-  - [.agents/skills/pdf-to-latex/scripts/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/.agents/skills/pdf-to-latex/scripts) (`compile_latex.py`, `compile_pages.py`, `convert.py`, `crop_asset.py`, `diff_layout.py`, `inspect_pdf.py`)
+  - `scripts/pdf_to_docx/`
+  - `scripts/pdf_to_latex/`
 - **Analysis:**
-  All of these helper scripts are thin Typer wrappers (25–35 lines each) that forward directly to functions in `pdf_to_docx.cli` and `pdf_to_latex.cli`.
+  All of these runner scripts are thin Typer wrappers (25–35 lines each) that forward directly to functions in `pdf_to_docx.cli` and `pdf_to_latex.cli`.
   
   In `pyproject.toml`, the project exposes three first-class CLIs:
   ```toml
@@ -60,13 +54,13 @@ Over the project's lifecycle, the codebase evolved through three distinct archit
   pdf-to-latex = "pdf_to_latex:main"
   worksheet-packer = "worksheet_packer:main"
   ```
-  Every single operation performed by these helper scripts is already available directly:
-  - `python .agents/.../convert.py ...` $\rightarrow$ `uv run pdf-to-docx convert ...`
-  - `python .agents/.../compile_pages.py ...` $\rightarrow$ `uv run pdf-to-docx compile-pages ...`
-  - `python .agents/.../crop_asset.py ...` $\rightarrow$ `uv run pdf-to-docx crop ...`
-  - `python .agents/.../inspect_pdf.py ...` $\rightarrow$ `uv run pdf-to-docx info` / `render-pages`
-  - `python .agents/.../diff_layout.py ...` $\rightarrow$ `uv run pdf-to-docx diff ...`
-- **Verdict:** **Functionally Redundant**. They are currently maintained only so agent skill prompts can invoke a standalone `.py` file path if desired.
+  Every operation performed by these runner scripts is also available directly:
+  - `python scripts/pdf_to_docx/convert.py ...` $\leftrightarrow$ `uv run pdf-to-docx convert ...`
+  - `python scripts/pdf_to_docx/compile_pages.py ...` $\leftrightarrow$ `uv run pdf-to-docx compile-pages ...`
+  - `python scripts/pdf_to_docx/crop_asset.py ...` $\leftrightarrow$ `uv run pdf-to-docx crop ...`
+  - `python scripts/pdf_to_docx/inspect_pdf.py ...` $\leftrightarrow$ `uv run pdf-to-docx info` / `render-pages`
+  - `python scripts/pdf_to_docx/diff_layout.py ...` $\leftrightarrow$ `uv run pdf-to-docx diff ...`
+- **Verdict:** **Convenience Entrypoints for Subagents & Humans**. Kept in root `scripts/` for easy direct execution without needing to know CLI syntax.
 
 ---
 
@@ -212,25 +206,18 @@ The following table catalogs every script surveyed in the repository outside `.v
 | `src/worksheet_packer/worksheet_parser.py`| Multimodal worksheet parser | Core Architecture | **Active Production** |
 | `src/worksheet_packer/docx_extractor.py` | Ingests existing DOCX into AST | Core Architecture | **Active Production** |
 | `src/worksheet_packer/image_utils.py` | Auto-crop, whitespace trimming, AR | Core Architecture | **Active Production** |
-| **Root Script Clones** | | | |
-| `scripts/pdf_to_latex/compile_latex.py` | Invokes LaTeX compiler | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| `scripts/pdf_to_latex/compile_pages.py` | Compiles page specs | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| `scripts/pdf_to_latex/convert.py` | End-to-end converter runner | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| `scripts/pdf_to_latex/crop_asset.py` | Bounding box cropper | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| `scripts/pdf_to_latex/diff_layout.py` | Visual diff comparison | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| `scripts/pdf_to_latex/inspect_pdf.py` | PDF metadata & page rendering | Exact Clone | **100% Redundant** (identical to `.agents/skills/...`) |
-| **Agent Skill Wrappers** | | | |
-| `.agents/skills/pdf-to-docx/scripts/convert.py` | Wrapper calling `pdf_to_docx.cli` | Skill Wrapper | **Redundant with CLI** (`pdf-to-docx convert`) |
-| `.agents/skills/pdf-to-docx/scripts/compile_pages.py` | Wrapper calling `pdf_to_docx.cli` | Skill Wrapper | **Redundant with CLI** (`pdf-to-docx compile-pages`) |
-| `.agents/skills/pdf-to-docx/scripts/crop_asset.py` | Wrapper calling `PDFExtractor` | Skill Wrapper | **Redundant with CLI** (`pdf-to-docx crop`) |
-| `.agents/skills/pdf-to-docx/scripts/diff_layout.py` | Wrapper calling `VisualDiffInspector` | Skill Wrapper | **Redundant with CLI** (`pdf-to-docx diff`) |
-| `.agents/skills/pdf-to-docx/scripts/inspect_pdf.py` | Wrapper calling `PDFExtractor` | Skill Wrapper | **Redundant with CLI** (`pdf-to-docx info/render-pages`) |
-| `.agents/skills/pdf-to-latex/scripts/convert.py` | Wrapper calling `pdf_to_latex.cli` | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex convert`) |
-| `.agents/skills/pdf-to-latex/scripts/compile_pages.py` | Wrapper calling `pdf_to_latex.cli` | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex compile-pages`) |
-| `.agents/skills/pdf-to-latex/scripts/compile_latex.py` | Wrapper calling compiler helper | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex compile-tex`) |
-| `.agents/skills/pdf-to-latex/scripts/crop_asset.py` | Wrapper calling `PDFExtractor` | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex crop`) |
-| `.agents/skills/pdf-to-latex/scripts/diff_layout.py` | Wrapper calling visual diff | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex diff`) |
-| `.agents/skills/pdf-to-latex/scripts/inspect_pdf.py` | Wrapper calling `PDFExtractor` | Skill Wrapper | **Redundant with CLI** (`pdf-to-latex info/render-pages`) |
+| **Root Convenience Scripts** | | | |
+| `scripts/pdf_to_docx/convert.py` | Wrapper calling `pdf_to_docx.cli` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_docx/compile_pages.py` | Wrapper calling `pdf_to_docx.cli` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_docx/crop_asset.py` | Wrapper calling `PDFExtractor` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_docx/diff_layout.py` | Wrapper calling `VisualDiffInspector` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_docx/inspect_pdf.py` | Wrapper calling `PDFExtractor` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/convert.py` | Wrapper calling `pdf_to_latex.cli` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/compile_pages.py` | Wrapper calling `pdf_to_latex.cli` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/compile_latex.py` | Wrapper calling compiler helper | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/crop_asset.py` | Wrapper calling `PDFExtractor` | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/diff_layout.py` | Wrapper calling visual diff | Root Runner | **Maintained** (convenience runner) |
+| `scripts/pdf_to_latex/inspect_pdf.py` | Wrapper calling `PDFExtractor` | Root Runner | **Maintained** (convenience runner) |
 | **Legacy Subsystem (`standalone_converter/`)** | | | |
 | `standalone_converter/__main__.py` | CLI for monolithic converter | Legacy Subsystem | **Deprecated** (superseded by `pdf-to-docx`) |
 | `standalone_converter/converter.py` | Monolithic converter pipeline | Legacy Subsystem | **Deprecated** |
@@ -294,8 +281,8 @@ The following table catalogs every script surveyed in the repository outside `.v
 Whenever you are ready to perform repository cleanup, here is the prioritized action plan:
 
 ### Tier 1: Zero-Risk Instant Deletions
-1. **Delete [scripts/pdf_to_latex/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/scripts/pdf_to_latex):**
-   - 100% duplicate of [.agents/skills/pdf-to-latex/scripts/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/.agents/skills/pdf-to-latex/scripts). Deleting it eliminates clone confusion and fixes root structural symmetry.
+1. **Consolidate Scripts to Root `scripts/` and Delete `.agents/skills/*/scripts`:**
+   - Moved helper scripts to `scripts/pdf_to_docx/` and maintained `scripts/pdf_to_latex/`. Deleted `.agents/skills/pdf-to-docx/scripts/` and `.agents/skills/pdf-to-latex/scripts/` to eliminate clone confusion and enforce symmetry.
 2. **Delete [batch_convert_stats_archive.py](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/batch_convert_stats_archive.py):**
    - Obsolete, hardcoded external machine path pointing to deprecated tooling.
 3. **Delete [scratch/](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/scratch) directory:**

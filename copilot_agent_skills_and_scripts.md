@@ -2,7 +2,7 @@
 
 This document defines the **skills** a Microsoft Copilot–style document agent should have for rewriting, packing, and rendering educational documents (PDF/DOCX worksheets, quizzes, exams, retakes), and the **scripts/tools each skill uses** with their **inputs and outputs**.
 
-Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper scripts in `.agents/skills/*/scripts/` and `scripts/pdf_to_latex/`, and CLI entrypoints from `pyproject.toml` (`worksheet-packer`, `pdf-to-docx`, `pdf-to-latex`).
+Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper scripts in `scripts/pdf_to_docx/` and `scripts/pdf_to_latex/`, and CLI entrypoints from `pyproject.toml` (`worksheet-packer`, `pdf-to-docx`, `pdf-to-latex`).
 
 ---
 
@@ -115,8 +115,8 @@ Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper
 |---|---|---|---|---|
 | `worksheet-packer render-docx-pages` | Yes (CLI) | Render DOCX pages to PNG for inspection. | `docx_path`, `-o _temp/renders/docx_pages`, `--dpi 200`. | `page_1.png`, `page_2.png`, … |
 | **`render_pdf_pages.py`** (recommended agent script) | *Not present as standalone file; skill shows inline PyMuPDF snippet* | Render PDF pages to PNG for inspection. | `output/Assessment.pdf`, output dir, DPI. | `_temp/renders/pdf_pages/page_*.png`. |
-| `.agents/skills/pdf-to-docx/scripts/diff_layout.py` | Yes | Visual compare original page PNG vs rendered DOCX page (DOCX→PNG via LibreOffice/Word COM) and critique. | `original_png`, `docx_path`, `--page`. | Console fidelity score, matches/discrepancies; uses temp render under docx dir. |
-| `scripts/pdf_to_latex/diff_layout.py` (mirrored in skill) | Yes | Side-by-side visual compare original PNG vs compiled PDF page. | `original_png`, `compiled_pdf`, `--page`, `-o` output image, `--dpi`. | `visual_diff.png` (side-by-side) and temp compiled page render (cleaned). |
+| `scripts/pdf_to_docx/diff_layout.py` | Yes | Visual compare original page PNG vs rendered DOCX page (DOCX→PNG via LibreOffice/Word COM) and critique. | `original_png`, `docx_path`, `--page`. | Console fidelity score, matches/discrepancies; uses temp render under docx dir. |
+| `scripts/pdf_to_latex/diff_layout.py` | Yes | Side-by-side visual compare original PNG vs compiled PDF page. | `original_png`, `compiled_pdf`, `--page`, `-o` output image, `--dpi`. | `visual_diff.png` (side-by-side) and temp compiled page render (cleaned). |
 
 ---
 
@@ -164,15 +164,15 @@ Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper
 
 **Purpose:** High-fidelity PDF→DOCX via page-parallel subagents, `PageSpec`/`DocumentSpec` AST or Markdown fast-track, PyMuPDF asset harvesting, deterministic OpenXML compilation, optional visual diff QA.
 
-**Source:** `.agents/skills/pdf-to-docx/SKILL.md`. **Helper scripts:** `.agents/skills/pdf-to-docx/scripts/`. **CLI:** `pdf-to-docx` / `python -m pdf_to_docx`.
+**Source:** `.agents/skills/pdf-to-docx/SKILL.md`. **Helper scripts:** `scripts/pdf_to_docx/`. **CLI:** `pdf-to-docx` / `python -m pdf_to_docx`.
 
 | Script / Tool | Exists in repo? | Purpose | Inputs | Outputs |
 |---|---|---|---|---|
-| `.agents/skills/pdf-to-docx/scripts/inspect_pdf.py` | Yes | Inspect PDF structure and render all pages. | `pdf_path`, `--dpi` (default 200), `--output-dir/-o` (default `./rendered_pages`). | Console page table (dims/orientation/images/drawings); rendered PNGs in output dir. |
-| `.agents/skills/pdf-to-docx/scripts/crop_asset.py` | Yes | Crop figure/diagram region from PDF. | `pdf_path`, `--page/-p` (1-indexed), `--bbox/-b` as `ymin,xmin,ymax,xmax` (0–1000), `--output/-o`, `--dpi`, `--format` (`png`/`svg`). | Cropped asset file at output path. |
-| `.agents/skills/pdf-to-docx/scripts/compile_pages.py` | Yes | Compile per-page `page_*_spec.json` into DOCX. | `pages_dir` (default `.conversion_workspace`), `-o output.docx`, `--title`, `--theme-hex`, `--assets-dir`, `--save-ast`, `--ast-path`. | `output/*.docx`; optionally merged `DocumentSpec` AST JSON. |
-| `.agents/skills/pdf-to-docx/scripts/convert.py` | Yes | End-to-end PDF→DOCX conversion (CLI wrapper). | `pdf_path`, `-o`, `--workspace-dir`, `--assets-dir`, `--dpi`, `--diff`, `--save-ast`, `--ast-path`. | DOCX (+ optional AST, optional diff workflow artifacts). |
-| `.agents/skills/pdf-to-docx/scripts/diff_layout.py` | Yes | Visual QA: compare original page PNG to rendered DOCX page. | `original_png`, `docx_path`, `--page`. | Fidelity/critique output; temp rendered DOCX page PNG (requires LibreOffice/`soffice`). |
+| `scripts/pdf_to_docx/inspect_pdf.py` | Yes | Inspect PDF structure and render all pages. | `pdf_path`, `--dpi` (default 200), `--output-dir/-o` (default `./rendered_pages`). | Console page table (dims/orientation/images/drawings); rendered PNGs in output dir. |
+| `scripts/pdf_to_docx/crop_asset.py` | Yes | Crop figure/diagram region from PDF. | `pdf_path`, `--page/-p` (1-indexed), `--bbox/-b` as `ymin,xmin,ymax,xmax` (0–1000), `--output/-o`, `--dpi`, `--format` (`png`/`svg`). | Cropped asset file at output path. |
+| `scripts/pdf_to_docx/compile_pages.py` | Yes | Compile per-page `page_*_spec.json` into DOCX. | `pages_dir` (default `.conversion_workspace`), `-o output.docx`, `--title`, `--theme-hex`, `--assets-dir`, `--save-ast`, `--ast-path`. | `output/*.docx`; optionally merged `DocumentSpec` AST JSON. |
+| `scripts/pdf_to_docx/convert.py` | Yes | End-to-end PDF→DOCX conversion (CLI wrapper). | `pdf_path`, `-o`, `--workspace-dir`, `--assets-dir`, `--dpi`, `--diff`, `--save-ast`, `--ast-path`. | DOCX (+ optional AST, optional diff workflow artifacts). |
+| `scripts/pdf_to_docx/diff_layout.py` | Yes | Visual QA: compare original page PNG to rendered DOCX page. | `original_png`, `docx_path`, `--page`. | Fidelity/critique output; temp rendered DOCX page PNG (requires LibreOffice/`soffice`). |
 | `python -m pdf_to_docx parse-page ...` | Yes (CLI module) | Parse one page to `PageSpec` JSON + crop assets (subagent task). | PDF, `--page`, `--image`, `-o spec.json`, `--assets-dir`. | `_temp/specs/page_{k}_spec.json`, cropped assets in `_temp/assets/`. |
 | `python -m pdf_to_docx compile-pages ...` | Yes | Merge/compile page specs. | Pages/specs dir, `-o`, `--title`, `--save-ast`. | DOCX + optional AST. |
 | `python -m pdf_to_docx to-markdown-page` / `merge-markdown` | Yes (per skill/CLI) | Markdown fast-track pathway. | Page image/PDF page refs; markdown output paths. | `page_{k}.md`, merged `document.md` (then `docx-mcp: create_from_markdown`). |
@@ -185,16 +185,16 @@ Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper
 
 **Purpose:** High-fidelity PDF→LaTeX via page-parallel subagents, LaTeX-oriented `PageSpec`/`DocumentSpec` extraction or direct `.tex` fragments, asset harvesting, deterministic compilation (`article|report|exam|scrartcl`), optional PDF compile and visual diff.
 
-**Source:** `.agents/skills/pdf-to-latex/SKILL.md`. **Helper scripts:** `.agents/skills/pdf-to-latex/scripts/` (mirrors `scripts/pdf_to_latex/` patterns). **CLI:** `pdf-to-latex` / `python -m pdf_to_latex`.
+**Source:** `.agents/skills/pdf-to-latex/SKILL.md`. **Helper scripts:** `scripts/pdf_to_latex/`. **CLI:** `pdf-to-latex` / `python -m pdf_to_latex`.
 
 | Script / Tool | Exists in repo? | Purpose | Inputs | Outputs |
 |---|---|---|---|---|
-| `scripts/pdf_to_latex/inspect_pdf.py` (and skill mirror) | Yes | Inspect PDF, render pages, detect LaTeX compiler. | `pdf_path`, `--dpi`, `--output-dir/-o`. | Console page table + render count; PNG pages in output dir; reports detected LaTeX engine or install/Overleaf note. |
-| `scripts/pdf_to_latex/crop_asset.py` (skill mirror) | Yes | Crop high-res asset for LaTeX `\includegraphics`. | `pdf_path`, `--page`, `--bbox` `ymin,xmin,ymax,xmax` (0–1000), `--output/-o`, `--dpi` (default 300). | Cropped image (e.g., `assets/cropped_asset.png`). |
-| `scripts/pdf_to_latex/compile_pages.py` (skill mirror) | Yes | Compile `page_*_spec.json` → `.tex` (and optional PDF). | `pages_dir`, `-o document.tex`, `--title`, `--author`, `--doc-class article|report|exam|scrartcl`, `--theme-hex`, `--assets-dir`, `--pdf`, `--save-ast`, `--ast-path`. | `.tex` in `output/` (recommended); optional compiled `.pdf`; optional merged AST JSON. |
-| `scripts/pdf_to_latex/compile_latex.py` (skill mirror) | Yes | Compile existing `.tex` to PDF. | `tex_path`, `--output/-o` PDF. | Compiled PDF (or error with engine/install guidance); uses `latexmk/tectonic/xelatex/pdflatex/lualatex` detection. |
-| `scripts/pdf_to_latex/convert.py` (skill mirror) | Yes | End-to-end PDF→LaTeX (optional PDF). | `pdf_path`, `-o`, `--workspace-dir`, `--assets-dir`, `--doc-class`, `--title`, `--dpi`, `--pdf`, `--save-ast`, `--ast-path`. | `.tex` (+ optional `.pdf`, optional AST) in specified paths/workspace. |
-| `scripts/pdf_to_latex/diff_layout.py` (skill mirror) | Yes | Visual QA vs original render. | `original_png`, `compiled_pdf`, `--page`, `--output/-o`, `--dpi`. | Side-by-side comparison PNG; temp compiled-page render removed. |
+| `scripts/pdf_to_latex/inspect_pdf.py` | Yes | Inspect PDF, render pages, detect LaTeX compiler. | `pdf_path`, `--dpi`, `--output-dir/-o`. | Console page table + render count; PNG pages in output dir; reports detected LaTeX engine or install/Overleaf note. |
+| `scripts/pdf_to_latex/crop_asset.py` | Yes | Crop high-res asset for LaTeX `\includegraphics`. | `pdf_path`, `--page`, `--bbox` `ymin,xmin,ymax,xmax` (0–1000), `--output/-o`, `--dpi` (default 300). | Cropped image (e.g., `assets/cropped_asset.png`). |
+| `scripts/pdf_to_latex/compile_pages.py` | Yes | Compile `page_*_spec.json` → `.tex` (and optional PDF). | `pages_dir`, `-o document.tex`, `--title`, `--author`, `--doc-class article|report|exam|scrartcl`, `--theme-hex`, `--assets-dir`, `--pdf`, `--save-ast`, `--ast-path`. | `.tex` in `output/` (recommended); optional compiled `.pdf`; optional merged AST JSON. |
+| `scripts/pdf_to_latex/compile_latex.py` | Yes | Compile existing `.tex` to PDF. | `tex_path`, `--output/-o` PDF. | Compiled PDF (or error with engine/install guidance); uses `latexmk/tectonic/xelatex/pdflatex/lualatex` detection. |
+| `scripts/pdf_to_latex/convert.py` | Yes | End-to-end PDF→LaTeX (optional PDF). | `pdf_path`, `-o`, `--workspace-dir`, `--assets-dir`, `--doc-class`, `--title`, `--dpi`, `--pdf`, `--save-ast`, `--ast-path`. | `.tex` (+ optional `.pdf`, optional AST) in specified paths/workspace. |
+| `scripts/pdf_to_latex/diff_layout.py` | Yes | Visual QA vs original render. | `original_png`, `compiled_pdf`, `--page`, `--output/-o`, `--dpi`. | Side-by-side comparison PNG; temp compiled-page render removed. |
 | `python -m pdf_to_latex render-pages` / `parse-page` / `to-latex-page` / `merge-latex` | Yes (per skill/CLI) | Page rendering, AST extraction, LaTeX fragment fast-track, merge. | PDF/pages/images + output/workspace/asset dirs; page numbers. | Page PNGs, `page_{k}_spec.json` or `page_{k}.tex`, merged `.tex`, assets. |
 
 ---
@@ -208,7 +208,7 @@ Grounded in this repository (`pdf-to-docx`): `.agents/skills/*/SKILL.md`, helper
 | Script / Tool | Exists in repo? | Purpose | Inputs | Outputs |
 |---|---|---|---|---|
 | `docx-mcp` tools (`open_document`, `set_column_widths`, `set_cell_shading`, `set_table_borders`, `set_header_row`, `insert_*_chart`, `set_page_margins`, `set_page_orientation`, `save_document`, etc.) | External MCP (used by skill) | Deterministic/surgical DOCX edits and native charts. | DOCX path, table/paragraph indices, widths/colors/chart data, output path. | Updated DOCX saved to `output/` (or specified path). |
-| `.agents/skills/pdf-to-docx/scripts/diff_layout.py` or DOCX render/QA flow | Yes | Verify refinement visually. | Original page PNG + refined DOCX, page. | Visual critique/fidelity feedback. |
+| `scripts/pdf_to_docx/diff_layout.py` or DOCX render/QA flow | Yes | Verify refinement visually. | Original page PNG + refined DOCX, page. | Visual critique/fidelity feedback. |
 
 ---
 
@@ -290,10 +290,10 @@ uv run pdf-to-latex ...
 python -m pdf_to_latex <subcommand> ...
 
 # Skill helper scripts
-uv run python .agents/skills/pdf-to-docx/scripts/inspect_pdf.py <pdf>
-uv run python .agents/skills/pdf-to-docx/scripts/crop_asset.py <pdf> --page N --bbox y0,x0,y1,x1 -o out.png
-uv run python .agents/skills/pdf-to-docx/scripts/compile_pages.py <specs_dir> -o output/doc.docx
-uv run python .agents/skills/pdf-to-docx/scripts/diff_layout.py <orig_page.png> <output.docx> --page N
+uv run python scripts/pdf_to_docx/inspect_pdf.py <pdf>
+uv run python scripts/pdf_to_docx/crop_asset.py <pdf> --page N --bbox y0,x0,y1,x1 -o out.png
+uv run python scripts/pdf_to_docx/compile_pages.py <specs_dir> -o output/doc.docx
+uv run python scripts/pdf_to_docx/diff_layout.py <orig_page.png> <output.docx> --page N
 
 uv run python scripts/pdf_to_latex/inspect_pdf.py <pdf>
 uv run python scripts/pdf_to_latex/compile_pages.py <specs_dir> -o output/doc.tex --pdf
