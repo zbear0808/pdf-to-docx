@@ -1,13 +1,13 @@
 ---
 name: assessment-builder
-description: Autonomous orchestrator for building standards-aligned, equity-centered assessments, quizzes, and lesson worksheets. Coordinates source document ingestion, Markdown drafting, pedagogical revision, authentic de-fluffing, Worksheet AST translation, Python diagram generation, 2D packing into DOCX/LaTeX, and visual layout audits using isolated subagents to prevent context bloat.
+description: Builds standards-aligned, equity-centered assessments, quizzes, and lesson worksheets. Coordinates source document ingestion, Markdown drafting, pedagogical revision, authentic de-fluffing, Worksheet AST translation, Python diagram generation, 2D packing into DOCX/LaTeX, and visual layout audits as a sequential, single-agent workflow.
 ---
 
 # Assessment Builder Skill
 
 This skill provides an autonomous, multi-phase pipeline that pairs with **`lesson-assessment-designer`** (`.agents/skills/lesson-assessment-designer/SKILL.md`) to build classroom-ready tests, quizzes, retakes, and lesson worksheets.
 
-To maintain speed, eliminate hallucinations, and **prevent context bloat**, every major phase is delegated to a specialized **subagent** with a fresh context window. Intermediate files are exchanged via a strictly standardized folder structure.
+To keep work reliable and easy to follow, perform each major phase **sequentially in the current agent/session** (do **not** start subagents or use agent-delegation tools; Microsoft Copilot and similar environments may not support them). Intermediate files are exchanged via a strictly standardized folder structure so each phase has clear inputs/outputs.
 
 ---
 
@@ -61,7 +61,7 @@ flowchart TD
 ---
 
 ### Step 1: Ingest & Understand Relevant Documents
-**Subagent Role:** `Source Document Researcher`  
+**Role:** `Source Document Researcher`  
 **Tools / Skills:** `course-content-extractor` (`.agents/skills/course-content-extractor/SKILL.md`)
 
 1. Read all relevant curriculum sources:
@@ -75,7 +75,7 @@ flowchart TD
 ---
 
 ### Step 2: Initial Draft in Markdown with Visual Placeholders
-**Subagent Role:** `Assessment Drafter`  
+**Role:** `Assessment Drafter`  
 **Input:** `_temp/specs/source_analysis.md`
 
 1. Draft a complete, test-aligned assessment directly in Markdown.
@@ -96,7 +96,7 @@ flowchart TD
 ---
 
 ### Step 3: Pedagogical Revision via `lesson-assessment-designer`
-**Subagent Role:** `Pedagogical Assessment Auditor`  
+**Role:** `Pedagogical Assessment Auditor`  
 **Tools / Skills:** `lesson-assessment-designer` (`.agents/skills/lesson-assessment-designer/SKILL.md`), `classroom-context` (`.agents/skills/classroom-context/SKILL.md`)  
 **Input:** `_temp/specs/draft_v1_initial.md`
 
@@ -115,7 +115,7 @@ flowchart TD
 ---
 
 ### Step 4: Authentic Phrasing & De-fluffing
-**Subagent Role:** `Authentic Educational Editor`  
+**Role:** `Authentic Educational Editor`  
 **Tools / Skills:** `authentic-writer` (`.agents/skills/authentic-writer/SKILL.md`), `critical-checker` (`.agents/skills/critical-checker/SKILL.md`)  
 **Input:** `_temp/specs/draft_v2_pedagogy.md`
 
@@ -135,10 +135,10 @@ flowchart TD
 ---
 
 ### Step 5: Convert Markdown to Worksheet AST
-**Subagent Role:** `AST Translation Subagent`  
+**Role:** `AST Translation`  
 **Input:** `_temp/specs/draft_v3_authentic.md`
 
-The subagent directly translates the polished Markdown document into the strongly typed `WorksheetSpec` JSON AST (`_temp/specs/worksheet_spec.json`) based on the schema in [`src/worksheet_packer/worksheet_ast.py`](file:///src/worksheet_packer/worksheet_ast.py).
+Translate the polished Markdown document into the strongly typed `WorksheetSpec` JSON AST (`_temp/specs/worksheet_spec.json`) based on the schema in [`src/worksheet_packer/worksheet_ast.py`](file:///src/worksheet_packer/worksheet_ast.py).
 
 #### AST JSON Structure & Fields:
 ```json
@@ -200,7 +200,7 @@ The subagent directly translates the polished Markdown document into the strongl
 ---
 
 ### Step 6: Generate or Crop Visuals via Python Scripts
-**Subagent Role:** `Visual Asset Developer`  
+**Role:** `Visual Asset Developer`  
 **Tools / Skills:** `curriculum-visual-generator` (`.agents/skills/curriculum-visual-generator/SKILL.md`)  
 **Input:** Image placeholders listed in `_temp/specs/worksheet_spec.json`
 
@@ -219,7 +219,7 @@ The subagent directly translates the polished Markdown document into the strongl
 ---
 
 ### Step 7: 2D Layout Packing & DOCX / LaTeX Render
-**Subagent Role:** `Document Packing Engineer`  
+**Role:** `Document Packing Engineer`  
 **Tools / Skills:** `worksheet-packer` (`.agents/skills/worksheet-packer/SKILL.md`)  
 **Input:** `_temp/specs/worksheet_spec.json` and `_temp/assets/`
 
@@ -239,7 +239,7 @@ The subagent directly translates the polished Markdown document into the strongl
 ---
 
 ### Step 8: Visual & Layout Critical Checker
-**Subagent Role:** `Visual Layout Auditor`  
+**Role:** `Visual Layout Auditor`  
 **Tools / Skills:** `visual-layout-checker` (`.agents/skills/visual-layout-checker/SKILL.md`)  
 **Input:** `output/Assessment.docx` and `output/Assessment.pdf`
 
@@ -257,20 +257,12 @@ The subagent directly translates the polished Markdown document into the strongl
 
 ---
 
-## 3. Subagent Dispatch Guidelines (Preventing Context Bloat)
+## 3. Execution Guidelines (Sequential, No Subagents)
 
-To maintain a clean parent context, invoke each step with a targeted subagent using `invoke_subagent`:
+Run Steps 1–8 **in order** in the current session. After each step, confirm the expected output file exists before continuing.
 
-```python
-# Example: Launching Step 3 (Pedagogical Revision)
-invoke_subagent(
-    Role="Pedagogical Assessment Auditor",
-    TypeName="self",
-    Prompt="""Read _temp/specs/draft_v1_initial.md and apply .agents/skills/lesson-assessment-designer/SKILL.md.
-Review cognitive demand, craft diagnostic distractors (Taylor & Nolen Ch. 7), and add MLL linguistic scaffolds.
-Save the revised markdown to _temp/specs/draft_v2_pedagogy.md. Reply with a short bulleted summary of changes."""
-)
-```
-
-By passing file paths instead of entire file contents through conversational prompts, subagents run with lean context windows, preventing context bloat and rate-limit degradation.
+- **Do not** call `invoke_subagent`, `task`, or any agent-spawning/delegation tool.
+- Pass work between phases via file paths (read/write `_temp/specs/*`, `_temp/assets/*`, `_temp/renders/*`, `output/*`) rather than repeating large content in chat.
+- If a phase produces many files (e.g., figures), generate them with scripts/CLI commands and summarize what was created.
+- If the environment is rate-limited or context is tight, complete the pipeline in multiple user turns, resuming from the last saved artifact.
 

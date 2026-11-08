@@ -5,7 +5,7 @@ description: Designs standards-aligned, equity-centered secondary mathematics le
 
 # Lesson, Worksheet & Assessment Designer Skill
 
-This skill provides comprehensive instructions, pedagogical guidelines, automated subagent workflows, and **direct local file paths** for generating classroom-ready lesson plans, student worksheets/handouts, and balanced assessment tools. It synthesizes core literature and templates from **EDTEP 573** (Assessment in Secondary Education) and **EDTEP 582 / 583** (Teaching Mathematics in the Secondary School).
+This skill provides comprehensive instructions, pedagogical guidelines, and **direct local file paths** for generating classroom-ready lesson plans, student worksheets/handouts, and balanced assessment tools. Execute steps sequentially in the current session (do **not** start subagents or use agent-delegation tools). It synthesizes core literature and templates from **EDTEP 573** (Assessment in Secondary Education) and **EDTEP 582 / 583** (Teaching Mathematics in the Secondary School).
 
 ---
 

@@ -2,21 +2,20 @@
 name: pdf-to-latex
 description: >-
   Converts PDF documents into high-fidelity, compilable LaTeX (.tex) documents and PDFs using a multimodal
-  LaTeX Intermediate Representation (IR), independent page-parallel subagents, PyMuPDF asset harvesting,
-  and deterministic compilation. Specializes in advanced mathematics, technical tables, and exam/quiz worksheets.
+  LaTeX Intermediate Representation (IR), PyMuPDF asset harvesting, and deterministic compilation. Runs as a
+  sequential, single-agent workflow (no subagents). Specializes in advanced mathematics, technical tables, and exam/quiz worksheets.
 ---
 
 # PDF to High-Fidelity LaTeX Conversion Skill
 
 This skill executes an autonomous, page-parallel pipeline to transform complex PDF documents into publication-ready, compilable LaTeX (`.tex`) documents and PDFs.
 
-## Core Principle: Page-Parallel Subagent Architecture
+## Core Principle: Sequential Single-Agent Execution (No Subagents)
 
 > [!IMPORTANT]
-> **Context Window Protection via Independent Subagents**
-> Processing multiple PDF pages sequentially inside a single conversation context rapidly exhausts tokens with high-resolution page rasters, bounding-box math, and verbose markup.
-> 
-> **Rule**: The orchestrator agent **MUST spawn independent subagents for each page** using `invoke_subagent`. Each subagent operates within its own isolated conversation context, processes exactly one page, crops visual assets, and reports back a concise summary.
+> **Do not start subagents or use agent-delegation tools** (e.g., `invoke_subagent`, `task`). Microsoft Copilot and similar environments may not support them.
+>
+> Process pages **one at a time in the current session**, writing each page’s outputs to disk (`_temp/specs/`, `_temp/assets/`, `_temp/renders/`) before moving to the next page. Keep progress durable and resume by skipping pages whose `page_*_spec.json` / `page_*.tex` output already exists.
 
 ---
 
@@ -24,9 +23,9 @@ This skill executes an autonomous, page-parallel pipeline to transform complex P
 
 | Pathway | Document Characteristics | Primary Tooling | Execution Pattern |
 | :--- | :--- | :--- | :--- |
-| **Pathway 1: LaTeX AST IR (Default)** | Mathematical papers, multi-column reports, exams/quizzes, structured tables + charts + images | `pdf_to_latex` CLI AST Compiler | Page subagents extract `page_{k}_spec.json`; orchestrator compiles |
-| **Pathway 2: Direct LaTeX Fragments** | Standard narrative papers, lecture notes, straightforward equations | Gemini Vision fast-path + `pdf_to_latex merge-latex` | Page subagents extract `page_{k}.tex`; orchestrator merges |
-| **Pathway 3: CodeAgent Sandbox** | Complex TikZ diagrams, dynamic geometry, specialized custom exam environments | Python / TeX script sandbox | Dedicated subagent script execution sandbox |
+| **Pathway 1: LaTeX AST IR (Default)** | Mathematical papers, multi-column reports, exams/quizzes, structured tables + charts + images | `pdf_to_latex` CLI AST Compiler | Extract `page_{k}_spec.json` per page sequentially; compile all specs |
+| **Pathway 2: Direct LaTeX Fragments** | Standard narrative papers, lecture notes, straightforward equations | Gemini Vision fast-path + `pdf_to_latex merge-latex` | Extract `page_{k}.tex` per page sequentially; merge |
+| **Pathway 3: CodeAgent Sandbox** | Complex TikZ diagrams, dynamic geometry, specialized custom exam environments | Python / TeX script sandbox | Run dedicated scripts in the current session |
 
 ---
 
@@ -49,21 +48,18 @@ This guarantees that all transient files are automatically matched by gitignore 
 ## Step-by-Step Execution Workflow
 
 ```
-[ Orchestrator Agent ]
+[ Single Agent / Current Session ]
        │
        ├─► 1. Inspect PDF structure (page count N, dimensions, local LaTeX compiler)
        ├─► 2. Render all pages to PNGs (_temp/renders/page_{k}.png)
        │
-       ├─► 3. Dispatch N Parallel Subagents (invoke_subagent)
-       │         │
-       │         ├──► [Subagent Page 1] ──► Extracts _temp/specs/page_1_spec.json & crops assets to _temp/assets/
-       │         ├──► [Subagent Page 2] ──► Extracts _temp/specs/page_2_spec.json & crops assets to _temp/assets/
-       │         └──► [Subagent Page N] ──► Extracts _temp/specs/page_N_spec.json & crops assets to _temp/assets/
+       ├─► 3. For each page k = 1..N (sequential)
+       │         └──► Parse page k → _temp/specs/page_{k}_spec.json (or page_{k}.tex) and crop assets to _temp/assets/
+       │              Resume by skipping pages whose output file already exists
        │
-       ├─► 4. Reactive Wakeup: Receive concise completion messages (context stays clean!)
-       ├─► 5. Compile assembled specs: uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --pdf
+       ├─► 4. Compile assembled specs: uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --pdf
        │
-       └─► 6. Optional QA: Compare compiled PDF with original renderings using diff_layout.py
+       └─► 5. Optional QA: compare compiled PDF with original renderings (diff_layout.py)
 ```
 
 ---
@@ -85,35 +81,19 @@ This guarantees that all transient files are automatically matched by gitignore 
 
 ---
 
-### Phase 2: Page-Parallel Subagent Delegation
+### Phase 2: Per-Page Extraction (Sequential)
 
-The orchestrator calls `invoke_subagent` to spawn an independent subagent for each page concurrently.
+Process each page in the current session. For every page `k` (1-indexed), run:
 
-#### Subagent Dispatch Example:
-```json
-{
-  "Subagents": [
-    {
-      "TypeName": "self",
-      "Role": "Page 1 LaTeX Extractor",
-      "Model": "flash",
-      "Prompt": "You are the dedicated LaTeX extractor for Page 1 of 'path/to/document.pdf'.\nRendered image: '_temp/renders/page_1.png'.\n\nYour task:\n1. Parse Page 1 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_latex parse-page path/to/document.pdf --page 1 --image _temp/renders/page_1.png -o _temp/specs/page_1_spec.json --assets-dir _temp/assets\n2. Inspect _temp/specs/page_1_spec.json to ensure mathematical formulas ($...$, display equations), table headers, and question blocks are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, equations, tables, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
-    },
-    {
-      "TypeName": "self",
-      "Role": "Page 2 LaTeX Extractor",
-      "Model": "flash",
-      "Prompt": "You are the dedicated LaTeX extractor for Page 2 of 'path/to/document.pdf'.\nRendered image: '_temp/renders/page_2.png'.\n\nYour task:\n1. Parse Page 2 into the canonical PageSpec AST JSON schema.\n   Run: uv run python -m pdf_to_latex parse-page path/to/document.pdf --page 2 --image _temp/renders/page_2.png -o _temp/specs/page_2_spec.json --assets-dir _temp/assets\n2. Inspect _temp/specs/page_2_spec.json to ensure mathematical formulas ($...$, display equations), table headers, and question blocks are accurately captured.\n3. Reply with a 2-line completion summary: total blocks, equations, tables, and confirmation of file creation.\nDo NOT dump large JSON in your final reply to keep parent context compact."
-    }
-  ]
-}
+```bash
+uv run python -m pdf_to_latex parse-page path/to/document.pdf --page {k} --image _temp/renders/page_{k}.png -o _temp/specs/page_{k}_spec.json --assets-dir _temp/assets
 ```
 
-> [!TIP]
-> **Reactive Wakeup**: Do NOT poll or loop checking on subagents. Stop calling tools and allow the system to notify you when the subagents complete.
+- After each page, inspect `_temp/specs/page_{k}_spec.json` to ensure mathematical formulas (`$...$`, display equations), table headers, and question blocks are accurately captured.
+- Keep a brief running note (page number, block/equation/table counts, issues) instead of dumping large JSON into chat.
+- **Resume-friendly:** if `_temp/specs/page_{k}_spec.json` already exists and is valid, skip and continue.
 
-#### Fast-Track Direct LaTeX Fragment Subagent Alternative:
-For narrative papers using Pathway 2:
+#### Fast-Track Direct LaTeX Fragment Alternative (Pathway 2)
 ```bash
 uv run python -m pdf_to_latex to-latex-page path/to/document.pdf --page {k} --image _temp/renders/page_{k}.png -o _temp/specs/page_{k}.tex
 ```
@@ -122,10 +102,10 @@ uv run python -m pdf_to_latex to-latex-page path/to/document.pdf --page {k} --im
 
 ### Phase 3: Assembly & Compilation
 
-Once all page subagents report completion:
+Once all required page outputs exist in `_temp/specs/` (`page_*_spec.json` for Pathway 1 or `page_*.tex` for Pathway 2):
 
 #### For Pathway 1 (Block-Based IR):
-The orchestrator compiles the assembled `page_*_spec.json` files directly into `.tex` and `.pdf` inside `output/`:
+Compile the assembled `page_*_spec.json` files directly into `.tex` and `.pdf` inside `output/`:
 
 ```bash
 uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --title "Document Title" --doc-class article --pdf --save-ast

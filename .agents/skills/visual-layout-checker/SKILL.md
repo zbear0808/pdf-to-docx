@@ -90,22 +90,15 @@ If the visual audit identifies issues, apply these direct fixes in `_temp/specs/
 
 ---
 
-## 4. Subagent Audit Prompt Template
+## 4. Audit Procedure (Sequential, No Subagents)
 
-When dispatching an isolated subagent to perform the visual check:
+> [!IMPORTANT]
+> **Do not start subagents or use agent-delegation tools** (e.g., `invoke_subagent`, `task`). Microsoft Copilot and similar environments may not support them.
 
-```python
-invoke_subagent(
-    Role="Visual Layout Auditor",
-    TypeName="self",
-    Prompt="""Audit the rendered page images in _temp/renders/docx_pages/ for output/Assessment.docx.
-Inspect each page using .agents/skills/visual-layout-checker/SKILL.md:
-1. Check diagram legibility, angle labels, and aspect ratio.
-2. Check multi-column balance and vertical slack distribution.
-3. Confirm zero blank underlines and verify adequate clean whitespace.
-4. Confirm exact 2-page target without orphan spills.
-If issues are found, update _temp/specs/worksheet_spec.json, re-pack with `uv run worksheet-packer pack`, and re-render.
-Reply with the final audit verdict: PASS or CORRECTED."""
-)
-```
+Perform the visual audit in the current session:
+1. Render page images to `_temp/renders/docx_pages/` (or `pdf_pages/`).
+2. Inspect each page against the Visual Layout Audit Checklist (legibility/aspect ratio, column balance/slack, layout harmony, clean whitespace, page budget/overflow).
+3. Record a short per-page verdict and any defects.
+4. If issues are found, update `_temp/specs/worksheet_spec.json` (or the relevant source), re-pack with `uv run worksheet-packer pack`, and re-render; re-audit affected pages.
+5. Report the final verdict: `PASS` or `CORRECTED`, with a brief summary of changes.
 
