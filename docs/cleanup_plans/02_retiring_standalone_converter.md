@@ -7,6 +7,7 @@ This document details the architectural deprecation of the [`standalone_converte
 ## 1. Background & Evolution Context
 
 Early in this repository's history, the conversion pipeline was implemented as a monolithic single-process package:
+
 - **Triage Router:** Used the `laya` package (FastText/ONNX classifiers) to triage whether a PDF page was simple enough for direct local text/table extraction or required AI vision.
 - **API Escalation:** Pages below confidence ($< 0.85$) were sent sequentially or via thread workers directly to Gemini Flash Lite (`gemini--flash-lite-latest`) through the Google GenAI SDK.
 - **In-Process MCP Dispatcher:** Executed Word modifications via an in-memory MCP tool dispatcher class mimicking the Model Context Protocol.
@@ -25,26 +26,27 @@ As a result, `standalone_converter/` became a dormant codebase with frozen depen
 
 [`standalone_converter/`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/standalone_converter) contains 12 Python files totaling **~112 KB** of code:
 
-| File | Size (Bytes) | Role in Legacy Architecture | Current Status in Modern Pipeline |
-| :--- | :---: | :--- | :--- |
-| `__init__.py` | 1,187 | Package exports & convenience wrapper | Deprecated |
-| `__main__.py` | 4,375 | ArgumentParser CLI runner | Superseded by `pdf_to_docx.cli` (Typer) |
-| `asymmetric_cascade.py` | 18,026 | Laya triage + Gemini API escalation | Abandoned monolithic architecture |
-| `laya_router.py` | 10,313 | FastText/Laya local classification | Abandoned (adds heavy runtime dependencies) |
-| `mcp_dispatcher.py` | 17,705 | In-process MCP tool simulator | Abandoned (replaced by native `docx-mcp` or compiler) |
-| `ir_schema.py` | 5,835 | Outdated Pydantic AST schema | **Stale Fork** (missing LaTeX & exam blocks) |
-| `docx_compiler.py` | 23,122 | Early Word OpenXML builder | Outdated copy of `src/pdf_to_docx/docx_compiler.py` |
-| `converter.py` | 12,408 | Sequential page parsing loop | Superseded by subagent orchestrator |
-| `chart_generator.py` | 3,354 | Early Matplotlib chart generator | Outdated copy of `src/pdf_to_docx/chart_generator.py` |
-| `page_parser.py` | 8,396 | Direct prompt/response parser | Superseded by `src/pdf_to_docx/layout_parser.py` |
-| `pdf_extractor.py` | 5,955 | Early PyMuPDF extractor wrapper | Superseded by `src/pdf_to_docx/pdf_extractor.py` |
-| `asset_harvester.py` | 11,972 | Heuristic image asset discovery | Superseded by subagent bounding-box crops |
+| File                      | Size (Bytes) | Role in Legacy Architecture           | Current Status in Modern Pipeline                       |
+| :------------------------ | :----------: | :------------------------------------ | :------------------------------------------------------ |
+| `__init__.py`           |    1,187    | Package exports & convenience wrapper | Deprecated                                              |
+| `__main__.py`           |    4,375    | ArgumentParser CLI runner             | Superseded by `pdf_to_docx.cli` (Typer)               |
+| `asymmetric_cascade.py` |    18,026    | Laya triage + Gemini API escalation   | Abandoned monolithic architecture                       |
+| `laya_router.py`        |    10,313    | FastText/Laya local classification    | Abandoned (adds heavy runtime dependencies)             |
+| `mcp_dispatcher.py`     |    17,705    | In-process MCP tool simulator         | Abandoned (replaced by native `docx-mcp` or compiler) |
+| `ir_schema.py`          |    5,835    | Outdated Pydantic AST schema          | **Stale Fork** (missing LaTeX & exam blocks)      |
+| `docx_compiler.py`      |    23,122    | Early Word OpenXML builder            | Outdated copy of `src/pdf_to_docx/docx_compiler.py`   |
+| `converter.py`          |    12,408    | Sequential page parsing loop          | Superseded by subagent orchestrator                     |
+| `chart_generator.py`    |    3,354    | Early Matplotlib chart generator      | Outdated copy of `src/pdf_to_docx/chart_generator.py` |
+| `page_parser.py`        |    8,396    | Direct prompt/response parser         | Superseded by `src/pdf_to_docx/layout_parser.py`      |
+| `pdf_extractor.py`      |    5,955    | Early PyMuPDF extractor wrapper       | Superseded by `src/pdf_to_docx/pdf_extractor.py`      |
+| `asset_harvester.py`    |    11,972    | Heuristic image asset discovery       | Superseded by subagent bounding-box crops               |
 
 ---
 
 ## 3. Detailed Technical Divergence
 
 ### 3.1 Schema Drift: `ir_schema.py`
+
 Comparing [`standalone_converter/ir_schema.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/standalone_converter/ir_schema.py) with [`src/pdf_to_docx/ir_schema.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/src/pdf_to_docx/ir_schema.py) shows significant architectural drift:
 
 ```diff
@@ -61,6 +63,7 @@ Comparing [`standalone_converter/ir_schema.py`](file:///c:/Users/zubair/Document
 The standalone schema only supported basic Word conversion. Running any modern AST JSON through `standalone_converter` will fail Pydantic validation due to missing block types.
 
 ### 3.2 Compilation Drift: `docx_compiler.py` & `chart_generator.py`
+
 - [`src/pdf_to_docx/chart_generator.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/src/pdf_to_docx/chart_generator.py) supports native Office DrawingML conversion via `to_docx_mcp_chart_args`, area charts, and custom corporate themes. `standalone_converter/chart_generator.py` lacks these features.
 - [`src/pdf_to_docx/docx_compiler.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/src/pdf_to_docx/docx_compiler.py) has advanced table borders, `w:cantSplit` row protections, and custom cell margin padding.
 
@@ -71,6 +74,7 @@ The standalone schema only supported basic Word conversion. Running any modern A
 What currently depends on `standalone_converter`?
 
 A repository-wide search identified only two files:
+
 1. **[`batch_convert_stats_archive.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/batch_convert_stats_archive.py):**
    - Line 77: Invokes `python -m standalone_converter`. (This script is an obsolete external batch runner, addressed in Cleanup Plan 04).
 2. **[`audit_tools/audit_ast.py`](file:///c:/Users/zubair/Documents/GitHub/pdf-to-docx/audit_tools/audit_ast.py):**
@@ -89,17 +93,20 @@ A repository-wide search identified only two files:
 You have two clean options depending on whether you want to preserve git history locally or purge dead code:
 
 ### Option A: Clean Deletion (Recommended)
+
 Since git retains full history, removing dead code keeps the repository focused and clean:
 
-```powershell
-# 1. Remove the entire directory
-Remove-Item -Recurse -Force standalone_converter
+* [ ] 
+  ```powershell
+  # 1. Remove the entire directory
+  Remove-Item -Recurse -Force standalone_converter
 
-# 2. Run test suite to verify no unintended breaks
-uv run pytest tests/
-```
+  # 2. Run test suite to verify no unintended breaks
+  uv run pytest tests/
+  ```
 
 ### Option B: Archive to `legacy/`
+
 If you prefer keeping legacy code visibly accessible without it cluttering root:
 
 ```powershell
