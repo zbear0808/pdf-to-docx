@@ -19,7 +19,7 @@ from .worksheet_ast import (
     WorksheetSection,
     WorksheetSpec,
 )
-from .image_utils import auto_crop_image, inspect_diagram_dimensions
+from .image_utils import auto_crop_image, inspect_diagram_dimensions, audit_image_boundaries, ImageBoundaryAuditor
 from .layout_engine import LayoutEngine
 from .docx_renderer import DocxWorksheetRenderer
 from .latex_renderer import LatexWorksheetRenderer
@@ -43,6 +43,8 @@ __all__ = [
     "RenderPlan",
     "auto_crop_image",
     "inspect_diagram_dimensions",
+    "audit_image_boundaries",
+    "ImageBoundaryAuditor",
     "convert_docx_to_pdf",
     "extract_docx_media",
     "render_docx_pages",

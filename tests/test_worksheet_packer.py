@@ -34,7 +34,13 @@ from worksheet_packer.worksheet_ast import (
     WorksheetSection,
     WorksheetSpec,
 )
-from worksheet_packer.image_utils import auto_crop_image, inspect_diagram_dimensions, estimate_image_scale_bounds
+from worksheet_packer.image_utils import (
+    auto_crop_image,
+    inspect_diagram_dimensions,
+    estimate_image_scale_bounds,
+    audit_image_boundaries,
+    ImageBoundaryAuditor,
+)
 from worksheet_packer.layout_engine import LayoutEngine
 from worksheet_packer.docx_renderer import DocxWorksheetRenderer
 from worksheet_packer.latex_renderer import LatexWorksheetRenderer
@@ -76,6 +82,56 @@ class TestWorksheetPacker(unittest.TestCase):
         orig_w, orig_h, orig_ar = inspect_diagram_dimensions(self.sample_diagram)
         self.assertEqual(orig_w, 400)
         self.assertEqual(orig_h, 300)
+
+    def test_audit_image_boundaries(self):
+        """Verifies edge perimeter cutoff detection and boundary auditing."""
+        # 1. Clean image with white borders should pass
+        clean_res = audit_image_boundaries(self.sample_diagram)
+        self.assertEqual(clean_res["status"], "PASS")
+        self.assertEqual(clean_res["cutoffs"], [])
+        self.assertEqual(clean_res["densities"]["top"], 0.0)
+        self.assertEqual(clean_res["densities"]["bottom"], 0.0)
+        self.assertEqual(clean_res["densities"]["left"], 0.0)
+        self.assertEqual(clean_res["densities"]["right"], 0.0)
+
+        # 2. Image with content extending to borders should flag cutoffs
+        cutoff_path = self.temp_dir / "severed_diagram.png"
+        img = Image.new("RGBA", (200, 200), (255, 255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        # Draw dark lines directly across left edge (x=0) and bottom edge (y=199)
+        draw.line([(0, 0), (0, 199)], fill=(0, 0, 0, 255), width=2)
+        draw.line([(0, 199), (199, 199)], fill=(0, 0, 0, 255), width=2)
+        img.save(str(cutoff_path))
+
+        cutoff_res = audit_image_boundaries(cutoff_path)
+        self.assertEqual(cutoff_res["status"], "FAIL")
+        cutoff_edges = [edge for edge, _ in cutoff_res["cutoffs"]]
+        self.assertIn("LEFT", cutoff_edges)
+        self.assertIn("BOTTOM", cutoff_edges)
+        self.assertNotIn("TOP", cutoff_edges)
+        self.assertNotIn("RIGHT", cutoff_edges)
+
+        # 3. Transparent background is treated as clean margin
+        transparent_path = self.temp_dir / "transparent_diagram.png"
+        trans_img = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        trans_draw = ImageDraw.Draw(trans_img)
+        # Content centered at (30, 30) to (70, 70)
+        trans_draw.rectangle([(30, 30), (70, 70)], fill=(0, 0, 0, 255))
+        trans_img.save(str(transparent_path))
+
+        trans_res = audit_image_boundaries(transparent_path)
+        self.assertEqual(trans_res["status"], "PASS")
+        self.assertEqual(trans_res["cutoffs"], [])
+
+        # 4. ImageBoundaryAuditor class wrapper produces identical results
+        auditor = ImageBoundaryAuditor()
+        class_res = auditor.audit_image_file(cutoff_path)
+        self.assertEqual(class_res["status"], "FAIL")
+        self.assertEqual(class_res["cutoffs"], cutoff_res["cutoffs"])
+
+        # 5. Non-existent file raises FileNotFoundError
+        with self.assertRaises(FileNotFoundError):
+            audit_image_boundaries(self.temp_dir / "non_existent.png")
 
     def test_ast_schema_and_serialization(self):
         """Verifies WorksheetSpec AST creation, validation, and JSON round-trip."""

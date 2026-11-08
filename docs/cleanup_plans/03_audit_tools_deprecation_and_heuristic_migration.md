@@ -143,7 +143,7 @@ Remove-Item -Recurse -Force audit_tools
 
 ## 5. Verification Checklist
 
-- [ ] `audit_image_boundaries()` is available in `worksheet_packer.image_utils`.
-- [ ] Unit test in `tests/test_worksheet_packer.py` passes.
-- [ ] `audit_tools/` folder is deleted.
-- [ ] No remaining references to `audit_tools` exist in the codebase.
+- [x] `audit_image_boundaries()` is available in `worksheet_packer.image_utils`.
+- [x] Unit test in `tests/test_worksheet_packer.py` passes.
+- [x] `audit_tools/` folder is deleted.
+- [x] No remaining references to `audit_tools` exist in the codebase.

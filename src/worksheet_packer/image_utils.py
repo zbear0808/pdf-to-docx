@@ -7,7 +7,7 @@ computes true aspect ratios, and validates minimum scale thresholds for legibili
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from PIL import Image, ImageChops, ImageFilter, ImageOps
 
 
@@ -213,5 +213,95 @@ def estimate_image_scale_bounds(
         has_fine_text=has_fine_text,
         elasticity=elasticity,
     )
+
+
+def audit_image_boundaries(
+    image_path: str | Path,
+    bg_threshold: int = 240,
+    edge_density_tolerance: float = 0.015,
+) -> Dict[str, Any]:
+    """Audits image edge perimeters for non-background pixels indicative of cutoffs.
+
+    Scans the outer 2 rows and columns of an image asset to detect whether visual content
+    (e.g., axes, formulas, exponent text, or diagram strokes) was truncated by a tight crop.
+
+    Args:
+        image_path: Path to the image file to audit.
+        bg_threshold: RGB channel value above which a pixel is considered white background (0-255).
+        edge_density_tolerance: Max allowed proportion of content pixels along any edge before flagging.
+
+    Returns:
+        Dict with status ("PASS" | "FAIL"), filename, cutoffs list, and per-edge density metrics.
+    """
+    img_p = Path(image_path)
+    if not img_p.exists():
+        raise FileNotFoundError(f"Image not found: {img_p}")
+
+    with Image.open(img_p) as raw_img:
+        img = raw_img.convert("RGBA")
+        w, h = img.size
+        if w == 0 or h == 0:
+            return {
+                "status": "FAIL",
+                "name": img_p.name,
+                "error": "Empty image",
+                "cutoffs": [],
+                "densities": {"top": 0.0, "bottom": 0.0, "left": 0.0, "right": 0.0},
+            }
+
+        pixels = img.load()
+
+        def is_content(x: int, y: int) -> bool:
+            r, g, b, a = pixels[x, y]
+            if a < 30:  # transparent
+                return False
+            return r < bg_threshold or g < bg_threshold or b < bg_threshold
+
+        def scan_edge(coords: List[Tuple[int, int]]) -> float:
+            content_count = sum(1 for (x, y) in coords if is_content(x, y))
+            return content_count / max(1, len(coords))
+
+        top_density = scan_edge([(x, y) for y in range(min(2, h)) for x in range(w)])
+        bottom_density = scan_edge([(x, y) for y in range(max(0, h - 2), h) for x in range(w)])
+        left_density = scan_edge([(x, y) for x in range(min(2, w)) for y in range(h)])
+        right_density = scan_edge([(x, y) for x in range(max(0, w - 2), w) for y in range(h)])
+
+        cutoffs: List[Tuple[str, float]] = []
+        if top_density > edge_density_tolerance:
+            cutoffs.append(("TOP", top_density))
+        if bottom_density > edge_density_tolerance:
+            cutoffs.append(("BOTTOM", bottom_density))
+        if left_density > edge_density_tolerance:
+            cutoffs.append(("LEFT", left_density))
+        if right_density > edge_density_tolerance:
+            cutoffs.append(("RIGHT", right_density))
+
+        return {
+            "status": "FAIL" if cutoffs else "PASS",
+            "name": img_p.name,
+            "cutoffs": cutoffs,
+            "densities": {
+                "top": top_density,
+                "bottom": bottom_density,
+                "left": left_density,
+                "right": right_density,
+            },
+        }
+
+
+class ImageBoundaryAuditor:
+    """Audits image edge perimeters for non-background pixels indicative of cutoffs."""
+
+    def __init__(self, bg_threshold: int = 240, edge_density_tolerance: float = 0.015):
+        self.bg_threshold = bg_threshold
+        self.edge_density_tolerance = edge_density_tolerance
+
+    def audit_image_file(self, image_path: str | Path) -> Dict[str, Any]:
+        return audit_image_boundaries(
+            image_path=image_path,
+            bg_threshold=self.bg_threshold,
+            edge_density_tolerance=self.edge_density_tolerance,
+        )
+
 
 
