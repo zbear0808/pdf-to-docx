@@ -84,7 +84,7 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
 - Leave room to write. Use labeled diagrams and tables. Add a vocabulary callout only for dual-meaning words.
 - Fill-ins and frames follow `handout-release-check` §1 (labeled boxes, clear referent).
 - Teacher key: full solutions, anticipated difficulties, what to say. Every item, part, and box answered; drawing tasks get a labeled answer figure.
-- To produce the DOCX/PDF, run Steps 5-8 of `assessment-builder`. Treat the worksheet draft as `draft.md`.
+- To produce the DOCX/PDF, write the lesson as a lesson YAML and build it with `lesson-builder` (handout, key, practice, practice key, teacher guide, packets).
 
 ## Final check
 
@@ -92,4 +92,4 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
 - [ ] Every assessment piece measures a Stage 1 target.
 - [ ] MLL access is built into the task (visuals, a clear context, optional stems, talk in any language) without lowering the math.
 - [ ] Contexts are familiar to students and do actual mathematical work.
-- [ ] The lesson fits 40 minutes (`lesson-scope`), and `check_lesson.py` passes (`handout-release-check`).
+- [ ] The lesson fits 40 minutes (`lesson-scope`), and `lesson-builder check` passes (`handout-release-check`).

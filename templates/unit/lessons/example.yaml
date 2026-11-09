@@ -1,0 +1,124 @@
+# Example lesson: every field the builder understands. Copy, rename (e.g. 3.1.yaml), and list it in unit.yaml.
+# Math is LaTeX in $...$. Use single quotes for strings with backslashes; write an apostrophe as ''.
+# Every item and part needs an answer (or `no_answer: true`); `lesson-builder check` enforces it.
+id: 3.1
+title: Short catchy title
+notes_title: Topic name for the QuickNotes page
+framing: >-
+  One or two sentences that pose today's question.
+materials: patty paper
+
+sections:
+  - kind: warmup                  # warmup | together | partner | notes | cyu | exit | plain
+    items:
+      - minutes: 4
+        prompt: 'What do you notice? What do you wonder?'
+        figure: warmup_fig        # a registered figure name (figures.py) or a path like assets/x.png
+        fig_w: 2.3
+        work: 0
+        columns:                  # bordered write-in columns
+          headers: [I notice..., I wonder...]
+          italic: true
+          answers: [['sample notice'], ['sample wonder']]
+
+  - kind: together
+    box: ['**Move bank**', '*Translate* one vertex onto its match.']   # optional bordered box under the heading
+    items:
+      - n: 1
+        minutes: 4
+        prompt: 'Find a sequence of rigid motions that takes $\triangle ABC$ onto $\triangle DEF$.'
+        figure: pair_fig
+        work: 1.0
+        answer: 'Sample: translate $A$ to $D$, then rotate around $D$.'
+      - n: 2
+        minutes: 3
+        prompt: 'Where does each vertex land?'
+        work: 0
+        table:                    # arrow table
+          header: ['Vertex', '$A$', '$B$', '$C$']
+          answers: ['$D$', '$E$', '$F$']
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 3
+        prompt: 'Explain why. Fill in each box.'
+        frame:                    # sentence frame: [before, answer, after(, box width)]
+          - ['In Problem 2, $B$ landed on', '$E$', '.']
+          - ['Rigid motions do not change', 'length', '.']
+      - n: 4
+        minutes: 7
+        prompt: ['Build it.', 'Step 1: Draw ...', 'Step 2: ...']
+        draw:                     # steps left, drawing box right; key shows a labeled answer figure
+          height: 3.0
+          key_figure: build_fig   # registered figure with an answer layer, or a path
+          key_note: 'Short note under the key figure.'
+      - n: 5
+        minutes: 3
+        prompt: 'Two-part item.'
+        parts:
+          - label: a.
+            prompt: 'What kind of quadrilateral is it?'
+            fill: [['Quadrilateral:', 'parallelogram']]   # labeled answer boxes
+            work: 0
+          - label: b.
+            prompt: 'Explain how you know.'
+            answer: 'Model answer.'
+            work: 1.0
+        page_break_after: true
+
+  - kind: notes                   # new page: notes_title header + printed QuickNotes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: 'Which statement must be true?'
+        choices: ['option A', 'option B', 'option C', 'option D']
+        choice_cols: 2
+        answer: '[B] one-line reason'
+        work: 0.1
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 5
+        prompt: 'Explain why ...'
+        box: 1.5                  # bordered write-in box; the answer prints inside it on the key
+        answer: 'Model answer.'
+
+quicknotes:
+  - '**LT 1: I can ...**'
+  - '- One fact per bullet.'
+
+practice:
+  title: 'Topic: practice'
+  rows:
+    - cells:                      # 1 or 2 items side by side
+        - n: 1
+          prompt: 'Practice item.'
+          answer: 'Answer.'
+          work: 1.0
+        - n: 2
+          prompt: 'Practice item.'
+          answer: 'Answer.'
+          work: 1.0
+    - heading: SBA review         # optional heading above a row; `page_break_before: true` also works
+      cells:
+        - n: 3
+          prompt: 'Spiral review item.'
+          answer: 'Answer.'
+          work: 1.0
+  selected: [[1, Answer], [3, Answer]]   # "Answers to selected problems" on the student practice set
+
+plan: |
+  **Overview.** Where this lesson sits in the unit.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students |
+  | 4-10 | Together | Teacher + class |
+  | 10-25 | With a partner | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-37 | CYU + exit ticket | Students |
+  | 37-40 | Collect, assign practice | Teacher |

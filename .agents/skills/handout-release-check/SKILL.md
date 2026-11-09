@@ -5,55 +5,38 @@ description: Rules and checks that a lesson handout, key, and practice set must 
 
 # Handout release check
 
-Each rule below came from a real problem a teacher hit. Apply them while drafting; the scripts catch what slips through.
+Each rule came from a real problem a teacher hit. Apply them while writing; `lesson-builder` checks what slips through.
 
 ## 1. Fill-ins and sentence frames
 
-- No `___` on student pages. Every blank is a labeled box (`Handout.fill_boxes` or `Handout.frame` in `scripts/docbuilder.py`) big enough to write in (≥ 0.9 in wide, ≥ 0.34 in tall).
+- No `___` on student pages. Every blank is a labeled box (`fill:` or `frame:` in the lesson YAML), ≥ 0.9 in wide.
 - A frame sits directly under the problem it supports. No floating "Talk frames" box for several problems.
-- Every frame names its referent: the figure, triangle, or earlier problem ("In Problem 2, ∠ABC landed on ☐"). If a student can't tell what "it" or "___" refers to, rewrite.
-- Fill in most of the sentence; leave 1 box per idea. A frame with 4 open blanks per line is a puzzle, not a scaffold.
-- A word or move bank lists phrases, not blanks ("Translate one vertex onto its match"), so nothing in it looks like it needs an answer.
-- Each box has exactly one expected answer, written in the key. If the teacher can't fill it in at a glance, students can't either.
+- Every frame names its referent: the figure, triangle, or earlier problem ("In Problem 2, ∠ABC landed on ☐").
+- Fill in most of the sentence; one box per idea. A word or move bank lists phrases, never blanks.
+- Each box has exactly one expected answer, written in the key. If the teacher can't fill it at a glance, students can't either.
 
 ## 2. Keys
 
-- Every numbered item, every lettered part, and every box gets a red answer. That includes warm-ups (sample responses), Together problems, and "circle one" items.
-- Draw, sketch, construct, mark, shade, plot: the key shows a **labeled figure** of a correct answer (given parts black, student work red). Generate it with Python (`curriculum-visual-generator`), assert the geometry in code, and add `- **Key image**: <path>` under the item in the draft. A text description alone is not enough.
-- For tasks where student drawings will differ, give the steps fixed letters ("Label it ABC with AC longest; call the image of B point D") so the key figure matches.
-- Each practice set gets a full practice key (every problem and part), not just "answers to selected problems."
-- The key keeps the student layout: same pages and item positions, so the teacher can work it under the doc camera.
+- Every item, part, and box gets a red answer, including warm-ups (samples), Together problems, and "circle one" items.
+- Draw, sketch, construct, mark, shade, plot: the key shows a **labeled answer figure**, made in `figures.py` with an `answer` layer (given black, student work red), with the geometry asserted in code. A text description is not enough.
+- When student drawings vary, give the steps fixed letters ("Label it ABC, AC longest; call the image of B point D") so the key matches.
+- Every practice set gets a full practice key, not just "answers to selected problems."
+- The key keeps the student layout (same pages and positions) for the doc camera.
 
 ## 3. Cross-references
 
-- After any cut or renumber, every "Problem N" still exists and supports what the sentence claims (see `lesson-scope`).
+After any cut or renumber, every "Problem N" exists and supports what the sentence claims (`lesson-scope`).
 
-## 4. Layout
+## 4. Layout and printing
 
-- Student copy ≤ 3 pages, practice ≤ 2. Key page count = student page count. No blank pages.
-- Labels next to boxes stay on one line (measure label widths with the real fonts, not character counts).
-- Red text only on keys.
-
-## 5. Packets for printing
-
-Teachers print double-sided. Build both a PDF and a DOCX packet; each lesson starts on a front page, and the practice set follows its lesson directly.
-
-```bash
-uv run python .agents/skills/handout-release-check/scripts/make_packet.py --out "<dir>/Unit N Student Packet.pdf" \
-  --group "L1 Student Handout.pdf" "L1 Practice Problems.pdf" --group "L2 ..." "L2 ..."
-pwsh -File .agents/skills/handout-release-check/scripts/make_packet_docx.ps1 -Out "<dir>/Unit N Student Packet.docx" `
-  "L1 Student Handout.docx" "L1 Practice Problems.docx" "|" "L2 ..." "L2 ..."
-```
-
-Make a key packet the same way (lesson key + practice key).
+- Student ≤ 3 pages, practice ≤ 2, key pages = student pages, no blank pages, red only on keys.
+- Packets: one student packet and one key packet, PDF and DOCX, duplex (each lesson starts on a front page; practice follows its lesson).
 
 ## Run before release
 
 ```bash
-S=.agents/skills/handout-release-check/scripts/check_lesson.py
-uv run python $S draft --draft <draft.md> --minutes 40
-uv run python $S outputs --student "<X Student Handout.pdf>" --key "<X Lesson Key.pdf>"
-uv run python $S outputs --student "<X Practice Problems.pdf>" --key "<X Practice Key.pdf>" --max-pages 2
+uv run lesson-builder check <unit_dir>                          # spec + rendered PDFs
+uv run lesson-builder check-pdfs "<student.pdf>" "<key.pdf>"    # any pair not built from YAML
 ```
 
-Fix every ERROR. Then look at each key page yourself: the script finds missing red text, not wrong answers.
+`lesson-builder build` runs both, fits pages, and builds the packets. Fix every ERROR, then look at the pages it lists as changed. The checker finds missing answers, not wrong ones.

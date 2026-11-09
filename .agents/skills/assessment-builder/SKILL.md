@@ -14,6 +14,7 @@ Load these only when the step that needs them comes up:
 | 1 | `classroom-context` (only the section for the target period) |
 | 1 | `course-content-extractor` (only if there's no source file, or a retake/variant is needed) |
 | 2 | `lesson-scope` (lesson handouts and worksheets: 40-min budget, what to cut) |
+| 3-8 | `lesson-builder` for lesson handouts (YAML instead of `draft.md`; replaces Steps 6-7 here) |
 | 3-4 | `references/item-rules.md` (this folder), `authentic-writer`, `handout-release-check` §1-2 (fill-ins, keys) |
 | 6 | `curriculum-visual-generator` |
 | 7 | `worksheet-packer` |
@@ -113,7 +114,7 @@ Fix every ERROR. Fix WARNs unless there's a reason not to; a NOT stem that's rea
 - [ ] No `___` blanks; every fill-in is a labeled box under its problem, naming the figure it refers to.
 - [ ] Every "Problem N" exists and supports the task.
 
-Lesson handouts: also run `check_lesson.py draft` (`handout-release-check`).
+Lesson handouts: write a lesson YAML instead of `draft.md` and use `lesson-builder` for Steps 5-8 (it checks, renders, fits pages, and builds packets).
 
 Rerun the script until it shows 0 errors.
 
@@ -159,7 +160,7 @@ Look at every page using the `visual-layout-checker` checklist. Problems to catc
 
 Fix the problem in `worksheet_spec.json` (workspace, widths, layout hints, columns, font), not in the DOCX. Then repack. Stop after 3 rounds and report what's left.
 
-Then run `check_lesson.py outputs` on student/key pairs (handout and practice) and build the duplex PDF and DOCX packets (`handout-release-check` §5).
+Then run `uv run lesson-builder check-pdfs <student.pdf> <key.pdf>` on the student/key pair and build duplex packets if the user prints sets (`handout-release-check` §4).
 
 ## Finish
 

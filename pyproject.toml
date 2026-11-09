@@ -16,6 +16,8 @@ dependencies = [
     "pydantic>=2.13.5",
     "pymupdf>=1.28.2",
     "python-docx>=1.2.0",
+    "pywin32>=306 ; sys_platform == 'win32'",
+    "pyyaml>=6.0.3",
     "rich>=15.0.0",
     "typer>=0.27.2",
 ]
@@ -24,7 +26,13 @@ dependencies = [
 pdf-to-docx = "pdf_to_docx:main"
 pdf-to-latex = "pdf_to_latex:main"
 worksheet-packer = "worksheet_packer:main"
+lesson-builder = "lesson_builder:main"
 
 [build-system]
 requires = ["uv_build>=0.12.5,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

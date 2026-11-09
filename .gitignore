@@ -51,3 +51,9 @@ tests/.cascade_sample/
 /unit_1_review_aligned/
 /unit2*
 /codehs_unit1*
+
+# Lesson builder units: YAML, figures.py, and assets are the source; these are generated or private
+/units/**/input/
+/units/**/output/
+/units/**/_temp/
+/units/_scratch/

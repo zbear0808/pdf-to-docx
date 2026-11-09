@@ -18,7 +18,7 @@ A lesson is **40 minutes**, including the warm-up and exit ticket. Write less. S
 | Check your understanding + exit ticket | 8 | 2 items + 1 exit ticket |
 | Collect, assign practice | 3 | |
 
-Whole-class talk ≤ 14 min. The plan's timing table ends at 40 or less (`check_lesson.py draft` enforces this).
+Whole-class talk ≤ 14 min. The plan's timing table ends at 40 or less, and item `minutes:` add up to 40 or less (`lesson-builder check` enforces both).
 
 ## Per-item minutes (estimate before writing)
 

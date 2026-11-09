@@ -1,0 +1,236 @@
+id: 2.1
+title: Along for the ride
+notes_title: Congruent parts
+framing: >-
+  In Unit 1 you moved figures with translations, reflections, and rotations. Today's question: if rigid motions
+  move one triangle onto another, what do we know about the sides and angles of the two triangles?
+materials: patty paper
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        prompt: '$\triangle A''B''C''$ is the image of $\triangle ABC$ after a reflection across line $BC$. What do you notice? What do you wonder?'
+        figure: assets/21_kite.png
+        fig_w: 2.3
+        work: 0
+        after: 0.04
+        columns:
+          headers: [I notice..., I wonder...]
+          italic: true
+          answers:
+            - ['$B$ and $C$ are on the line of reflection, so they don''t move ($B = B''$, $C = C''$).', '$AB = A''B$ and $AC = A''C$.']
+            - ['Does $\overline{BC}$ cut $\angle ABA''$ in half?', 'Is $ABA''C$ a kite?']
+
+  - kind: together
+    items:
+      - n: 1
+        minutes: 4
+        prompt:
+          - 'Triangle $ABC$ can be moved onto triangle $DEF$ with rigid motions. Trace $\triangle ABC$ on patty paper, then find a sequence of rigid motions that takes it onto $\triangle DEF$. Describe each move.'
+          - '*Move bank:*  translate  |  reflect across a line  |  rotate around a point'
+        figure: assets/21_act_abc_def.png
+        fig_w: 2.25
+        work: 1.1
+        after: 0.06
+        answer: 'Sample: translate $A$ to $D$, rotate around $D$ until $B''$ lands on $E$, then reflect across line $DE$. Other sequences work too.'
+      - n: 2
+        minutes: 3
+        prompt: 'After your moves, where does each part of $\triangle ABC$ land?'
+        work: 0
+        after: 0.04
+        table:
+          header: ['Part of $\triangle ABC$', '$A$', '$B$', '$C$', '$\overline{BC}$', '$\overline{AB}$', '$\angle ABC$', '$\angle BCA$']
+          answers: ['$D$', '$E$', '$F$', '$\overline{EF}$', '$\overline{DE}$', '$\angle DEF$', '$\angle EFD$']
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 4
+        prompt: 'Mateo says $\angle ABC$ and $\angle DEF$ have the same measure, and $BC = EF$. Linh says, "We can''t know that unless we measure with a protractor and a ruler." Who do you agree with? Use your table from Problem 2. Fill in each box.'
+        after: 0.06
+        frame:
+          - ['I agree with', 'Mateo', '.']
+          - ['In Problem 2, $\angle ABC$ landed on', '$\angle DEF$', '.']
+          - ['In Problem 2, $\overline{BC}$ landed on', '$\overline{EF}$', '.']
+          - ['Rigid motions do not change angle measures or', 'lengths', ', so no measuring is needed.']
+        page_break_after: true
+      - n: 4
+        minutes: 3
+        prompt:
+          - 'Finish the sentence in your own words. Write the ending in the box.'
+          - '"If a sequence of rigid motions takes one figure onto another figure, then ..."'
+        box: 1.3
+        after: 0.16
+        answer: 'Sample: "... every part of the first figure lands on a matching part of the second figure, and those matching parts are congruent."'
+      - n: 5
+        minutes: 7
+        prompt:
+          - Build a quadrilateral.
+          - 'Step 1: Draw a scalene triangle in the box. Label it $ABC$, with $\overline{AC}$ as the longest side.'
+          - 'Step 2: Mark the midpoint of $\overline{AC}$. Label it $M$.'
+          - 'Step 3: Trace your triangle on patty paper. Rotate it $180^\circ$ around $M$ and draw the image in the box.'
+          - 'Step 4: Label the image of $B$ as $D$. Mark the parts that must be congruent.'
+        draw:
+          height: 3.1
+          key_figure: parallelogram_build
+          key_fig_w: 2.6
+          key_note: 'The rotation takes $A \to C$, $C \to A$, $B \to D$. Same tick marks: $\overline{AB}, \overline{CD}$ and $\overline{BC}, \overline{DA}$. Same arcs on the matching angles.'
+      - n: 6
+        minutes: 4
+        prompt: What did you build?
+        page_break_after: true
+        parts:
+          - label: a.
+            prompt: What kind of quadrilateral did you make? Compare with the pair next to you.
+            fill: [['Quadrilateral:', 'parallelogram']]
+            box_w: 1.9
+            answer: Every pair should get a parallelogram, even with different triangles.
+            work: 0
+          - label: b.
+            prompt: Explain why it has to be a parallelogram. Fill in each box.
+            frame:
+              - ['The rotation takes $\overline{AB}$ onto', '$\overline{CD}$', '.']
+              - ['A $180^\circ$ rotation takes a line to a line that is', 'parallel', ', so these opposite sides are parallel.']
+              - ['The same is true for $\overline{BC}$ and', '$\overline{DA}$', '.']
+              - ['Two pairs of parallel sides make a', 'parallelogram', '.', 1.6]
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: '$\triangle JKL \cong \triangle TSR$. Find $a$, $b$, and $x$. Write each answer in its box.'
+        figure: assets/21_cyu1_jkl_tsr.png
+        fig_w: 2.9
+        fill: [['$a =$', '5'], ['$b =$', '7'], ['$x =$', '78']]
+        box_w: 0.9
+        answer: '$\overline{TS}$ matches $\overline{JK}$, $\overline{SR}$ matches $\overline{KL}$, and $\angle T$ matches $\angle J$.'
+        work: 0
+        after: 0.06
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 5
+        prompt: '$\triangle A''B''C''$ is the reflection of $\triangle ABC$ across $\overleftrightarrow{BC}$. Explain why $\overrightarrow{BC}$ bisects $\angle ABA''$.'
+        figure: assets/21_kite.png
+        fig_w: 2.3
+        work: 3.0
+        answer: '$B$ and $C$ are on the line of reflection, so $B'' = B$ and $C'' = C$. The reflection takes $\angle ABC$ onto $\angle A''BC$, so they are corresponding parts and congruent. $\overrightarrow{BC}$ splits $\angle ABA''$ into two congruent angles, so it bisects it.'
+
+quicknotes:
+  - '**LT 1: I can identify corresponding parts of congruent figures.**'
+  - '- Two figures are congruent if a sequence of rigid motions takes one figure onto the other.'
+  - '- Corresponding parts are the parts that land on each other: points, segments, and angles.'
+  - '- $\triangle ABC \cong \triangle DEF$ tells you the matches by position: $A \leftrightarrow D$, $B \leftrightarrow E$, $C \leftrightarrow F$.'
+  - '**LT 2: I can explain why corresponding parts of congruent figures are congruent.**'
+  - '- Rigid motions don''t change lengths or angle measures, so parts that land on each other are congruent.'
+  - '- Corresponding parts of congruent figures are congruent. If $\triangle ABC \cong \triangle DEF$, then $\overline{AB} \cong \overline{DE}$, $\overline{BC} \cong \overline{EF}$, $\overline{AC} \cong \overline{DF}$, $\angle A \cong \angle D$, $\angle B \cong \angle E$, $\angle C \cong \angle F$.'
+
+practice:
+  title: 'Congruent parts: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'When rectangle $ABCD$ is reflected across line $EF$, the image is $DCBA$. How do you know that $\overline{AB} \cong \overline{DC}$?'
+          figure: assets/21_prac1_rect.png
+          fig_w: 1.9
+          choices: ['A rectangle has 2 pairs of parallel sides.', 'Any 2 sides of a rectangle are congruent.', 'Congruent parts of congruent figures are corresponding.', 'Corresponding parts of congruent figures are congruent.']
+          answer: '[D]. The reflection takes $\overline{AB}$ onto $\overline{DC}$, so they are corresponding parts of congruent figures.'
+          work: 0.2
+        - n: 2
+          prompt: '$\triangle FGH$ is the image of isosceles $\triangle FEH$ after a reflection across line $HF$. Select **all** the statements that are a result of corresponding parts of congruent triangles being congruent.'
+          figure: assets/21_prac2_rhombus.png
+          fig_w: 1.25
+          choices: ['$EFGH$ is a rectangle.', '$EFGH$ has four congruent sides.', 'Diagonal $FH$ bisects $\angle EFG$ and $\angle EHG$.', 'Diagonal $FH \perp FE$.', '$\angle FEH \cong \angle FGH$']
+          work: 0.15
+          answer: ['[B], [C], [E]', '[B]: $FG = FE$ and $GH = EH$ (corresponding parts), and $FE = EH$ is given. [C]: $\angle EFH \cong \angle GFH$ and $\angle EHF \cong \angle GHF$. [E]: $\angle FEH$ lands on $\angle FGH$.']
+    - cells:
+        - n: 3
+          prompt: ['a. Reflect right triangle $ABC$ across line $BC$.', 'b. Then classify $\triangle ACA''$ by its side lengths.']
+          figure: right_triangle_reflect
+          fig_w: 1.45
+          choices: [equilateral, scalene, isosceles, equiangular]
+          choice_cols: 2
+          answer: ['a. See the red drawing: $A''$ is on line $AB$, on the other side of $B$, with $BA'' = BA$.', 'b. [C] isosceles']
+          work: 0
+          parts:
+            - label: c.
+              prompt: Explain how you know.
+              answer: 'The reflection takes $\overline{CA}$ onto $\overline{CA''}$, so they are corresponding parts and $CA = CA''$. Two congruent sides makes $\triangle ACA''$ isosceles.'
+              work: 1.1
+        - n: 4
+          prompt: '$\triangle FAD$ and $\triangle DCE$ are translations of $\triangle ABC$. Select **all** statements that must be true.'
+          figure: assets/21_prac4_translations.png
+          fig_w: 3.0
+          choices: ['Points $B$, $A$, and $F$ are collinear.', '$m\angle BCA = m\angle CED$', '$\overleftrightarrow{AD} \parallel \overleftrightarrow{BC}$', '$m\angle CED = m\angle FAD$', '$m\angle DAC = m\angle BCA$', '$\triangle ADC$ is a reflection of $\triangle FAD$.']
+          work: 0.15
+          answer: ['[A], [B], [C], [E]', '[A], [C]: one translation moves $B$ to $A$ and $A$ to $F$, and another moves $B$ to $C$ and $A$ to $D$. [B]: $\angle CED$ matches $\angle BCA$. [E]: alternate interior angles, since $\overleftrightarrow{AD} \parallel \overleftrightarrow{BC}$.', '[D] is false: $\angle FAD$ matches $\angle ABC$.']
+    - page_break_before: true
+      cells:
+        - n: 5
+          prompt: 'In the diagram, $\triangle ABC \cong \triangle BAD \cong \triangle CEA$.'
+          figure: assets/21_prac5_three.png
+          fig_w: 3.0
+          parts:
+            - label: a.
+              prompt: Explain why points $D$, $A$, and $E$ are collinear.
+              work: 1.4
+              answer: ['$\angle DAB \cong \angle ABC$ and $\angle CAE \cong \angle BCA$ (corresponding parts).', 'At $A$: $m\angle DAB + m\angle BAC + m\angle CAE = m\angle ABC + m\angle BAC + m\angle BCA = 180^\circ$, so $D$, $A$, $E$ form a straight angle.']
+            - label: b.
+              prompt: 'Explain why $\overleftrightarrow{DE} \parallel \overleftrightarrow{BC}$.'
+              work: 1.4
+              answer: '$\angle DAB \cong \angle ABC$, and they are alternate interior angles for transversal $\overleftrightarrow{AB}$. So $\overleftrightarrow{DE} \parallel \overleftrightarrow{BC}$.'
+        - n: 6
+          prompt: Here is a diagram made of quadrilaterals.
+          figure: assets/21_prac6_quads.png
+          fig_w: 2.2
+          parts:
+            - label: a.
+              prompt: Identify a figure that is the result of a rigid transformation of quadrilateral $ABCD$.
+              answer: $FBHG$
+              work: 0.8
+            - label: b.
+              prompt: Describe a rigid transformation that would take $ABCD$ to that figure.
+              answer: 'Rotate $ABCD$ $180^\circ$ around $B$: $A \to F$, $B \to B$, $C \to H$, $D \to G$.'
+              work: 0.9
+    - heading: SBA review
+      cells:
+        - n: 7
+          prompt: Kenny can make 6 origami swans in 10 minutes. How long would it take him to make 15 origami swans?
+          work: 1.5
+          answer: ['15 swans is $15 ÷ 6 = 2.5$ groups of 6.', '$2.5 \times 10 = 25$ minutes']
+        - n: 8
+          prompt: 'Write the equation of the line containing the points $(-2, 1)$ and $(-1, 4)$.'
+          work: 1.5
+          answer: ['slope $= (4 - 1) / (-1 - (-2)) = 3$', '$1 = 3(-2) + b$, so $b = 7$', '$y = 3x + 7$']
+  selected: [[1, D], [2, 'B, C, E'], [3, 'b. isosceles'], [4, 'A, B, C, E'], [6, $FBHG$], [7, 25 minutes], [8, '$y = 3x + 7$']]
+
+plan: |
+  **Overview.** First lesson of Unit 2. Students used rigid motions in Unit 1. Today they find that a rigid motion carries every side and angle onto a matching one, and they name this idea (corresponding parts, CPCTC). Lesson 2.2 moves to congruence statements; Lesson 2.3 asks the converse, which sets up SSS/SAS/ASA.
+
+  **Objectives.** Students will be able to: (1) identify corresponding parts of two figures using a rigid motion or a congruence statement; (2) explain why corresponding parts of congruent figures are congruent. **Standards.** G-CO.A.5, G-CO.B.6, G-CO.B.7 (only-if direction). SMP 3, 5 (patty paper), 6.
+
+  **Quick look (45 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up on the handout | Students (individual), 1 min share |
+  | 4-11 | Together: Problems 1-2 | Teacher + class |
+  | 11-29 | Work time: Problems 3-6 | Students (pairs) |
+  | 29-33 | QuickNotes | Teacher + class |
+  | 33-41 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 41-45 | Collect exit ticket, assign practice, buffer | Teacher |
+
+  **Together (7 min, doc camera).** Read the framing box. Problem 1: trace $\triangle ABC$ under the camera and do the moves the class suggests until one sequence works. Problem 2: students call out where each part lands. Stop there.
+
+  **Work time (18 min, pairs).**
+  - Problems 3-4 first (about 7 min), then 5-6 (about 11 min). At minute 18, move pairs still on Problem 3 to Problem 5.
+  - Assessing: "Where did $B$ land? How do you know?" Advancing: "What else, besides the vertices, is now on top of something?"
+  - Problem 4: Turn and Talk before writing. Problems 5-6: compare quadrilaterals with the next pair.
+  - MLL supports: any language for discussion; Problems 3 and 6b are fill-in sentences with labeled boxes tied to the Problem 2 table and the drawing.
+  - 6b uses the Unit 1 fact that a $180^\circ$ rotation takes a line to a parallel line. If the class hasn't seen it, accept "opposite sides are congruent" and record "parallelogram" as a conjecture.
+
+  **QuickNotes (4 min).** Printed on page 3. Show two student answers picked while circulating and connect each to a bullet.
+
+  **CYU (8 min).** CYU 1 shows whether students match by letter order; the exit ticket shows whether they cite corresponding parts.

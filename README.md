@@ -55,6 +55,30 @@ This project implements the **Page-Parallel Subagent Compiler Architecture**:
 
 ---
 
+## Lesson builder (`lesson-builder` CLI)
+
+Builds each lesson's student handout, lesson key, practice set, practice key, and teacher guide, plus duplex
+student and key packets, from one YAML file per lesson. Works for any math course. Design: `docs/lesson_builder.md`.
+Agent workflow: `.agents/skills/lesson-builder/SKILL.md`.
+
+```bash
+uv run lesson-builder new-unit units/geometry/unit-3-similarity --course Geometry --unit 3 --title "Similarity"
+uv run lesson-builder ingest units/geometry/unit-3-similarity/input -o units/geometry/unit-3-similarity/_temp/ingest
+uv run lesson-builder build units/geometry/unit-3-similarity          # all lessons + packets
+uv run lesson-builder build units/geometry/unit-3-similarity -l 3.1   # one lesson
+uv run lesson-builder check units/geometry/unit-3-similarity
+```
+
+```text
+src/lesson_builder/   package (spec, render, docbuilder, fit, check, export, diff, packet, ingest, figures/)
+templates/unit/       starter unit.yaml, lessons/example.yaml (every field), figures.py
+units/<course>/<unit>/ unit.yaml, lessons/*.yaml, figures.py, assets/  (input/, output/, _temp/ are gitignored)
+```
+
+Example: `units/geometry/unit-2-congruent-triangles/` (Lesson 2.1).
+
+---
+
 ## Antigravity Agent Skills & Slash Commands
 
 This repository includes three first-class Antigravity skills in `.agents/skills/`:

@@ -1,0 +1,12 @@
+# {course} Unit {unit}: {title}
+course: {course}
+unit: {unit}
+unit_title: {title}
+period: "{period}"
+budget:
+  minutes: 40          # lesson-scope: every lesson fits a 40-minute period
+  handout_pages: 3
+  practice_pages: 2
+lessons:               # files in lessons/, in teaching order
+  - example.yaml
+figures: figures.py    # @figure functions; student and key PNGs come from the same function
