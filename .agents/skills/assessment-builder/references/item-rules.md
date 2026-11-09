@@ -63,7 +63,7 @@ Goal: lower the language load without lowering the math. Same mathematical aim, 
 - Pair key text with a visual: labeled diagram, table, or graph. Do not assume students see in a diagram what you see; label what matters (Roberts p460; Lotan p73-74).
 - Leave white space. Math text packs many ideas per sentence, so break items into parts (Zwiers p102).
 - Let students answer with drawings, tables, or labeled diagrams where the target allows (Moschkovich p24-25; T&N8 p14).
-- Sentence starters, if used: optional, matched to the language function (explain, compare, justify), and they start the sentence without giving the claim. "I know the triangles are congruent because ___" is fine. A frame that contains the reasoning is not (Rodriguez-Mojica p399-401). Use them on 1-3 explain items, not every item.
+- Sentence starters, if used: optional, matched to the language function (explain, compare, justify), and they start the sentence without giving the claim. "I know the triangles are congruent because ___" is fine. A frame that contains the reasoning is not (Rodriguez-Mojica p399-401). Use them on 1-3 explain items, not every item. On the page, each blank is a labeled box under its own problem, naming the figure it refers to, with the answer in the key (`handout-release-check` §1).
 - One version for everyone. Accommodations (extra time, dictionary, reading aloud, oral response) keep the same target. Changing the target is a modification and needs IEP or specialist input (T&N5 p70-71; Guskey & Jung p2; Stigler & Hiebert p4).
 
 ## 7. Contexts and fairness

@@ -20,6 +20,8 @@ This skill provides the factual classroom context, instructional environment, co
 
 ## 2. Daily Schedule & Course Profiles
 
+**Lesson format (all periods):** 40-minute periods (budget with `lesson-scope`). No slides: the class works the same handout, with the teacher under the doc camera for short "Together" parts, then long student work time. Keep direct instruction short. Student copies print black and white, double-sided; keys may use red.
+
 ### Period 4: Geometry
 * **Course:** High School Geometry
 * **Demographics & Student Background:**

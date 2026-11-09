@@ -56,18 +56,18 @@ Only cite a reading for something it actually says. If you haven't checked the t
 
 ## Step 3: Lesson plan (Launch, Explore, Summarize)
 
-Follow `MathLessonPlanTemplateFall2026.docx`.
+Follow `MathLessonPlanTemplateFall2026.docx`. Periods are **40 minutes**; budget every part with `lesson-scope` and keep the plan's timing table at 40 or less.
 
-1. **Launch (10-15 min):**
+1. **Launch (about 10 min, warm-up included):**
    - A low-floor entry: Notice and Wonder, Which One Doesn't Belong, or a short visual.
    - Make sure everyone understands the context before the math (for word problems, the 3-Reads routine in `mll-literacy-scaffolding`).
    - Set expectations without giving away a method.
-2. **Explore (25-30 min):**
+2. **Explore (about 15-18 min):**
    - Pairs or trios on a task at the "procedures with connections" or "doing mathematics" level.
    - Use a group-worthy task (Lotan): several ways in, visuals, real interdependence, and an individual write-up at the end.
    - List anticipated strategies and errors.
    - Write assessing and advancing questions that don't break the task into tiny steps (Stigler & Hiebert).
-3. **Summarize (15-20 min):**
+3. **Summarize (about 12 min):**
    - Pick and order student work so it connects different methods.
    - Close with a 1-2 question exit ticket tied to the target.
 
@@ -82,7 +82,8 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
   - check for understanding
   - exit ticket
 - Leave room to write. Use labeled diagrams and tables. Add a vocabulary callout only for dual-meaning words.
-- Teacher key: full solutions, anticipated difficulties, what to say.
+- Fill-ins and frames follow `handout-release-check` §1 (labeled boxes, clear referent).
+- Teacher key: full solutions, anticipated difficulties, what to say. Every item, part, and box answered; drawing tasks get a labeled answer figure.
 - To produce the DOCX/PDF, run Steps 5-8 of `assessment-builder`. Treat the worksheet draft as `draft.md`.
 
 ## Final check
@@ -91,3 +92,4 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
 - [ ] Every assessment piece measures a Stage 1 target.
 - [ ] MLL access is built into the task (visuals, a clear context, optional stems, talk in any language) without lowering the math.
 - [ ] Contexts are familiar to students and do actual mathematical work.
+- [ ] The lesson fits 40 minutes (`lesson-scope`), and `check_lesson.py` passes (`handout-release-check`).

@@ -13,10 +13,11 @@ Load these only when the step that needs them comes up:
 |---|---|
 | 1 | `classroom-context` (only the section for the target period) |
 | 1 | `course-content-extractor` (only if there's no source file, or a retake/variant is needed) |
-| 3-4 | `references/item-rules.md` (this folder) and `authentic-writer` |
+| 2 | `lesson-scope` (lesson handouts and worksheets: 40-min budget, what to cut) |
+| 3-4 | `references/item-rules.md` (this folder), `authentic-writer`, `handout-release-check` §1-2 (fill-ins, keys) |
 | 6 | `curriculum-visual-generator` |
 | 7 | `worksheet-packer` |
-| 8 | `visual-layout-checker` |
+| 8 | `visual-layout-checker`, `handout-release-check` (scripts, packets) |
 
 Workspace (see AGENTS.md): sources in `input/`, final files in `output/`, everything else in `_temp/{specs,assets,renders,build}/`.
 
@@ -47,6 +48,8 @@ Fill gaps from the source document and `classroom-context`. Ask the user only ab
 ## Step 2: Blueprint
 
 Add a table to `requirements.md` with one row per item: item number, learning target, item type, cognitive demand level (memorization / procedures without connections / procedures with connections / doing math), and points. Check that it covers the targets and isn't all procedural. Rewrite mode: build the table from the existing items, then flag any item that doesn't fit a target.
+
+Lesson handouts and worksheets: add a minutes column (estimates in `lesson-scope`). The total is 40 or less. Cut before drafting, not after.
 
 ## Step 3: Draft (one pass, rules applied while writing)
 
@@ -91,6 +94,7 @@ Write `_temp/specs/key.md`:
 - Constructed response: a model answer, where each point comes from, acceptable alternatives, and "credit any valid method." AP Stats uses E/P/I per part.
 - If a rubric is needed, use 3-6 specific levels and score communication separately from content.
 - Add a short "Scoring notes" block for MLL work (item-rules section 8) when the period has MLLs.
+- Every item, part, and fill-in box has an answer. Drawing or marking items get a labeled answer figure (`- **Key image**: <path>`), not a description (`handout-release-check` §2).
 
 ## Step 5: Check and fix
 
@@ -106,6 +110,10 @@ Fix every ERROR. Fix WARNs unless there's a reason not to; a NOT stem that's rea
 - [ ] Contexts are ordinary and every number has a purpose.
 - [ ] It reads like a teacher wrote it: direct stems, nothing addressed to the reader at the start or end.
 - [ ] The page budget is plausible. Step 7 confirms it.
+- [ ] No `___` blanks; every fill-in is a labeled box under its problem, naming the figure it refers to.
+- [ ] Every "Problem N" exists and supports the task.
+
+Lesson handouts: also run `check_lesson.py draft` (`handout-release-check`).
 
 Rerun the script until it shows 0 errors.
 
@@ -150,6 +158,8 @@ Look at every page using the `visual-layout-checker` checklist. Problems to catc
 - more pages than the budget allows
 
 Fix the problem in `worksheet_spec.json` (workspace, widths, layout hints, columns, font), not in the DOCX. Then repack. Stop after 3 rounds and report what's left.
+
+Then run `check_lesson.py outputs` on student/key pairs (handout and practice) and build the duplex PDF and DOCX packets (`handout-release-check` §5).
 
 ## Finish
 
