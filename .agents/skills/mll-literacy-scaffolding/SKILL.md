@@ -1,93 +1,85 @@
 ---
 name: mll-literacy-scaffolding
-description: Provides evidence-based instructional scaffolding, translanguaging strategies, and academic language supports for Multilingual Learners (MLLs / ELs) in secondary mathematics and STEM classrooms, synthesized from EDTEP 575 (Language & Literacy). Use whenever designing or adapting lesson plans, worksheets, word problems, talk routines, or assessments to make content accessible while maintaining high cognitive demand.
+description: Classroom and lesson supports for multilingual learners (MLLs / ELs) in secondary math, from EDTEP 575 readings (Moschkovich, Roberts et al., Zwiers, Rodriguez-Mojica, WIDA, 3-Reads, translanguaging). Use when planning lessons, talk routines, or worksheets for Period 4 Geometry. For rewriting assessment items, the rules are already in assessment-builder/references/item-rules.md section 6.
 ---
 
-# Multilingual Learner (MLL) & Disciplinary Literacy Scaffolding Skill
+# MLL supports for secondary math
 
-This skill provides theoretical principles, practical classroom strategies, and canonical file links from **EDTEP 575 (Language & Literacy)** to support Multilingual Learners (emergent bilinguals) in secondary mathematics (such as Period 4 Geometry and Period 5 AP Statistics in room 105 at Franklin High School).
+The goal is access to the same math. Lower the language barrier and keep the cognitive demand. Language is a resource, and students' home languages and everyday ways of talking count as mathematical reasoning (Moschkovich 2013).
 
----
+Readings are in `C:\Users\zubair\Documents\canvas-extractor\export\edtep-575-a&b-su-26_-language-&-literacy-(l&l)\files\` unless noted:
 
-## 1. Core Foundational Frameworks & Literature Links
+- Moschkovich (2013): `02-jmoschkovich-math-final_bound-with-appendix-(7).pdf`
+- Roberts et al. (2022): `[23300582---mathematics-teacher_-learning-and-teaching-pk-12]-three-ways-to-enhance-tasks-for-multilingual-learners.pdf`
+- Zwiers (2014) Ch. 4: `session-11_zwiers_2014_ch-4_content-area_variations_of_academic_language.pdf`
+- Rodriguez-Mojica & Briceño (2018): file starts `rodriguez` (the name uses a Unicode hyphen, so glob for it)
+- WIDA: `wida_features_of_academic_language.pdf`, `cando-keyuses-gr-9-12.pdf`
+- 3-Reads (Routines for Reasoning Ch. 6, scan): `3-reads.pdf`
+- Decide and Defend (Teaching for Thinking Ch. 3, scan): `decide-and-defend.pdf`
+- García et al. (2017) Ch. 1 (scan): file starts `garc`
+- Accountable Talk: `accountable-talk-sourcebook_2016_pp.21---27_teacher-moves-only.pdf`
+- CER organizer: `claimevidencereasoninggraphicorganizer.pdf`
+- Baker-Bell (2020): `baker-bell-2020.pdf`
 
-### A. Asset-Based Disciplinary Mathematics & Discourse (Moschkovich & Roberts et al.)
-* **Moschkovich (2013) — *Mathematics, the Common Core, and Language***
-  * *Path*: [02-jmoschkovich-math-final_bound-with-appendix-(7).pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/02-jmoschkovich-math-final_bound-with-appendix-(7).pdf)
-  * *Core Principle*: Language is a resource, not a deficiency. Treat emergent bilingualism as a strength. Avoid reducing math language support to isolated vocabulary lists; prioritize mathematical reasoning, generalizing, justifying, and abstracting. Focus first on uncovering mathematical meaning rather than correcting imperfect English syntax or accents.
-* **Roberts et al. (2022) — *Three Ways to Enhance Tasks for Multilingual Learners***
-  * *Path*: [[23300582---mathematics-teacher_-learning-and-teaching-pk-12]-three-ways-to-enhance-tasks-for-multilingual-learners.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/%5B23300582---mathematics-teacher_-learning-and-teaching-pk-12%5D-three-ways-to-enhance-tasks-for-multilingual-learners.pdf)
-  * *Three Task Enhancements*:
-    1. **Connect Multiple Representations**: Use visual models, geometric diagrams, color-coded graphs, and tabular data so students express understanding multimodally.
-    2. **Address Language Obstacles**: Unpack low-frequency vocabulary, clarify polysemous words (e.g., *table*, *plane*, *root*, *spread*, *mean*), and streamline sentence structure without lowering mathematical demand.
-    3. **Contextualize Concepts**: Anchor problems in relatable, tangible real-world situations.
+## Task and worksheet design (Roberts et al., three enhancements)
 
-### B. Translanguaging & Linguistic Justice (García et al. / Baker-Bell)
-* **García, Ibarra Johnson, & Seltzer (2017) — *The Translanguaging Classroom***
-  * *Path*: [garci'a,-ibarra-johnson-&-seltzer-(2017)_ch.-1pdf.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/garci'a,-ibarra-johnson-&-seltzer-(2017)_ch.-1pdf.pdf)
-  * *Core Principle*: Leverage students' entire unitary linguistic repertoire. Encourage partner discussions, initial drafting, and rough-draft thinking in students' home languages (e.g., Spanish, Vietnamese, Somali, Tagalog) before formal English reporting.
-* **Baker-Bell (2020) — *Linguistic Justice***
-  * *Path*: [baker-bell-2020.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/baker-bell-2020.pdf)
-  * *Core Principle*: Value language varieties and eliminate deficit orientations toward students' native dialects or vernaculars.
+1. **Connect representations.** Put a labeled diagram, table, or graph next to the text. Plan how students will learn to read each representation. Don't assume they see what you see.
+2. **Unpack the language.**
+   - Write in active voice and short sentences.
+   - Name the subject instead of writing "they".
+   - Replace rare non-math words.
+   - Keep the math terms and teach them, since avoiding them is "linguistic enabling" (Zwiers).
+   - Call out words with two meanings: similar, plane, product, square, odd, table, round, mean, range.
+3. **Build up the context.** Spend time on a shared understanding of the situation before the math, using pictures or a quick act-out. Use the context to develop language, not only to decorate the problem.
 
-### C. WIDA Features of Academic Language & Can-Do Descriptors
-* **WIDA Features of Academic Language (Word, Sentence, Discourse Levels)**
-  * *Path*: [wida_features_of_academic_language.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/wida_features_of_academic_language.pdf)
-  * *Three Tiers*:
-    1. **Word/Phrase Level**: Technical vocabulary, nominalizations, multiple-meaning words.
-    2. **Sentence Level**: Syntax, conditional clauses (*if... then...*), passive voice, comparative structures (*greater than*, *per unit*).
-    3. **Discourse Level**: Linguistic complexity, cohesion, structure of mathematical arguments and proofs.
-* **WIDA Can-Do Descriptors (Grades 9–12)**
-  * *Path*: [cando-keyuses-gr-9-12.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/cando-keyuses-gr-9-12.pdf)
-  * *Key Uses of Academic Language*: Recount, Explain, Argue, Discuss.
+## Reading word problems: 3-Reads
 
-### D. Structured Talk Routines & Disciplinary Argumentation
-* **Accountable Talk Sourcebook (Teacher Moves & Discourse Tools)**
-  * *Path*: [accountable-talk-sourcebook_2016_pp.21---27_teacher-moves-only.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/accountable-talk-sourcebook_2016_pp.21---27_teacher-moves-only.pdf)
-  * *Moves*: Revoicing, asking students to restate someone else's reasoning, prompting for evidence (*"What in the diagram shows you that?"*), wait time.
-* **Zwiers (2014) — Content-Area Variations of Academic Language**
-  * *Path*: [session-11_zwiers_2014_ch-4_content-area_variations_of_academic_language.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/session-11_zwiers_2014_ch-4_content-area_variations_of_academic_language.pdf)
-* **Sentence Stems for Comprehension & Argumentation (Rodriguez-Mojica, 2018)**
-  * *Path*: [rodriguez-mojica-2018---sentence-stems-that-support-reading-comprehension.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/rodriguez-mojica-2018---sentence-stems-that-support-reading-comprehension.pdf)
-* **Decide and Defend / Claim-Evidence-Reasoning (CER)**
-  * *Paths*: [decide-and-defend.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/decide-and-defend.pdf) | [claimevidencereasoninggraphicorganizer.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/claimevidencereasoninggraphicorganizer.pdf)
+The same problem is read three times. Each read has its own question, and nobody calculates during the routine.
 
-### E. Reading Word Problems: The 3-Reads & 4-Reads Routines
-* **The 3-Reads Math Protocol**:
-  * *Path*: [3-reads.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/3-reads.pdf) | [four_reads_handout.pdf](file:///c:/Users/zubair/Documents/canvas-extractor/export/edtep-575-a&b-su-26_-language-&-literacy-(l&l)/files/four_reads_handout.pdf)
-  * **Read 1 (Understand the Context)**: What is this situation about? (No numbers, no math questions yet).
-  * **Read 2 (Identify Quantities & Relationships)**: What can be counted, measured, or compared?
-  * **Read 3 (Focus on the Mathematical Problem)**: What mathematical questions can we ask and solve?
+1. **Read 1: "What is this problem about?"** Students give the context in a short phrase.
+2. **Read 2: "What are we trying to find out?"** Students restate the question in their own words.
+3. **Read 3: "What information is important?"** Students identify the quantities and how they relate.
 
----
+Support the context with pictures or gestures. Focus language support on the words the math depends on, such as "remaining" or "now has." Leave decorative words alone.
 
-## 2. Practical Application to Mathematics Lesson & Assessment Design
+## Talk routines
 
-When designing or revising materials for Franklin High School Room 105 (specifically **Period 4 Geometry** with many MLLs, or **Period 5 AP Statistics**):
+- **Turn and Talk in any language.** "Talk it through with your partner in whatever language helps, then we'll share out in English" (García et al.). Allow rough-draft talk before formal answers.
+- **Accountable Talk moves:**
+  - Revoice ("So you're saying...?").
+  - Ask a student to restate someone else's idea.
+  - Press for reasoning ("Why do you think that?", "Where can we find that?").
+  - Use wait time.
+- **Decide and Defend.** Show a worked example with a common error or an unusual strategy. Students decide whether it's correct, draft a defense (annotations are fine), and then defend it to skeptics. The point is arguing from the concepts, not just fixing the answer.
+- **CER.** Claim, evidence (from data, a graph, or a diagram), and reasoning. The organizer's starters work as optional stems: "The data show ___." "The evidence supports the claim because ___."
 
-### 1. Modifying Word Problems & Task Stems
-- **Strip Non-Essential Linguistic Complexity**: Replace passive constructions with active verbs; break complex compound-complex sentences into two direct statements.
-- **Clarify Polysemous Terms**: Call out math-specific meanings (e.g., *skew*, *independent*, *scale*, *radical*, *origin*).
-- **Dual Visual Anchors**: Provide a labeled diagram or annotated data display alongside any text block.
+## Sentence stems (Rodriguez-Mojica & Briceño)
 
-### 2. Scaffolding Mathematical Discussions & Talk
-- **Pair-Share with Translanguaging**: Direct students: *"Discuss your hypothesis with your partner in English or your home language."*
-- **Disciplinary Sentence Frames (Tiers of Support)**:
-  - *Entering / Emerging*: `"The shape is ____ because it has ____ sides."`
-  - *Developing / Expanding*: `"Although both distributions have a median of ____, Distribution A has greater spread because ____."`
-  - *Bridging*: `"We reject the claim of independence since $P(A \cap B) \neq P(A) \times P(B)$, demonstrating that the occurrence of event A alters the likelihood of event B."`
+- First decide the language function the task needs: describe, explain, compare, or justify. Then choose a stem that fits that function.
+- Stems start a sentence. They don't hand students the claim or the reasoning.
+- Offer them as optional supports, and fade them as students get comfortable.
+- Accept nonstandard English that still does the job.
 
-### 3. Student Handouts & Worksheet Integration
-- **Graphic Organizers**: Include comparison tables, Frayer models for new terminology, or CER organizers.
-- **Annotated Glossaries & Margin Notes**: Subtle, non-intrusive vocabulary hints in margins.
-- **Rough Draft Thinking Spaces**: Clearly delineate draft spaces from final mathematical justification lines.
+Examples of function-matched stems for this class. These are written for room 105, not quoted from the reading.
+- Explain: "I know ___ because ___."
+- Compare: "Distribution A ___, but distribution B ___."
+- Justify congruence: "The triangles are congruent because ___ maps ___ onto ___."
+- Critique: "I agree / disagree with ___ because ___."
 
----
+## WIDA check
 
-## 3. Checklist for MLL-Responsive Design
-- [ ] **Linguistic Demand**: Are language demands explicit (word, sentence, and discourse levels identified)?
-- [ ] **3-Reads Readiness**: Is there a launch routine to unpack word problem contexts before calculating?
-- [ ] **Visual Redundancy**: Are all key textual clues paired with visual, symbolic, or graphic representations?
-- [ ] **Translanguaging Opportunity**: Can students brainstorm, discuss, or annotate in their primary languages?
-- [ ] **Cognitive Integrity**: Are we scaffolding access to the language without watering down the high cognitive demand of the math?
+- Look at three levels of the task:
+  - Words: technical terms, words with two meanings, collocations.
+  - Sentences: length, clauses, passive voice.
+  - Discourse: how dense and how connected the text is.
+- Students at the Entering and Emerging levels handle single statements, Wh-questions, commands, and cognates best. Write directions in those forms.
+- WIDA treats "Discuss" as an oral language use, so put Discuss tasks in talk, not in writing. Recount, Explain, and Argue tasks can be written.
 
+## Checklist
+
+- [ ] Key text is paired with a labeled visual.
+- [ ] The context is understood before anyone calculates (3-Reads or a quick launch).
+- [ ] Math terms are kept, and words with two meanings are made clear.
+- [ ] Students can think and talk in any language before reporting out.
+- [ ] Stems are optional and match the language function.
+- [ ] The math goal and the explain demand are the same as for every other student.

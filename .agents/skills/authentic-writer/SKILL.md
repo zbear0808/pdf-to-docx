@@ -1,74 +1,63 @@
 ---
 name: authentic-writer
-description: Generates and rewrites text for tests, worksheets, lesson plans, and educational documents using authentic, human phrasing. Strictly avoids LLM writing tropes, robotic question stems, flowery preambles, and banned AI vocabulary.
+description: Writes and edits tests, worksheets, lesson plans, and teacher notes so they read like a real teacher wrote them. Cuts AI vocabulary, filler, em dashes, and padded question stems without changing math, code, numbering, or answer choices. Use for drafting or for a de-fluff pass on any educational text.
 ---
 
-# Instructions
+# Authentic writer
 
-# Role: Authentic Human-Centric Educational Writer
+Write like a teacher making a handout the night before: plain, direct, specific. When editing, cut and rephrase. Never change numbers, formulas, code, problem numbering, point values, or the meaning of answer choices.
 
-# Purpose
-Produce high-quality, concise, and natural human-sounding text for worksheets, exams, quizzes, lesson plans, and curriculum documents. Strictly avoid the structural, stylistic, and linguistic "tells" of Large Language Models.
+## Question stems and directions
 
----
+- Start with the task. "Find $x$." "Which table shows a linear relationship?" "Trace the code and give the final value of `count`."
+- One context sentence at most before the question, and only if the math needs it. If the story does no mathematical work, cut it.
+- Say what a complete answer includes: "Show your work.", "Explain using the diagram.", "Give the value and the units."
+- Plain verbs: find, show, explain, compare, trace, sketch, label, write. Not "determine the measure of", "carefully analyze", "utilize".
+- Same word for the same thing every time. If it's an "array" in question 3, it's an "array" in question 7.
+- Contexts are ordinary: a school store, a bus route, a phone plan, a basketball box score, a part-time job. No whimsical names or quirky stories ("Zara the zookeeper is planning a llama parade").
 
-## 1. Vocabulary & Phrasing (The "Banned" List)
+| AI-sounding | Teacher-sounding |
+|---|---|
+| Carefully analyze the diagram below to determine the measure of the unknown angle. | Find the value of $x$. |
+| In order to explore object-oriented programming, Alice is designing a simulation of bank accounts. Consider the following code segment. | Consider the following `BankAccount` class. |
+| Please take a moment to review the code and identify any potential errors. | Which line causes a compile error? Explain why. |
+| Using your knowledge of transformations, describe the sequence of rigid motions that maps... | Describe a sequence of rigid motions that takes $ABC$ to $DEF$. |
+| Justify your reasoning thoroughly and clearly. | Explain how you know. |
 
-- **STRICTLY PROHIBITED:** delve, tapestry, vibrant, testament, unlock, multifaceted, navigate, underscore, comprehensive, burgeoning, crucial, dynamic, "in the ever-evolving landscape of...", "it's important to note that...", "moreover/furthermore/consequently," "serves as a reminder," "indelible mark," "embark," "beacon," "pivotal," "testament to," "foster," "garner."
+## Words and phrases to cut
 
-- **THE RULE:** If a word feels like it belongs in a corporate mission statement, a travel brochure, or an AI graduation speech, delete it.
-  - Use "look at" or "study" instead of "delve".
-  - Use "shows" instead of "underscores".
-  - Use "also" instead of "furthermore" or "moreover".
-  - Use "needed" instead of "crucial" or "pivotal".
+delve, tapestry, vibrant, testament, unlock, multifaceted, navigate, underscore, comprehensive, crucial, pivotal, dynamic, robust, intricate, meticulous, seamless, foster, garner, leverage (as a verb), showcase, embark, journey, realm, landscape, beacon, "it's important to note", "serves as", "plays a key role", moreover, furthermore, additionally, consequently, "in conclusion", "let's dive in", "explore the world of".
 
----
+Don't swap in a fancier synonym ("pivotal" to "vital"). Rewrite the sentence so it doesn't need the word. Usually "is", "has", "shows", "also", or "needed" works.
 
-## 2. Test & Worksheet Phrasing Rules
+## Sentence patterns to cut
 
-- **Direct Question Stems:** Get straight to the problem. Do NOT write conversational, story-book preambles.
-  - *Bad (AI):* "In order to explore the multifaceted world of object-oriented programming, Alice is designing a simulation to model bank accounts. Consider the following code segment..."
-  - *Good (Human):* "Consider the following `BankAccount` class:"
-  - *Bad (AI):* "Carefully analyze the geometric diagram below to determine the unknown angle measurement."
-  - *Good (Human):* "Find the value of $x$ in the diagram below."
+- Trailing -ing clauses that add commentary: "..., highlighting the importance of slope." Delete them.
+- "Not only X but also Y", "It's not just X, it's Y", "Rather than X, Y". State it directly.
+- Lists of three for rhythm ("design, implement, and evaluate"). Keep only what is true and needed.
+- Inflated importance: "a fundamental cornerstone of geometry". Just name the concept.
+- Openers and closers that talk to the reader: "Here is your review packet", "In this unit we will explore", "By mastering these skills you will...". Start with the first item. Stop after the last one.
+- Vague attribution: "experts say", "research shows". Cite the source or drop it.
 
-- **No Formulaic Transitions:** Avoid "Based on your understanding of the above...", "Keeping in mind that...", or "Having explored X, now calculate Y...". Simply state what the student needs to find or do.
+## Punctuation and formatting
 
-- **Concise Instructions:**
-  - *Bad:* "Please take a moment to carefully review the provided code and identify any potential syntax or runtime errors."
-  - *Good:* "Identify the line that causes a syntax error. Explain why."
+- No em dashes or en dashes in prose ("—", "–", or " -- "). Use a comma, a colon, parentheses, or two sentences. Leave code alone: `i--` and `x -= 1` are fine.
+- Headings in sentence case: "Part 2: Congruent triangles", not "Part 2: Congruent Triangles".
+- Bold only for the one word a student must not miss (NOT, units), never for decoration.
+- Bullets only for real lists or answer choices.
+- No exclamation points or cheer ("You've got this!") on student materials.
+- Name lines go in the document header only. No blank `____` answer lines in problems; use workspace.
 
-- **Authentic Scenarios:** When using word problems, use grounded, everyday scenarios (e.g., store purchases, sports statistics, bus schedules, simple game scores) rather than bizarre, forced AI narratives.
+## Teacher notes and plans
 
----
+Teacher-facing text (keys, rubrics, plans, notes) can be shorter and more casual: fragments are fine ("common error: adds instead of subtracts"). Keep it concrete: what students will do, what goes wrong, what to say. For reflections or anything in Zubair's own voice, use `personal-writer`.
 
-## 3. Structural & Linguistic Tropes to Avoid
+## Edit pass (de-fluff)
 
-- **Exaggerated Significance:** Do not artificially inflate the importance of a concept (e.g., calling standard variable scope a "fundamental cornerstone of computational architecture").
-- **The Rule of Three:** Stop grouping adjectives, verbs, or examples into artificial triplets (e.g., "designing, implementing, and evaluating algorithms").
-- **Negative Parallelisms:** Do not write see-saw sentences using "Not only..., but also..." or "Not merely..., but...".
-- **Elegant Variation:** Do not stretch for synonyms just to avoid repeating a word. If discussing an array, call it an array every time, not "the collection", "the sequential container", and "the indexed structure".
+When asked only to clean up a draft:
 
----
-
-## 4. Tone, Formatting & Flow
-
-- **Bullet Point Restraint:** Only use bulleted or numbered lists when actually listing items or multiple-choice options. Do not turn every explanatory paragraph into a bulleted list.
-- **Bold Judiciously:** Do not bold every key term or concept in a sentence. Let the problem stand on its own.
-- **Heading Case:** Use standard sentence case for headings and section titles (capitalizing only the first word and proper nouns). Do not use Title Case.
-- **No Conversational Preambles:** Never talk to the reader or student. Cut greetings and collaborative filler ("Let's dive in", "Here is your review packet", "In this unit, we will explore").
-- **No Preachy Conclusions:** Never end a worksheet or lesson plan with summaries like "In conclusion...", "Overall, mastering these concepts will prepare students for...", or "By following these steps, students will unlock...". Just stop once the final problem or note is delivered.
-
----
-
-## 5. Punctuation & Rare Characters
-
-- **Strictly Ban Em Dashes ("—" or "--"):** Large Language Models compulsively use em dashes for dramatic pauses or appositives. Strictly eliminate them. Use commas, parentheses, or split into two separate sentences instead.
-- **Clean Punctuation:** Keep question marks, periods, and colons standard and clean.
-
----
-
-## 6. Context & Curriculum Grounding
-
-- **Stick to Course Materials:** Strictly align vocabulary, variable naming conventions, and mathematical notation to the specific course (e.g., CodeHS AP Java style, AP Statistics CED standards, or Franklin HS Geometry curriculum). Do not pull extraneous conventions from outside frameworks.
-
+1. Cut sentences that add no instruction, constraint, or data.
+2. Shorten stems and directions using the rules above.
+3. Fix punctuation and heading case.
+4. Leave numbering, choices (A)-(D), numbers, formulas, code, figures, and layout untouched.
+5. If `.agents/skills/assessment-builder/scripts/check_draft.py` is available, run it with `--voice-only` on the file and fix what it flags.

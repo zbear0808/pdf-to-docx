@@ -1,268 +1,160 @@
 ---
 name: assessment-builder
-description: Builds standards-aligned, equity-centered assessments, quizzes, and lesson worksheets. Coordinates source document ingestion, Markdown drafting, pedagogical revision, authentic de-fluffing, Worksheet AST translation, Python diagram generation, 2D packing into DOCX/LaTeX, and visual layout audits as a sequential, single-agent workflow.
+description: One-call workflow for writing or rewriting a test, quiz, retake, or worksheet for Franklin HS room 105. Runs requirements intake, source extraction, a fair and MLL-accessible draft in teacher voice, answer key and rubric, automated checks, Worksheet AST, figures, DOCX/LaTeX packing, and a visual audit. Use whenever the user asks to make, rewrite, adapt, or fix an assessment or worksheet.
 ---
 
-# Assessment Builder Skill
+# Assessment builder
 
-This skill provides an autonomous, multi-phase pipeline that pairs with **`lesson-assessment-designer`** (`.agents/skills/lesson-assessment-designer/SKILL.md`) to build classroom-ready tests, quizzes, retakes, and lesson worksheets.
+Runs the whole job in order, in this session. Don't spawn subagents. Each step writes a file, and the next step reads it, so the work can resume after an interruption.
 
-To keep work reliable and easy to follow, perform each major phase **sequentially in the current agent/session** (do **not** start subagents or use agent-delegation tools; Microsoft Copilot and similar environments may not support them). Intermediate files are exchanged via a strictly standardized folder structure so each phase has clear inputs/outputs.
+Load these only when the step that needs them comes up:
 
----
+| Step | Load |
+|---|---|
+| 1 | `classroom-context` (only the section for the target period) |
+| 1 | `course-content-extractor` (only if there's no source file, or a retake/variant is needed) |
+| 3-4 | `references/item-rules.md` (this folder) and `authentic-writer` |
+| 6 | `curriculum-visual-generator` |
+| 7 | `worksheet-packer` |
+| 8 | `visual-layout-checker` |
 
-## 1. Directory Structure & Workspace Hygiene
+Workspace (see AGENTS.md): sources in `input/`, final files in `output/`, everything else in `_temp/{specs,assets,renders,build}/`.
 
-All assessment and lesson tasks MUST separate deliverables from working files:
+## Exam integrity
 
-```text
-<document_workspace>/
-├── input/                  # (Optional) Source curriculum documents, exams, or syllabus files (.pdf, .docx)
-├── output/                 # Final deliverables ONLY (.docx, .pdf, .tex, final answer keys)
-└── _temp/                  # Transient intermediate working files
-    ├── assets/             # Generated or cropped figures, plots, grids, and diagrams (.png)
-    ├── renders/            # Page preview images rendered for inspection (p1.png, docx_p1.png)
-    ├── specs/              # Markdown drafts, WorksheetSpec AST JSON, and RenderPlan JSON
-    └── build/              # Python generation scripts, compilation logs (.aux, .log, .fls)
+If a source is a real exam that students have taken or will take, never copy an item verbatim into review, practice, or retake material. Keep the target, item type, cognitive demand, and points. Change the numbers, the figure's orientation and letters, the context, and the variable or method names. In Geometry, compare Form A to Form B first to see how much the district varies items.
+
+## Step 0: Requirements
+
+Write `_temp/specs/requirements.md`:
+
+- Mode: **rewrite** (improve an existing document) or **new** (build from targets or sources).
+- Course and period, learning targets or standards, and item types and counts.
+- Total points, page budget, and whether this is a retake or variant of an exam.
+- Source files.
+- Anything the user said to keep or change.
+
+Fill gaps from the source document and `classroom-context`. Ask the user only about things you can't infer and that change the output: the page budget, or the points when no source gives them. Ask all questions at once.
+
+## Step 1: Context and sources
+
+- Note the period profile in a few lines at the top of `requirements.md`. Period 4 Geometry has many MLLs, so apply section 6 of item-rules fully. Period 5 AP Stats follows CED wording and E/P/I scoring. Period 6 AP CSA follows CodeHS Java style and uses tracing.
+- Rewrite mode: get the source into an editable form.
+  - `.docx` or `.pdf`: run `uv run worksheet-packer parse <src> -o _temp/specs/source_spec.json --workspace-dir _temp/assets` to collect text and figures.
+  - Or read the file directly if parsing doesn't work well.
+- New mode: use `course-content-extractor` to pull matching items, keys, and figures into `_temp/specs/extracted_content.md`.
+
+## Step 2: Blueprint
+
+Add a table to `requirements.md` with one row per item: item number, learning target, item type, cognitive demand level (memorization / procedures without connections / procedures with connections / doing math), and points. Check that it covers the targets and isn't all procedural. Rewrite mode: build the table from the existing items, then flag any item that doesn't fit a target.
+
+## Step 3: Draft (one pass, rules applied while writing)
+
+Write `_temp/specs/draft.md` with `references/item-rules.md` and `authentic-writer` open. Apply them as you write. Don't plan a separate cleanup pass.
+
+Rewrite mode: keep the item order, numbering, points, figures, and math unless the user asked for changes or an item breaks a rule. For each change, add one line to `_temp/specs/changes.md`: item, what changed, and why (cite the rule, e.g. "T&N7: removed 'all of the above'").
+
+Draft format, which the checker and the AST step both expect:
+
+```markdown
+# Unit 2 quiz: congruent triangles
+**Course**: Geometry, Period 4 | **Total**: 20 pts | **Pages**: 2
+
+### Part 1: Rigid motions (target G.CO.6)
+Answer each question. Show your work on Part 2.
+
+#### Problem 1 (Reflection) [2 pts]
+Triangle $ABC$ is reflected over line $m$. Which figure shows the image?
+- **Image**: `_temp/assets/fig_q1_reflection.png`
+- **Layout**: side_by_side
+- (A) Figure 1
+- (B) Figure 2
+- (C) Figure 3
+- (D) Figure 4
+
+#### Problem 5 (Explain congruence) [4 pts]
+Explain why $\triangle PQR \cong \triangle STU$. Be sure to include:
+- the rigid motion you used
+- which parts match
+- **Workspace**: 1.5 in
 ```
 
----
+- Put each section's learning target in its heading so scores can be reported by target.
+- Use workspace heights instead of blank lines. Name, date, and period go only in the header.
+- Each figure gets an `**Image**` line with a planned path, even before it exists.
 
-## 2. Exam Integrity & Item Novelty Rule (Zero Verbatim Copying)
+## Step 4: Key, rubric, scoring notes
 
-> [!IMPORTANT]
-> **STRICT EXAM SECURITY PROTOCOL:**
-> If any source document is identified or referenced as an **actual exam** given (or scheduled to be given) to students:
-> - **NEVER copy questions verbatim or exactly from it.**
-> - **Cognitive & Archetype Mirroring**: Mirror the underlying learning standard, problem structure, and cognitive demand (Smith & Stein).
-> - **Substantive Parameter Variation**:
->   - Alter all numerical constants, angle measurements, and coordinate endpoints.
->   - Rotate or reflect geometric figure orientations and change vertex letters.
->   - Modify contextual scenarios in word problems (e.g. changing school store items, sports stats, or business scenarios).
->   - Swap variable names, method signatures, or loop bounds in CS code tracing questions.
-> - **Novel Problem Solving**: Ensure that review materials, study packets, and retakes assess authentic student mastery rather than rote recall or memorized answers.
+Write `_temp/specs/key.md`:
 
----
+- MC: `N. (X) one-line reason`. Under it, the error each distractor targets, one line per distractor.
+- Constructed response: a model answer, where each point comes from, acceptable alternatives, and "credit any valid method." AP Stats uses E/P/I per part.
+- If a rubric is needed, use 3-6 specific levels and score communication separately from content.
+- Add a short "Scoring notes" block for MLL work (item-rules section 8) when the period has MLLs.
 
-## 3. End-to-End Autonomous Pipeline Sequence
+## Step 5: Check and fix
 
-```mermaid
-flowchart TD
-    A[Step 1: Ingest & Understand Source Documents] -->|source_analysis.md| B[Step 2: Initial Draft in Markdown with Placeholders]
-    B -->|draft_v1_initial.md| C[Step 3: Pedagogical Revision via lesson-assessment-designer]
-    C -->|draft_v2_pedagogy.md| D[Step 4: Authentic Phrasing & De-fluffing via authentic-writer]
-    D -->|draft_v3_authentic.md| E[Step 5: Convert Markdown to Worksheet AST]
-    E -->|worksheet_spec.json| F[Step 6: Generate / Copy Visuals via Python scripts]
-    F -->|cropped images in _temp/assets/| G[Step 7: 2D Layout Packing & DOCX / LaTeX Render]
-    G -->|output/deliverables| H[Step 8: Visual & Layout Critical Checker]
-    H -->|Verified & Polished| I[Final Classroom Deliverables in output/]
+```bash
+uv run python .agents/skills/assessment-builder/scripts/check_draft.py _temp/specs/draft.md --key _temp/specs/key.md
 ```
 
----
+Fix every ERROR. Fix WARNs unless there's a reason not to; a NOT stem that's really needed is one. Then read the draft once against this list and fix what fails:
 
-### Step 1: Ingest & Understand Relevant Documents
-**Role:** `Source Document Researcher`  
-**Tools / Skills:** `course-content-extractor` (`.agents/skills/course-content-extractor/SKILL.md`)
+- [ ] Every item matches a blueprint target, and the targets are covered.
+- [ ] Each MC item has one defensible answer, distractors drawn from real errors, and parallel options.
+- [ ] Language load is down but the math is the same: math terms kept, dual-meaning words clear, visuals labeled, no idioms or insider contexts.
+- [ ] Contexts are ordinary and every number has a purpose.
+- [ ] It reads like a teacher wrote it: direct stems, nothing addressed to the reader at the start or end.
+- [ ] The page budget is plausible. Step 7 confirms it.
 
-1. Read all relevant curriculum sources:
-   - High School Geometry district assessments / Form A & B (`OneDrive ... 00 Geometry/Assessments`).
-   - AP Statistics Math Medic lesson handouts & keys (`mathmedic-extractor/export/mathmedic/ap-statistics`).
-   - AP Statistics College Board released FRQs, rubrics, & Chief Reader reports (`stats-archive`).
-   - AP Computer Science CodeHS unit repositories or user-provided files.
-2. Synthesize all mathematical concepts, formulas, target learning objectives, common student misconceptions, and question archetypes.
-3. Write findings and item notes into `_temp/specs/source_analysis.md`.
+Rerun the script until it shows 0 errors.
 
----
+## Step 6: AST and figures
 
-### Step 2: Initial Draft in Markdown with Visual Placeholders
-**Role:** `Assessment Drafter`  
-**Input:** `_temp/specs/source_analysis.md`
+Translate `draft.md` into `_temp/specs/worksheet_spec.json` using the `WorksheetSpec` schema in `src/worksheet_packer/worksheet_ast.py`. The key never goes in the student spec.
 
-1. Draft a complete, test-aligned assessment directly in Markdown.
-2. **Enforce Exam Integrity**: If based on an actual active exam, do NOT copy any question exactly. Mirror the cognitive skill, problem archetype, and point weight while varying numbers, orientations, and contexts.
-3. Structure the document with metadata, clear sections, numbered questions, point values, and sub-parts.
-3. For any problem requiring a diagram, geometric figure, coordinate grid, or data plot, include an explicit image placeholder:
-   ```markdown
-   #### Problem 4 (Coordinate Transformation Drawing) [3 pts]
-   Draw the image of quadrilateral $ABCD$ after a translation that maps $A$ to $A'$. Label the image $A'B'C'D'$.
-   - **Image**: `_temp/assets/fig_p4_quadrilateral_grid.png`
-   - **Workspace**: 1.0 in
-   - **Layout**: side_by_side
-   ```
-4. For multiple choice items, provide four clean choices: `- [A] ...`, `- [B] ...`, `- [C] ...`, `- [D] ...`.
-5. For free response or constructed response, indicate the required clean whitespace (e.g. `- **Workspace**: 0.75 in`). **Never use blank underlines (`____`)**.
-6. Save to `_temp/specs/draft_v1_initial.md`.
+| Markdown | AST |
+|---|---|
+| `# title`, `**Course**` line | `title`, `subtitle` |
+| `### Part ...` + first paragraph | `WorksheetSection(id, title, instructions, ordering="strict")` |
+| `#### Problem N (T) [X pts]` + text | `Problem(id="qN", number=N, points=X, prompt_text=...)` |
+| `- (A) ...` | `choices: [{label: "(A)", text: ...}]` |
+| `**Workspace**: X in` | `workspace: {type: "blank", approx_height_in: X}` |
+| `**Image**` / `**Layout**` | `image: {media_path, category, min/preferred/max_width_in, has_fine_text}`, `layout_hint` |
 
----
+Use `layout_hint: "side_by_side"` for portrait or square figures and `"stacked"` for wide grids or plots. Set `default_columns`, margins, and font size for the page budget. Defaults: 2 columns, 0.5 in margins, 10-10.5 pt.
 
-### Step 3: Pedagogical Revision via `lesson-assessment-designer`
-**Role:** `Pedagogical Assessment Auditor`  
-**Tools / Skills:** `lesson-assessment-designer` (`.agents/skills/lesson-assessment-designer/SKILL.md`), `classroom-context` (`.agents/skills/classroom-context/SKILL.md`)  
-**Input:** `_temp/specs/draft_v1_initial.md`
+Figures: reuse the cropped figures in `_temp/assets/` from Step 1 where they fit. Make any others with `curriculum-visual-generator` (script in `_temp/build/`, 300 DPI, then `worksheet_packer.image_utils.auto_crop_image`). For variants, redraw rather than reuse: the figure has to match the new numbers and letters.
 
-1. Ground items in the classroom profile:
-   - **Room 105 Geometry (Period 4)**: Multimodal scaffolds, color-coded diagrams, linguistic support for MLLs, sentence stems.
-   - **Period 5 AP Statistics**: AP CED alignment, conceptual understanding before formulas, statistical argumentation (SOCS, inference, probability modeling).
-   - **Period 6 AP Computer Science A**: Precise code syntax, tracing tables, algorithm analysis.
-2. **Cognitive Demand Check (Smith & Stein)**: Ensure problems balance procedural fluency with conceptual connections ("Doing Mathematics").
-3. **Diagnostic Distractor Construction (Taylor & Nolen Ch. 7)**:
-   - Every multiple-choice distractor must target an authentic student error or flawed intuition (e.g. procedural reversal, arithmetic slip, confusing independent with disjoint events).
-   - No trivial or throwaway choices.
-4. **Constructed Response & Rubrics (Taylor & Nolen Ch. 5 & 8)**:
-   - Clear criteria for success and transparent scoring guidelines.
-5. Save revised draft to `_temp/specs/draft_v2_pedagogy.md`.
+## Step 7: Pack and render
 
----
-
-### Step 4: Authentic Phrasing & De-fluffing
-**Role:** `Authentic Educational Editor`  
-**Tools / Skills:** `authentic-writer` (`.agents/skills/authentic-writer/SKILL.md`), `critical-checker` (`.agents/skills/critical-checker/SKILL.md`)  
-**Input:** `_temp/specs/draft_v2_pedagogy.md`
-
-1. **Delete AI Tropes & Banned Vocabulary**:
-   - Strip *delve*, *testament*, *crucial*, *pivotal*, *multifaceted*, *vibrant*, *navigate*, *furthermore*, *moreover*.
-2. **Eliminate All Em Dashes**:
-   - Replace every em dash ("—" or "--") with a comma, parentheses, or separate sentences.
-3. **Cut Fluff & Conversational Preambles**:
-   - Make question stems direct and straightforward.
-   - Remove conversational greetings ("Let's dive into...", "Here is your review").
-   - Cut preachy concluding summaries.
-4. **Enforce Formatting**:
-   - Headings in sentence case.
-   - Concise teacher instructions.
-5. Save polished draft to `_temp/specs/draft_v3_authentic.md`.
-
----
-
-### Step 5: Convert Markdown to Worksheet AST
-**Role:** `AST Translation`  
-**Input:** `_temp/specs/draft_v3_authentic.md`
-
-Translate the polished Markdown document into the strongly typed `WorksheetSpec` JSON AST (`_temp/specs/worksheet_spec.json`) based on the schema in [`src/worksheet_packer/worksheet_ast.py`](file:///src/worksheet_packer/worksheet_ast.py).
-
-#### AST JSON Structure & Fields:
-```json
-{
-  "title": "Unit 1 Assessment: Transformations & Angle Proofs",
-  "subtitle": "Geometry — Period 4",
-  "header_right": "Name: ______________________ Date: ________ Period: ____",
-  "page_width_in": 8.5,
-  "page_height_in": 11.0,
-  "margins": { "top_in": 0.45, "bottom_in": 0.45, "left_in": 0.5, "right_in": 0.5 },
-  "default_columns": 2,
-  "column_gap_in": 0.3,
-  "theme_hex": "#1F4E79",
-  "default_font": "Calibri",
-  "default_font_size_pt": 10.0,
-  "sections": [
-    {
-      "id": "sec_1",
-      "title": "PART I: Rigid Transformations",
-      "instructions": "Answer all questions. Show your reasoning where requested.",
-      "ordering": "strict",
-      "problems": [
-        {
-          "id": "q1",
-          "number": 1,
-          "points": 2,
-          "prompt_text": "Figure ABCDE is shown below alongside candidate reflection images. Which image shows figure ABCDE correctly reflected over line BC?",
-          "image": {
-            "media_path": "_temp/assets/fig_p1_reflections.png",
-            "category": "detailed_diagram",
-            "min_width_in": 2.0,
-            "max_width_in": 3.4,
-            "preferred_width_in": 2.8,
-            "has_fine_text": true
-          },
-          "choices": [
-            { "label": "(A)", "text": "Image 1" },
-            { "label": "(B)", "text": "Image 2" },
-            { "label": "(C)", "text": "Image 3" },
-            { "label": "(D)", "text": "Image 4" }
-          ],
-          "workspace": { "type": "blank", "approx_height_in": 0.5 },
-          "layout_hint": "side_by_side"
-        }
-      ]
-    }
-  ]
-}
+```bash
+uv run worksheet-packer pack _temp/specs/worksheet_spec.json -o _temp/specs/render_plan.json
+uv run worksheet-packer render _temp/specs/render_plan.json -o "output/<Name>.docx" --format docx
+uv run worksheet-packer render _temp/specs/render_plan.json -o "output/<Name>.tex" --format pdf
 ```
 
-#### Translation Mapping Rules:
-1. **Sections:** Map Markdown `### PART ...` headings to `WorksheetSection(id=..., title=..., ordering="strict"|"flexible")`.
-2. **Problems:** Map `#### Problem N (Title) [X pts]` to `Problem(id="qN", number=N, points=X, prompt_text=...)`.
-3. **Choices:** Map `- [A]`, `- (A)` lists to `QuestionChoice(label="(A)", text=...)`.
-4. **Clean Workspaces:** Map `- **Workspace**: X in` to `WorkspaceConfig(type="blank", approx_height_in=X)`. Never use underlines.
-5. **Diagrams & Hints:** Map visual placeholders to `image` configs with appropriate `category` ("detailed_diagram" or "wide_grid") and set `layout_hint = "side_by_side"` for portrait/square diagrams, or `"stacked"` for wide grids.
-6. Save the AST JSON to `_temp/specs/worksheet_spec.json`.
+If the user wants the key as a document, build a second spec from `key.md` and render it to `output/<Name> - Key.docx`. Otherwise copy `key.md` to `output/`.
 
----
+## Step 8: Visual check
 
-### Step 6: Generate or Crop Visuals via Python Scripts
-**Role:** `Visual Asset Developer`  
-**Tools / Skills:** `curriculum-visual-generator` (`.agents/skills/curriculum-visual-generator/SKILL.md`)  
-**Input:** Image placeholders listed in `_temp/specs/worksheet_spec.json`
+```bash
+uv run worksheet-packer render-docx-pages "output/<Name>.docx" -o _temp/renders/docx --dpi 150
+```
 
-1. Create a dedicated Python script `_temp/build/generate_figures.py` using `matplotlib`, `numpy`, and `PIL`.
-2. Generate crisp, high-DPI (300 DPI) figures:
-   - Coordinate planes, geometry polygons, angle arcs, parallel lines, boxplots, or histograms.
-   - Or crop and auto-trim diagrams from source PDFs using `auto_crop_image`.
-3. Save all images to `_temp/assets/` (e.g. `_temp/assets/fig_p1_reflections.png`).
-4. Auto-crop extra whitespace from every generated image so layout engine calculations reflect the exact drawing footprint:
-   ```python
-   from worksheet_packer.image_utils import auto_crop_image
-   auto_crop_image("_temp/assets/fig_p1_reflections.png")
-   ```
-5. Ensure image paths in `_temp/specs/worksheet_spec.json` point to the generated files.
+Look at every page using the `visual-layout-checker` checklist. Problems to catch:
+- labels too small to read, or figures stretched
+- uneven columns
+- an item split across pages
+- not enough room to write
+- more pages than the budget allows
 
----
+Fix the problem in `worksheet_spec.json` (workspace, widths, layout hints, columns, font), not in the DOCX. Then repack. Stop after 3 rounds and report what's left.
 
-### Step 7: 2D Layout Packing & DOCX / LaTeX Render
-**Role:** `Document Packing Engineer`  
-**Tools / Skills:** `worksheet-packer` (`.agents/skills/worksheet-packer/SKILL.md`)  
-**Input:** `_temp/specs/worksheet_spec.json` and `_temp/assets/`
+## Finish
 
-1. Execute 2D bin packing to generate the `RenderPlan`:
-   ```bash
-   uv run worksheet-packer pack _temp/specs/worksheet_spec.json -o _temp/specs/render_plan.json
-   ```
-2. Render deterministic DOCX and LaTeX deliverables directly to `output/`:
-   ```bash
-   # DOCX deliverable
-   uv run worksheet-packer render _temp/specs/render_plan.json -o output/Assessment.docx --format docx
-
-   # LaTeX & compiled PDF deliverable
-   uv run worksheet-packer render _temp/specs/render_plan.json -o output/Assessment.tex --format pdf
-   ```
-
----
-
-### Step 8: Visual & Layout Critical Checker
-**Role:** `Visual Layout Auditor`  
-**Tools / Skills:** `visual-layout-checker` (`.agents/skills/visual-layout-checker/SKILL.md`)  
-**Input:** `output/Assessment.docx` and `output/Assessment.pdf`
-
-1. Headlessly render page preview images to `_temp/renders/`:
-   ```bash
-   uv run worksheet-packer render-docx-pages output/Assessment.docx -o _temp/renders/docx_pages --dpi 200
-   ```
-2. Inspect rendered page images against the Visual Layout Audit Checklist:
-   - Diagram legibility, angle labels, and aspect ratio fidelity.
-   - Multi-column symmetry and balanced vertical spacing.
-   - Side-by-side vs stacked layout elegance.
-   - Clean whitespace adequacy for student handwriting.
-   - No orphan problems spilling onto unintended trailing pages.
-3. If layout issues exist, adjust hints or dimensions in `_temp/specs/worksheet_spec.json`, re-pack, and re-render until flawless.
-
----
-
-## 3. Execution Guidelines (Sequential, No Subagents)
-
-Run Steps 1–8 **in order** in the current session. After each step, confirm the expected output file exists before continuing.
-
-- **Do not** call `invoke_subagent`, `task`, or any agent-spawning/delegation tool.
-- Pass work between phases via file paths (read/write `_temp/specs/*`, `_temp/assets/*`, `_temp/renders/*`, `output/*`) rather than repeating large content in chat.
-- If a phase produces many files (e.g., figures), generate them with scripts/CLI commands and summarize what was created.
-- If the environment is rate-limited or context is tight, complete the pipeline in multiple user turns, resuming from the last saved artifact.
-
+Tell the user:
+- Which files are in `output/`.
+- The page count, point total, and how many items there are of each type.
+- Rewrite mode: the main changes from `changes.md`, grouped (e.g. "simplified 6 stems, replaced 2 'all of the above', added labels to 3 figures"), plus anything you flagged but didn't change.
+- Any judgment calls the user should check.

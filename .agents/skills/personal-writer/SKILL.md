@@ -33,9 +33,7 @@ When personalizing content, consult the user's writing samples in:
 
 ## 3. Strict Authenticity & Anti-AI Rules
 
-- Strictly adhere to `authentic-writer` (`.agents/skills/authentic-writer/SKILL.md`):
-  - Zero banned words (*delve*, *tapestry*, *vibrant*, *testament*, *multifaceted*, *crucial*, *pivotal*, *navigate*).
-  - Absolutely NO em dashes ("—" or "--"). Replace with commas, parentheses, or separate sentences.
-  - Skip formulaic intros ("In today's lesson, we will explore...") and preachy endings ("In conclusion...").
-  - Start directly with the task and end cleanly.
+- Follow every rule in `authentic-writer` (`.agents/skills/authentic-writer/SKILL.md`): banned words, no em dashes, no openers or wrap-ups.
+- What the samples actually sound like: first person, plain, a little informal ("honestly it's kinda hard to...", "alot of students"). Observations come before interpretation, and he names his own biases (honors-track background). Paragraphs often end on an open question rather than a conclusion. He's willing to disagree with the methods readings ("math is not conducive to groupwork, many problems are procedural").
+- Keep spelling and grammar correct in anything submitted. The casual tone stays; the typos in the samples don't.
 

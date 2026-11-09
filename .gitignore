@@ -49,4 +49,5 @@ tests/.cascade_sample/
 .venv
 /lesson_1_*
 /unit_1_review_aligned/
+/unit2*
 /codehs_unit1*

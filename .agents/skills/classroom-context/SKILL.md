@@ -33,7 +33,7 @@ This skill provides the factual classroom context, instructional environment, co
   * **Multimodal Representations:** Heavy use of visual diagrams, color-coding, geometric manipulatives, interactive sketches (e.g., GeoGebra/Desmos), and physical models.
   * **Peer Discourse & Low-Stakes Talk:** Structured partner talk (Turn & Talk, Accountable Talk teacher moves), desk whiteboards for group collaboration, and collective problem-solving to lower affective filters.
   * **Asset-Based Mindset:** Honoring students' home languages, non-verbal geometric intuition, and collaborative cultural orientations (Hammond's collectivist framework) rather than viewing language learning as a deficit.
-  * *Canonical Reading Reference*: See [`mll-literacy-scaffolding`](file:///c:/Users/zubair/Documents/canvas-extractor/.agents/skills/mll-literacy-scaffolding/SKILL.md).
+  * *Canonical Reading Reference*: See `mll-literacy-scaffolding` (`.agents/skills/mll-literacy-scaffolding/SKILL.md`). For assessment items, see `.agents/skills/assessment-builder/references/item-rules.md`.
 
 ### Period 5: AP Statistics
 * **Course:** Advanced Placement Statistics (College Board aligned)
