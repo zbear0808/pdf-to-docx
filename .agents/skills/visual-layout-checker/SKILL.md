@@ -9,6 +9,8 @@ This skill provides an objective, rigorous visual inspection protocol for evalua
 
 It inspects rendered high-resolution page PNGs to verify that all figures, coordinate grids, mathematical notation, and student work areas are visually aligned, perfectly legible, and packed with balanced whitespace.
 
+When a figure itself needs correction (geometry, labels, styling), edit its saved Python generator, rerun it, and rebuild the affected documents before re-auditing. Keep the corrected source and the actual used student/key images in the lesson/assessment workspace: standalone bundles in `output/figures/`; lesson-builder images in `output/figures/<lesson-id>/` with the canonical unit `figures.py`. Update the figure README's item-to-script mapping and regeneration command. Check that retained images match the final documents; temporary previews alone are not a figure handoff.
+
 ---
 
 ## 1. Page Rendering Protocol
@@ -101,4 +103,3 @@ Perform the visual audit in the current session:
 3. Record a short per-page verdict and any defects.
 4. If issues are found, update `_temp/specs/worksheet_spec.json` (or the relevant source), re-pack with `uv run worksheet-packer pack`, and re-render; re-audit affected pages.
 5. Report the final verdict: `PASS` or `CORRECTED`, with a brief summary of changes.
-

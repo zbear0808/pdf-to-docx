@@ -7,7 +7,7 @@ description: Generates high-resolution mathematical diagrams, geometry figures, 
 
 This skill provides comprehensive instructions, standardized visual styling, and reusable Python templates for generating high-resolution, print-ready diagrams and figures for assessments, worksheets, and lesson plans.
 
-All generated assets are saved directly to `_temp/assets/` and auto-cropped to guarantee accurate 2D bin-packing footprint calculations.
+Save generated figures and their editable Python sources inside the current lesson/assessment workspace as a final editable bundle in `output/figures/`. Auto-crop used images to give accurate 2D bin-packing footprints. `_temp/` is for scratch work, never the only copy of a delivered figure or its generator. All `figures/` paths below mean `output/figures/` within this workspace.
 
 ---
 
@@ -30,7 +30,7 @@ Every generated figure must follow these strict publication standards:
 
 ## 2. Standard Workspace Script Structure
 
-Store all diagram generation scripts in `_temp/build/generate_figures.py` and output all images to `_temp/assets/`:
+For standalone assessments, save scripts in `figures/generate_figures.py` and used images in `figures/assets/`. Save the script before running it. Anchor paths to the saved script so running from another working directory cannot scatter files:
 
 ```python
 import os
@@ -40,7 +40,7 @@ import numpy as np
 from PIL import Image
 
 # 1. Output directory
-ASSET_DIR = Path("_temp/assets")
+ASSET_DIR = Path(__file__).resolve().parent / "assets"
 ASSET_DIR.mkdir(parents=True, exist_ok=True)
 
 # 2. Global styling
@@ -63,6 +63,13 @@ def save_and_crop(fig, filename: str):
 ```
 
 ---
+
+### Retention and regeneration
+
+- Keep `figures/README.md` with a mapping from each item and student/key image to the script/function that draws it, the exact command and working directory for rerunning it, and dependencies/shared helper paths. Preserve custom data and record random seeds.
+- Keep the actual auto-cropped image returned by `save_and_crop` and referenced by the AST. Use stable, descriptive names with item IDs and student/key suffixes where needed.
+- For lesson-builder, use the canonical unit `figures.py` and `@figure` registry instead of a separate generator. Retain the used rendered images under the unit's `output/figures/<lesson-id>/`, with a README mapping them to registered functions and the lesson YAML. Document `uv run lesson-builder build <unit-path> -l <lesson-id>` from the repository root; do not duplicate the canonical script. If work is delegated, pass the workspace, source paths, and these retention requirements to the agent.
+- Correct visual defects in the saved source, rerun it, rebuild affected documents, and inspect the affected images and pages. Refresh retained images after every correction. Before delivery, verify regeneration from the saved source and include links to the images, script, and README in the handoff.
 
 ## 3. Reusable Educational Visual Templates
 
@@ -233,4 +240,3 @@ When figures are generated or harvested:
 3. In `worksheet_spec.json`, configure the problem's `image` object:
    - For square/portrait figures ($0.6 \le AR \le 1.4$): `category = "detailed_diagram"`, `min_width_in = 1.6`, `preferred_width_in = 2.4`, `layout_hint = "side_by_side"`.
    - For wide figures ($AR < 0.6$): `category = "wide_grid"`, `min_width_in = 2.8`, `preferred_width_in = 3.4`, `layout_hint = "stacked"`.
-

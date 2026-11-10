@@ -1,6 +1,7 @@
 """LessonSpec -> student handout, lesson key, practice, practice key, teacher guide (DOCX)."""
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from . import docbuilder as db
@@ -244,30 +245,40 @@ def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures
 
 
 # ----------------------------------------------------------------------------- teacher guide
+def _join(bits) -> str:
+    """Join answer pieces: a space after a piece that ends a sentence, '; ' otherwise. Markup at the end
+    (**, *, $) doesn't hide the punctuation, so 'half as long.**' + 'Next' never becomes '.; '."""
+    text = ""
+    for b in bits:
+        b = str(b).strip()
+        if not b:
+            continue
+        if text:
+            end = re.sub(r"[*$\s]+$", "", text)
+            text += " " if end.endswith((".", "?", "!", ":", ";", ")")) else "; "
+        text += b
+    return text
+
+
 def _answers_md(it: Item | Part, prefix: str) -> list[str]:
     bits = []
     if isinstance(it, Item) and it.table:
         bits.append(", ".join(f"{a} $\\to$ {b}" for a, b in zip(it.table.header[1:], it.table.answers)))
     if isinstance(it, Item) and it.columns:
         for head, ans in zip(it.columns.headers, it.columns.answers):
-            bits.append(f"*{head}* " + "; ".join(ans))
+            bits.append(f"*{head}* " + _join(ans))
     for r in it.fill or []:
         bits.append(f"{r[0]} {r[1]}")
     for r in it.frame or []:
         tail = str(r[2]) if len(r) > 2 and r[2] else ""
-        if tail and tail[0].isalnum():
+        if tail and tail[0] not in ".,;:!?)'’":
             tail = " " + tail
         bits.append(f"{r[0]} **{r[1]}**{tail}")
     bits += as_list(it.answer)
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
         bits.append("(labeled sample drawing on the lesson key)")
-    text = ""
-    for b in bits:
-        b = b.strip()
-        if text:
-            text += " " if text.endswith((".", "?", "!", ":", ")")) else "; "
-        text += b
+    text = _join(bits)
     parts = [ln for p in getattr(it, "parts", []) for ln in _answers_md(p, f"   {p.label}")]
     if bits:
         return [f"{prefix} {text}"] + parts

@@ -23,7 +23,7 @@ SYMBOLS = {
     r"\circ": "°", r"\leftrightarrow": "↔", r"\ldots": "…", r"\cdot": "·", r"\neq": "≠", r"\approx": "≈",
     r"\ell": "ℓ", r"\quad": "  ", r"\,": " ", r"\ ": " ", r"\times": "×", r"\pm": "±", r"\le": "≤",
     r"\ge": "≥", r"\square": "□", r"\sim": "∼", r"\div": "÷", r"\infty": "∞", r"\theta": "θ", r"\pi": "π",
-    r"\sin": "sin ", r"\cos": "cos ", r"\tan": "tan ", r"\left": "", r"\right": "", r"\colon": ":",
+    r"\sin": "sin ", r"\cos": "cos ", r"\tan": "tan ", r"\left": "", r"\right": "", r"\colon": ":", r"\prime": "′",
 }
 
 
@@ -142,8 +142,17 @@ def latex_to_omml_inner(s, size):
             out.append(f'<m:sSub><m:e>{_mrun(base, size) if base else ""}</m:e>'
                        f'<m:sub>{latex_to_omml_inner(inner, size)}</m:sub></m:sSub>')
         elif ch == "'":
-            buf.append("′")
-            i += 1
+            # A' -> superscript prime on the letter (Word's own form); a bare ′ shrinks to a slash in fractions
+            n = 1
+            while i + n < len(s) and s[i + n] == "'":
+                n += 1
+            i += n
+            if buf and buf[-1].strip():
+                base = buf.pop()
+                flush()
+                out.append(f'<m:sSup><m:e>{_mrun(base, size)}</m:e><m:sup>{_mrun("′" * n, size)}</m:sup></m:sSup>')
+            else:
+                buf.append("′" * n)
         elif ch == "-":
             buf.append("−")
             i += 1
@@ -623,6 +632,26 @@ class Handout:
         n = len(choices)
         rows = (n + cols - 1) // cols
         avail = cell.width.inches - indent if cell.width else self.width - indent
+        colw = avail / cols
+        if all(_measure_rich(c, self.size) <= colw - 0.5 for c in choices):
+            # every choice fits its column: one paragraph per row with tab stops, so all choices share a baseline
+            # (table cells top-align, which drops a plain choice below one with a stacked fraction)
+            for r in range(rows):
+                p = cell.add_paragraph()
+                fmt(p, before=3, left=indent)
+                for c in range(cols):
+                    i = r * cols + c
+                    if i >= n:
+                        break
+                    if c:
+                        add_rich(p, "\t", self.size)
+                    add_rich(p, f"[{CHOICE_LABELS[i]}]\t", self.size)
+                    add_rich(p, choices[i], self.size)
+                for c in range(cols):
+                    p.paragraph_format.tab_stops.add_tab_stop(Inches(indent + c * colw + 0.4))
+                    if c + 1 < cols:
+                        p.paragraph_format.tab_stops.add_tab_stop(Inches(indent + (c + 1) * colw))
+            return
         t = cell.add_table(rows=rows, cols=cols)
         table_no_borders(t)
         set_widths(t, [avail / cols] * cols)

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 import re
 import sys
 from collections.abc import Callable
@@ -19,6 +20,7 @@ from matplotlib.patches import FancyArrowPatch  # noqa: E402
 from PIL import Image, ImageOps  # noqa: E402
 
 from .geometry import vertex_directions  # noqa: E402
+from .layout import Label, angle_candidates, nudge_candidates, offset_candidates, place_labels  # noqa: E402
 
 BLACK = "#000000"
 RED = "#C00000"
@@ -39,6 +41,17 @@ class _Op:
     pts: np.ndarray
     pad_pt: float = 0.0  # extra room (points) needed around pts, e.g. for offset labels
     z: float = 0.0
+    kind: str = "ink"    # ink | dots | label
+    label: Label | None = None
+
+
+_MATH = re.compile(r"\$[^$]*\$")
+
+
+def math_fix(s: str) -> str:
+    """Primes as the U+2032 glyph inside mathtext: `$A'$` sets the prime tight against the letter."""
+    return _MATH.sub(lambda m: m.group(0).replace(r"^{\prime}", "\u2032").replace(r"\prime", "\u2032")
+                     .replace("'", "\u2032"), s)
 
 
 @dataclass
@@ -47,12 +60,22 @@ class Figure:
     height_in: float
     name: str | None = None
     _ops: list[_Op] = field(default_factory=list, repr=False)
+    lint: list[str] = field(default_factory=list, repr=False)
+    _placed: bool = field(default=False, repr=False)
 
     # ------------------------------------------------------------ recording
-    def _add(self, layer, draw, pts, pad_pt=0.0):
+    def _add(self, layer, draw, pts, pad_pt=0.0, kind="ink", label=None):
         if layer not in LAYERS:
             raise ValueError(f"layer must be 'given' or 'answer', not {layer!r}")
-        self._ops.append(_Op(layer, draw, np.atleast_2d(np.asarray(pts, float)), pad_pt))
+        self._ops.append(_Op(layer, draw, np.atleast_2d(np.asarray(pts, float)), pad_pt, kind=kind, label=label))
+        self._placed = False
+
+    def grid(self, x0, x1, y0, y1, step=1, lw=0.3, layer="given"):
+        """Light square grid. Grid lines are thinner than LIGHT_LW, so labels may sit on them."""
+        for x in np.arange(x0, x1 + 1e-9, step):
+            self.seg((x, y0), (x, y1), lw=lw, layer=layer)
+        for y in np.arange(y0, y1 + 1e-9, step):
+            self.seg((x0, y), (x1, y), lw=lw, layer=layer)
 
     def poly(self, pts, closed=True, layer="given", lw=None, dashed=False, fill=None, hatch=None):
         pts = np.asarray(pts, float)
@@ -73,21 +96,29 @@ class Figure:
     def dots(self, pts, layer="given", size=14):
         pts = np.atleast_2d(np.asarray(pts, float))
         self._add(layer, lambda ax: ax.scatter(pts[:, 0], pts[:, 1], s=size, color=COLORS[layer],
-                                               zorder=3.5 if layer == "answer" else 3, clip_on=False), pts)
+                                               zorder=3.5 if layer == "answer" else 3, clip_on=False), pts,
+                  kind="dots")
 
-    def label(self, pt, text, layer="given", direction=None, center=None, offset_pt=10, size=None, italic=True):
+    def label(self, pt, text, layer="given", direction=None, center=None, offset_pt=10, size=None, italic=True,
+              fixed=False):
+        """Point label. `direction` is the preferred side; if that spot touches ink, the nearest clear spot
+        is used (see layout.py). fixed=True keeps the requested spot."""
         pt = np.asarray(pt, float)
         d = np.asarray(direction, float) if direction is not None else (
             pt - np.asarray(center, float) if center is not None else np.array([0.0, 1.0]))
         n = np.linalg.norm(d)
         d = d / n if n else np.array([0.0, 1.0])
-        self._annotate(pt, f"${text}$" if italic else text, d * offset_pt, layer, size or FS)
+        self._annotate(pt, f"${text}$" if italic else text, d * offset_pt, layer, size or FS, "point", fixed)
 
-    def _annotate(self, pt, s, off_pt, layer, size):
+    def _annotate(self, pt, s, off_pt, layer, size, kind="point", fixed=False, anchor=None):
+        s = math_fix(s)
+        pt = np.asarray(pt, float)
+        lab = Label(layer, s, size, kind, np.asarray(anchor if anchor is not None else pt, float),
+                    offset_candidates(pt, off_pt, size), fixed)
         self._add(layer, lambda ax: ax.annotate(
-            s, xy=pt, xytext=tuple(off_pt), textcoords="offset points", fontsize=size, ha="center",
+            lab.s, xy=lab.xy, xytext=tuple(lab.off), textcoords="offset points", fontsize=size, ha="center",
             va="center", color=COLORS[layer], zorder=4, annotation_clip=False), pt,
-            pad_pt=float(np.linalg.norm(off_pt)) + 0.9 * size)
+            pad_pt=float(np.linalg.norm(off_pt)) + 0.9 * size, kind="label", label=lab)
 
     def label_poly(self, pts, names, layer="given", overrides=None, offset_pt=10):
         pts = np.asarray(pts, float)
@@ -153,23 +184,24 @@ class Figure:
         self._add(layer, lambda ax: ax.plot(pts[:, 0], pts[:, 1], color=COLORS[layer], lw=1.0, zorder=3,
                                             clip_on=False), pts)
 
-    def side_label(self, a, b, text, center, layer="given", offset_pt=10, italic=False, size=None):
+    def side_label(self, a, b, text, center, layer="given", offset_pt=10, italic=False, size=None, fixed=False):
         a, b = np.asarray(a, float), np.asarray(b, float)
         m = (a + b) / 2
         nrm = np.array([-(b - a)[1], (b - a)[0]])
         nrm /= np.linalg.norm(nrm)
         if np.dot(nrm, m - np.asarray(center, float)) < 0:
             nrm = -nrm
-        self._annotate(m, f"${text}$" if italic else text, nrm * offset_pt, layer, size or FS)
+        self._annotate(m, f"${text}$" if italic else text, nrm * offset_pt, layer, size or FS, "side", fixed)
 
-    def angle_label(self, vertex, p1, p2, text, dist=None, layer="given", size=None):
+    def angle_label(self, vertex, p1, p2, text, dist=None, layer="given", size=None, fixed=False):
         v, p1, p2 = (np.asarray(x, float) for x in (vertex, p1, p2))
         u1, u2 = (p1 - v) / np.linalg.norm(p1 - v), (p2 - v) / np.linalg.norm(p2 - v)
         b = u1 + u2
         b = b / np.linalg.norm(b) if np.linalg.norm(b) > 1e-9 else np.array([-u1[1], u1[0]])
         if dist is None:
             dist = 0.18 * min(np.linalg.norm(p1 - v), np.linalg.norm(p2 - v)) + 0.3
-        self.text(v + b * dist, text, layer=layer, size=size or FS - 2)
+        half = float(np.degrees(np.arccos(np.clip(np.dot(u1, u2), -1, 1)))) / 2
+        self._text(v + b * dist, text, layer, size or FS - 2, "angle", fixed, angle_candidates(v, b, dist, half), v)
 
     def arrow(self, a, b, layer="answer", dashed=True):
         a, b = np.asarray(a, float), np.asarray(b, float)
@@ -177,16 +209,61 @@ class Figure:
             a, b, arrowstyle="-|>", mutation_scale=10, color=COLORS[layer], lw=1.0,
             ls=(0, (3, 2)) if dashed else "-", shrinkA=4, shrinkB=4, zorder=3, clip_on=False)), [a, b])
 
-    def text(self, pt, s, layer="given", size=None):
+    def text(self, pt, s, layer="given", size=None, fixed=False):
+        """Free text centered at pt. Nudged a little if it touches ink, unless fixed=True."""
         pt = np.asarray(pt, float)
         size = size or FS
-        self._add(layer, lambda ax: ax.text(pt[0], pt[1], s, fontsize=size, ha="center", va="center",
-                                            color=COLORS[layer], zorder=4, clip_on=False), pt,
-                  pad_pt=0.9 * size)
+        self._text(pt, s, layer, size, "text", fixed, nudge_candidates(pt, size), pt)
+
+    def _text(self, pt, s, layer, size, kind, fixed, cands, anchor):
+        lab = Label(layer, math_fix(s), size, kind, np.asarray(anchor, float), cands, fixed)
+        self._add(layer, lambda ax: ax.annotate(
+            lab.s, xy=lab.xy, xytext=tuple(lab.off), textcoords="offset points", fontsize=size, ha="center",
+            va="center", color=COLORS[layer], zorder=4, annotation_clip=False), pt, pad_pt=0.9 * size,
+            kind="label", label=lab)
 
     # ------------------------------------------------------------ rendering
     def has_answer(self) -> bool:
         return any(op.layer == "answer" for op in self._ops)
+
+    @property
+    def labels(self) -> list[Label]:
+        return [op.label for op in self._ops if op.label is not None]
+
+    @property
+    def min_text_pt(self) -> float | None:
+        sizes = [lab.size for lab in self.labels]
+        return min(sizes) if sizes else None
+
+    def _new_axes(self):
+        xl, yl = self._limits()
+        W, H = self.width_in + 2 * MARGIN_IN, self.height_in + 2 * MARGIN_IN
+        fig = plt.figure(figsize=(W, H), dpi=DPI, facecolor="white")
+        ax = fig.add_axes((MARGIN_IN / W, MARGIN_IN / H, self.width_in / W, self.height_in / H))
+        ax.set_xlim(*xl)
+        ax.set_ylim(*yl)
+        ax.axis("off")
+        return fig, ax
+
+    def place(self) -> list[str]:
+        """Choose label spots once, against the ink of ALL layers, so student and key labels match."""
+        if self._placed:
+            return self.lint
+        with plt.rc_context(RC):
+            fig, ax = self._new_axes()
+            try:
+                for op in self._ops:
+                    if op.kind != "label":
+                        op.draw(ax)
+                fig.canvas.draw()
+                anchors = [op.pts for op in self._ops if op.kind == "dots"]
+                anchors += [op.label.anchor[None] for op in self._ops if op.label and op.label.kind == "point"]
+                anchors = np.unique(np.round(np.vstack(anchors), 9), axis=0) if anchors else np.zeros((0, 2))
+                self.lint = place_labels(fig, ax, self.labels, anchors, DPI)
+            finally:
+                plt.close(fig)
+        self._placed = True
+        return self.lint
 
     def _limits(self):
         """Axis limits from ALL layers, so student and key share one scale and frame."""
@@ -204,15 +281,10 @@ class Figure:
 
     def render(self, layers=("given",)) -> Image.Image:
         """Untrimmed RGB image of the requested layers on the full (margin-padded) canvas."""
-        xl, yl = self._limits()
-        W, H = self.width_in + 2 * MARGIN_IN, self.height_in + 2 * MARGIN_IN
+        self.place()
         with plt.rc_context(RC):
-            fig = plt.figure(figsize=(W, H), dpi=DPI, facecolor="white")
+            fig, ax = self._new_axes()
             try:
-                ax = fig.add_axes((MARGIN_IN / W, MARGIN_IN / H, self.width_in / W, self.height_in / H))
-                ax.set_xlim(*xl)
-                ax.set_ylim(*yl)
-                ax.axis("off")
                 for op in self._ops:
                     if op.layer in layers:
                         op.draw(ax)
@@ -306,7 +378,7 @@ def registered(module: ModuleType) -> dict[str, Callable[[], Figure]]:
     return {k: fn for k, fn in _REGISTRY.items() if fn.__module__ == module.__name__}
 
 
-_LIB_FILES = (Path(__file__), Path(__file__).with_name("geometry.py"))
+_LIB_FILES = (Path(__file__), Path(__file__).with_name("geometry.py"), Path(__file__).with_name("layout.py"))
 
 
 def render_all(module_or_path, out_dir: Path, names: list[str] | None = None, force: bool = False
@@ -334,16 +406,27 @@ def render_all(module_or_path, out_dir: Path, names: list[str] | None = None, fo
             raise TypeError(f"@figure({name!r}) returned {type(f).__name__}, not Figure")
         f.name = f.name or name
         student, key = out_dir / f"{name}.png", out_dir / f"{name}_key.png"
+        meta_p = out_dir / f"{name}.json"
         if not f.has_answer():
             key.unlink(missing_ok=True)
-            if not fresh(student):
+            if not (fresh(student) and fresh(meta_p)):
                 f.save(student)
-            result[name] = {"student": student, "key": None}
+                _write_meta(meta_p, f, student)
+            result[name] = {"student": student, "key": None, "meta": json.loads(meta_p.read_text("utf-8"))}
             continue
-        if not (fresh(student) and fresh(key)):
+        if not (fresh(student) and fresh(key) and fresh(meta_p)):
             full, given = f.render(LAYERS), f.render(("given",))
             bbox = union_bbox(content_bbox(full), content_bbox(given))  # one frame for both images
             crop(full, bbox).save(key, dpi=(DPI, DPI))
             crop(given, bbox).save(student, dpi=(DPI, DPI))
-        result[name] = {"student": student, "key": key}
+            _write_meta(meta_p, f, student)
+        result[name] = {"student": student, "key": key, "meta": json.loads(meta_p.read_text("utf-8"))}
     return result
+
+
+def _write_meta(path: Path, f: Figure, png: Path):
+    """Sidecar for the checks: drawn width (inches at 300 dpi), smallest text size, label lint."""
+    with Image.open(png) as im:
+        w_in = im.width / DPI
+    path.write_text(json.dumps({"width_in": round(w_in, 3), "min_text_pt": f.min_text_pt, "lint": f.place()},
+                               indent=1), encoding="utf-8")

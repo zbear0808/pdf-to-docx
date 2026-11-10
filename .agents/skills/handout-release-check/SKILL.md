@@ -32,6 +32,13 @@ After any cut or renumber, every "Problem N" exists and supports what the senten
 - Student ≤ 3 pages, practice ≤ 2, key pages = student pages, no blank pages, red only on keys.
 - Packets: one student packet and one key packet, PDF and DOCX, duplex (each lesson starts on a front page; practice follows its lesson).
 
+## 5. Editable figure handoff (manual check)
+
+- Every generated student/key figure has its actual used image and saved Python source in the lesson/assessment workspace. Standalone assessments deliver `output/figures/` with scripts and images; lesson-builder retains images in `output/figures/<lesson-id>/` and the canonical `figures.py` in the unit root. Temporary render caches alone do not count.
+- A figure README maps items/images to scripts/functions (or registered figures), with exact regeneration commands, working directory, dependencies/helper paths, and any custom data/seeds. For lesson-builder, point to the canonical unit `figures.py` rather than duplicating it.
+- Rerun the saved source, rebuild affected documents, and visually check the affected figures/pages. Retained images must match the final documents. Include the figure folder and script paths in the handoff.
+- These retention checks are manual; the commands below do not verify them.
+
 ## Run before release
 
 ```bash

@@ -26,9 +26,121 @@ def _has_answer(it: Item | Part) -> bool:
     return False
 
 
+def _all_items(lesson: LessonSpec):
+    for _, it in lesson.items():
+        yield it
+    if lesson.practice:
+        for r in lesson.practice.rows:
+            yield from r.cells
+
+
+def placed_widths(lesson: LessonSpec, figures: dict) -> dict[str, list[tuple[str, float, str]]]:
+    """{figure name: [(item label, printed width in inches, 'student'|'key')]} for registered figures."""
+    out: dict[str, list] = {}
+
+    def add(name, w, label, which):
+        r = figures.get(name or "")
+        if not r:
+            return
+        drawn = (r.get("meta") or {}).get("width_in")
+        out.setdefault(name, []).append((label, float(w) if w else drawn, which))
+
+    for it in _all_items(lesson):
+        label = f"item {it.n}" if it.n else "unnumbered item"
+        add(it.figure, it.fig_w, label, "student")
+        if it.key_figure:
+            add(it.key_figure, it.fig_w, label, "key")
+        if it.draw and it.draw.key_figure:
+            add(it.draw.key_figure, it.draw.key_fig_w, label, "key")
+    return out
+
+
+MIN_PT, WARN_PT = 7.0, 8.0
+MIN_BOX_W = 0.9   # inches: narrowest fill-in box a student can write in (handout-release-check)
+
+
+def _box_issues(it: Item | Part, label: str) -> list[str]:
+    out = []
+    if it.fill and it.box_w < MIN_BOX_W:
+        out.append(f"ERROR {label}: fill box_w {it.box_w:g} in; the minimum is {MIN_BOX_W:g}")
+    if it.frame:
+        widths = [float(r[3]) if len(r) > 3 and r[3] is not None else it.frame_box_w for r in it.frame]
+        if min(widths) < MIN_BOX_W:
+            out.append(f"ERROR {label}: frame box width {min(widths):g} in; the minimum is {MIN_BOX_W:g}")
+    return out
+
+
+def check_guide_text(md: str, where: str) -> list[str]:
+    """Punctuation the guide renderer must never produce."""
+    out = []
+    for m in re.finditer(r"[.?!:][;,]|;;", md):
+        ctx = md[max(0, m.start() - 25):m.end() + 15].replace("\n", " ")
+        out.append(f"WARN  {where} teacher guide: odd punctuation: ...{ctx}...")
+    for line in md.splitlines():
+        segs = line.split("**")
+        for k in range(2, len(segs), 2):   # text right after a closing **
+            if segs[k][:1].isalnum() or segs[k][:1] == "$":
+                out.append(f"WARN  {where} teacher guide: missing space after bold: ...**{segs[k - 1][-20:]}**"
+                           f"{segs[k][:15]}...")
+    return out
+
+
+def check_figures(lesson: LessonSpec, figures: dict) -> list[str]:
+    """Label lint from the figure renders, and printed text size at the width each item places the figure."""
+    issues = []
+    where = lesson.id
+    for name, uses in placed_widths(lesson, figures).items():
+        meta = figures[name].get("meta") or {}
+        for msg in meta.get("lint", []):
+            issues.append(f"WARN  {where} figure {name}: {msg} (move it, enlarge the figure, or set fixed=True)")
+        drawn, pt = meta.get("width_in"), meta.get("min_text_pt")
+        if not drawn or not pt:
+            continue
+        for label, w, which in uses:
+            if not w:
+                continue
+            printed = pt * w / drawn
+            if printed < WARN_PT:
+                need = drawn * 9 / pt
+                level = "ERROR" if printed < MIN_PT else "WARN "
+                issues.append(f"{level} {where} {label}: figure {name} text prints at {printed:.1f} pt "
+                              f"(placed {w:.2f} in, drawn {drawn:.2f} in); use fig_w >= {need:.1f} or larger labels")
+    return issues
+
+
+def check_assets(lesson: LessonSpec, unit_dir: Path) -> list[str]:
+    """Image files (not registered figures): colour on student copies and print resolution."""
+    import numpy as np
+    from PIL import Image
+    issues = []
+    for it in _all_items(lesson):
+        ref = it.figure
+        if not ref or not re.search(r"\.(png|jpe?g|gif|bmp)$", ref, re.I):
+            continue
+        p = Path(ref) if Path(ref).is_absolute() else unit_dir / ref
+        if not p.exists():
+            continue
+        label = f"{lesson.id} item {it.n}" if it.n else lesson.id
+        with Image.open(p) as im:
+            rgb = np.asarray(im.convert("RGB"), dtype=np.int16)
+            w_px = im.width
+        sat = rgb.max(-1) - rgb.min(-1)
+        frac = float((sat > 60).mean())
+        if frac > 0.002:
+            issues.append(f"WARN  {label}: {p.name} has colour ({frac:.1%} of pixels); student copies print black "
+                          "and white. Redraw it or convert to grayscale")
+        if it.fig_w:
+            dpi = w_px / it.fig_w
+            if dpi < 150:
+                issues.append(f"WARN  {label}: {p.name} prints at {dpi:.0f} dpi (under 150); it will look blurry")
+    return issues
+
+
 def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) -> list[str]:
     figures = figures or {}
-    issues = []
+    issues = check_figures(lesson, figures)
+    if unit.dir:
+        issues += check_assets(lesson, unit.dir)
     where = f"{lesson.id}"
     if lesson.doc_type == "lesson":
         if lesson.minutes > unit.budget.minutes:
@@ -66,6 +178,11 @@ def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) 
                 text = " ".join(_texts(part))
                 if "___" in text:
                     issues.append(f"ERROR {plabel}: '___' blank; use fill/frame boxes")
+                issues += _box_issues(part, plabel)
+                for t in _texts(part) + as_list(part.answer):
+                    if str(t).count("$") % 2:
+                        issues.append(f"ERROR {plabel}: odd number of '$' in {str(t)[:50]!r}; math is $...$ "
+                                      "(write dollars as 'dollars' or \\$)")
                 for m in re.finditer(r"\bProblems?\s+(\d+)(?:\s*-\s*(\d+))?", text):
                     for k in {m.group(1), m.group(2) or m.group(1)}:
                         if k not in nums:
@@ -81,6 +198,9 @@ def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) 
                 if not has_key_fig:
                     issues.append(f"ERROR {label}: drawing task without a key figure (key_figure, draw.key_figure, "
                                   "or a registered figure with an answer layer)")
+    if needs_answers:
+        from .render import guide_markdown
+        issues += check_guide_text(guide_markdown(lesson), where)
     return issues
 
 

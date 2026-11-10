@@ -180,6 +180,32 @@ def _packets(unit):
 
 
 @app.command()
+def figs(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l"),
+         sheet: bool = typer.Option(True, help="write a contact sheet per document"), force: bool = False):
+    """Figures only (seconds): render, lint labels, check printed text size, write contact sheets.
+    Loop on this until it is clean, then run `build`."""
+    from .check import check_figures, placed_widths, summarize
+    from .figures.sheet import contact_sheet
+    unit = load_unit(unit_dir)
+    specs = _lessons(unit, lesson)
+    rendered = _figures(unit, force, docs={l.stem for l in specs})
+    issues = []
+    for l in specs:
+        lf = _figs_for(rendered, l)
+        own = rendered.get(l.stem, {})
+        issues += check_figures(l, lf)
+        if sheet and own:
+            widths = {n: max(w for _, w, _ in uses) for n, uses in placed_widths(l, lf).items() if n in own}
+            out = contact_sheet(own, unit.dir / "_temp" / "figures" / f"{l.stem}_sheet.png", widths)
+            _out(f"{l.id}: {len(own)} figures -> {out}")
+    for i in issues:
+        _out(i)
+    e, w = summarize(issues)
+    _out(f"{e} errors, {w} warnings")
+    raise typer.Exit(1 if e else 0)
+
+
+@app.command()
 def packet(unit_dir: Path):
     """Rebuild the duplex student and key packets from existing outputs."""
     _packets(load_unit(unit_dir))

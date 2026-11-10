@@ -22,7 +22,7 @@ Load these only when the step that needs them comes up:
 | 7 | `worksheet-packer` |
 | 8 | `visual-layout-checker`, `handout-release-check` (scripts, packets) |
 
-Workspace (see AGENTS.md): sources in `input/`, final files in `output/`, everything else in `_temp/{specs,assets,renders,build}/`.
+Workspace: use a dedicated folder for this assessment. Sources go in `input/`, final documents in `output/`, and working files in `_temp/{specs,assets,renders,build}/` (see AGENTS.md). Deliver an editable figure bundle in `output/figures/`: Python scripts, the actual student/key images used, custom input data, and a regeneration README. This bundle is a final deliverable; `_temp/` must never hold its only copy. All `figures/` paths below mean `output/figures/` within this assessment's folder.
 
 ## Exam integrity
 
@@ -83,7 +83,7 @@ Answer each question. Show your work on Part 2.
 
 #### Problem 1 (Reflection) [2 pts]
 Triangle $ABC$ is reflected over line $m$. Which figure shows the image?
-- **Image**: `_temp/assets/fig_q1_reflection.png`
+- **Image**: `output/figures/assets/fig_q1_reflection.png`
 - **Layout**: side_by_side
 - (A) Figure 1
 - (B) Figure 2
@@ -149,7 +149,9 @@ Translate `draft.md` into `_temp/specs/worksheet_spec.json` using the `Worksheet
 
 Use `layout_hint: "side_by_side"` for portrait or square figures and `"stacked"` for wide grids or plots. Set `default_columns`, margins, and font size for the page budget. Defaults: 2 columns, 0.5 in margins, 10-10.5 pt.
 
-Figures: reuse the cropped figures in `_temp/assets/` from Step 1 where they fit. Make any others with `curriculum-visual-generator` (script in `_temp/build/`, 300 DPI, then `worksheet_packer.image_utils.auto_crop_image`). For variants, redraw rather than reuse: the figure has to match the new numbers and letters.
+Figures: reuse the cropped figures from Step 1 where they fit, retaining used images in `figures/assets/`. Make any others with `curriculum-visual-generator`: save the script in `figures/generate_figures.py` before running it, render at 300 DPI, then use `worksheet_packer.image_utils.auto_crop_image`. Point the AST at the retained images. For variants, redraw rather than reuse: the figure has to match the new numbers and letters.
+
+Write `figures/README.md` mapping item numbers and student/key image filenames to the generating script and function. Include the exact regeneration command, working directory, dependencies/shared helpers, and required input data or random seeds. Label reused images with their source document/page instead of implying they have a generator. Keep the actual cropped image used by the AST alongside the source script and custom data.
 
 ## Step 7: Pack and render
 
@@ -174,7 +176,9 @@ Look at every page using the `visual-layout-checker` checklist. Problems to catc
 - not enough room to write
 - more pages than the budget allows
 
-Fix the problem in `worksheet_spec.json` (workspace, widths, layout hints, columns, font), not in the DOCX. Then repack. Stop after 3 rounds and report what's left.
+Fix layout problems in `worksheet_spec.json` (workspace, widths, layout hints, columns, font), not in the DOCX. Fix incorrect geometry, overlapping labels, or poor figure styling in the saved figure script; rerun it, update asset paths/metadata if needed, and repack. Inspect the affected figures and pages again. Stop after 3 rounds and report what's left.
+
+Before delivery, confirm the saved script regenerates the used images, the retained images match the final documents, and `figures/README.md` points to the latest source and commands.
 
 Then run `uv run lesson-builder check-pdfs <student.pdf> <key.pdf>` on the student/key pair and build duplex packets if the user prints sets (`handout-release-check` §4).
 
@@ -182,6 +186,7 @@ Then run `uv run lesson-builder check-pdfs <student.pdf> <key.pdf>` on the stude
 
 Tell the user:
 - Which files are in `output/`.
+- Where the retained figure images, editable Python script, and regeneration README are saved.
 - The page count, point total, and how many items there are of each type.
 - Rewrite mode: the main changes from `changes.md`, grouped (e.g. "simplified 6 stems, replaced 2 'all of the above', added labels to 3 figures"), plus anything you flagged but didn't change.
 - Any judgment calls the user should check.
