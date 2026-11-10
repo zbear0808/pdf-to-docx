@@ -1,0 +1,218 @@
+# Kitchen-sink lesson: every lesson field the builder understands (tooling plan T10).
+id: KS.1
+title: Same shape, new place
+notes_title: Rigid motions and dilations
+framing: >-
+  How can you tell that two figures match without measuring every part?
+materials: patty paper, ruler
+numbering: auto
+source: 'Kitchen-sink fixture, built from the template lesson'
+max_pages: 3
+notes_height: 2.0
+targets:
+  - id: LT3
+    understand: 'a reflection flips a figure but keeps its size'
+    able_to: 'reflect a figure across a line and name the image'
+    standard: G.CO.5
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        prompt: 'What do you notice? What do you wonder?'
+        figure: assets/ks_square.png
+        fig: small
+        columns:
+          headers: [I notice..., I wonder...]
+          italic: true
+          height: 0.7
+          answers: [['a square cut on its diagonal'], ['are the two triangles the same size']]
+      - n: ''
+        minutes: 1
+        prompt: 'Turn and talk: share one notice with your partner.'
+        no_answer: true
+
+  - kind: together
+    sub: 'Problems 1-2, as a class'
+    box: ['**Reflection rule**', 'Each point and its image are the same distance from the line.']
+    intro: 'We work these together. Write as we go.'
+    target: LT3
+    items:
+      - id: reflect_tri
+        minutes: 4
+        target: LT3
+        type: cr
+        demand: pwc
+        standard: G.CO.5
+        source: 'Template lesson, problem 1'
+        prompt: 'Reflect $\triangle ABC$ across line $m$. Label the image.'
+        figure: ks_reflect
+        fig: medium
+        work: 0.5
+        answer: ['See the red image.', 'Each image point is as far from $m$ as its original.']
+      - id: arrow_table
+        minutes: 3
+        prompt: 'Where does each vertex in {ref:reflect_tri} land?'
+        table:
+          header: ['Vertex', '$A$', '$B$', '$C$']
+          row_label: Image
+          answers: ["$A'$", "$B'$", "$C'$"]
+          first_w: 1.3
+          height: 0.4
+
+  - kind: partner
+    bank: [translate, reflect across a line, rotate around a point]
+    items:
+      - id: why_frame
+        minutes: 3
+        prompt: 'Use your table from {ref:arrow_table}. Fill in each box.'
+        frame_box_w: 1.2
+        frame:
+          - ['In Problem {num:arrow_table}, $B$ landed on', "$B'$", '.']
+          - {before: 'A reflection does not change', answer: length, after: '.', w: 1.3}
+      - id: build_rot
+        minutes: 6
+        prompt: 'Build a parallelogram from $\triangle ABC$.'
+        steps: ['Find $M$, the midpoint of $\overline{AC}$.', 'Rotate $B$ 180 degrees around $M$. Call the image $D$.']
+        draw:
+          height: 2.6
+          steps_w: 3.2
+          key_figure: ks_rotation
+          key_fig_w: 2.2
+          key_note: '$ABCD$ is a parallelogram.'
+      - id: pair
+        minutes: 4
+        layout: stacked
+        prompt: '$\triangle ABC$ and $\triangle DEF$ are marked below.'
+        figure: ks_congruent
+        parts:
+          - label: a.
+            id: pair_mc
+            prompt: 'Which statement is true?'
+            choices: ['$\triangle ABC \cong \triangle DEF$', '$\triangle ABC \cong \triangle EDF$',
+                      '$\triangle ABC \cong \triangle FED$']
+            choice_cols: 3
+            key: A
+            work: 0.3
+            answer: 'The marks match $A$ to $D$, $B$ to $E$, and $C$ to $F$.'
+            distractors: {B: 'swaps the first two vertices', C: 'reads the second triangle backward'}
+          - label: b.
+            prompt: 'Name one rigid motion that maps $\triangle ABC$ onto $\triangle DEF$.'
+            fill: [['Motion:', 'reflection']]
+            fill_cols: 1
+            box_w: 1.6
+          - label: c.
+            prompt: 'Finish the sentence.'
+            frame_box_w: 1.4
+            frame: [{before: 'All the parts match, so the triangles are', answer: congruent, after: '.'}]
+        page_break_after: true
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - id: cyu_mc
+        minutes: 3
+        prompt: "Point $A(2, 1)$ is reflected across the $y$-axis. Which point is $A'$?"
+        figure: ks_coord
+        choices: ['$(2, -1)$', '$(-2, -1)$', '$(-2, 1)$', '$(1, 2)$']
+        choice_cols: 2
+        key: C
+        answer: 'The $x$-coordinate changes sign.'
+        distractors: {A: 'reflected across the $x$-axis', B: 'rotated 180 degrees', D: 'swapped the coordinates'}
+      - minutes: 2
+        prompt: 'Select all the motions that keep every length the same.'
+        choices: [translation, reflection, rotation, dilation by 2, a stretch]
+        choice_cols: 3
+        select_all: true
+        key: 'A, B, C'
+        answer: 'Rigid motions keep lengths.'
+
+  - kind: exit
+    items:
+      - minutes: 4
+        prompt: 'How do you know a reflection keeps lengths?'
+        box: 1.1
+        answer: 'Each side and its image fold onto each other, so they are the same length.'
+        rubric:
+          - {level: 2, desc: 'Says the sides fold or match exactly.'}
+          - {level: 1, desc: 'Says the shape looks the same.'}
+          - {level: 0, desc: 'No reason.'}
+
+  - kind: plain
+    title: Extension
+    page_break_before: false
+    items:
+      - minutes: 3
+        prompt: 'Graph $x > 1$ on the number line.'
+        figure: ks_numberline
+        fig_w: 2.8
+        fill: [['Boundary:', '1'], ['Dot:', 'open']]
+        fill_cols: 2
+        box_w: 1.0
+        after: 0.1
+
+quicknotes:
+  - '**LT 3: I can reflect a figure across a line.**'
+  - '- Each point and its image are the same distance from the line.'
+  - target: LT1
+    title: I can name the image of a part.
+    bullets: ['Rigid motions keep lengths and angle measures.', 'Write the image with a prime: $A$ goes to $A''$.']
+
+practice:
+  title: 'Same shape, new place: practice'
+  font_size: 10.5
+  rows:
+    - cells:
+        - prompt: 'Dilate $\triangle ABC$ from $O$ by scale factor 2. Label the image.'
+          figure: ks_dilate
+          answer: "$A'(2, 2)$, $B'(4, 2)$, $C'(2, 4)$"
+          work: 0.3
+        - prompt: '$\overline{DE} \parallel \overline{BC}$. Find $EC$.'
+          figure: ks_split
+          fill: [['$EC =$', '4']]
+    - heading: Mixed review
+      cells:
+        - prompt: 'Rectangle $N$ is a dilation of rectangle $M$. What is the scale factor?'
+          figure: ks_rects
+          fill: [['Scale factor:', '1.5']]
+          box_w: 1.1
+        - prompt: 'The dot plot shows quiz scores. How many students scored 4?'
+          figure: ks_dotplot
+          answer: '3 students'
+          work: 0.4
+    - cells:
+        - prompt: 'The code runs `nums[2] = nums[0] + 1;`. What goes in the empty box?'
+          figure: ks_array
+          answer: '5'
+          work: 0.3
+        - prompt: 'Translate $\triangle ABC$ 3 units right. Label the image.'
+          figure: ks_union
+          answer: "See the red image $\\triangle A'B'C'$."
+          work: 0.3
+    - page_break_before: true
+      cells:
+        - prompt: 'Circle $O$ has radius 1. Draw one radius.'
+          figure: ks_custom
+          key_figure: ks_custom
+          answer: 'Any segment from $O$ to the circle.'
+          work: 0.3
+  selected: auto
+
+plan: |
+  **Overview.** Students reflect, rotate, and dilate figures, then name images. {ref:reflect_tri} sets up the
+  table in {ref:arrow_table}; the frame in {ref:why_frame} uses it.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students |
+  | 4-11 | Together | Teacher + class |
+  | 11-24 | With a partner | Students (pairs) |
+  | 24-28 | QuickNotes | Teacher + class |
+  | 28-37 | CYU, exit ticket, extension | Students |
+  | 37-40 | Collect, assign practice | Teacher |
+
+guide_notes: |
+  **Changes.** Partner problem {num:build_rot} replaced the old patty-paper build. Part {num:pair_mc} has
+  distractor notes in the table above.

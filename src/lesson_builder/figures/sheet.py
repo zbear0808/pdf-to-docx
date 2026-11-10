@@ -30,11 +30,16 @@ def contact_sheet(rendered: dict, out: Path, widths: dict[str, float] | None = N
         drawn_w = ims[0].width / DPI
         placed = widths.get(name, drawn_w)
         s = placed / drawn_w
-        ims = [im.resize((max(1, round(im.width / DPI * s * SHEET_DPI)), max(1, round(im.height / DPI * s * SHEET_DPI))))
-               for im in ims]
+        # each image at the placed width (fig_w) or its own drawn width, as the builder places it; with
+        # key_frame="union" the key is wider, so with fig_w set it prints smaller than the student copy
+        ims = [im.resize((max(1, round(w * SHEET_DPI)), max(1, round(im.height / im.width * w * SHEET_DPI))))
+               for im in ims for w in [placed if name in widths else im.width / DPI]]
         meta = r.get("meta") or {}
         pt = (meta.get("min_text_pt") or 0) * s
-        head = [f"{name}  {placed:.2f} in, text {pt:.1f} pt"] + [f"! {m}" for m in meta.get("lint", [])]
+        title = f"{name}  {placed:.2f} in, text {pt:.1f} pt"
+        if name in widths and meta.get("key_width_in") and abs(meta["key_width_in"] - drawn_w) > 0.01:
+            title += f" (key {(meta.get('min_text_pt') or 0) * placed / meta['key_width_in']:.1f} pt)"
+        head = [title] + [f"! {m}" for m in meta.get("lint", [])]
         w = sum(im.width for im in ims) + 20 * (len(ims) - 1)
         w = max(w, max(int(lint_f.getlength(h)) for h in head) + 4)
         h = 18 * len(head) + 6 + max(im.height for im in ims)

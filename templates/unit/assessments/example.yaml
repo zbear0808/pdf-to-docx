@@ -1,40 +1,59 @@
 # Example assessment (progress check, quiz, test, review). One YAML per version (A, B, Retake).
-# Builds output/Assessments/<id>.docx and <id> Key.docx (+ Teacher Notes if `plan` or `guide_notes` is set).
+# Builds output/Assessments/<id>.docx and <id> Key.docx (+ Teacher Notes if `plan`, `guide_notes`, a blueprint,
+# or distractor notes exist).
 id: 3.6 Progress Check A
 doc_type: assessment          # or: reference (notes sheet, no key, no answers needed)
 title: 'Progress check: lesson 3.6'
 directions: Show your work.
 total_points: 10              # must equal the sum of item/part points (lesson-builder check)
 max_pages: 2                  # page budget for this document (default: unit handout_pages)
+numbering: auto               # items without `n` are numbered 1, 2, 3 ...
+set: 3.6 Progress Check       # the forms of one assessment share a set; `form` tells them apart
+form: A
+targets:                      # adds to the unit's targets; items point at them with `target:`
+  - id: LT1
+    able_to: 'dilate a figure from a center by a scale factor'
+    standard: G.SRT.1
 
 sections:
-  - kind: plain               # no heading
+  - kind: plain               # no heading; `columns: 2` puts items two per row
     items:
-      - n: 1
-        points: 4
+      - points: 4
+        target: LT1           # blueprint metadata (Teacher Notes print a blueprint table)
+        type: cr              # sr | cr | performance
+        demand: pwoc          # mem | pwoc | pwc | dm (Smith & Stein)
         prompt: 'Dilate $\triangle ABC$ using center $P$ and scale factor 2.'
         figure: dilate_abc    # registered figure with an answer layer (figures/<this file stem>.py)
         work: 2.0
         answer: 'See the red image $\triangle A''B''C''$.'
-      - n: 2
-        points: 2
+        rubric:               # printed on the key under the answer, and in the Teacher Notes
+          - {level: 4, desc: 'All three image points are correct and labeled.'}
+          - {level: 2, desc: 'Uses center $P$, but one point is off.'}
+          - {level: 0, desc: 'No dilation from $P$.'}
+      - points: 2
+        target: LT1
+        type: sr
+        demand: mem
         prompt: 'Which scale factor makes the image smaller than the original?'
         choices: ['$\frac{7}{10}$', '1', '$\frac{5}{4}$', '2']
         choice_cols: 4
-        answer: '[A] A scale factor between 0 and 1 shrinks the figure.'
-        work: 0.2
-      - n: 3
-        prompt: 'Polygon $N$ is a dilation of polygon $M$.'
+        key: A                # the key prints "[A] ..." in front of the answer
+        answer: 'A scale factor between 0 and 1 shrinks the figure.'
+        distractors:          # Teacher Notes get a distractor table
+          B: 'thinks a scale factor of 1 shrinks the figure'
+          C: 'reads any fraction as smaller'
+      - prompt: 'Polygon $N$ is a dilation of polygon $M$.'
+        target: LT1
         parts:
           - label: a.
             points: 2
+            demand: pwoc
             prompt: What is the scale factor?
             fill: [['Scale factor:', '$\frac{3}{2}$']]
-            work: 0
           - label: b.
             points: 2
+            demand: pwc
             prompt: If $x = 10$, what is $y$?
             fill: [['$y =$', '15']]
-            work: 0
 guide_notes: |
   **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.

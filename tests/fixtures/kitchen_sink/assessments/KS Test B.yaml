@@ -1,0 +1,104 @@
+# Kitchen-sink assessment, Form B: same blueprint as Form A, new letters, numbers, and key positions.
+id: KS Test B
+doc_type: assessment
+title: 'Unit KS test: rigid motions and dilations'
+directions: Show your work.
+total_points: 15
+max_pages: 3
+numbering: auto
+set: KS Test
+form: B
+parallel_to: KS Test A
+
+sections:
+  - kind: plain
+    title: 'Part 1: multiple choice'
+    intro: 'Circle the letter of the best answer.'
+    columns: 2
+    target: LT1
+    items:
+      - points: 1
+        target: LT1
+        type: sr
+        demand: mem
+        standard: G.CO.6
+        prompt: "A reflection maps $\\triangle DEG$ onto $\\triangle D'E'G'$. Which length equals $DE$?"
+        choices: ["$E'G'$", "$D'G'$", "$D'E'$", '$DG$']
+        key: C
+        answer: 'Matching letters name matching sides.'
+        distractors: {A: 'matched by position in the list, not by letter', D: 'used a side of the original'}
+      - points: 1
+        target: LT1
+        type: sr
+        demand: pwoc
+        prompt: "In $\\triangle DEG$, $m\\angle E = 47^\\circ$. A rotation maps $E$ to $E'$. What is $m\\angle E'$?"
+        choices: ['$47^\circ$', '$43^\circ$', '$133^\circ$', '$94^\circ$']
+        key: A
+        answer: 'Rotations keep angle measures.'
+      - points: 1
+        target: LT2
+        type: sr
+        demand: pwoc
+        prompt: 'A dilation with scale factor 4 maps a segment of length 6 onto a new segment. How long is it?'
+        choices: ['10', '$\frac{3}{2}$', '2', '24']
+        key: D
+        answer: '$4 \cdot 6 = 24$'
+        distractors: {A: 'added the scale factor', B: 'divided by the scale factor'}
+      - points: 1
+        target: LT2
+        type: sr
+        demand: mem
+        prompt: 'Which transformation can change the length of a segment?'
+        choices: ['a rotation', 'a dilation', 'a reflection', 'a translation']
+        key: B
+        answer: 'Only a dilation changes lengths.'
+
+  - kind: plain
+    title: 'Part 2: show your work'
+    items:
+      - points: 3
+        target: LT2
+        type: cr
+        demand: pwoc
+        standard: G.SRT.1
+        prompt: 'Dilate $\triangle TUV$ from center $Q$ by scale factor $\frac{1}{2}$. Label the image.'
+        figure: ksb_dilate
+        work: 0.3
+        answer: "See the red image $\\triangle T'U'V'$."
+        rubric:
+          - {level: 3, desc: 'All three image points are correct and labeled.'}
+          - {level: 2, desc: 'Uses center $Q$, but one point is off.'}
+          - {level: 0, desc: 'No dilation from $Q$.'}
+      - prompt: 'In $\triangle RST$, $\overline{MN} \parallel \overline{ST}$.'
+        target: LT2
+        standard: G.SRT.4
+        figure: ksb_split
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: pwoc
+            prompt: 'Find $NT$.'
+            fill: [['$NT =$', '8']]
+          - label: b.
+            points: 2
+            type: cr
+            demand: pwc
+            prompt: 'Why are the two triangles similar?'
+            frame_box_w: 1.0
+            frame: [{before: 'The triangles are similar by', answer: AA, after: '.'}]
+      - points: 4
+        target: LT2
+        type: performance
+        demand: dm
+        scoring: epi
+        prompt: ['A student says a dilation never changes angle measures.', 'Is the student right? Explain with an example.']
+        box: 1.2
+        answer: 'Yes. A dilation by 3 triples the sides of a triangle, but its angles stay the same.'
+        rubric:
+          - {level: E, desc: 'Says yes and gives a dilation that keeps the angles.'}
+          - {level: P, desc: 'Says yes, with no example.'}
+          - {level: I, desc: 'Says no.'}
+
+guide_notes: |
+  **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.

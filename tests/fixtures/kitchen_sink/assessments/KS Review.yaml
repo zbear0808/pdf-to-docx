@@ -1,0 +1,43 @@
+# Kitchen-sink review: must not reuse the tests' letters, numbers, or answers (do_not_reuse).
+id: KS Review
+doc_type: assessment
+title: 'Unit KS review'
+directions: Show your work.
+total_points: 5
+max_pages: 2
+do_not_reuse: ['KS Test*']
+
+sections:
+  - kind: plain
+    title: Rigid motions
+    target: LT1
+    items:
+      - n: 1
+        points: 1
+        type: sr
+        demand: mem
+        prompt: "A translation maps $\\triangle WXZ$ onto $\\triangle W'X'Z'$. Which angle has the same measure as $\\angle X$?"
+        choices: ["$\\angle W'$", "$\\angle X'$", "$\\angle Z'$"]
+        choice_cols: 3
+        key: B
+        answer: 'Matching letters name matching angles.'
+      - n: 2
+        points: 2
+        type: cr
+        demand: pwoc
+        prompt: 'Two angles of $\triangle WXZ$ are marked. Find $m\angle Z$.'
+        figure: ksr_tri
+        fill: [['$m\angle Z =$', '$45^\circ$']]
+        box_w: 1.2
+
+  - kind: plain
+    title: Dilations
+    target: LT2
+    items:
+      - n: 3
+        points: 2
+        type: cr
+        demand: pwc
+        prompt: 'Circle $O$ has radius 7. A dilation about $O$ with scale factor 3 maps it onto a new circle. Find the new radius.'
+        figure: ksr_circle
+        fill: [['Radius:', '21']]

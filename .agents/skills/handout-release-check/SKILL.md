@@ -36,19 +36,21 @@ After any cut or renumber, every "Problem N" exists and supports what the senten
 - Printed figure labels are ≥ 7 pt at the item's `fig_w` (`lesson-builder figs` reports it).
 - Packets: one student packet and one key packet, PDF and DOCX, duplex (each lesson starts on a front page; practice follows its lesson).
 
-## 5. Editable figure handoff (manual check)
+## 5. Editable figure handoff (automatic)
 
-- After the final build, copy the student and key PNGs each document actually uses to `output/figures/<stem>/`. The source is `figures/<stem>.py` (one per document) plus any reused images in `assets/<stem>/`. Temporary render caches alone do not count.
-- `output/figures/<stem>/README.md` maps item -> figure name -> function in `figures/<stem>.py` (or asset path with source file and page), lists shared helpers and any custom data/seeds, and gives the regeneration command `uv run lesson-builder figs <unit> -l <stem>`, run from the repo root. Point to `figures/<stem>.py`; don't copy it.
-- Rerun the saved source, rebuild affected documents, and visually check the affected figures/pages. Retained images must match the final documents. Include the figure folder and script paths in the handoff.
-- These retention checks are manual for now; the commands below do not verify them.
+- `lesson-builder build` copies the student and key PNGs each document uses to `output/figures/<stem>/`, writes `README.md` (item → figure name → `figures/<stem>.py:function` or asset path, helper files, the `figs` / `build` / `retain` commands), and verifies the copies against the images in the built DOCX. A figure with no source or a stale copy is an ERROR.
+- The source is `figures/<stem>.py` plus any reused images in `assets/<stem>/`; the README points to them. Render caches alone do not count.
+- At release: confirm each document's last build printed `figures retained: ... (N files)` with 0 errors, or run `uv run lesson-builder retain <unit> -l <stem> --verify-only`. Link the bundle and figure file in the handoff.
 
 ## Run before release
 
 ```bash
 uv run lesson-builder figs <unit> -l <stem>                     # figures only: lint, printed size, contact sheet
 uv run lesson-builder check <unit> -l <stem>                    # spec + rendered PDFs
+uv run lesson-builder integrity <unit> --set "<set>*" --vs "<review>"   # assessment forms and reviews
+uv run lesson-builder tidy <unit>                               # temp files, orphan assets, unused figures
+uv run lesson-builder status <unit>                             # open Must fix lines, stale outputs, bundles
 uv run lesson-builder check-pdfs "<student.pdf>" "<key.pdf>"    # any pair not built from YAML
 ```
 
-`lesson-builder build <unit> -l <stem>` runs the checks and fits pages; a full build (no `-l`) also makes the packets. Fix every ERROR in the YAML or figure file, never the DOCX, then look at the pages it lists as changed. The checker finds missing answers, not wrong ones, and doesn't check MC key letters yet: read those. Record findings in `_temp/specs/<stem>/audit.md`.
+`lesson-builder build <unit> -l <stem>` runs the checks, fits pages, prints the page-fill lines, and retains the figures; a full build (no `-l`) also makes the packets. Fix every ERROR in the YAML or figure file, never the DOCX, then look at the pages it lists as changed. The checker finds missing answers and MC key-letter problems, not wrong answers: read those. Record findings in `_temp/specs/<stem>/audit.md`.

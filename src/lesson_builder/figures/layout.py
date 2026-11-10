@@ -6,12 +6,13 @@ another point than to its own. Labels with no clear candidate keep the least-bad
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from functools import lru_cache
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.collections import PathCollection
+from matplotlib.collections import LineCollection, PathCollection
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch
 
@@ -31,6 +32,7 @@ class Label:
     cands: list = field(default_factory=list)   # [(data xy, offset pt)], preferred first
     fixed: bool = False
     choice: int = 0
+    raw: str = ""                     # the text as written, before math_fix (for the prime-style lint)
 
     @property
     def xy(self):
@@ -118,18 +120,35 @@ class _Scene:
                 continue
             xy = ax.transData.transform(np.asarray(ln.get_xydata(), float))
             for a, b in zip(xy[:-1], xy[1:]):
+                if not (np.isfinite(a).all() and np.isfinite(b).all()):  # NaN breaks a curve into pieces
+                    continue
                 n = max(2, int(np.linalg.norm(b - a) / SAMPLE_PX) + 1)
                 t = np.linspace(0, 1, n)[:, None]
                 pts.append(a + (b - a) * t)
                 half.append(np.full(n, lw * self.px / 2))
+
+        def sample(v, lw):
+            for a, b in zip(v[:-1], v[1:]):
+                n = max(2, int(np.linalg.norm(b - a) / SAMPLE_PX) + 1)
+                pts.append(a + (b - a) * np.linspace(0, 1, n)[:, None])
+                half.append(np.full(n, lw * self.px / 2))
+
         for p in ax.patches:
             if isinstance(p, FancyArrowPatch):
+                # split at MOVETO, so the shaft and the arrowheads aren't joined by a phantom segment
                 path = p.get_path().transformed(p.get_transform()) if p.get_transform() else p.get_path()
-                v = np.asarray(path.vertices, float)
-                for a, b in zip(v[:-1], v[1:]):
-                    n = max(2, int(np.linalg.norm(b - a) / SAMPLE_PX) + 1)
-                    pts.append(a + (b - a) * np.linspace(0, 1, n)[:, None])
-                    half.append(np.full(n, p.get_linewidth() * self.px / 2))
+                for v in path.to_polygons(closed_only=False):
+                    sample(np.asarray(v, float), p.get_linewidth())
+            elif p.get_linewidth() >= LIGHT_LW and p.get_edgecolor()[3] > 0:
+                # outlines drawn by Figure.custom (bars, boxes, circles); fills with lw=0 are not obstacles
+                for v in p.get_path().transformed(p.get_transform()).to_polygons(closed_only=False):
+                    sample(np.asarray(v, float), p.get_linewidth())
+        for c in ax.collections:
+            if isinstance(c, LineCollection):
+                lws = np.resize(np.asarray(c.get_linewidths(), float), len(c.get_segments()) or 1)
+                for seg, lw in zip(c.get_segments(), lws):
+                    if lw >= LIGHT_LW and len(seg) > 1:
+                        sample(c.get_transform().transform(np.asarray(seg, float)), lw)
         self.line_pts = np.vstack(pts) if pts else np.zeros((0, 2))
         self.line_half = np.concatenate(half) if half else np.zeros(0)
         dots, rad = [], []
@@ -142,6 +161,11 @@ class _Scene:
         self.dots = np.vstack(dots) if dots else np.zeros((0, 2))
         self.dot_r = np.concatenate(rad) if rad else np.zeros(0)
         self.boxes: list[tuple[np.ndarray, str]] = []
+        renderer = fig.canvas.get_renderer()
+        for t in ax.texts:  # text drawn by Figure.custom (labels are not drawn yet when the scene is built)
+            if t.get_visible() and t.get_text().strip():
+                bb = t.get_window_extent(renderer)
+                self.boxes.append((np.array([bb.x0, bb.y0, bb.x1, bb.y1]), _plain(t.get_text())))
         W, H = fig.canvas.get_width_height()
         self.canvas = (0, 0, W, H)
 
@@ -170,7 +194,9 @@ class _Scene:
 
 
 def _plain(s: str) -> str:
-    return s.replace("$", "").replace(r"^\circ", "°").replace(r"^{\circ}", "°").replace("\\", "")
+    """Label text as read: no $, ° for ^\\circ, math spacing commands dropped, no grouping braces."""
+    s = s.replace("$", "").replace(r"^\circ", "°").replace(r"^{\circ}", "°")
+    return s.replace(r"\,", "").replace(r"\ ", " ").replace("{", "").replace("}", "").replace("\\", "")
 
 
 def _box(ax, renderer, lab: Label, xy, off, dpi):
@@ -215,3 +241,31 @@ def place_labels(fig, ax, labels: list[Label], point_anchors: np.ndarray, dpi: i
         if hit:
             issues.append(f"label {_plain(lab.s)!r} touches {', '.join(dict.fromkeys(hit))}")
     return issues
+
+
+_MATH_SEG = re.compile(r"\$[^$]*\$")
+
+
+def prime_styles(s: str) -> set[str]:
+    """Prime forms used in one label as written: the U+2032 glyph anywhere, and `^{\\prime}`, `\\prime` or an
+    ASCII `'` inside `$..$` (an apostrophe outside math is plain text, not a prime)."""
+    out = {"\u2032"} if "\u2032" in s else set()
+    for m in _MATH_SEG.finditer(s):
+        t = m.group(0)
+        if r"^{\prime}" in t:
+            out.add(r"^{\prime}")
+            t = t.replace(r"^{\prime}", "")
+        if r"\prime" in t:
+            out.add(r"\prime")
+        if "'" in t:
+            out.add("'")
+    return out
+
+
+def prime_lint(labels: list[Label]) -> list[str]:
+    """One message when the labels of one figure mix prime forms (they print the same, but the source should
+    read one way so search, integrity checks, and later edits find every label)."""
+    styles = set().union(*(prime_styles(lab.raw or lab.s) for lab in labels)) if labels else set()
+    if len(styles) < 2:
+        return []
+    return [f"mixed prime styles in labels: {' '.join(sorted(styles))} (write A' everywhere)"]

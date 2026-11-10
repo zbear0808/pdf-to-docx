@@ -169,7 +169,13 @@ def latex_to_omml_inner(s, size, bar=False):
 
 
 def add_math(paragraph, latex, size=SIZE):
-    xml = f'<m:oMath {M_NS}>{latex_to_omml_inner(latex, size)}</m:oMath>'
+    inner = latex_to_omml_inner(latex, size)
+    if "′" in inner and not inner.startswith("<m:r>"):
+        # Word sizes a superscript prime by the first run of the equation; when the equation starts with a
+        # structure (A' itself, a fraction, a bar) at any size but 11 pt the prime prints tiny and raised.
+        # A sized zero-width run in front fixes it.
+        inner = _mrun("\u200b", size) + inner
+    xml = f'<m:oMath {M_NS}>{inner}</m:oMath>'
     paragraph._p.append(parse_xml(xml))
 
 
@@ -591,9 +597,9 @@ class Handout:
             add_rich(p, "•\t" + text[2:], self.size)
             p.paragraph_format.tab_stops.add_tab_stop(Inches(indent + 0.2))
             return p
-        m = re.match(r"^([a-z]\.|\[[A-J]\]|Step \d:)\s+(.*)$", text)
+        m = re.match(r"^([a-z]\.|\[[A-J]\]|Step \d+:)\s+(.*)$", text)
         if m:
-            lab_w = 0.25 if len(m.group(1)) <= 3 else 0.5
+            lab_w = 0.25 if len(m.group(1)) <= 3 else 0.5 if len(m.group(1)) <= 7 else 0.62
             fmt(p, before=2, left=indent + lab_w, hanging=lab_w)
             add_rich(p, m.group(1) + "\t", self.size, bold=m.group(1).startswith("Step"))
             add_rich(p, m.group(2), self.size)

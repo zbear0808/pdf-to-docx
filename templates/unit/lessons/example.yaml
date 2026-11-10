@@ -14,9 +14,8 @@ sections:
       - minutes: 4
         prompt: 'What do you notice? What do you wonder?'
         figure: warmup_fig        # a registered figure name (figures.py) or a path like assets/x.png
-        fig_w: 2.3
-        work: 0
-        columns:                  # bordered write-in columns
+        fig: medium               # small | medium | wide (1.6, 2.4, 3.4 in), or fig_w: 2.3; neither = drawn width
+        columns:                  # bordered write-in columns (work defaults to 0 with columns/table/fill/frame)
           headers: [I notice..., I wonder...]
           italic: true
           answers: [['sample notice'], ['sample wonder']]
@@ -31,24 +30,26 @@ sections:
         work: 1.0
         answer: 'Sample: translate $A$ to $D$, then rotate around $D$.'
       - n: 2
+        id: arrow_table           # other text can say {ref:arrow_table} ("Problem 2") or {num:arrow_table} ("2")
         minutes: 3
         prompt: 'Where does each vertex land?'
-        work: 0
         table:                    # arrow table
           header: ['Vertex', '$A$', '$B$', '$C$']
           answers: ['$D$', '$E$', '$F$']
 
   - kind: partner
+    bank: [translate, reflect across a line, rotate around a point]   # word/move bank box, joined by " | "
     items:
       - n: 3
         minutes: 3
         prompt: 'Explain why. Fill in each box.'
-        frame:                    # sentence frame: [before, answer, after(, box width)]
-          - ['In Problem 2, $B$ landed on', '$E$', '.']
-          - ['Rigid motions do not change', 'length', '.']
+        frame:                    # sentence frame rows: [before, answer, after(, box width)] or a mapping
+          - ['In {ref:arrow_table}, $B$ landed on', '$E$', '.']
+          - {before: 'Rigid motions do not change', answer: length, after: '.', w: 1.2}
       - n: 4
         minutes: 7
-        prompt: ['Build it.', 'Step 1: Draw ...', 'Step 2: ...']
+        prompt: 'Build it.'
+        steps: ['Draw ...', 'Label ...']   # printed "Step 1: ...", "Step 2: ..." under the prompt
         draw:                     # steps left, drawing box right; key shows a labeled answer figure
           height: 3.0
           key_figure: build_fig   # registered figure with an answer layer, or a path
@@ -76,8 +77,8 @@ sections:
         prompt: 'Which statement must be true?'
         choices: ['option A', 'option B', 'option C', 'option D']
         choice_cols: 2
-        answer: '[B] one-line reason'
-        work: 0.1
+        key: B                    # the key shows "[B] one-line reason"; work defaults to 0.2 with choices
+        answer: 'one-line reason'
   - kind: exit
     items:
       - n: 2
@@ -87,8 +88,11 @@ sections:
         answer: 'Model answer.'
 
 quicknotes:
-  - '**LT 1: I can ...**'
+  - '**LT 1: I can ...**'         # plain strings: '**heading**' lines and '- ' bullets
   - '- One fact per bullet.'
+  - target: LT2                   # or a block: bold "LT2: title" heading, then bullets
+    title: I can ...
+    bullets: ['One fact per bullet.', 'Another fact.']
 
 practice:
   title: 'Topic: practice'
@@ -108,7 +112,7 @@ practice:
           prompt: 'Spiral review item.'
           answer: 'Answer.'
           work: 1.0
-  selected: [[1, Answer], [3, Answer]]   # "Answers to selected problems" on the student practice set
+  selected: auto                  # answers taken from the items; or [1, 3] (those items), or [[1, Answer], ...]
 
 plan: |
   **Overview.** Where this lesson sits in the unit.

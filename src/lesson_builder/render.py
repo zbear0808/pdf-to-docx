@@ -47,10 +47,38 @@ def _cell_w(cell, h: Handout) -> float:
     return cell.width.inches if cell.width else h.width
 
 
+def _work(it: Item | Part) -> float:
+    """Explicit `work` wins. Otherwise 0 when the item has its own place to write, 0.2 for choices."""
+    if _explicit(it, "work"):
+        return it.work
+    if it.fill or it.frame or any(getattr(it, f, None) for f in ("box", "parts", "table", "columns", "draw")):
+        return 0
+    return 0.2 if it.choices else it.work
+
+
+def _answer_lines(it: Item | Part) -> list[str]:
+    """Answer lines; with `key` and an answer that doesn't start with '[', the key letter goes first."""
+    lines = as_list(it.answer)
+    if it.key and not (lines and lines[0].lstrip().startswith("[")):
+        lines = [f"[{it.key}] {lines[0]}".rstrip()] + lines[1:] if lines else [f"[{it.key}]"]
+    return lines
+
+
+def _rubric_lines(it: Item | Part) -> list[str]:
+    return [f"{r.level}: {r.desc}" for r in it.rubric]
+
+
+def _prompt_lines(it: Item, points: bool = True) -> list:
+    """Prompt lines, "(2 pts)" after the first line, then numbered steps."""
+    lines = as_list(it.prompt)
+    if points and it.points is not None and lines:
+        lines = [lines[0] + _pts(it.points)] + lines[1:]
+    return lines + [f"Step {k}: {s}" for k, s in enumerate(it.steps, 1)]
+
+
 def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width: float):
-    """Fill-ins, frames, write-in box, parts, then the answer workspace."""
-    answer = as_list(it.answer)
-    boxed = bool(it.fill or it.frame or getattr(it, "box", None))
+    """Fill-ins, frames, write-in box, parts, then the answer workspace (answer and rubric on the key)."""
+    answer = _answer_lines(it)
     if isinstance(it, Part) and it.choices:
         h._choices(cell, it.choices, it.choice_cols, indent=indent + 0.25)
     if it.fill:
@@ -63,10 +91,12 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
         inner = h._inner_box(cell, it.box * scale, indent=indent)
         for a in answer:
             h.key_note(inner, a, size=10)
+        for a in _rubric_lines(it):
+            h.key_note(inner, a, size=9)
         answer = []
-    work = it.work if (_explicit(it, "work") or not boxed) else 0
-    if getattr(it, "parts", None) and not _explicit(it, "work"):
-        work = 0
+    else:
+        answer += _rubric_lines(it)
+    work = _work(it)
     if answer or work:
         h.answer(cell, answer, work * scale, indent=indent, width=width)
     for p in getattr(it, "parts", []):
@@ -82,15 +112,17 @@ def _draw(h: Handout, it: Item, figs: Figures, scale: float):
     a, b = t.rows[0].cells
     for c in (a, b):
         db.cell_margins(c, 0, 0, 0, 60)
-    h._problem_text(a, _num(it), as_list(it.prompt))
+    h._problem_text(a, _num(it), _prompt_lines(it, points=False))
     box = h._inner_box(b, max(2.2, d.height * scale), indent=0.1, exact=False)  # grows to fit the key figure
     kf = figs.get(d.key_figure or it.key_figure or it.figure, key=True)
     if h.key and kf:
         h.key_image(box, kf, d.key_fig_w, before=4)
     if d.key_note:
         h.key_note(box, d.key_note, size=9.5)
-    for a_ in as_list(it.answer):
+    for a_ in _answer_lines(it):
         h.key_note(box, a_, size=9.5)
+    for a_ in _rubric_lines(it):
+        h.key_note(box, a_, size=9)
     h.space(it.after + 0.08)
 
 
@@ -130,10 +162,7 @@ def _item(h: Handout, it: Item, figs: Figures, scale: float):
     if it.draw:
         return _draw(h, it, figs, scale)
     img = figs.get(it.key_figure if (h.key and it.key_figure) else it.figure, h.key)
-    lines = as_list(it.prompt)
-    if it.points is not None and lines:
-        lines = [lines[0] + _pts(it.points)] + lines[1:]
-    t = h.problem(_num(it), lines, image=img, img_w=it.fig_w, work=0, after=0, choices=it.choices,
+    t = h.problem(_num(it), _prompt_lines(it), image=img, img_w=it.width, work=0, after=0, choices=it.choices,
                   choice_cols=it.choice_cols, layout=it.layout)
     cell = t.rows[0].cells[0]
     _body(h, cell, it, scale, 0.3 if it.n else 0, _cell_w(cell, h))
@@ -183,7 +212,7 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
                 h.page_break()
             broke = False
             h.header(lesson.notes_title or lesson.title, label, right=right)
-            h.notes_box("QuickNotes", lesson.notes_height, lines=lesson.quicknotes)
+            h.notes_box("QuickNotes", lesson.notes_height, lines=quicknote_lines(lesson))
             continue
         if s.page_break_before and not broke:
             h.page_break()
@@ -193,8 +222,13 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
         broke = False
         if s.box:
             h.box(as_list(s.box), size=9.5, after=0.08, pad=50)
+        if s.bank:
+            h.box("  |  ".join(s.bank), size=9.5, after=0.08, pad=50)
         if s.intro:
             h.para(s.intro, after=4)
+        if s.columns == 2:
+            broke = _two_columns(h, s.items, figs, scale)
+            continue
         for it in s.items:
             _item(h, it, figs, scale)
             broke = False
@@ -204,11 +238,41 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
     return h.save(out)
 
 
-def _cell_item(h: Handout, cell, it: Item, figs: Figures, scale: float):
+def _cell_item(h: Handout, cell, it: Item, figs: Figures, scale: float, points: bool = False):
     img = figs.get(it.key_figure if (h.key and it.key_figure) else it.figure, h.key)
-    db.cell_problem(h, cell, _num(it), as_list(it.prompt), image=img, img_w=it.fig_w, choices=it.choices,
+    db.cell_problem(h, cell, _num(it), _prompt_lines(it, points), image=img, img_w=it.width, choices=it.choices,
                     choice_cols=it.choice_cols, work=0)
     _body(h, cell, it, scale, 0.3, _cell_w(cell, h))
+
+
+def _two_columns(h: Handout, items: list[Item], figs: Figures, scale: float) -> bool:
+    """Section `columns: 2`: items two per row in a borderless grid. draw/table/columns items take the full
+    width. Returns True if the last item ended with a page break."""
+    run, broke = [], False
+
+    def flush():
+        if not run:
+            return
+        t = db.practice_grid(h, (len(run) + 1) // 2, cols=2)
+        db.table_no_borders(t)
+        for k, it in enumerate(run):
+            _cell_item(h, t.rows[k // 2].cells[k % 2], it, figs, scale, points=True)
+        h.space(0.08)
+        run.clear()
+
+    for it in items:
+        broke = False
+        if it.draw or it.table or it.columns:
+            flush()
+            _item(h, it, figs, scale)
+        else:
+            run.append(it)
+        if it.page_break_after:
+            flush()
+            h.page_break()
+            broke = True
+    flush()
+    return broke
 
 
 def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures, out: Path,
@@ -238,10 +302,72 @@ def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures
         for r, row in enumerate(block):
             for c, it in enumerate(row.cells):
                 _cell_item(h, t.rows[r].cells[c], it, figs, scale)
-    if not key and pr.selected:
+    sel = selected_answers(lesson)
+    if not key and sel:
         h.section("Answers to selected problems", before=0.1)
-        db.key_table(h, [tuple(x) for x in pr.selected], cols=4)
+        db.key_table(h, sel, cols=4)
     return h.save(out)
+
+
+_MC = re.compile(r"^\s*\[([A-J](?:\s*,\s*[A-J])*)\]")
+
+
+def _short(text: str, limit: int = 60) -> str:
+    """Long answers keep their first sentence (a stop outside $...$ followed by a space)."""
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    for m in re.finditer(r"[.!?;](?=\s)", text):
+        head = text[:m.start() + (m.group(0) != ";")]
+        if len(head) >= 3 and head.count("$") % 2 == 0:
+            return head
+    return text
+
+
+def _derive(it: Item | Part) -> str:
+    """Short answer for the selected-answers table: MC letter(s), first answer line, fill/frame answers,
+    or "a. .. b. .." from the parts."""
+    if it.no_answer:
+        return ""
+    lines = as_list(it.answer)
+    if it.key:
+        return it.key
+    m = _MC.match(lines[0]) if lines else None
+    if m:
+        return re.sub(r"\s*,\s*", ", ", m.group(1))
+    if lines:
+        return _short(lines[0])
+    if it.fill or it.frame:
+        return ", ".join(str(r[1]) for r in (it.fill or []) + (it.frame or []))
+    return "  ".join(f"{p.label} {a}" for p in getattr(it, "parts", []) if (a := _derive(p)))
+
+
+def _lookup(cells: list[Item], num: str) -> str:
+    for it in cells:
+        if it.n == num:
+            return _derive(it)
+        for p in it.parts:
+            if it.n and f"{it.n}{p.label.rstrip('.').strip()}" == num:
+                return _derive(p)
+    return ""
+
+
+def selected_answers(lesson: LessonSpec) -> list[tuple[str, str]]:
+    """practice.selected as (number, answer) pairs. "auto": every numbered cell; bare numbers ("4", or "6a" for
+    a part): those cells; [n, answer] pairs as written. Derived answers that come out empty are dropped."""
+    pr = lesson.practice
+    if not pr or not pr.selected:
+        return []
+    cells = [it for r in pr.rows for it in r.cells]
+    if pr.selected == "auto":
+        return [(it.n, a) for it in cells if it.n and (a := _derive(it))]
+    out = []
+    for x in pr.selected:
+        if isinstance(x, (list, tuple)):
+            out.append(tuple(str(v) for v in x))
+        elif a := _lookup(cells, str(x)):
+            out.append((str(x), a))
+    return out
 
 
 # ----------------------------------------------------------------------------- teacher guide
@@ -274,24 +400,88 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
         if tail and tail[0] not in ".,;:!?)'’":
             tail = " " + tail
         bits.append(f"{r[0]} **{r[1]}**{tail}")
-    bits += as_list(it.answer)
+    bits += _answer_lines(it)
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
         bits.append("(labeled sample drawing on the lesson key)")
     text = _join(bits)
+    if it.scoring == "epi":
+        text = f"{text} (scored E/P/I)".strip()
+    pad = " " * (len(prefix) - len(prefix.lstrip()) + 2)
+    rubric = [f"{pad}- Rubric {ln}" for ln in _rubric_lines(it)]
+    if rubric and not text:
+        text = "Rubric:"
     parts = [ln for p in getattr(it, "parts", []) for ln in _answers_md(p, f"   {p.label}")]
-    if bits:
-        return [f"{prefix} {text}"] + parts
+    if text or bits:
+        return [f"{prefix} {text}"] + rubric + parts
     if parts:  # no stem answer: keep the item number on the first part's line
         return [f"{prefix} {parts[0].strip()}"] + parts[1:]
     return []
+
+
+def quicknote_lines(lesson: LessonSpec) -> list[str]:
+    """QuickNotes as printed lines: strings as written; a NoteBlock is a bold heading and '- ' bullets."""
+    out = []
+    for q in lesson.quicknotes:
+        if isinstance(q, str):
+            out.append(q)
+            continue
+        head = ": ".join(x for x in (q.target, q.title) if x)
+        if head:
+            out.append(f"**{head}**")
+        out += [f"- {b}" for b in q.bullets]
+    return out
+
+
+def _scored(lesson: LessonSpec, practice: bool = True):
+    """(label, item or part, parent item) for section items and parts, then practice cells ("Practice 3")."""
+    groups = [(it, "") for _, it in lesson.items()]
+    if practice and lesson.practice:
+        groups += [(it, "Practice ") for r in lesson.practice.rows for it in r.cells]
+    for it, pre in groups:
+        yield pre + (it.n or "-"), it, it
+        for p in it.parts:
+            yield pre + f"{it.n or ''}{p.label.rstrip('.').strip()}", p, it
+
+
+def _distractors_md(lesson: LessonSpec) -> list[str]:
+    rows = [f"| {lab} | {x.key or ''} | {c} | {d} |" for lab, x, _ in _scored(lesson)
+            for c, d in sorted(x.distractors.items())]
+    if not rows:
+        return []
+    return ["### Distractors", "| Item | Key | Choice | What it shows |", "|---|---|---|---|"] + rows
+
+
+def _blueprint_md(lesson: LessonSpec) -> list[str]:
+    """Assessments with target/type/demand on any item or part: one row per item (per part when parts carry
+    the fields), then a demand count."""
+    def meta(x):
+        return x.target or x.type or x.demand
+    if lesson.doc_type != "assessment" or not any(meta(x) for _, x, _ in _scored(lesson, practice=False)):
+        return []
+    rows = []
+    for _, it in lesson.items():
+        if any(meta(p) for p in it.parts):
+            for p in it.parts:
+                rows.append((f"{it.n or '-'}{p.label.rstrip('.').strip()}", p.target or it.target,
+                             p.type or it.type, p.demand or it.demand, p.points))
+        elif it.n or meta(it):
+            pts = [x.points for x in [it] + list(it.parts) if x.points is not None]
+            rows.append((it.n or "-", it.target, it.type, it.demand, sum(pts) if pts else None))
+    out = ["## Blueprint", "| Item | Target | Type | Demand | Points |", "|---|---|---|---|---|"]
+    out += [f"| {n} | {t or ''} | {ty or ''} | {d or ''} | {'' if p is None else f'{p:g}'} |"
+            for n, t, ty, d, p in rows]
+    counts = {k: sum(r[3] == k for r in rows) for k in ("mem", "pwoc", "pwc", "dm")}
+    line = "Demand count: " + ", ".join(f"{k} {v}" for k, v in counts.items())
+    unset = sum(r[3] is None for r in rows)
+    return out + ["", line + (f", not set {unset}" if unset else "")]
 
 
 def guide_markdown(lesson: LessonSpec) -> str:
     out = ["## Answer key: student handout" if lesson.doc_type == "lesson" else "## Answer key"]
     for s in lesson.sections:
         if s.kind == "notes":
-            out += ["### QuickNotes (printed on the handout and the key)"] + lesson.quicknotes
+            out += ["### QuickNotes (printed on the handout and the key)"] + quicknote_lines(lesson)
             continue
         title = s.title or SECTION_TITLES[s.kind][0]
         if title:
@@ -303,10 +493,11 @@ def guide_markdown(lesson: LessonSpec) -> str:
         for row in lesson.practice.rows:
             for it in row.cells:
                 out += _answers_md(it, f"{it.n}.")
+    out += _distractors_md(lesson) + _blueprint_md(lesson)
     if lesson.plan:
         out += ["## Lesson plan" if lesson.doc_type == "lesson" else "## Notes for the teacher", lesson.plan]
     if lesson.guide_notes:
-        out += [lesson.guide_notes]
+        out += ["", lesson.guide_notes]   # blank line: a paragraph just above would swallow its first line
     return "\n".join(out) + "\n"
 
 
@@ -321,7 +512,7 @@ def render_guide(unit: UnitSpec, lesson: LessonSpec, out: Path) -> Path:
 
 def outputs(unit: UnitSpec, lesson: LessonSpec) -> dict[str, Path]:
     """Lessons: output/Lesson X/ with five files. Assessments: output/Assessments/<stem>.docx + Key (+ guide if
-    there are teacher notes). Reference sheets: output/Reference/<stem>.docx only."""
+    there are teacher notes, a blueprint, or distractor notes). Reference sheets: output/Reference/<stem>.docx."""
     if lesson.doc_type == "lesson":
         d = unit.dir / "output" / f"Lesson {lesson.id}"
         names = {"handout": "Student Handout", "key": "Lesson Key", "practice": "Practice Problems",
@@ -335,7 +526,7 @@ def outputs(unit: UnitSpec, lesson: LessonSpec) -> dict[str, Path]:
         return {"handout": unit.dir / "output" / "Reference" / f"{title}.docx"}
     d = unit.dir / "output" / "Assessments"
     out = {"handout": d / f"{title}.docx", "key": d / f"{title} Key.docx"}
-    if lesson.plan or lesson.guide_notes:
+    if lesson.plan or lesson.guide_notes or _distractors_md(lesson) or _blueprint_md(lesson):
         out["guide"] = d / f"{title} Teacher Notes.docx"
     return out
 

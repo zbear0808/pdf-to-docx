@@ -1,0 +1,21 @@
+# Kitchen-sink reference sheet: no key, no answers needed. Notes-sheet parts carry `no_answer`.
+id: KS Notes
+doc_type: reference
+title: 'Unit KS notes: rigid motions'
+directions: Keep this sheet in your binder.
+sections:
+  - kind: plain
+    title: Words to know
+    bank: [image, pre-image, rigid motion, dilation]
+    items:
+      - n: 1
+        prompt: 'A rigid motion keeps lengths and angle measures. Write two examples.'
+        parts:
+          - label: a.
+            prompt: 'First example:'
+            work: 0.4
+            no_answer: true
+          - label: b.
+            prompt: 'Second example:'
+            work: 0.4
+            no_answer: true

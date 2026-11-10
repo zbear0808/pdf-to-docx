@@ -1,0 +1,24 @@
+# Kitchen-sink unit (tooling plan T10): every schema field and figure helper, built in tests/test_kitchen_sink.py.
+# New fields land here first. Tests copy this folder to tmp_path; nothing is ever built in place.
+course: Geometry
+unit: KS
+unit_title: Kitchen sink
+period: Period 4
+budget:
+  minutes: 40
+  handout_pages: 3
+  practice_pages: 2
+lessons:
+  - ks.yaml
+assessments: [assessments/*.yaml]
+figures: figures
+packets: true
+targets:
+  - id: LT1
+    understand: 'rigid motions keep lengths and angle measures'
+    able_to: 'name the image of a point, side, or angle under a rigid motion'
+    standard: G.CO.6
+  - id: LT2
+    understand: 'a dilation multiplies every length by the scale factor'
+    able_to: 'dilate a figure and use side splitting to find a length'
+    standard: G.SRT.1

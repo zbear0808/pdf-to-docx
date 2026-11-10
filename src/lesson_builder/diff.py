@@ -36,6 +36,8 @@ def diff_renders(new_dir: Path, prev_dir: Path, out_dir: Path | None = None, thr
     if out_dir is not None:
         out_dir = Path(out_dir)
         out_dir.mkdir(parents=True, exist_ok=True)
+        for old in out_dir.glob("*_diff.png"):  # a page that stopped changing must not keep its old diff
+            old.unlink()
     changed = []
     for new_path in sorted(new_dir.glob("*.png")):
         prev_path = prev_dir / new_path.name

@@ -2,6 +2,41 @@
 
 Based on a review of `units/geometry/unit-2-congruent-triangles` and `units/geometry/unit-3-similarity`, the lesson-builder source, and `docs/workflow_painpoints.md`. Items already done in the pain-points list (label auto-placement, print-size and colour checks, `figs` contact sheets, box width, balanced `$`) are not repeated here.
 
+## Status (Nov 9)
+
+| Item | Status | What remains |
+|---|---|---|
+| P0.1 gitignore | partial | `.gitignore` ignores only `input/`, `output/`, `_temp/`, `__pycache__/` under `units/`; Unit 3 is not committed yet |
+| P0.2 Unit 3 Must fix | open | audit `SUMMARY.md` Must fix list not applied |
+| T1 `retain` | done | build runs retain + verify (`--no-retain` skips); `retain --verify-only` |
+| T2 MC + voice checks | done | `check.py` MC rules, `voice.py` banned list (keep in sync with `authentic-writer`); `check_draft.py` deleted |
+| T3 `integrity` | done | heuristics; no district-exam comparison yet (needs S13 sources ingested) |
+| T4 `scaffold` | done | |
+| T5 `brief` | done | per step: `brief <unit> <stem> --step plan\|figures\|write\|audit` |
+| T6 geometry helpers | partial | helpers, asserts, marks, templates done (`parallel_set` became `mark_parallel`); Unit 3 figure files not yet refactored onto them |
+| T7 page-fill | partial | report, overflow, pinned-break, uneven and key/student mismatch lines done; per-page shrink and key pagination from the student layout need per-item scale in `render.py` |
+| T8 other subjects | done | `coordinate`, `numberline`, `stats`, `cs` on `Figure.custom`; `pdf_to_docx/chart_generator.py` not retired |
+| T9 `tidy` | done | |
+| T10 kitchen-sink fixture | done | `tests/fixtures/kitchen_sink/` (lesson, Test A/B, Review, reference sheet; every field, template and figure module) built by `tests/test_kitchen_sink.py`, full `build` when Word is available. New fields land here first |
+| T11 `status` | done | `wave.md` stays for session IDs |
+| Small fixes | done | diff clearing, 3-digit labels, unknown figure ERROR, `$` message, money and block-prime WARNs, cache key, template `assessments:` line and `figures/example.py` |
+| S1 ids and refs | done | `{ref:id}`, `{num:id}` everywhere, unknown id ERROR |
+| S2 auto numbering | done | opt-in `numbering: auto` |
+| S3 `work` default | partial | 0 for table/columns/draw, 0.2 for choices, `tidy` flags redundant lines; the figure-only `work: 0` default wasn't applied |
+| S4 named frame rows | done | |
+| S5 size words | partial | `fig: small\|medium\|wide`; no lint yet for `fig_w` far from the drawn width |
+| S6 `selected: auto` | done | also bare numbers |
+| S7 targets + metadata | done | coverage and all-procedural checks; blueprint in Teacher Notes |
+| S8 forms | done | `set`, `form`, `parallel_to`, `do_not_reuse` |
+| S9 `key` / `distractors` | done | distractor table in Teacher Notes |
+| S10 `rubric` / `scoring: epi` | partial | rubric levels render on key and notes; no separate `communication` field |
+| S11 QuickNotes blocks | done | |
+| S12 `steps` / `bank` | done | |
+| S13 `source` | done | listed in the retain README |
+| S14 `columns: 2` | done | |
+| S15 retire `header_right` | partial | only warns; fill `box_w` still per item |
+| Figure core | done | `key_frame="union"`, prime-style lint, cache watches `_*.py`, library, `assets/` |
+
 ## What the two units show
 
 | Finding | Evidence | Fix |

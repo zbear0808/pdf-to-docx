@@ -28,6 +28,8 @@ Write like a teacher making a handout the night before: plain, direct, specific.
 
 delve, tapestry, vibrant, testament, unlock, multifaceted, navigate, underscore, comprehensive, crucial, pivotal, dynamic, robust, intricate, meticulous, seamless, foster, garner, leverage (as a verb), showcase, embark, journey, realm, landscape, beacon, "it's important to note", "serves as", "plays a key role", moreover, furthermore, additionally, consequently, "in conclusion", "let's dive in", "explore the world of".
 
+When you change this list, change `BANNED` in `src/lesson_builder/voice.py` too (orchestrator task).
+
 Don't swap in a fancier synonym ("pivotal" to "vital"). Rewrite the sentence so it doesn't need the word. Usually "is", "has", "shows", "also", or "needed" works.
 
 ## Sentence patterns to cut
@@ -60,5 +62,5 @@ When asked only to clean up a draft:
 2. Shorten stems and directions using the rules above.
 3. Fix punctuation and heading case.
 4. Leave numbering, choices (A)-(D), numbers, formulas, code, figures, and layout untouched.
-5. Check the cut-word list and punctuation rules above by reading the YAML text (prompts, choices, answers, `plan`, `guide_notes`). `lesson-builder check` doesn't flag banned words yet (planned), and this file stays the source for the list.
+5. `lesson-builder check` flags the cut words (any form: navigate, navigates, navigating), dashes in prose, and exclamation points in student-facing text (prompts, choices, fill and frame labels, steps, banks, QuickNotes) as WARN lines. It skips `$...$` math and `` `code` ``. Fix every one. It doesn't read answers, `plan`, or `guide_notes`, so check those by eye. This file is the source for the list; `src/lesson_builder/voice.py` (`BANNED`) holds the code copy, so change both together.
 6. Edit the lesson or assessment YAML, never the built DOCX.

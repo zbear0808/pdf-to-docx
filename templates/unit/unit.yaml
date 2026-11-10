@@ -9,4 +9,6 @@ budget:
   practice_pages: 2
 lessons:               # files in lessons/, in teaching order
   - example.yaml
-figures: figures.py    # @figure functions; student and key PNGs come from the same function
+assessments: [assessments/*.yaml]   # progress checks, quizzes, tests, reviews, reference sheets (one YAML per form)
+figures: figures.py    # shared @figure functions (optional); student and key PNGs come from the same function
+# Per-document figures go in figures/<stem>.py (stem = YAML file stem); `lesson-builder scaffold` writes one.

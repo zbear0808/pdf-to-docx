@@ -13,13 +13,14 @@ This skill is designed to run as a read-only subagent; it never edits files. It 
 - `_temp/specs/<stem>/requirements.md` (blueprint and figure plan) and `changes.md` (GAP lines, known workarounds).
 - Built PDFs in `output/`, page renders in `_temp/renders/current/<stem>/` (`<pdf>_p<n>.png`), diffs in `_temp/renders/diff/<stem>/`.
 - Figure contact sheet `_temp/figures/<stem>_sheet.png` and figure source `figures/<stem>.py`.
-- Retained figures in `output/figures/<stem>/` with `README.md`.
+- Retained figures in `output/figures/<stem>/` with `README.md` (written and verified by the build).
+- The build log's page-fill lines (`<kind> Np/budget: p1 0.4 in [1-3]; ...`, `OVER`, "empty while ... is full", key/student mismatch) when the orchestrator passes them. Don't rebuild to get them; without them, judge page fill from the renders.
 
 All `_temp/` and `output/` paths are inside the unit folder.
 
 ## Procedure
 
-1. Run `uv run lesson-builder check units/<course>/<unit-slug> -l <stem>` and `uv run lesson-builder figs units/<course>/<unit-slug> -l <stem>`. Copy every ERROR and WARN line into `audit.md` as written. Don't re-judge them by eye.
+1. Run `uv run lesson-builder check units/<course>/<unit-slug> -l <stem>`, `uv run lesson-builder figs units/<course>/<unit-slug> -l <stem>`, and `uv run lesson-builder retain units/<course>/<unit-slug> -l <stem> --verify-only`. For assessment forms, also `uv run lesson-builder integrity units/<course>/<unit-slug> --set "<set>*"` (add `--vs "<review>"` for a review). Copy every ERROR and WARN line into `audit.md` as written. Don't re-judge them by eye. `uv run lesson-builder status units/<course>/<unit-slug>` shows whether the outputs are stale against the YAML.
 2. Open the pages listed under "pages to review" first, then the rest of the student copy and the key page by page. The build renders at 110 dpi; for a close look at small text, save a script in `_temp/build/` that calls `lesson_builder.export.pdf_to_pngs(pdf, out_dir, dpi=200)` with `out_dir` under `_temp/renders/audit/<stem>/`, and run it with `uv run python _temp/build/<script>.py`. Don't use `python -c`.
 3. Open the contact sheet and compare each figure to its item and to the figure plan.
 4. For a PDF not built from YAML, use `uv run lesson-builder check-pdfs <student.pdf> <key.pdf> --max-pages <n>` and render it with the same saved-script approach.
@@ -42,8 +43,8 @@ All `_temp/` and `output/` paths are inside the unit folder.
 - Page count is within budget; no trailing page with a few lines.
 
 **Key and retention**
-- Key has the same pages and item positions as the student copy; every item and part has an answer in red. Red appears only on the key.
-- Retained images in `output/figures/<stem>/` match the figures in the final PDFs (same names, same content, key and student both present), and the README maps each item to its figure function and gives the `figs` regeneration command.
+- Key has the same pages and item positions as the student copy; every item and part has an answer in red. Red appears only on the key. A page-fill line "item N is on key pX but student pY" is a Must fix.
+- `retain --verify-only` is clean: the bundle matches the final DOCX images. Skim the README for an item with no figure source.
 
 ## Fix table
 
@@ -62,7 +63,8 @@ Recommend the fix in the source. Never the DOCX, never a font size change.
 | Over the page budget or blank space at the end | Cut content with `lesson-scope`; don't shrink fonts or `work` below what the task needs |
 | Colour or blurry source image | Redraw it as an `@figure`, or replace with a B&W image at ≥ 150 dpi at `fig_w` |
 | Key layout differs from student | Report as Must fix with page and item; it is a builder issue for the orchestrator (GAP line) |
-| Retained figures stale or missing | Re-copy from `_temp/figures/<stem>/` and update the README |
+| Retained figures stale or missing | Rebuild the document (`build` retains and verifies); don't copy PNGs by hand |
+| Page-fill "p2 has 2 in empty while p1 is full; page break before ..." | Remove or move that `page_break_after` / `page_break_before`, or adjust `work:` on the items named |
 
 ## `audit.md` format
 

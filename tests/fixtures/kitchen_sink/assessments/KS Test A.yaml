@@ -1,0 +1,104 @@
+# Kitchen-sink assessment, Form A. Form B mirrors it (parallel_to) with new letters, numbers, and keys.
+id: KS Test A
+doc_type: assessment
+title: 'Unit KS test: rigid motions and dilations'
+directions: Show your work.
+total_points: 15
+max_pages: 3
+numbering: auto
+set: KS Test
+form: A
+source: 'Kitchen-sink fixture, written from the unit targets'
+
+sections:
+  - kind: plain
+    title: 'Part 1: multiple choice'
+    intro: 'Circle the letter of the best answer.'
+    columns: 2
+    target: LT1
+    items:
+      - points: 1
+        target: LT1
+        type: sr
+        demand: mem
+        standard: G.CO.6
+        prompt: "A reflection maps $\\triangle JKL$ onto $\\triangle J'K'L'$. Which length equals $JK$?"
+        choices: ["$J'K'$", "$K'L'$", "$J'L'$", '$JL$']
+        key: A
+        answer: 'Matching letters name matching sides.'
+        distractors: {B: 'matched by position in the list, not by letter', D: 'used a side of the original'}
+      - points: 1
+        target: LT1
+        type: sr
+        demand: pwoc
+        prompt: "In $\\triangle JKL$, $m\\angle K = 38^\\circ$. A rotation maps $K$ to $K'$. What is $m\\angle K'$?"
+        choices: ['$52^\circ$', '$76^\circ$', '$38^\circ$', '$142^\circ$']
+        key: C
+        answer: 'Rotations keep angle measures.'
+      - points: 1
+        target: LT2
+        type: sr
+        demand: pwoc
+        prompt: 'A dilation with scale factor 3 maps a segment of length 5 onto a new segment. How long is it?'
+        choices: ['8', '15', '$\frac{5}{3}$', '2']
+        key: B
+        answer: '$3 \cdot 5 = 15$'
+        distractors: {A: 'added the scale factor', C: 'divided by the scale factor'}
+      - points: 1
+        target: LT2
+        type: sr
+        demand: mem
+        prompt: 'Which transformation can change the length of a segment?'
+        choices: ['a translation', 'a reflection', 'a rotation', 'a dilation']
+        key: D
+        answer: 'Only a dilation changes lengths.'
+
+  - kind: plain
+    title: 'Part 2: show your work'
+    items:
+      - points: 3
+        target: LT2
+        type: cr
+        demand: pwoc
+        standard: G.SRT.1
+        prompt: 'Dilate $\triangle JKL$ from center $P$ by scale factor 2. Label the image.'
+        figure: ksa_dilate
+        work: 0.3
+        answer: "See the red image $\\triangle J'K'L'$."
+        rubric:
+          - {level: 3, desc: 'All three image points are correct and labeled.'}
+          - {level: 2, desc: 'Uses center $P$, but one point is off.'}
+          - {level: 0, desc: 'No dilation from $P$.'}
+      - prompt: 'In $\triangle FGH$, $\overline{XY} \parallel \overline{GH}$.'
+        target: LT2
+        standard: G.SRT.4
+        figure: ksa_split
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: pwoc
+            prompt: 'Find $YH$.'
+            fill: [['$YH =$', '5']]
+          - label: b.
+            points: 2
+            type: cr
+            demand: pwc
+            prompt: 'Why are the two triangles similar?'
+            frame_box_w: 1.0
+            frame: [{before: 'The triangles are similar by', answer: AA, after: '.'}]
+      - points: 4
+        target: LT2
+        type: performance
+        demand: dm
+        scoring: epi
+        prompt: ['A student says every dilation is a rigid motion.', 'Is the student right? Explain with an example.']
+        box: 1.2
+        answer: 'No. A dilation by 2 doubles every length, so it is not rigid.'
+        rubric:
+          - {level: E, desc: 'Says no and gives a dilation that changes a length.'}
+          - {level: P, desc: 'Says no, with no example.'}
+          - {level: I, desc: 'Says yes.'}
+
+guide_notes: |
+  **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.

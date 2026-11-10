@@ -57,4 +57,5 @@ tests/.cascade_sample/
 /units/**/output/
 /units/**/_temp/
 /units/_scratch/
-units/*
+/units/**/__pycache__/
+/units*

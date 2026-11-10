@@ -1,4 +1,5 @@
-"""lesson-builder CLI: new-unit, ingest, build, check, packet."""
+"""lesson-builder CLI: new-unit, scaffold, brief, ingest, figs, build, check, check-pdfs, retain, integrity, tidy,
+status, packet."""
 from __future__ import annotations
 
 import shutil
@@ -112,13 +113,15 @@ def check_pdfs(student: Path, key: Path, max_pages: int = 3):
 @app.command()
 def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l",
                                                                      help="file stem or id; repeatable"),
-          fit: bool = True, strict: bool = False, packets: bool = True, force_figures: bool = False):
-    """Figures -> DOCX -> PDF (fit to page budget) -> renders, diff, checks, packets."""
+          fit: bool = True, strict: bool = False, packets: bool = True, force_figures: bool = False,
+          retain: bool = typer.Option(True, help="copy used figures to output/figures/<stem>/ with a README")):
+    """Figures -> DOCX -> PDF (fit to page budget) -> renders, diff, checks, figure bundle, packets."""
     from .check import check_outputs, check_spec, summarize
     from .diff import diff_renders, snapshot
     from .export import pdf_to_pngs
     from .fit import build_lesson
     from .render import Figures
+    from .retain import retain as retain_figs
     unit = load_unit(unit_dir)
     specs = _lessons(unit, lesson)
     if lesson and not specs:
@@ -138,6 +141,13 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
         for a, b, n in _pairs(unit, l):
             if a in pdfs and b in pdfs:
                 issues += check_outputs(pdfs[a], pdfs[b], n)
+        if retain:
+            from .retain import verify
+            res = retain_figs(unit, l, lf)
+            issues += res.errors
+            if res.rows:
+                issues += verify(unit, l, res.out_dir)
+                _out(f"   figures retained: {res.out_dir} ({len(res.files)} files)")
         cur = tmp / "renders" / "current" / l.stem
         if cur.exists():
             shutil.rmtree(cur)
@@ -195,7 +205,10 @@ def figs(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--les
         own = rendered.get(l.stem, {})
         issues += check_figures(l, lf)
         if sheet and own:
-            widths = {n: max(w for _, w, _ in uses) for n, uses in placed_widths(l, lf).items() if n in own}
+            # only explicit fig_w / fig: a figure at its drawn width prints each image (a wider union key
+            # too) at its own width, as the builder places it
+            widths = {n: max(w for _, w, _ in uses) for n, uses in placed_widths(l, lf, explicit=True).items()
+                      if n in own}
             out = contact_sheet(own, unit.dir / "_temp" / "figures" / f"{l.stem}_sheet.png", widths)
             _out(f"{l.id}: {len(own)} figures -> {out}")
     for i in issues:
@@ -211,5 +224,88 @@ def packet(unit_dir: Path):
     _packets(load_unit(unit_dir))
 
 
+def _report(issues: list[str]):
+    from .check import summarize
+    for i in issues:
+        _out(i)
+    e, w = summarize(issues)
+    _out(f"{e} errors, {w} warnings")
+    raise typer.Exit(1 if e else 0)
+
+
+@app.command()
+def retain(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l"),
+           verify_only: bool = typer.Option(False, "--verify-only", help="compare the bundle to the built DOCX")):
+    """Copy each document's figures to output/figures/<stem>/ with a README (figure -> source function)."""
+    from .retain import retain as run, verify
+    unit = load_unit(unit_dir)
+    specs = _lessons(unit, lesson)
+    figs = None if verify_only else _figures(unit, docs={l.stem for l in specs})
+    issues = []
+    for l in specs:
+        if not verify_only:
+            res = run(unit, l, _figs_for(figs, l))
+            issues += res.errors
+            if not res.rows:
+                continue
+            _out(f"{l.id}: {len(res.rows)} uses, {len(res.files)} files -> {res.out_dir}"
+                 + (f" ({len(res.removed)} stale removed)" if res.removed else ""))
+        issues += verify(unit, l)
+    _report(issues)
+
+
+@app.command()
+def tidy(unit_dir: Path, apply: bool = typer.Option(False, "--apply", help="delete temp files, caches, stale diffs")):
+    """List litter: Word temp files, caches, stale diffs, orphan assets and figures, redundant `work:` lines."""
+    from .tidy import apply as run, find_litter, summary
+    unit = load_unit(unit_dir)
+    found = find_litter(unit)
+    for f in found:
+        _out(str(f))
+    if apply:
+        _out(f"deleted {len(run(found))} paths")
+    _out(summary(found))
+
+
+@app.command()
+def status(unit_dir: Path, checks: bool = typer.Option(False, "--checks", help="also count spec errors/warnings")):
+    """One row per document: handoff files, open Must fix lines, GAP lines, outputs, retained figures."""
+    from .status import format_table, unit_status
+    _out(format_table(unit_status(load_unit(unit_dir), with_checks=checks)))
+
+
+@app.command()
+def integrity(unit_dir: Path, set_: List[str] = typer.Option(..., "--set", help="stem globs of the forms"),
+              vs: Optional[List[str]] = typer.Option(None, "--vs", help="review/notes docs that must not reuse")):
+    """Exam integrity across forms (letters, numbers, keys) and between a test and its review/notes."""
+    from .integrity import check_set
+    unit = load_unit(unit_dir)
+    figs = _figures(unit)
+    rendered = {l.stem: _figs_for(figs, l) for l in unit.lesson_specs()}
+    _report(check_set(unit, list(set_), list(vs or []), rendered=rendered))
+
+
+@app.command()
+def scaffold(unit_dir: Path, stem: str, type_: str = typer.Option("lesson", "--type",
+                                                                 help="lesson | assessment | reference"),
+             forms: Optional[str] = typer.Option(None, help="comma list, e.g. A,B,Retake"),
+             title: Optional[str] = None, force: bool = False):
+    """Skeleton YAML, figures/<stem>.py, and _temp/specs/<stem>/ handoff files for a new document."""
+    from .scaffold import scaffold as run
+    fl = [f.strip() for f in forms.split(",")] if forms else None
+    for p in run(unit_dir, stem, doc_type=type_, forms=fl, title=title, force=force, log=_out):
+        _out(f"wrote {p}")
+
+
+@app.command()
+def brief(unit_dir: Path, stem: str, step: str = typer.Option("plan", help="plan | figures | write | audit")):
+    """One-file brief for a step subagent: inputs, files it owns, schema subset, examples, done condition."""
+    from .brief import brief as run
+    _out(f"wrote {run(unit_dir, stem, step=step)}")
+
+
 def main():
+    for s in (sys.stdout, sys.stderr):   # redirected output on Windows is cp1252; figure labels use primes
+        if hasattr(s, "reconfigure") and (s.encoding or "").lower().replace("-", "") != "utf8":
+            s.reconfigure(encoding="utf-8", errors="replace")
     app()
