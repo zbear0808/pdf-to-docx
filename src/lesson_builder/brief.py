@@ -175,12 +175,13 @@ def source_files(unit: UnitSpec, stem: str, data: dict, req_md: str = "") -> lis
 # ---------------------------------------------------------------- schema subset
 MODELS = {
     "lesson": ["LessonSpec", "Target", "Section", "Item", "Part", "Table", "Columns", "Draw", "Practice",
-               "PracticeRow", "NoteBlock"],
-    "assessment": ["LessonSpec", "Target", "Section", "Item", "Part", "RubricLevel", "Table", "Columns"],
+                "PracticeRow", "NoteBlock", "ScaledRectangles"],
+    "assessment": ["LessonSpec", "Target", "Section", "Item", "Part", "RubricLevel", "Table", "Columns", "ScaledRectangles"],
     "reference": ["LessonSpec", "Section", "Item", "Part"],
 }
 _ASSESS_ONLY = {"directions", "total_points", "set", "form", "parallel_to", "do_not_reuse"}
-_LESSON_ONLY = {"notes_title", "framing", "materials", "quicknotes", "notes_height", "practice"}
+_LESSON_ONLY = {"notes_title", "framing", "materials", "quicknotes", "notes_height", "notes_figure", "notes_fig_w",
+                "practice"}
 SKIP = {
     "lesson": {"LessonSpec": _ASSESS_ONLY | {"header_right"}},
     "assessment": {"LessonSpec": _LESSON_ONLY | {"header_right"}},

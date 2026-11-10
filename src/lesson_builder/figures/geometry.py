@@ -522,10 +522,11 @@ def dilation_task(pts, k, center, names="ABC", grid=None, rays=True, width_in=3.
 
 
 def side_splitter(tri, t, names="ABC", split_names="DE", width_in=3.0, height_in=None, seg_labels=None,
-                  marks=False):
+                   marks=False, label_directions=None, inside_labels=()):
     """Triangle ABC with D on AB and E on AC at fraction t from A (AD = t AB), so DE is parallel to BC.
     seg_labels = (AD, DB, AE, EC) side texts (None skips one). marks=True adds parallel arrows on DE and BC
-    (given). Returns (Figure, {split_pts, t, k}) where k = AB/AD."""
+    (given). label_directions maps point names to preferred directions; inside_labels contains "AB"
+    and/or "AC" for labels inside those sides. Returns (Figure, {split_pts, t, k}) where k = AB/AD."""
     from .core import Figure
 
     T = _arr(tri)
@@ -540,22 +541,23 @@ def side_splitter(tri, t, names="ABC", split_names="DE", width_in=3.0, height_in
     f.poly(T)
     f.seg(D, E)
     f.dots(np.vstack([T, [D, E]]))
-    f.label_poly(T, _names(names))
+    label_directions = label_directions or {}
+    f.label_poly(T, _names(names), overrides=label_directions)
     ctr = T.mean(0)
     for p, q, nm in ((D, B, split_names[0]), (E, C, split_names[1])):
         v = q - A
         out = np.array([-v[1], v[0]])
-        f.label(p, nm, direction=out if np.dot(out, p - ctr) > 0 else -out)
+        f.label(p, nm, direction=label_directions.get(nm, out if np.dot(out, p - ctr) > 0 else -out))
     if seg_labels:
-        for (p, q), s in zip(((A, D), (D, B), (A, E), (E, C)), seg_labels):
+        for (p, q), side, s in zip(((A, D), (D, B), (A, E), (E, C)), ("AB", "AB", "AC", "AC"), seg_labels):
             if s is not None:
-                f.side_label(p, q, s, ctr)
+                f.side_label(p, q, s, p + q - ctr if side in inside_labels else ctr)
     if marks:
         mark_parallel(f, [(D, E), (B, C)], size=0.06 * dist(B, C))
     return f, {"split_pts": np.array([D, E]), "t": t, "k": 1 / t}
 
 
-def rect_pair(w, h, k, names=("M", "N"), labels=None, gap=None, width_in=3.0, height_in=None):
+def rect_pair(w, h, k, names=("M", "N"), labels=None, gap=None, width_in=3.0, height_in=None, label_offset_pt=10):
     """Rectangle w x h and its copy scaled by k, side by side on one baseline, names centered inside.
     labels = (w1, h1, w2, h2) side texts, bottom and left of each (None skips one; default: the lengths).
     Returns (Figure, {rects, k})."""
@@ -574,9 +576,9 @@ def rect_pair(w, h, k, names=("M", "N"), labels=None, gap=None, width_in=3.0, he
         if nm:
             f.text(c, f"${nm}$")
         if wl is not None:
-            f.side_label(r[0], r[1], wl, c)
+            f.side_label(r[0], r[1], wl, c, offset_pt=label_offset_pt)
         if hl is not None:
-            f.side_label(r[0], r[3], hl, c)
+            f.side_label(r[0], r[3], hl, c, offset_pt=label_offset_pt)
     return f, {"rects": (a, b), "k": k}
 
 

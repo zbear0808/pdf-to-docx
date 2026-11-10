@@ -2,6 +2,7 @@
 # Builds output/Assessments/<id>.docx and <id> Key.docx (+ Teacher Notes if `plan`, `guide_notes`, a blueprint,
 # or distractor notes exist).
 id: 3.6 Progress Check A
+schema_version: 1             # legacy documents may omit this
 doc_type: assessment          # or: reference (notes sheet, no key, no answers needed)
 title: 'Progress check: lesson 3.6'
 directions: Show your work.
@@ -42,18 +43,28 @@ sections:
         distractors:          # Teacher Notes get a distractor table
           B: 'thinks a scale factor of 1 shrinks the figure'
           C: 'reads any fraction as smaller'
-      - prompt: 'Polygon $N$ is a dilation of polygon $M$.'
+      - id: rectangles
+        model:                # checked givens; text and a figure can read the same model
+          kind: scaled_rectangles
+          source_name: M
+          image_name: N
+          source_known: 8
+          image_known: 12
+          given_other: 10
+          known_axis: height
+          given_on: source    # image means divide to recover the source dimension
+        prompt: 'Polygon ${value:rectangles.image_name}$ is a dilation of polygon ${value:rectangles.source_name}$.'
         target: LT1
         parts:
           - label: a.
             points: 2
             demand: pwoc
             prompt: What is the scale factor?
-            fill: [['Scale factor:', '$\frac{3}{2}$']]
+            fill: [['Scale factor:', '${value:rectangles.scale}$']]
           - label: b.
             points: 2
             demand: pwc
-            prompt: If $x = 10$, what is $y$?
-            fill: [['$y =$', '15']]
+            prompt: 'If ${value:rectangles.given_symbol} = {value:rectangles.given_other}$, what is ${value:rectangles.unknown_symbol}$?'
+            fill: [['${value:rectangles.unknown_symbol} =$', '{value:rectangles.answer}']]
 guide_notes: |
   **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.

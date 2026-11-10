@@ -4,6 +4,29 @@ Based on a review of `units/geometry/unit-2-congruent-triangles` and `units/geom
 
 ## Status (Nov 9)
 
+### Shared-data pilot implementation
+
+The first follow-on milestone is implemented for `3.1-3.5 Progress Check A`, `B`, `Retake A`, and `Retake B`:
+
+- The teacher chose to keep `/units*` ignored. The classroom unit remains local; a source-only snapshot of the
+  four pilot forms is preserved in `tests/fixtures/shared_data_pilot/` so the regression suite runs in a clean checkout.
+- Added schema version 1 and a checked `scaled_rectangles` item model using exact fractions. The pilot's item q3
+  reads its givens once for figure dimensions, labels, prompt values, answers, and numerical scoring examples.
+- Added `{value:item.fact|format}` resolution and `lesson-builder resolve` for inspecting intermediate data.
+- Replaced the four copies of grid-dilation, rectangle, side-splitter, and line-family helpers with library calls.
+- Added stable item IDs, auto numbering, structured keys, and set/form links to the four pilot YAMLs.
+- Figure cache invalidation now includes the matching YAML and model/resolution code. Retention lists those
+  helper imports. Tests cover all four forms and a numeric-only edit propagating through text, geometry, and PNGs.
+
+This is a pilot adoption of T6, S1/S2, S8/S9 plus the shared-data extension. Full Unit 2/3 migration, model support
+for the other item families, shared student/key layout planning, content-hash stage manifests, and automated
+release remain subsequent milestones. The first-wave status table below is historical.
+
+Pilot verification: all four strict builds and form-integrity/retention checks pass. Student and key copies
+are two pages each, with one-page teacher notes. The migration preserves the resolved problem and answer text.
+Visual audits record the existing small student/key vertical-position differences for the shared-layout milestone;
+matching page counts alone does not close those findings.
+
 | Item | Status | What remains |
 |---|---|---|
 | P0.1 gitignore | partial | `.gitignore` ignores only `input/`, `output/`, `_temp/`, `__pycache__/` under `units/`; Unit 3 is not committed yet |

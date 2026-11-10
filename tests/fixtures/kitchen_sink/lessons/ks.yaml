@@ -1,5 +1,6 @@
 # Kitchen-sink lesson: every lesson field the builder understands (tooling plan T10).
 id: KS.1
+schema_version: 1
 title: Same shape, new place
 notes_title: Rigid motions and dilations
 framing: >-
@@ -9,6 +10,8 @@ numbering: auto
 source: 'Kitchen-sink fixture, built from the template lesson'
 max_pages: 3
 notes_height: 2.0
+notes_figure: ks_split
+notes_fig_w: 1.6
 targets:
   - id: LT3
     understand: 'a reflection flips a figure but keeps its size'
@@ -173,9 +176,17 @@ practice:
           fill: [['$EC =$', '4']]
     - heading: Mixed review
       cells:
-        - prompt: 'Rectangle $N$ is a dilation of rectangle $M$. What is the scale factor?'
+        - id: rectangles
+          model:
+            kind: scaled_rectangles
+            source_name: M
+            image_name: N
+            source_known: 1
+            image_known: 1.5
+            given_other: 2
+          prompt: 'Rectangle ${value:rectangles.image_name}$ is a dilation of rectangle ${value:rectangles.source_name}$. What is the scale factor?'
           figure: ks_rects
-          fill: [['Scale factor:', '1.5']]
+          fill: [['Scale factor:', '{value:rectangles.scale|decimal2}']]
           box_w: 1.1
         - prompt: 'The dot plot shows quiz scores. How many students scored 4?'
           figure: ks_dotplot

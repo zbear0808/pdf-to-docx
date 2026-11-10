@@ -1,0 +1,11 @@
+course: Geometry
+unit: 3
+unit_title: Shared-data regression pilot
+period: Period 4
+budget:
+  minutes: 40
+  handout_pages: 2
+  practice_pages: 2
+lessons: []
+assessments: [assessments/*.yaml]
+packets: false

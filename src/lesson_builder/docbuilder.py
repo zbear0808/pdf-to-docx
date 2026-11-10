@@ -101,8 +101,11 @@ def latex_to_omml_inner(s, size, bar=False):
                 num, i = _read_group(s, _skip_sp(s, i))
                 den, i = _read_group(s, _skip_sp(s, i))
                 flush()
-                out.append(f"<m:f><m:num>{latex_to_omml_inner(num, size)}</m:num>"
-                           f"<m:den>{latex_to_omml_inner(den, size)}</m:den></m:f>")
+                # Word sets inline fractions at script size; \dfrac asks for full-size numerator/denominator
+                fs = size * 1.35 if cmd == r"\dfrac" else size
+                pb = bar or cmd == r"\dfrac"   # at full size a plain prime reads better than a superscript one
+                out.append(f"<m:f><m:num>{latex_to_omml_inner(num, fs, pb)}</m:num>"
+                           f"<m:den>{latex_to_omml_inner(den, fs, pb)}</m:den></m:f>")
             elif cmd == r"\sqrt":
                 inner, i = _read_group(s, _skip_sp(s, i))
                 flush()
@@ -467,11 +470,23 @@ class Handout:
             self.space(after)
         return c
 
-    def notes_box(self, title, height, after=0.12, lines=None, size=None):
-        """QuickNotes box. With `lines`, the notes are printed (both student copy and key) and the box grows to fit."""
-        t = self._table(1, 1, [self.width], bordered=True)
-        table_borders(t, sz=8, inside=False)
-        c = t.rows[0].cells[0]
+    def notes_box(self, title, height, after=0.12, lines=None, size=None, image=None, img_w=1.8):
+        """QuickNotes box. With `lines`, the notes are printed (both student copy and key) and the box grows to fit.
+        `image`: a figure printed inside the box, to the right of the notes."""
+        if image:
+            fw = img_w + 0.25
+            t = self._table(1, 2, [self.width - fw, fw], bordered=True)
+            table_borders(t, sz=8, inside=False)
+            c, r = t.rows[0].cells
+            cell_margins(r, 60, 60, 40, 120)
+            r.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            q = first_par(r)
+            q.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            q.add_run().add_picture(str(image), width=Inches(img_w))
+        else:
+            t = self._table(1, 1, [self.width], bordered=True)
+            table_borders(t, sz=8, inside=False)
+            c = t.rows[0].cells[0]
         cell_margins(c, 60, 60, 120, 120)
         row_height(t.rows[0], height, exact=not lines)
         p = first_par(c)
@@ -808,7 +823,7 @@ class Handout:
             for cc in (lab, box, tail):
                 cell_margins(cc, 10, 10, 30, 30)
                 cc.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
-            if after and after[0].isalnum():
+            if after and after[0] not in ".,;:!?)'’":
                 cell_margins(tail, 10, 10, 80, 30)
             if before:
                 add_rich(first_par(lab), before, sz)

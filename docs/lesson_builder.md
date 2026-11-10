@@ -9,9 +9,11 @@ so the documents and the checks can't drift apart.
 
 ```text
 src/lesson_builder/
-  cli.py          new-unit | scaffold | brief | ingest | figs | build | check | check-pdfs | retain | integrity |
+  cli.py          new-unit | scaffold | brief | ingest | resolve | figs | build | check | check-pdfs | retain | integrity |
                   tidy | status | packet
   spec.py         UnitSpec / LessonSpec / Item / Part / Target / NoteBlock (pydantic), YAML loading
+  problem_models.py  checked problem givens and exact derived values (scaled rectangles)
+  resolve.py      {value:item.fact|format} lookup; model_for_figure; inspect with `lesson-builder resolve`
   numbering.py    numbering groups, `numbering: auto`, {ref:id} / {num:id} (runs on the raw dict before validation)
   docbuilder.py   python-docx layout engine: Word equations, labeled boxes, frames, key-only answers
   render.py       LessonSpec -> DOCX files; work defaults, selected answers, teacher guide (key, rubric,
@@ -54,6 +56,66 @@ units/<course>/<unit>/
 ```
 
 ## Interfaces
+
+### Shared problem data (schema version 1)
+
+Documents may declare `schema_version: 1`; legacy files may omit it. An unsupported version fails loading.
+An item with `model:` needs a stable `id:`. The first supported model is `scaled_rectangles`:
+
+```yaml
+- id: rectangles
+  model:
+    kind: scaled_rectangles
+    source_name: M
+    image_name: N
+    known_axis: height
+    source_known: 8
+    image_known: 12
+    given_other: 10
+    given_on: source
+  prompt: 'Polygon ${value:rectangles.image_name}$ is a dilation of polygon ${value:rectangles.source_name}$.'
+  parts:
+    - label: a.
+      prompt: What is the scale factor?
+      fill: [['Scale factor:', '${value:rectangles.scale}$']]
+    - label: b.
+      prompt: '${value:rectangles.given_symbol} = {value:rectangles.given_other}$. Find ${value:rectangles.unknown_symbol}$.'
+      fill: [['${value:rectangles.unknown_symbol} =$', '{value:rectangles.answer}']]
+```
+
+`given_on: image` computes the missing original dimension by division. `given_symbol` and `unknown_symbol`
+default to x and y. Givens must be positive; unknown fields, model kinds, IDs, and facts fail before rendering.
+Numbers use exact fractions (including decimal inputs). Model inputs are literal data, never expressions.
+
+Available facts: `source_name`, `image_name`, `given_symbol`, `unknown_symbol`, `source_known`, `image_known`,
+`given_other`, `scale`, `inverse_scale`, `source_other`, `image_other`, `answer`, `multiply_given` (for a common-error
+example). References work in prompts, choices, fill/frame answers, worked solutions, and teacher notes. Default
+format is TeX without dollar delimiters; `|decimal1`, `|decimal2`, and `|comma2` round and trim trailing zeros.
+The problem's prose and scoring remain authored content; changing the task direction also requires reviewing them.
+
+Use the same model in `figures/<stem>.py`:
+
+```python
+from lesson_builder.figures import figure
+from lesson_builder.figures.comparison import scaled_rectangles
+from lesson_builder.resolve import model_for_figure
+
+@figure("<stem>_q3")
+def rectangles():
+    return scaled_rectangles(model_for_figure(__file__, "rectangles"))
+```
+
+The figure loader finds exactly one matching lesson/assessment YAML. The figure cache watches that YAML and the
+shared model/resolution code. `uv run lesson-builder resolve <unit> -l "<stem>"` writes
+`_temp/specs/<stem>/resolved.json` with the resolved document and exact facts, without drawing figures or starting
+Word. Source YAML remains the editable master. Normal `figs`, `check`, `build`, and `retain` use the resolved data.
+
+The four `3.1-3.5 Progress Check` forms in Unit 3 are the pilot: item q3 has shared data, all items have stable IDs,
+and numbering and MC keys are structured. Their other problems still use authored values. Shared comparison
+helpers (`figures/comparison.py`) also provide `split_triangle`, `line_family`, and `parallel_names`, replacing
+the repeated helpers in those four figure files.
+The working units remain gitignored by teacher preference. `tests/fixtures/shared_data_pilot/` preserves a
+source-only snapshot of these four forms for independent regression tests.
 
 ### Figures (`lesson_builder.figures`)
 ```python

@@ -43,6 +43,7 @@ Commands run from the repo root as `uv run lesson-builder ...`.
 ## Rules
 
 - Answers come from the same place as the figure. If an image comes from a known motion or dilation, compute the correspondence or scale factor and use it in the answer.
+- For scaled-rectangle problems, put the givens in the item's `model: {kind: scaled_rectangles, ...}` and use `{value:id.fact}` in prompts, answers, and scoring notes. Figures read it with `model_for_figure(__file__, id)`. Run `resolve <unit> -l <stem>` to inspect exact facts before `figs` or `build`. See `docs/lesson_builder.md` for fields and formats; other problem families still use the existing figure workflow.
 - If a document still doesn't fit at the smallest workspace, the build says so and names the overflowing item. Cut content (`lesson-scope`); don't shrink fonts.
 - Lesson YAML, assessment YAML, `figures/`, and `assets/` are the source. `output/` and `_temp/` are rebuilt.
 - A layout feature the YAML can't express goes in `src/lesson_builder/render.py` with a field in `spec.py`, a test, and a line in the matching `example.yaml`. A figure helper goes in `src/lesson_builder/figures/<subject>.py` with a test. Only the orchestrator changes `src/`; a step subagent logs a `GAP:` line in `_temp/specs/<stem>/changes.md` and uses the closest existing field.

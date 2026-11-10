@@ -13,6 +13,7 @@ Checked against `src/lesson_builder/` (Nov 9). If this sheet and the code disagr
 | `figs UNIT [-l STEM]... [--no-sheet] [--force]` | figures only (seconds): lint, print size, `_temp/figures/<stem>_sheet.png` |
 | `build UNIT [-l STEM]... [--strict] [--force-figures] [--no-packets] [--no-fit] [--no-retain]` | figures, DOCX, PDF, fit, checks, page-fill report, **retain + verify**, renders, diff; packets only without `-l` |
 | `check UNIT [-l STEM]... [--no-outputs]` | spec checks + PDF checks of existing output |
+| `resolve UNIT [-l STEM]...` | resolved document + exact model facts in `_temp/specs/<stem>/resolved.json`; no figures or Word |
 | `check-pdfs STUDENT.pdf KEY.pdf [--max-pages 3]` | any student/key pair |
 | `retain UNIT [-l STEM]... [--verify-only]` | figure bundle `output/figures/<stem>/` + README (build runs it) |
 | `integrity UNIT --set GLOB... [--vs GLOB...]` | forms share no letters, numbers, MC key positions; `--vs` docs (review, notes) reuse nothing from the set; also each doc's `do_not_reuse` |
@@ -47,7 +48,7 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 
 ## 3. YAML quick reference (unknown keys are errors)
 
-**Document:** `id` | `doc_type` lesson*/assessment/reference | `title` | `notes_title`, `framing` (required for lessons) | `materials` | `directions` | `total_points` (= item + part points) | `max_pages` | `numbering: manual*|auto` | `targets: [{id, understand, able_to, standard}]` (adds to unit `targets`) | `set`, `form`, `parallel_to`, `do_not_reuse: [globs]` | `source` | `sections` | `quicknotes` | `notes_height` 2.2 | `practice` | `plan` | `guide_notes`. `header_right` is deprecated (WARN; the builder prints Name / Per / Score).
+**Document:** `id` | `doc_type` lesson*/assessment/reference | `title` | `notes_title`, `framing` (required for lessons) | `materials` | `directions` | `total_points` (= item + part points) | `max_pages` | `numbering: manual*|auto` | `targets: [{id, understand, able_to, standard}]` (adds to unit `targets`) | `set`, `form`, `parallel_to`, `do_not_reuse: [globs]` | `source` | `sections` | `quicknotes` | `notes_height` 2.2 | `notes_figure`, `notes_fig_w` 1.8 (figure inside the QuickNotes box, right of the notes) | `practice` | `plan` | `guide_notes`. `header_right` is deprecated (WARN; the builder prints Name / Per / Score).
 
 **Section:** `kind` warmup/together/partner/notes/cyu/exit/plain | `title` | `sub` | `intro` | `box` | `bank: [...]` (boxed, ` | ` separated) | `target` | `columns: 1|2` (2: items two per row; draw/table/columns items full width) | `items` | `page_break_before`. `notes` starts the QuickNotes page; numbering restarts after it.
 
@@ -57,6 +58,7 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 |---|---|---|
 | `n` | None | "1" prints "1."; `numbering: auto` fills it (warm-up stays unnumbered; `n: ''` skips one) |
 | `id`* | None | `{ref:id}` prints "Problem 4", `{num:id}` prints "4" (parts: "4b") in any text, including `plan`; unknown id is an ERROR |
+| `model` | None | checked `scaled_rectangles` givens; requires item `id`; `{value:id.scale}` / `{value:id.answer}` resolve before rendering (see docs/lesson_builder.md) |
 | `minutes` / `points`* | 0 / None | lessons: minutes ≤ budget; points print "(2 pts)" |
 | `prompt`* / `steps` | "" / [] | `steps` print "Step 1: ..." under the prompt |
 | `figure` / `key_figure` | None | registered name or path; an unknown name is a check ERROR |
@@ -80,6 +82,16 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 **QuickNotes:** strings, or blocks `{target: LT1, title: '...', bullets: ['...']}` (bold heading + bullets).
 
 ## 4. Figures API (`from lesson_builder.figures import ...`)
+
+**Shared numeric data:** `schema_version: 1` is optional on legacy documents. On an item, use
+`model: {kind: scaled_rectangles, source_name: M, image_name: N, source_known: 8, image_known: 12, given_other: 10}`
+with a stable `id`. `known_axis: height|width` (default height), `given_on: source|image` (default source).
+Use `{value:id.fact}` in document text; `|decimal1`, `|decimal2`, `|comma2` select rounded formats. The default
+returns exact TeX without `$`. Supported facts and a complete example are in `docs/lesson_builder.md`.
+Figure functions call `resolve.model_for_figure(__file__, item_id)` and
+`figures.comparison.scaled_rectangles(model, width_in=3.0, height_in=1.5)`; they never repeat the givens.
+`comparison.split_triangle` is the labeled side-splitter view from the Unit 3 pilot; `line_family` draws
+named lines clipped to a box, and `parallel_names(lines, reference)` computes the matching line set.
 
 `Figure(width_in, height_in, name=None, key_frame="same")`: one x/y scale. `layer="given"` is black (student + key), `layer="answer"` red (key only). Tick/arc/right-angle sizes are data units; `offset_pt` and `size` are points.
 `key_frame="same"`: student and key share one frame (blank room where the answer goes). `key_frame="union"`: the student frame fits the given ink; the key keeps the scale and grows to fit the answer ink (replaces separate `_key` figures; the key prints wider).

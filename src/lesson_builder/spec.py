@@ -7,6 +7,8 @@ from typing import Literal, Optional, Union
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from .problem_models import ScaledRectangles
+
 Lines = Union[str, list[str]]
 
 
@@ -132,6 +134,7 @@ class Part(_Scored):
 
 
 class Item(_Scored):
+    model: Optional[ScaledRectangles] = None  # checked givens shared by text ({value:id.fact}) and figures
     n: Optional[str] = None          # "1" (printed "1."); None for unnumbered (warm-up, example). numbering: auto
     minutes: float = 0
     points: Optional[float] = None   # printed after the prompt as "(2 pts)"; assessments
@@ -195,6 +198,7 @@ class Practice(_M):
 
 
 class LessonSpec(_M):
+    schema_version: Literal[1] = 1    # omitted on legacy documents; unsupported versions fail validation
     id: str                          # "2.1", or an assessment name like "3.6 Progress Check A"
     doc_type: Literal["lesson", "assessment", "reference"] = "lesson"   # reference: notes sheet, no key
     title: str                       # page-1 title
@@ -215,6 +219,8 @@ class LessonSpec(_M):
     sections: list[Section]
     quicknotes: list[Union[str, NoteBlock]] = Field(default_factory=list)
     notes_height: float = 2.2
+    notes_figure: Optional[str] = None   # figure printed inside the QuickNotes box, right of the notes
+    notes_fig_w: float = 1.8
     practice: Optional[Practice] = None
     plan: str = ""                   # teacher lesson plan (Markdown), timing table included
     guide_notes: str = ""            # extra teacher-guide Markdown (changes, notes)
@@ -317,9 +323,10 @@ def load_unit(path: Path) -> UnitSpec:
 
 def load_lesson(path: Path) -> LessonSpec:
     from .numbering import number_and_resolve
+    from .resolve import resolve_values
     path = Path(path)
     raw = path.read_text(encoding="utf-8")
-    data = yaml.safe_load(raw) or {}
+    data = resolve_values(yaml.safe_load(raw) or {})
     if "id" in data:
         data["id"] = str(data["id"])
     for s in data.get("sections", []):

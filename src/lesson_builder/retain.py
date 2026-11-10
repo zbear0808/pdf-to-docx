@@ -64,6 +64,9 @@ def figure_uses(unit: UnitSpec, lesson: LessonSpec) -> list[Use]:
                 continue
             add(label, it.figure, "student", sdoc, it.source)
             add(label, it.key_figure or it.figure, "key", kdoc, it.source)
+    if lesson.notes_figure:
+        add("QuickNotes", lesson.notes_figure, "student", "handout", "")
+        add("QuickNotes", lesson.notes_figure, "key", "key", "")
     return uses
 
 
@@ -99,7 +102,7 @@ def _rel(p: Path, base: Path) -> str:
 
 
 def helpers(path: Path) -> list[str]:
-    """Helper modules a figure file imports: sibling `_x` modules and lesson_builder.figures.*."""
+    """Helper modules a figure file imports: sibling `_x` modules and lesson_builder.*."""
     tree = ast.parse(Path(path).read_text(encoding="utf-8"))
     mods = set()
     for node in ast.walk(tree):
@@ -111,7 +114,7 @@ def helpers(path: Path) -> list[str]:
     for m in sorted(mods):
         if m.startswith("_") and (Path(path).parent / f"{m.split('.')[0]}.py").is_file():
             out.append(_rel(Path(path).parent / f"{m.split('.')[0]}.py", ROOT))
-        elif m == "lesson_builder.figures" or m.startswith("lesson_builder.figures."):
+        elif m == "lesson_builder" or m.startswith("lesson_builder."):
             spec = importlib.util.find_spec(m)
             out.append(_rel(Path(spec.origin), ROOT) if spec and spec.origin else m)
     return out

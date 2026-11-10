@@ -1,4 +1,4 @@
-"""lesson-builder CLI: new-unit, scaffold, brief, ingest, figs, build, check, check-pdfs, retain, integrity, tidy,
+"""lesson-builder CLI: new-unit, scaffold, brief, ingest, resolve, figs, build, check, check-pdfs, retain, integrity, tidy,
 status, packet."""
 from __future__ import annotations
 
@@ -19,8 +19,9 @@ def _out(msg: str):
     sys.stdout.write(msg + "\n")
 
 
-def _figures(unit, force=False, docs=None) -> dict:
-    """Shared figures.py plus figures/<doc stem>.py per document. Returns {doc stem or "": rendered}."""
+def _figures(unit, force=False, docs=None, tolerant=False) -> dict:
+    """Shared figures.py plus figures/<doc stem>.py per document. Returns {doc stem or "": rendered}.
+    tolerant=True: a figure file that fails to load (another agent mid-edit) is skipped with a note, not fatal."""
     from .figures import render_all
     out = {"": {}}
     tmp = unit.dir / "_temp" / "figures"
@@ -33,7 +34,13 @@ def _figures(unit, force=False, docs=None) -> dict:
             if p.stem.startswith("_"):  # shared helpers for this unit's figure files, not a document
                 continue
             if docs is None or p.stem in docs:
-                out[p.stem] = render_all(p, tmp / p.stem, force=force)
+                try:
+                    out[p.stem] = render_all(p, tmp / p.stem, force=force)
+                except Exception as e:
+                    if not tolerant:
+                        raise
+                    _out(f"WARN  figures/{p.name} did not load ({type(e).__name__}: {e}); its labels are skipped")
+                    out[p.stem] = {}
     return out
 
 
@@ -280,7 +287,7 @@ def integrity(unit_dir: Path, set_: List[str] = typer.Option(..., "--set", help=
     """Exam integrity across forms (letters, numbers, keys) and between a test and its review/notes."""
     from .integrity import check_set
     unit = load_unit(unit_dir)
-    figs = _figures(unit)
+    figs = _figures(unit, tolerant=True)
     rendered = {l.stem: _figs_for(figs, l) for l in unit.lesson_specs()}
     _report(check_set(unit, list(set_), list(vs or []), rendered=rendered))
 
@@ -302,6 +309,23 @@ def brief(unit_dir: Path, stem: str, step: str = typer.Option("plan", help="plan
     """One-file brief for a step subagent: inputs, files it owns, schema subset, examples, done condition."""
     from .brief import brief as run
     _out(f"wrote {run(unit_dir, stem, step=step)}")
+
+
+@app.command("resolve")
+def resolve(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l")):
+    """Write resolved text and exact model facts to _temp/specs/<stem>/resolved.json (no figures or Word)."""
+    import json
+
+    from .resolve import resolved_document
+    unit = load_unit(unit_dir)
+    specs = _lessons(unit, lesson)
+    if lesson and not specs:
+        raise typer.BadParameter(f"no document matches {lesson}")
+    for l in specs:
+        out = unit.dir / "_temp" / "specs" / l.stem / "resolved.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(resolved_document(l), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        _out(f"resolved {l.id}: {out}")
 
 
 def main():

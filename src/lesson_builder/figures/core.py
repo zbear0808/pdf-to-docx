@@ -471,6 +471,11 @@ def _deps(src: Path) -> list[Path]:
     such as figures/_helpers.py), every library file in this package, and the files in an `assets/` folder
     next to the module or one level up (the unit's assets/ for figures/<stem>.py)."""
     deps = [src, *src.parent.glob("_*.py"), *_LIB_DIR.glob("*.py")]
+    # Modeled figures read their givens from the matching YAML. A numeric-only YAML edit must
+    # invalidate the PNG and its sidecar even when the figure wrapper itself has not changed.
+    unit = src.parent.parent if src.parent.name == "figures" else src.parent
+    deps += [p for d in ("lessons", "assessments") if (p := unit / d / f"{src.stem}.yaml").is_file()]
+    deps += [_LIB_DIR.parent / f for f in ("problem_models.py", "resolve.py", "spec.py", "numbering.py")]
     for a in (src.parent / "assets", src.parent.parent / "assets"):
         if a.is_dir():
             deps += [p for p in a.rglob("*") if p.is_file()]

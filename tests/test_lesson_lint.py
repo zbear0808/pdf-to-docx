@@ -82,6 +82,9 @@ def test_prime_is_superscript_in_fractions():
     xml = db.latex_to_omml_inner(r"\frac{A'D'}{AD}", 11)
     assert xml.count("<m:sSup>") == 2 and "′" in xml
     assert db.latex_to_omml_inner(r"C^{\prime}", 11).count("<m:sSup>") == 1
+    big = db.latex_to_omml_inner(r"\dfrac{A'D'}{AD}", 11)
+    assert "<m:sSup>" not in big and 'w:val="29"' in big   # full size (11 x 1.35 pt = 29 half-points)
+    assert "<m:sSup>" not in db.latex_to_omml_inner(r"\overline{K'L'}", 11)
 
 
 def test_choice_rows_share_a_baseline():

@@ -218,7 +218,7 @@ def test_cli_smoke(fresh):
     assert "0 errors, 0 warnings" in _ok(["check", fresh])
     assert "0 errors, 0 warnings" in _ok(["integrity", fresh, "--set", "KS Test*", "--vs", "KS Review"])
     out = _ok(["retain", fresh])   # not built yet: retained but not verified (WARN)
-    assert "KS.1: 25 uses" in out and "0 errors" in out
+    assert "KS.1: 27 uses" in out and "0 errors" in out   # 25 item uses + the QuickNotes figure (student, key)
     assert _ok(["tidy", fresh]).strip().endswith("clean")
     out = _ok(["status", fresh, "--checks"])
     assert all(stem in out for stem in DOCS)

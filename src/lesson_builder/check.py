@@ -70,6 +70,8 @@ def placed_widths(lesson: LessonSpec, figures: dict, explicit: bool = False) -> 
             add(it.key_figure, it.width, label, "key")
         if it.draw and it.draw.key_figure:
             add(it.draw.key_figure, it.draw.key_fig_w, label, "key")
+    if lesson.notes_figure:
+        add(lesson.notes_figure, lesson.notes_fig_w, "QuickNotes", "student")
     return out
 
 
@@ -307,8 +309,12 @@ def _block_primes(raw: str, where: str) -> list[str]:
 def _figure_refs(unit: UnitSpec, lesson: LessonSpec, figures: dict | None, where: str) -> list[str]:
     """Names that are neither registered figures nor files. figures=None (not rendered): only path-like names."""
     out = []
-    for label, it in _labeled(lesson):
-        for name in (it.figure, it.key_figure, it.draw.key_figure if it.draw else None):
+    refs = [(label, it, (it.figure, it.key_figure, it.draw.key_figure if it.draw else None))
+            for label, it in _labeled(lesson)]
+    if lesson.notes_figure:
+        refs.append(("QuickNotes", None, (lesson.notes_figure,)))
+    for label, _it, names in refs:
+        for name in names:
             if not name or (figures is not None and name in figures):
                 continue
             pathlike = "/" in name or "\\" in name or IMG.search(name)

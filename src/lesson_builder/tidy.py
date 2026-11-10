@@ -44,6 +44,7 @@ def _refs(lesson: LessonSpec) -> set[str]:
     refs = set()
     for it in lesson.all_items():
         refs |= {it.figure, it.key_figure, it.draw.key_figure if it.draw else None}
+    refs.add(lesson.notes_figure)
     return refs - {None}
 
 

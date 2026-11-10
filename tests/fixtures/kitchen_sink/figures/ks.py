@@ -77,8 +77,11 @@ def ks_split() -> Figure:
 @figure("ks_rects")
 def ks_rects() -> Figure:
     """Practice 3: rectangle M and its dilation N by 1.5."""
-    f, info = rect_pair(2, 1, 1.5, names=("M", "N"), width_in=2.4)
-    assert info["k"] == 1.5
+    from lesson_builder.resolve import model_for_figure
+    model = model_for_figure(__file__, "rectangles")
+    (w, h), _ = model.dimensions()
+    f, info = rect_pair(float(w), float(h), float(model.scale), names=(model.source_name, model.image_name), width_in=2.4)
+    assert info["k"] == model.scale
     return f
 
 

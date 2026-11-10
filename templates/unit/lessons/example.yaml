@@ -93,6 +93,8 @@ quicknotes:
   - target: LT2                   # or a block: bold "LT2: title" heading, then bullets
     title: I can ...
     bullets: ['One fact per bullet.', 'Another fact.']
+# notes_figure: example_notes          # optional labeled figure inside the QuickNotes box, right of the notes
+# notes_fig_w: 1.8
 
 practice:
   title: 'Topic: practice'

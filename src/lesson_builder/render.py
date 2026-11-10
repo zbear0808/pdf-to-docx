@@ -212,7 +212,8 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
                 h.page_break()
             broke = False
             h.header(lesson.notes_title or lesson.title, label, right=right)
-            h.notes_box("QuickNotes", lesson.notes_height, lines=quicknote_lines(lesson))
+            h.notes_box("QuickNotes", lesson.notes_height, lines=quicknote_lines(lesson),
+                        image=figs.get(lesson.notes_figure, key), img_w=lesson.notes_fig_w)
             continue
         if s.page_break_before and not broke:
             h.page_break()
