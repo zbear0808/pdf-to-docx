@@ -81,23 +81,35 @@ def _pairs(unit, l):
     return [("handout", "key", hp), ("practice", "practice_key", unit.budget.practice_pages)]
 
 
+def _output_issues(unit, l, figs: dict, pdfs: dict) -> list[str]:
+    """Output checks for each student/key pair that exists, with the document's actual-size figures, and the
+    key's answers checked for text Word cut off."""
+    from .check import actual_figures, check_outputs, clipped_answers
+    actual = actual_figures(l, figs)
+    out = []
+    for a, b, n in _pairs(unit, l):
+        if a in pdfs and b in pdfs and pdfs[a].exists() and pdfs[b].exists():
+            out += check_outputs(pdfs[a], pdfs[b], n, actual=actual[a])
+            out += clipped_answers(l, pdfs[b], a, Path(pdfs[a]).stem)
+    return out
+
+
 @app.command()
 def check(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l"),
           outputs: bool = typer.Option(True, help="also check rendered PDFs in output/")):
-    """Spec checks (answers, blanks, refs, minutes, points, key figures) and output checks."""
-    from .check import check_outputs, check_spec, summarize
+    """Spec checks (answers, blanks, refs, minutes, points, key figures, answer cues) and output checks
+    (pages, key answers, student/key label positions, actual-size figure widths)."""
+    from .check import check_spec, summarize
     from .render import outputs as out_paths
     unit = load_unit(unit_dir)
     specs = _lessons(unit, lesson)
     figs = _figures(unit, docs={l.stem for l in specs})
     issues = []
     for l in specs:
-        issues += check_spec(unit, l, _figs_for(figs, l))
+        lf = _figs_for(figs, l)
+        issues += check_spec(unit, l, lf)
         if outputs:
-            o = {k: v.with_suffix(".pdf") for k, v in out_paths(unit, l).items()}
-            for a, b, n in _pairs(unit, l):
-                if a in o and b in o and o[a].exists() and o[b].exists():
-                    issues += check_outputs(o[a], o[b], n)
+            issues += _output_issues(unit, l, lf, {k: v.with_suffix(".pdf") for k, v in out_paths(unit, l).items()})
     for i in issues:
         _out(i)
     e, w = summarize(issues)
@@ -123,7 +135,7 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
           fit: bool = True, strict: bool = False, packets: bool = True, force_figures: bool = False,
           retain: bool = typer.Option(True, help="copy used figures to output/figures/<stem>/ with a README")):
     """Figures -> DOCX -> PDF (fit to page budget) -> renders, diff, checks, figure bundle, packets."""
-    from .check import check_outputs, check_spec, summarize
+    from .check import check_spec, summarize
     from .diff import diff_renders, snapshot
     from .export import pdf_to_pngs
     from .fit import build_lesson
@@ -145,9 +157,7 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
             continue
         docx, pdfs, pages = build_lesson(unit, l, Figures(unit, lf), fit=fit, log=_out)
         _out(f"{l.id}: " + ", ".join(f"{k} {n}p" for k, n in pages.items()))
-        for a, b, n in _pairs(unit, l):
-            if a in pdfs and b in pdfs:
-                issues += check_outputs(pdfs[a], pdfs[b], n)
+        issues += _output_issues(unit, l, lf, pdfs)
         if retain:
             from .retain import verify
             res = retain_figs(unit, l, lf)

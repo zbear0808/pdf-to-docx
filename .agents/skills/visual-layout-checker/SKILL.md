@@ -43,7 +43,7 @@ All `_temp/` and `output/` paths are inside the unit folder.
 - Page count is within budget; no trailing page with a few lines.
 
 **Key and retention**
-- Key has the same pages and item positions as the student copy; every item and part has an answer in red. Red appears only on the key. A page-fill line "item N is on key pX but student pY" is a Must fix.
+- Key has the same pages and item positions as the student copy; every item and part has an answer in red. Red appears only on the key. A page-fill line "item N is on key pX but student pY" is a Must fix. `check` measures label positions (0.5 pt), cut-off key text, and actual-size figure widths: copy those lines and don't re-measure them with your own scripts.
 - `retain --verify-only` is clean: the bundle matches the final DOCX images. Skim the README for an item with no figure source.
 
 ## Fix table
@@ -62,7 +62,9 @@ Recommend the fix in the source. Never the DOCX, never a font size change.
 | Item split or heading stranded | `page_break_after: true` on the item before, or `page_break_before: true` on the section or practice row |
 | Over the page budget or blank space at the end | Cut content with `lesson-scope`; don't shrink fonts or `work` below what the task needs |
 | Colour or blurry source image | Redraw it as an `@figure`, or replace with a B&W image at ≥ 150 dpi at `fig_w` |
-| Key layout differs from student | Report as Must fix with page and item; it is a builder issue for the orchestrator (GAP line) |
+| Key layout differs from student (`check`: "item N starts X pt lower than on the student copy") | The content just above item N is taller on the key: a key figure larger than the student figure (`key_figure` / `key_frame="union"` beside text), or answer text outside a slot. Give both copies the same figure height (`layout: stacked`, matching `fig_w`) or move the text into the item's answer; if neither applies, report a builder GAP |
+| Key text cut off (`check`: "the answer's last words ... are not on the key") | Raise that item's `box:` / `work:` or shorten the answer |
+| Actual-size figure resized (`check`) | Delete the item's `fig_w` / `fig` (or `draw.key_fig_w`) |
 | Retained figures stale or missing | Rebuild the document (`build` retains and verifies); don't copy PNGs by hand |
 | Page-fill "p2 has 2 in empty while p1 is full; page break before ..." | Remove or move that `page_break_after` / `page_break_before`, or adjust `work:` on the items named |
 

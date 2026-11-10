@@ -4,7 +4,10 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from PIL import Image
+
 from . import docbuilder as db
+from .check import draw_key_width
 from .docbuilder import Handout
 from .spec import Item, LessonSpec, Part, UnitSpec, as_list
 
@@ -76,8 +79,9 @@ def _prompt_lines(it: Item, points: bool = True) -> list:
     return lines + [f"Step {k}: {s}" for k, s in enumerate(it.steps, 1)]
 
 
-def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width: float):
-    """Fill-ins, frames, write-in box, parts, then the answer workspace (answer and rubric on the key)."""
+def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width: float, where: str = "item"):
+    """Fill-ins, frames, write-in box, parts, then the answer workspace (answer and rubric on the key).
+    Workspace that grows to hold the key's answer is noted in h.grown as (where, field, set, needed)."""
     answer = _answer_lines(it)
     if isinstance(it, Part) and it.choices:
         h._choices(cell, it.choices, it.choice_cols, indent=indent + 0.25)
@@ -88,7 +92,11 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
         rows = [tuple(r) for r in it.frame]
         h.frame(cell, rows, indent=indent + 0.25, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
     if getattr(it, "box", None):
-        inner = h._inner_box(cell, it.box * scale, indent=indent)
+        room = width - indent - 0.15
+        need = db.answer_height(answer, room, 10) + db.answer_height(_rubric_lines(it), room, 9)
+        if need > it.box * scale + 0.02:
+            h.grown.append((where, "box", it.box * scale, need))
+        inner = h._inner_box(cell, max(it.box * scale, need), indent=indent)
         for a in answer:
             h.key_note(inner, a, size=10)
         for a in _rubric_lines(it):
@@ -98,10 +106,12 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
         answer += _rubric_lines(it)
     work = _work(it)
     if answer or work:
-        h.answer(cell, answer, work * scale, indent=indent, width=width)
+        used = h.answer(cell, answer, work * scale, indent=indent, width=width)
+        if answer and used > work * scale + 0.05:
+            h.grown.append((where, "work", work * scale, used))
     for p in getattr(it, "parts", []):
         h._line(cell, f"{p.label} {p.prompt}{_pts(p.points)}", indent=indent)
-        _body(h, cell, p, scale, indent, width)
+        _body(h, cell, p, scale, indent, width, f"{where} part {p.label}")
 
 
 def _draw(h: Handout, it: Item, figs: Figures, scale: float):
@@ -113,10 +123,21 @@ def _draw(h: Handout, it: Item, figs: Figures, scale: float):
     for c in (a, b):
         db.cell_margins(c, 0, 0, 0, 60)
     h._problem_text(a, _num(it), _prompt_lines(it, points=False))
-    box = h._inner_box(b, max(2.2, d.height * scale), indent=0.1, exact=False)  # grows to fit the key figure
     kf = figs.get(d.key_figure or it.key_figure or it.figure, key=True)
+    kw = draw_key_width(d, figs.rendered, d.key_figure or it.key_figure or it.figure)
+    room = h.width - d.steps_w - 0.25
+    need = 0.12 + db.answer_height([d.key_note] if d.key_note else [], room, 9.5)
+    need += db.answer_height(_answer_lines(it), room, 9.5) + db.answer_height(_rubric_lines(it), room, 9)
+    if kf:
+        with Image.open(kf) as im:
+            kw = kw or im.width / 300
+            need += kw * im.height / im.width + 4 / 72
+    if need > max(2.2, d.height * scale) + 0.02:
+        h.grown.append((f"item {it.n or '(unnumbered)'}", "draw.height", max(2.2, d.height * scale), need))
+    # one exact height on both copies, tall enough for the key drawing, so later items line up
+    box = h._inner_box(b, max(2.2, d.height * scale, need), indent=0.1)
     if h.key and kf:
-        h.key_image(box, kf, d.key_fig_w, before=4)
+        h.key_image(box, kf, kw, before=4)
     if d.key_note:
         h.key_note(box, d.key_note, size=9.5)
     for a_ in _answer_lines(it):
@@ -165,7 +186,7 @@ def _item(h: Handout, it: Item, figs: Figures, scale: float):
     t = h.problem(_num(it), _prompt_lines(it), image=img, img_w=it.width, work=0, after=0, choices=it.choices,
                   choice_cols=it.choice_cols, layout=it.layout)
     cell = t.rows[0].cells[0]
-    _body(h, cell, it, scale, 0.3 if it.n else 0, _cell_w(cell, h))
+    _body(h, cell, it, scale, 0.3 if it.n else 0, _cell_w(cell, h), f"item {it.n or '(unnumbered)'}")
     if it.columns:
         _columns(h, it)
     if it.table:
@@ -184,7 +205,7 @@ def _section_sub(s) -> str | None:
 
 
 def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures, out: Path,
-                   scale: float = 1.0) -> Path:
+                   scale: float = 1.0, grown: list | None = None) -> Path:
     h = Handout(key=key)
     lesson_doc = lesson.doc_type == "lesson"
     label = f"Lesson {lesson.id}" if lesson_doc else ""
@@ -236,14 +257,16 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
             if it.page_break_after:
                 h.page_break()
                 broke = True
+    if grown is not None:
+        grown.extend(h.grown)
     return h.save(out)
 
 
-def _cell_item(h: Handout, cell, it: Item, figs: Figures, scale: float, points: bool = False):
+def _cell_item(h: Handout, cell, it: Item, figs: Figures, scale: float, points: bool = False, where: str = "item"):
     img = figs.get(it.key_figure if (h.key and it.key_figure) else it.figure, h.key)
     db.cell_problem(h, cell, _num(it), _prompt_lines(it, points), image=img, img_w=it.width, choices=it.choices,
                     choice_cols=it.choice_cols, work=0)
-    _body(h, cell, it, scale, 0.3, _cell_w(cell, h))
+    _body(h, cell, it, scale, 0.3, _cell_w(cell, h), f"{where} {it.n or '(unnumbered)'}")
 
 
 def _two_columns(h: Handout, items: list[Item], figs: Figures, scale: float) -> bool:
@@ -277,7 +300,7 @@ def _two_columns(h: Handout, items: list[Item], figs: Figures, scale: float) -> 
 
 
 def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures, out: Path,
-                    scale: float = 1.0) -> Path:
+                    scale: float = 1.0, grown: list | None = None) -> Path:
     pr = lesson.practice
     h = Handout(size=pr.font_size, key=key)
     h.footer_text(unit.footer(lesson.id, "Practice") + ("  |  Key" if key else ""))
@@ -302,11 +325,13 @@ def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures
         t = db.practice_grid(h, len(block), cols=cols)
         for r, row in enumerate(block):
             for c, it in enumerate(row.cells):
-                _cell_item(h, t.rows[r].cells[c], it, figs, scale)
+                _cell_item(h, t.rows[r].cells[c], it, figs, scale, where="practice item")
     sel = selected_answers(lesson)
     if not key and sel:
         h.section("Answers to selected problems", before=0.1)
         db.key_table(h, sel, cols=4)
+    if grown is not None:
+        grown.extend(h.grown)
     return h.save(out)
 
 
@@ -532,14 +557,17 @@ def outputs(unit: UnitSpec, lesson: LessonSpec) -> dict[str, Path]:
     return out
 
 
-def render_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, scale: dict | None = None) -> dict[str, Path]:
+def render_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, scale: dict | None = None,
+                  grown: list | None = None) -> dict[str, Path]:
+    """grown: if a list, filled with (where, field, set inches, inches used) for workspace that grew to hold the
+    key's answer (the same on the student copy and the key)."""
     scale = scale or {}
     o = outputs(unit, lesson)
-    render_handout(unit, lesson, False, figs, o["handout"], scale.get("handout", 1.0))
+    render_handout(unit, lesson, False, figs, o["handout"], scale.get("handout", 1.0), grown)
     if "key" in o:
         render_handout(unit, lesson, True, figs, o["key"], scale.get("handout", 1.0))
     if "practice" in o:
-        render_practice(unit, lesson, False, figs, o["practice"], scale.get("practice", 1.0))
+        render_practice(unit, lesson, False, figs, o["practice"], scale.get("practice", 1.0), grown)
         render_practice(unit, lesson, True, figs, o["practice_key"], scale.get("practice", 1.0))
     if "guide" in o:
         render_guide(unit, lesson, o["guide"])

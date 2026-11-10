@@ -12,7 +12,7 @@ Checked against `src/lesson_builder/` (Nov 9). If this sheet and the code disagr
 | `ingest SRC... -o OUT [--no-render]` | DOCX/PDF to Markdown with math, `_media/`, `_pages/` |
 | `figs UNIT [-l STEM]... [--no-sheet] [--force]` | figures only (seconds): lint, print size, `_temp/figures/<stem>_sheet.png` |
 | `build UNIT [-l STEM]... [--strict] [--force-figures] [--no-packets] [--no-fit] [--no-retain]` | figures, DOCX, PDF, fit, checks, page-fill report, **retain + verify**, renders, diff; packets only without `-l` |
-| `check UNIT [-l STEM]... [--no-outputs]` | spec checks + PDF checks of existing output |
+| `check UNIT [-l STEM]... [--no-outputs]` | spec checks (incl. answer cues) + PDF checks of existing output: pages, key answers, student/key label positions (0.5 pt), key text Word cut off, actual-size figure widths (0.3 mm) |
 | `resolve UNIT [-l STEM]...` | resolved document + exact model facts in `_temp/specs/<stem>/resolved.json`; no figures or Word |
 | `check-pdfs STUDENT.pdf KEY.pdf [--max-pages 3]` | any student/key pair |
 | `retain UNIT [-l STEM]... [--verify-only]` | figure bundle `output/figures/<stem>/` + README (build runs it) |
@@ -23,7 +23,11 @@ Checked against `src/lesson_builder/` (Nov 9). If this sheet and the code disagr
 
 `-l` matches the file stem or `id`; repeatable. Exit code 1 means errors. Quote stems with spaces.
 
-**Build log lines to read:** `<id> handout 3p/3: p1 0.4 in [1-3]; p2 ...` (slack and items per page), `WARN handout p2: 2.1 in empty while p1 is full; page break before ...`, `handout OVER: item 7 starts p4 (budget 3)`, `p4 starts after a page break` (shrinking won't help), `WARN key: item 5 is on key p2 but student p1`, `figures retained: <dir> (N files)`, `pages to review`. Page-fill lines are log lines, not counted errors.
+**Build log lines to read:** `<id> handout 3p/3: p1 0.4 in [1-3]; p2 ...` (slack and items per page), `WARN handout p2: 2.1 in empty while p1 is full; page break before ...`, `handout OVER: item 7 starts p4 (budget 3)`, `p4 starts after a page break` (shrinking won't help), `WARN key: item 5 is on key p2 but student p1`, `item 4: the key answer needs 0.57 in; work gives 0.50 in, so both copies get 0.57 in` (workspace grew to hold the key answer; it can push items to the next page), `figures retained: <dir> (N files)`, `pages to review`. Page-fill and growth lines are log lines, not counted errors.
+
+**Output checks (`build` and `check`):** every item and part label must start within 0.5 pt of the same spot on the student copy and the key; the ERROR names the first label that moved on each page, so the cause is the content just above it. Each key answer's closing words must be in the key PDF (Word drops text that overflows a fixed box). Figures drawn with `Figure(actual_size=...)` must print within 0.3 mm of their drawn width. Don't measure these by hand.
+
+**Answer cues (`check`, WARN):** a box label or the prompt that states the correspondence a box asks for ("Scale factor from NPQ to RST" above `QNP ~ ___`); a box label that prints a short answer; another item that prints this item's correspondence, or (assessments) a distinctive answer number (a fraction, decimal, or whole number over 20); a later figure that draws in black what an earlier item's key adds. Point names keep their subscripts (`A_2` and `A_7` differ; index digits aren't values) here and in `integrity`.
 
 ## 2. Unit layout
 
@@ -77,6 +81,8 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 
 **`work` default** (render `_work`): explicit value wins; else 0 if the item has `fill`, `frame`, `box`, `parts`, `table`, `columns`, or `draw`; 0.2 with `choices`; else 0.8 (part 0.6). Don't write `work:` lines equal to the default (`tidy` reports them). Figure-only items still get 0.8.
 
+**Workspace is one fixed height on both copies.** `work`, `box`, and `draw.height` print as exact-height slots; the key's red answer goes inside. When the key answer needs more room than the field gives, the builder makes the slot taller on **both** copies (build log: `the key answer needs ...`) so later items still line up. A long worked answer under a `fill`/`frame`/`parts` item (work 0) therefore adds blank space to the student copy: shorten it or plan for it with `work:`.
+
 **Table:** `header`, `answers` (one fewer), `row_label` "Lands on", `first_w` 1.45, `height` 0.42. **Columns:** `headers`, `answers` (list per column), `height` 0.85, `italic`. **Draw:** `height` 3.0, `steps_w` 3.05, `key_figure`, `key_fig_w` 2.5, `key_note`.
 **Practice:** `title`, `rows: [{cells: [Item, Item?], heading?, page_break_before?}]`, `selected: auto | ['1', '4', '6a'] | [['1', 'D'], ...]` (bare numbers take the item's `key`/`answer`), `font_size` 10.5. Cells ignore `draw`, `table`, `columns`.
 **QuickNotes:** strings, or blocks `{target: LT1, title: '...', bullets: ['...']}` (bold heading + bullets).
@@ -93,7 +99,8 @@ Figure functions call `resolve.model_for_figure(__file__, item_id)` and
 `comparison.split_triangle` is the labeled side-splitter view from the Unit 3 pilot; `line_family` draws
 named lines clipped to a box, and `parallel_names(lines, reference)` computes the matching line set.
 
-`Figure(width_in, height_in, name=None, key_frame="same")`: one x/y scale. `layer="given"` is black (student + key), `layer="answer"` red (key only). Tick/arc/right-angle sizes are data units; `offset_pt` and `size` are points.
+`Figure(width_in, height_in, name=None, key_frame="same", actual_size=None)`: one x/y scale. `layer="given"` is black (student + key), `layer="answer"` red (key only). Tick/arc/right-angle sizes are data units; `offset_pt` and `size` are points.
+`actual_size="cm"` (or `"mm"`, `"in"`): one data unit prints as 1 cm, for ruler and tracing tasks. Leave out `width_in`/`height_in` (the canvas fits the drawing) and leave `fig_w`/`fig` out of the YAML (ERROR otherwise; a draw item's key figure prints at its drawn width unless `key_fig_w` is set). `check` measures the printed width in the PDF. Tell students to print at Actual size / 100%.
 `key_frame="same"`: student and key share one frame (blank room where the answer goes). `key_frame="union"`: the student frame fits the given ink; the key keeps the scale and grows to fit the answer ink (replaces separate `_key` figures; the key prints wider).
 
 | Method | Signature (defaults) |

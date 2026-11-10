@@ -1,4 +1,5 @@
 """Small python-docx toolkit for black-and-white worksheet handouts with native Word math (OMML)."""
+import math
 import re
 from pathlib import Path
 
@@ -218,10 +219,20 @@ class A:
         self.height = height
 
 
-def _est_lines(text, width_in, size):
-    plain = re.sub(r"\\[A-Za-z]+|[${}*]", "", text)
-    per_line = max(10, int(width_in * 15 * 10.5 / size))
-    return max(1, -(-len(plain) // per_line))
+TALL_MATH = re.compile(r"\\[dt]?frac|\\sqrt|\\overline|\\overrightarrow|\\overleftrightarrow|\^\{|_\{")
+
+
+def answer_height(lines, width_in, size):
+    """Inches the key needs for answer paragraphs at `size` pt in a column `width_in` wide. Errs high: an
+    under-estimate clips the key answer, an over-estimate only adds blank room to both copies."""
+    if not lines:
+        return 0.0
+    total = 0.02
+    for text in lines:
+        n = max(1, math.ceil(_measure_rich(str(text), size) * 1.1 / max(width_in - 0.1, 0.5)))
+        lead = size * (1.8 if TALL_MATH.search(str(text)) else 1.25) / 72
+        total += n * lead + 2 / 72
+    return total
 
 
 _FONTS = {}
@@ -356,6 +367,7 @@ def first_par(cell):
 class Handout:
     def __init__(self, margins=0.6, size=SIZE, key=False):
         self.key = key
+        self.grown: list[tuple] = []   # (where, field, set inches, inches used): workspace grown for the key
         self.doc = Document()
         self.size = size
         sec = self.doc.sections[0]
@@ -508,23 +520,45 @@ class Handout:
         return c
 
     def answer(self, container, lines, height, indent=0.3, width=None):
-        """Student copy: blank space. Key: red answer text, then whatever space is left."""
-        if not self.key or not lines:
-            if height:
-                self.space(height, container=container)
-            return
-        width = (width or self.width) - indent
-        used = 0.0
+        """Workspace of one exact height on both copies: max(height, room the key answer needs). The key prints
+        the red answer inside it; the student copy leaves it blank, so everything after it starts at the same
+        spot on both copies."""
         sz = self.size - 0.5
-        for text in lines:
+        need = answer_height(lines or [], (width or self.width) - indent, sz)
+        height = max(height or 0, need)
+        if height <= 0.03:
+            return 0.0
+        cell = self.slot(container, height, width=width)
+        for k, text in enumerate(lines if self.key else []):
             if text.lstrip().startswith("$"):
                 text = "\u2009" + text  # leading text run keeps Word from turning lone math into centered display math
-            p = container.add_paragraph() if container is not None else self.doc.add_paragraph()
+            p = first_par(cell) if k == 0 else cell.add_paragraph()
             fmt(p, before=2, left=indent)
             add_rich(p, text, sz, color=ANS)
-            used += _est_lines(text, width, sz) * sz * 1.25 / 72 + 2 / 72
-        if height - used > 0.03:
-            self.space(height - used, container=container)
+        return height
+
+    def slot(self, container, height, width=None):
+        """Borderless one-cell table of an exact height: what goes in it can't move what comes after it."""
+        width = width or (container.width.inches if container is not None and container.width else self.width)
+        if container is None:
+            t = self._table(1, 1, [width])
+            self.space(1 / 72)   # adjacent tables would merge in Word
+            height -= 1 / 72
+        else:
+            t = container.add_table(rows=1, cols=1)
+            set_widths(t, [width])
+            tail = container.paragraphs[-1]  # python-docx adds a paragraph after a nested table
+            fmt(tail)
+            tail.paragraph_format.line_spacing_rule = WD_LINE_SPACING.EXACTLY
+            tail.paragraph_format.line_spacing = Pt(1)
+            height -= 1 / 72
+        table_no_borders(t)
+        row_cant_split(t.rows[0])
+        row_height(t.rows[0], max(height, 0.02), exact=True)
+        c = t.rows[0].cells[0]
+        cell_margins(c, 0, 0, 0, 0)
+        fmt(first_par(c))
+        return c
 
     def section(self, label, sub=None, before=0.06, after=0.04):
         if before:

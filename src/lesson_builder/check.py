@@ -51,6 +51,15 @@ def _with_parts(it: Item, label: str):
         yield p, f"{label} part {p.label}"
 
 
+def draw_key_width(d, figures: dict, ref: str | None = None) -> float | None:
+    """Printed width of a draw item's key figure: key_fig_w, except that an actual-size figure prints at its
+    drawn width (None) unless key_fig_w is set explicitly."""
+    meta = (figures.get(ref or d.key_figure or "") or {}).get("meta") or {}
+    if meta.get("actual_size") and "key_fig_w" not in d.model_fields_set:
+        return None
+    return d.key_fig_w
+
+
 def placed_widths(lesson: LessonSpec, figures: dict, explicit: bool = False) -> dict[str, list[tuple[str, float, str]]]:
     """{figure name: [(item label, printed width in inches, 'student'|'key')]} for registered figures. A use
     without fig_w / fig prints at the drawn width; explicit=True leaves those uses out."""
@@ -69,7 +78,7 @@ def placed_widths(lesson: LessonSpec, figures: dict, explicit: bool = False) -> 
         if it.key_figure:
             add(it.key_figure, it.width, label, "key")
         if it.draw and it.draw.key_figure:
-            add(it.draw.key_figure, it.draw.key_fig_w, label, "key")
+            add(it.draw.key_figure, draw_key_width(it.draw, figures), label, "key")
     if lesson.notes_figure:
         add(lesson.notes_figure, lesson.notes_fig_w, "QuickNotes", "student")
     return out
@@ -114,6 +123,12 @@ def check_figures(lesson: LessonSpec, figures: dict) -> list[str]:
         for msg in meta.get("lint", []):
             issues.append(f"WARN  {where} figure {name}: {msg} (move it, enlarge the figure, or set fixed=True)")
         drawn, pt = meta.get("width_in"), meta.get("min_text_pt")
+        if meta.get("actual_size"):
+            for label, w, which in placed_widths(lesson, {name: figures[name]}, explicit=True).get(name, []):
+                if drawn and abs(w - drawn) > 0.01:
+                    issues.append(f"ERROR {where} {label}: figure {name} is drawn at actual size "
+                                  f"(1 unit = 1 {meta['actual_size']}) but fig_w/fig prints it at {w:.2f} in "
+                                  f"instead of {drawn:.2f} in ({100 * w / drawn:.0f}%); delete fig_w/fig")
         if not drawn or not pt:
             continue
         for label, w, which in uses:
@@ -414,7 +429,9 @@ def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) 
                                   "or a registered figure with an answer layer)")
     issues += _key_pattern(seqs[False], where) + _key_pattern(seqs[True], f"{where} practice")
     if needs_answers:
+        from .integrity import answer_cues
         from .render import guide_markdown
+        issues += answer_cues(lesson, figures, where)
         issues += check_guide_text(guide_markdown(lesson), where)
     return issues
 
@@ -462,7 +479,150 @@ def _answered(pg, x0, x1, y0, y1, student_imgs):
     return len(imgs) > student_imgs
 
 
-def check_outputs(student: Path, key: Path, max_pages: int) -> list[str]:
+ANCHOR_TOL_PT = 0.5   # student/key item labels may differ by this much (PDF points) before it is an error
+SIZE_TOL_MM = 0.3     # actual-size figures: printed width may differ from drawn width by this much
+
+
+def anchor_drift(ls: list[dict], lk: list[dict], tag: str, tol: float = ANCHOR_TOL_PT) -> list[str]:
+    """Each item and part label must start at the same spot on the student copy and the key. One ERROR per
+    page, at the first label that moved: the item above it takes a different height on the key."""
+    sig = lambda L: [(l["page"], l["kind"], l["text"]) for l in L]  # noqa: E731
+    if sig(ls) != sig(lk):   # part labels differ (e.g. a part printed only on one copy): compare item numbers
+        ls, lk = [l for l in ls if l["kind"] == "num"], [l for l in lk if l["kind"] == "num"]
+    out, seen, item = [], set(), None
+    for a, b in zip(ls, lk):
+        if a["kind"] == "num":
+            item = a["text"].rstrip(".")
+        dy, dx = b["y"] - a["y"], b["x"] - a["x"]
+        if a["page"] in seen or (abs(dy) <= tol and abs(dx) <= tol):
+            continue
+        seen.add(a["page"])
+        later = sum(1 for m, n in zip(ls, lk) if m["page"] == a["page"] and m["y"] > a["y"] + 1
+                    and (abs(n["y"] - m["y"]) > tol or abs(n["x"] - m["x"]) > tol))
+        what = f"item {item}" + (f" part {a['text']}" if a["kind"] == "part" else "")
+        move = []
+        if abs(dy) > tol:
+            move.append(f"{abs(dy):.1f} pt {'lower' if dy > 0 else 'higher'}")
+        if abs(dx) > tol:
+            move.append(f"{abs(dx):.1f} pt {'right' if dx > 0 else 'left'}")
+        tail = f" ({later} more below it on this page)" if later else ""
+        out.append(f"ERROR {tag} key p{a['page'] + 1}: {what} starts {' and '.join(move)} than on the student copy "
+                   f"(limit {tol:g} pt){tail}; the content above it has a different height on the key (answer "
+                   "text, a larger key figure)")
+    return out
+
+
+def _png_in(path) -> tuple[float, float]:
+    from PIL import Image
+
+    from .figures.core import DPI
+    with Image.open(path) as im:
+        return im.width / DPI, im.height / DPI
+
+
+def actual_size_issues(s, k, actual: list, tag: str, tol_mm: float = SIZE_TOL_MM) -> list[str]:
+    """Figures drawn at actual size (Figure(actual_size=...)) must print at their drawn width, so a ruler on
+    the paper reads the lengths the figure was drawn with. Finds each figure by its aspect ratio and size."""
+    out = []
+    for name, spng, kpng in actual:
+        for which, doc, png in (("student", s, spng), ("key", k, kpng)):
+            if png is None:
+                continue
+            w_in, h_in = _png_in(png)
+            found = []
+            for pi, pg in enumerate(doc):
+                for info in pg.get_image_info():
+                    x0, y0, x1, y1 = info["bbox"]
+                    w, h = (x1 - x0) / 72, (y1 - y0) / 72
+                    if h > 0 and abs(w / h - w_in / h_in) <= 0.015 * (w_in / h_in) and 0.6 <= w / w_in <= 1.4:
+                        found.append((pi, w))
+            if not found:
+                out.append(f"WARN  {tag} {which}: actual-size figure {name} ({w_in * 25.4:.1f} mm wide) not found "
+                           "in the PDF to measure")
+            for pi, w in found:
+                err = abs(w - w_in) * 25.4
+                if err > tol_mm:
+                    out.append(f"ERROR {tag} {which} p{pi + 1}: actual-size figure {name} prints {w * 25.4:.1f} mm "
+                               f"wide ({100 * w / w_in:.1f}%), drawn {w_in * 25.4:.1f} mm; remove fig_w/fig so it "
+                               "prints at its drawn width")
+    return out
+
+
+def actual_figures(lesson: LessonSpec, figures: dict) -> dict[str, list[tuple[str, Path | None, Path | None]]]:
+    """{"handout" | "practice": [(figure name, PNG on the student copy or None, PNG on the key or None)]} for
+    figures drawn at actual size, as each copy prints them."""
+    out: dict[str, dict] = {"handout": {}, "practice": {}}
+
+    def add(group, name, student, key):
+        r = figures.get(name or "")
+        if not r or not (r.get("meta") or {}).get("actual_size"):
+            return
+        s, k = out[group].get(name, (None, None))
+        out[group][name] = (s or (r["student"] if student else None),
+                            k or ((r.get("key") or r["student"]) if key else None))
+
+    groups = [("handout", it) for _, it in lesson.items()]
+    groups += [("practice", it) for r in (lesson.practice.rows if lesson.practice else []) for it in r.cells]
+    for g, it in groups:
+        if it.draw:   # the drawing box: the key shows the answer figure, the student copy shows nothing
+            add(g, it.draw.key_figure or it.key_figure or it.figure, False, True)
+            continue
+        add(g, it.figure, True, not it.key_figure)
+        add(g, it.key_figure, False, True)
+    add("handout", lesson.notes_figure, True, True)
+    return {g: [(n, s, k) for n, (s, k) in v.items()] for g, v in out.items()}
+
+
+def _key_texts(lesson: LessonSpec) -> dict[str, list[tuple[str, str]]]:
+    """{"handout" | "practice": [(label, text)]}: answer text the key prints (answers, rubrics, box answers)."""
+    from .render import _answer_lines, _rubric_lines
+    out: dict[str, list] = {"handout": [], "practice": []}
+    groups = [("handout", "item", it) for _, it in lesson.items()]
+    groups += [("practice", "practice item", it) for r in (lesson.practice.rows if lesson.practice else [])
+               for it in r.cells]
+    for g, pre, it in groups:
+        for o, lab in _with_parts(it, f"{pre} {it.n or '(unnumbered)'}"):
+            texts = _answer_lines(o) + _rubric_lines(o) + [str(r[1]) for r in o.fill or [] if len(r) > 1]
+            texts += [str(r[1]) for r in o.frame or [] if len(r) > 1]
+            if isinstance(o, Item):
+                texts += (o.table.answers if o.table else []) + [a for c in (o.columns.answers if o.columns else [])
+                                                                 for a in c]
+                texts += [o.draw.key_note] if o.draw and o.draw.key_note else []
+            out[g] += [(lab, t) for t in texts if t]
+    return out
+
+
+def _probe(text: str) -> str | None:
+    """The last two words of the last run of plain words (no math) in an answer, lower case, or None."""
+    for seg in reversed(re.split(r"\$[^$]*\$", str(text))):
+        words = re.findall(r"[a-z]+", seg.lower())
+        if len(words) >= 2:
+            return " ".join(words[-2:])
+    return None
+
+
+def clipped_answers(lesson: LessonSpec, key_pdf, group: str, tag: str) -> list[str]:
+    """Word drops lines that overflow an exact-height box from the PDF. Each answer's closing words must be in
+    the key's red text."""
+    import pymupdf
+    words = []
+    with pymupdf.open(key_pdf) as doc:
+        for pg in doc:
+            for b in pg.get_text("dict")["blocks"]:
+                for ln in b.get("lines", []):
+                    words += [w for s in ln["spans"] if _red(s["color"]) for w in re.findall(r"[a-z]+", s["text"].lower())]
+    stream = f" {' '.join(words)} "
+    out = []
+    for lab, text in _key_texts(lesson)[group]:
+        probe = _probe(text)
+        if probe and f" {probe} " not in stream:
+            out.append(f"ERROR {tag} key: {lab}: the answer's last words ({probe!r}) are not on the key; the box "
+                       f"is too short and Word cut the text off: {str(text)[:70]!r}")
+    return out
+
+
+def check_outputs(student: Path, key: Path, max_pages: int, actual: list | None = None) -> list[str]:
+    """actual: [(figure name, student png, key png or None)] for figures drawn at actual size."""
     import pymupdf
     issues = []
     s, k = pymupdf.open(student), pymupdf.open(key)
@@ -488,6 +648,10 @@ def check_outputs(student: Path, key: Path, max_pages: int) -> list[str]:
     nums = lambda L: [(l["page"], l["text"]) for l in L if l["kind"] == "num"]  # noqa: E731
     if nums(ls) != nums(lk):
         issues.append(f"ERROR {tag}: item numbers differ between student and key")
+    else:
+        issues += anchor_drift(ls, lk, tag)
+    if actual:
+        issues += actual_size_issues(s, k, actual, tag)
     simg = {p: s[p].get_image_info() for p in {l["page"] for l in ls}}
     for pi in sorted({l["page"] for l in lk}):
         pg = k[pi]

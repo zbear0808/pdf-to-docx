@@ -51,6 +51,7 @@ def q3() -> Figure:
 - Scaled rectangles can use checked YAML data directly: `from lesson_builder.resolve import model_for_figure` and `from lesson_builder.figures.comparison import scaled_rectangles`; return `scaled_rectangles(model_for_figure(__file__, item_id))`. The model computes dimensions and labels from the same givens used by the document's `{value:item_id.fact}` references. Its YAML is a cache dependency. Use shared `comparison.split_triangle`, `line_family`, and `parallel_names` for the corresponding comparison diagrams.
 - Colours are fixed by the library: given is black, answer is red `#C00000` and appears only on keys. Do not pass colours or palettes. `fill=` and `hatch=` on `poly` are for gray or hatch shading only.
 - One scale for x and y (equal aspect). `width_in` / `height_in` set the drawn size. Leave `fig_w` out of the YAML so the figure prints at its drawn size, or use `fig: small|medium|wide` (1.6 / 2.4 / 3.4 in).
+- Students measure or trace it (ruler lengths, "keep their sizes", copies at the same size): use `Figure(actual_size="cm")` (or `"mm"`, `"in"`) with coordinates in that unit and no `width_in`/`height_in`. One unit prints as 1 cm. Never set `fig_w`/`fig` on it; `check` errors on a resized use and measures the printed width in the PDF. Put every figure students compare by size in the same unit.
 - Output is 300 DPI and trimmed automatically. No `savefig`, cropping, or manual file paths.
 
 ## Labels

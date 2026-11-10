@@ -46,7 +46,7 @@ After any cut or renumber, every "Problem N" exists and supports what the senten
 
 ```bash
 uv run lesson-builder figs <unit> -l <stem>                     # figures only: lint, printed size, contact sheet
-uv run lesson-builder check <unit> -l <stem>                    # spec + rendered PDFs
+uv run lesson-builder check <unit> -l <stem>                    # spec + answer cues + rendered PDFs (label positions, cut-off key text, actual-size widths)
 uv run lesson-builder integrity <unit> --set "<set>*" --vs "<review>"   # assessment forms and reviews
 uv run lesson-builder tidy <unit>                               # temp files, orphan assets, unused figures
 uv run lesson-builder status <unit>                             # open Must fix lines, stale outputs, bundles

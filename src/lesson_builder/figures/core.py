@@ -29,6 +29,7 @@ RED = "#C00000"
 LW = 1.3
 FS = 13
 DPI = 300
+UNITS_PER_INCH = {"in": 1.0, "cm": 2.54, "mm": 25.4}   # Figure(actual_size=...): data units per printed inch
 TRIM_PAD = 8
 MARGIN_IN = 0.75  # blank canvas around the axes so nothing is clipped; trimmed away afterwards
 RC = {"mathtext.fontset": "stix", "font.family": "STIXGeneral"}
@@ -79,11 +80,17 @@ class Figure:
     so the student copy has blank room where the answer goes. key_frame="union": the student frame fits the
     given layer only; the key keeps the same scale (data units per inch) and its canvas grows to the union of
     given and answer ink, so an answer that reaches past the given drawing isn't cut off or shrunk into the
-    student frame. The key image is then larger than the student image (sidecar `key_width_in`)."""
-    width_in: float
-    height_in: float
+    student frame. The key image is then larger than the student image (sidecar `key_width_in`).
+
+    actual_size="cm" (or "mm", "in"): one data unit prints as one centimetre (millimetre, inch), so a ruler on
+    the paper measures the lengths in the drawing. The canvas then fits the drawing at that scale (leave out
+    width_in and height_in), and the item must print it at its drawn width (no fig_w / fig); `check` measures
+    the printed width in the PDF."""
+    width_in: float = 0.0
+    height_in: float = 0.0
     name: str | None = None
     key_frame: str = "same"
+    actual_size: str | None = None
     _ops: list[_Op] = field(default_factory=list, repr=False)
     lint: list[str] = field(default_factory=list, repr=False)
     _placed: bool = field(default=False, repr=False)
@@ -91,6 +98,13 @@ class Figure:
     def __post_init__(self):
         if self.key_frame not in ("same", "union"):
             raise ValueError(f"key_frame must be 'same' or 'union', not {self.key_frame!r}")
+        if self.actual_size is not None:
+            if self.actual_size not in UNITS_PER_INCH:
+                raise ValueError(f"actual_size must be one of {sorted(UNITS_PER_INCH)}, not {self.actual_size!r}")
+            if self.width_in or self.height_in:
+                raise ValueError("actual_size sets the canvas from the drawing; leave out width_in and height_in")
+        elif self.width_in <= 0 or self.height_in <= 0:
+            raise ValueError("Figure needs width_in and height_in (or actual_size)")
 
     # ------------------------------------------------------------ recording
     def _add(self, layer, draw, pts, pad_pt=0.0, kind="ink", label=None):
@@ -320,29 +334,42 @@ class Figure:
         return self.lint
 
     def _fit(self, ops):
-        """Limits that fit `ops` (plus their label padding) into width_in x height_in at one shared scale."""
+        """Limits that fit `ops` (plus their label padding) into width_in x height_in at one shared scale, or,
+        with actual_size, limits that hold `ops` at that fixed scale."""
         allp = np.vstack([op.pts for op in ops])
         lo, hi = allp.min(0), allp.max(0)
         pad_in = max(op.pad_pt for op in ops) / 72 + 0.05
-        w, h = max(self.width_in - 2 * pad_in, 0.3), max(self.height_in - 2 * pad_in, 0.3)
         span = np.maximum(hi - lo, 1e-6)
-        scale = max(span[0] / w, span[1] / h)  # data units per inch
         c = (lo + hi) / 2
-        hx, hy = self.width_in * scale / 2, self.height_in * scale / 2
+        if self.actual_size:
+            scale = UNITS_PER_INCH[self.actual_size]
+            hx, hy = span[0] / 2 + pad_in * scale, span[1] / 2 + pad_in * scale
+        else:
+            w, h = max(self.width_in - 2 * pad_in, 0.3), max(self.height_in - 2 * pad_in, 0.3)
+            scale = max(span[0] / w, span[1] / h)  # data units per inch
+            hx, hy = self.width_in * scale / 2, self.height_in * scale / 2
         return (c[0] - hx, c[0] + hx), (c[1] - hy, c[1] + hy)
+
+    def _canvas(self, xl, yl) -> tuple[float, float]:
+        """Canvas inches for limits from _fit: the requested size, or the limits at actual size."""
+        if self.actual_size:
+            s = UNITS_PER_INCH[self.actual_size]
+            return (xl[1] - xl[0]) / s, (yl[1] - yl[0]) / s
+        return self.width_in, self.height_in
 
     def _frame(self, frame="student"):
         """(xlim, ylim, width_in, height_in) of the student or key canvas. See key_frame on the class."""
         if not self._ops:
-            return (0, 1), (0, 1), self.width_in, self.height_in
+            return (0, 1), (0, 1), self.width_in or 1.0, self.height_in or 1.0
         if self.key_frame == "same":
             xl, yl = self._fit(self._ops)
-            return xl, yl, self.width_in, self.height_in
+            return (xl, yl, *self._canvas(xl, yl))
         given = [op for op in self._ops if op.layer == "given"] or self._ops
         xl, yl = self._fit(given)
+        w_in, h_in = self._canvas(xl, yl)
         if frame != "key":
-            return xl, yl, self.width_in, self.height_in
-        s = (xl[1] - xl[0]) / self.width_in
+            return xl, yl, w_in, h_in
+        s = (xl[1] - xl[0]) / w_in
         allp = np.vstack([op.pts for op in self._ops])
         pad = (max(op.pad_pt for op in self._ops) / 72 + 0.05) * s
         lo, hi = allp.min(0) - pad, allp.max(0) + pad
@@ -552,6 +579,8 @@ def _write_meta(path: Path, f: Figure, png: Path, key_png: Path | None = None):
         lint = list(f.place()) + _colour_lint(im)
     meta = {"width_in": round(w_in, 3), "min_text_pt": f.min_text_pt, "lint": lint, "key_frame": f.key_frame,
             "labels": _label_meta(f), "key_labels": _label_meta(f, ("answer",))}
+    if f.actual_size:
+        meta["actual_size"] = f.actual_size
     if key_png is not None:
         with Image.open(key_png) as im:
             meta["key_width_in"] = round(im.width / DPI, 3)

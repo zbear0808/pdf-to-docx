@@ -3,7 +3,7 @@ import textwrap
 
 import pymupdf
 
-from lesson_builder.check import _labels, check_spec
+from lesson_builder.check import _labels, actual_size_issues, anchor_drift, check_spec
 from lesson_builder.spec import UnitSpec, load_lesson
 from lesson_builder.voice import voice_issues
 
@@ -151,3 +151,38 @@ def test_output_labels_three_digits_and_late_parts(tmp_path):
     pg.insert_text((72, 180), "1000.", fontname="hebo")
     labels = _labels(doc)
     assert [(lb["kind"], lb["text"]) for lb in labels] == [("num", "100."), ("part", "f.")]
+
+
+def _labelled(ys):
+    doc = pymupdf.open()
+    pg = doc.new_page()
+    for n, y in enumerate(ys, 1):
+        pg.insert_text((72, y), f"{n}.", fontname="hebo")
+    return doc
+
+
+def test_student_key_label_positions(tmp_path):
+    student = _labels(_labelled([100, 200, 300]))
+    assert anchor_drift(student, _labels(_labelled([100.3, 200.4, 300])), "T") == []   # within 0.5 pt
+    issues = anchor_drift(student, _labels(_labelled([100, 205.5, 305.5])), "T")
+    assert len(issues) == 1 and issues[0].startswith("ERROR T key p1: item 2 starts 5.5 pt lower")
+    assert "(1 more below it on this page)" in issues[0]
+
+
+def test_actual_size_figures(tmp_path):
+    from PIL import Image
+    png = tmp_path / "ruler.png"
+    Image.new("RGB", (600, 150), "white").save(png)   # 2.0 x 0.5 in at 300 dpi
+    figures = {"ruler": {"student": png, "key": None, "meta": {"width_in": 2.0, "actual_size": "cm"}}}
+    issues = _check(tmp_path, _sections("      - n: 1\n        prompt: 'Measure.'\n        figure: ruler\n"
+                                        "        fig_w: 1.5\n        answer: '4 cm'\n"), figures=figures)
+    assert _has(issues, "figure ruler is drawn at actual size", "ERROR")
+
+    def pdf(width_in):
+        doc = pymupdf.open()
+        doc.new_page().insert_image(pymupdf.Rect(72, 72, 72 + width_in * 72, 72 + width_in * 18), filename=str(png))
+        return doc
+    good = pdf(2.0)
+    assert actual_size_issues(good, good, [("ruler", png, png)], "T") == []
+    bad = actual_size_issues(pdf(1.8), good, [("ruler", png, None)], "T")
+    assert len(bad) == 1 and bad[0].startswith("ERROR T student p1: actual-size figure ruler prints 45.7 mm")

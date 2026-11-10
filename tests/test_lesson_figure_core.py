@@ -188,3 +188,26 @@ def test_load_module_registry_still_isolated(tmp_path):
             return f
     """))
     assert "one" in render_all(mod, tmp_path / "o")
+
+
+def test_actual_size_prints_one_unit_per_cm(tmp_path):
+    mod = _write(tmp_path, """
+        from lesson_builder.figures import Figure, figure
+
+        @figure("ruler")
+        def ruler():
+            f = Figure(actual_size="cm")
+            f.dots([(0, 0), (4, 0)])
+            return f
+        """)
+    out = render_all(mod, tmp_path / "out")["ruler"]
+    ink = np.asarray(Image.open(out["student"]).convert("L")) < 128
+    cols = np.flatnonzero(ink.any(0))
+    left, right = cols[cols < cols.mean()], cols[cols > cols.mean()]
+    gap_cm = (right.mean() - left.mean()) / 300 * 2.54
+    assert abs(gap_cm - 4) < 0.02
+    assert out["meta"]["actual_size"] == "cm"
+    with pytest.raises(ValueError):
+        Figure(3, 2, actual_size="cm")
+    with pytest.raises(ValueError):
+        Figure()

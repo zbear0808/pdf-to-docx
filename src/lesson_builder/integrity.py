@@ -33,10 +33,13 @@ _FRAC = re.compile(r"\\[dt]?frac\s*\{\s*(\d+(?:\.\d+)?)\s*\}\s*\{\s*(\d+(?:\.\d+
 _EXP = re.compile(r"\^\s*\{?\s*\d+\s*\}?")
 _NUM = re.compile(r"(?<![A-Za-z\d.])\d+(?:\.\d+)?")
 _MATH = re.compile(r"\$([^$]+)\$")
-_POLY = re.compile(r"\\triangle\s*((?:[A-Z]['\u2032]*){3})|(?:rectangle|quadrilateral|parallelogram|polygon|square|"
-                   r"trapezoid|rhombus|pentagon|hexagon|kite)\s+\$((?:[A-Z]['\u2032]*){3,})\$", re.I)
+_VTX = r"[A-Z](?:_(?:\{[A-Za-z0-9]+\}|[A-Za-z0-9]))?"   # a point name: A, A_1, A_{12} (LaTeX subscripts)
+_VTX_RE = re.compile(_VTX)
+_SUB = re.compile(r"(?<=[A-Za-z'\u2032}])\s*_\s*(?:\{\s*\d+\s*\}|\d)")   # subscript digits are names, not values
+_POLY = re.compile(rf"\\triangle\s*((?:{_VTX}['\u2032]*){{3}})|(?:rectangle|quadrilateral|parallelogram|polygon|"
+                   rf"square|trapezoid|rhombus|pentagon|hexagon|kite)\s+\$((?:{_VTX}['\u2032]*){{3,}})\$", re.I)
 _LINE = re.compile(r"\blines?\s+\$(\\ell|[a-z])['\u2032]*\$|^\s*\$(\\ell|[a-z])['\u2032]*\$\s*$")
-_POINTS_ONLY = re.compile(r"^\$?\s*(?:[A-Z](?:'|\u2032|\\prime|\^\{?\\prime\}?)*\s*)+\$?$")
+_POINTS_ONLY = re.compile(rf"^\$?\s*(?:{_VTX}(?:'|\u2032|\\prime|\^\{{?\\prime\}}?)*\s*)+\$?$")
 _KEY = re.compile(r"^\s*((?:(?:and\s+)?\[[A-H]\][,;]?\s*)+)")
 
 
@@ -70,7 +73,7 @@ def _clean(s: str) -> str:
 def numbers(s: str, split=False, keep_small=False) -> tuple[list[Fraction], list[Fraction]]:
     """(numbers, angles) in a string. split=True also returns a fraction's numerator and denominator.
     0, 1, and 2 are dropped unless keep_small."""
-    s = _clean(s)
+    s = _SUB.sub(" ", _clean(s))
     angles = [Fraction(m.group(1)) for m in _ANGLE.finditer(s)]
     s = _ANGLE.sub(" ", s)
     out = list(angles)
@@ -85,11 +88,17 @@ def numbers(s: str, split=False, keep_small=False) -> tuple[list[Fraction], list
     return [x for x in out if keep_small or x not in SMALL], [a for a in angles if a not in NOT_ANGLES]
 
 
+def _ident(tok: str) -> str:
+    """Normalized point name: A_{1} -> A_1."""
+    return re.sub(r"[{}\s]", "", tok)
+
+
 def letters(s: str) -> set[str]:
+    """Point names in math: capitals with their subscripts (A_2 and A_7 are different points)."""
     out = set()
     for m in _MATH.finditer(str(s)):
         t = re.sub(r"\\(?:text|mathrm|operatorname|textbf)\s*\{[^}]*\}", " ", m.group(1))
-        out |= set(re.findall(r"[A-Z]", re.sub(r"\\[A-Za-z]+", " ", t)))
+        out |= {_ident(x) for x in _VTX_RE.findall(re.sub(r"\\[A-Za-z]+", " ", t))}
     return out
 
 
@@ -99,11 +108,16 @@ def lines(s: str) -> set[str]:
 
 
 def names(s: str) -> set[frozenset]:
-    return {frozenset(re.sub(r"['\u2032]", "", a or b)) for a, b in _POLY.findall(str(s))}
+    return {frozenset(_ident(v) for v in _VTX_RE.findall(a or b)) for a, b in _POLY.findall(str(s))}
 
 
 def label_letters(text: str) -> set[str]:
-    return set(re.findall(r"[A-Z]", text)) if _POINTS_ONLY.match(text.strip()) else set()
+    return {_ident(v) for v in _VTX_RE.findall(text)} if _POINTS_ONLY.match(text.strip()) else set()
+
+
+def _join(names_: set) -> str:
+    """Point names for a message: 'ABC', or 'A_2 B_2 C_2' when any has a subscript."""
+    return (" " if any(len(n) > 1 for n in names_) else "").join(sorted(names_))
 
 
 def fmt(x: Fraction) -> str:
@@ -344,9 +358,9 @@ def compare(a: LessonSpec, b: LessonSpec, rendered_a: dict | None = None, render
         x, y, where = fa[k], fb[k], f"{a.stem} item {k} vs {b.stem} item {k}"
         if x.letters and x.letters == y.letters:
             lv = "ERROR" if len(x.letters) >= 3 else "WARN "
-            out.append(f"{lv} {where}: same letters {''.join(sorted(x.letters))}")
+            out.append(f"{lv} {where}: same letters {_join(x.letters)}")
         elif x.names & y.names:
-            out.append(f"WARN  {where}: same names {', '.join(''.join(sorted(n)) for n in x.names & y.names)}")
+            out.append(f"WARN  {where}: same names {', '.join(_join(n) for n in x.names & y.names)}")
         if x.lines and x.lines == y.lines:
             out.append(f"WARN  {where}: same line names {', '.join(sorted(x.lines))}")
         sx, sy = set(x.numbers), set(y.numbers)
@@ -406,10 +420,10 @@ def do_not_reuse(doc: LessonSpec, others: list[LessonSpec], rendered: dict | Non
                 if notation_ok:
                     continue
                 if len(t.fig_letters) >= 3 and t.fig_letters == d.fig_letters:
-                    out.append(f"WARN  {where}: same figure labels {''.join(sorted(t.fig_letters))}")
+                    out.append(f"WARN  {where}: same figure labels {_join(t.fig_letters)}")
                 nm = (t.names & d.names) - GENERIC
                 if nm:
-                    out.append(f"WARN  {where}: same names {', '.join(''.join(sorted(n)) for n in nm)}")
+                    out.append(f"WARN  {where}: same names {', '.join(_join(n) for n in nm)}")
     return out
 
 
@@ -423,6 +437,189 @@ def answers_on_figure(lesson: LessonSpec, fps: dict | None = None) -> list[str]:
         if hit:
             out.append(f"WARN  {lesson.stem} item {k}: answer {_nums(hit)} is printed on the figure")
     return out
+
+
+# ------------------------------------------------------------------ answer cues inside one document
+_PVTX = rf"{_VTX}(?:'|\u2032|\\prime)*"
+_SEQ = re.compile(rf"(?<![A-Za-z0-9_'\u2032])((?:{_PVTX}){{3,}})(?![A-Za-z0-9_])")
+_PT = rf"{_PVTX}(?:\s*\([^()]*\))?"   # a point, maybe with coordinates: A(1, 2)
+_LIST = re.compile(rf"(?<![A-Za-z0-9_])({_PT}(?:\s*(?:,\s*(?:and\s+)?|and\s+){_PT}){{2,}})(?![A-Za-z0-9_])")
+_ARROW = re.compile(rf"(?<![A-Za-z0-9_])({_PVTX})\s*\u2192\s*({_PVTX})(?![A-Za-z0-9_])")
+_ACRONYMS = {"SAS", "SSS", "ASA", "AAS", "AAA", "SSA", "HL", "MLL", "USA", "LT", "CR", "SR"}
+
+
+def _vertices(seq: str) -> tuple[str, ...]:
+    return tuple(_ident(re.sub(r"\\prime|\u2032", "'", v)) for v in re.findall(_PVTX, seq))
+
+
+def _flat(text: str) -> str:
+    """Math as plain point names: arrows as \u2192, other commands, $ and braces dropped (subscripts kept)."""
+    t = re.sub(r"\\(?:to|rightarrow|mapsto|longrightarrow)(?![A-Za-z])", " \u2192 ", str(text).replace("$", " "))
+    # angle, segment, and arc names are not polygon names: "angle LPA and angle LQB" states no correspondence
+    t = re.sub(r"\\(?:angle|measuredangle|overline|overrightarrow|overleftrightarrow|widehat|stackrel\{\\frown\})"
+               r"\s*\{?\s*(?:[A-Z]|_\{?[A-Za-z0-9]+\}?|['\s]|\\prime)+\}?", " ", t)
+    t = re.sub(r"_\s*\{\s*([A-Za-z0-9]+)\s*\}", "_\x00\\1\x01", t)
+    t = re.sub(r"\\[A-Za-z]+", " ", t)
+    return re.sub(r"[{}]", " ", t).replace("\x00", "{").replace("\x01", "}")
+
+
+def correspondences(text: str) -> set[frozenset]:
+    """Vertex correspondences a string states: two point-name sequences in a row ('ABC ~ DEF', 'from NPQ to
+    RST', 'taking A(1,1), B(3,1), C(1,2) onto D(...), E(...), F(...)') or two or more arrows ('A -> D, B -> E').
+    Each is a frozenset of (from, to) pairs, so 'BCA ~ EFD' states the same correspondence as 'ABC ~ DEF'.
+    Primed images (ABC -> A'B'C') state nothing new."""
+    t = _flat(text)
+    out = set()
+    found = [(m.start(), _vertices(m.group(1))) for m in _SEQ.finditer(t) if m.group(1) not in _ACRONYMS]
+    found += [(m.start(), _vertices(re.sub(r"\([^()]*\)", " ", m.group(1)))) for m in _LIST.finditer(t)]
+    seqs = [v for _, v in sorted(found)]
+    for a, b in zip(seqs, seqs[1:]):
+        if len(a) == len(b) and a != b and not all(y.rstrip("'") == x.rstrip("'") for x, y in zip(a, b)):
+            out.add(frozenset(zip(a, b)))
+    arrows = {tuple(_vertices(v)[0] for v in m.groups()) for m in _ARROW.finditer(t)}
+    arrows = {(x, y) for x, y in arrows if y.rstrip("'") != x.rstrip("'")}
+    if len(arrows) >= 2:
+        out.add(frozenset(arrows))
+    return out
+
+
+def _states(shown: set[frozenset], answer: frozenset) -> bool:
+    """A shown correspondence gives the answer away: the same pairs, or at least two of them."""
+    return any(s <= answer and len(s) >= 2 for s in shown)
+
+
+def _box_labels(o) -> list[str]:
+    return [str(r[0]) for r in o.fill or []] + [str(x) for r in o.frame or [] for x in r[:3:2] if x]
+
+
+def _prompt_texts(o) -> list[str]:
+    return as_list(o.prompt) + list(getattr(o, "steps", []) or [])
+
+
+def _box_answers(o) -> list[tuple[str, str, str]]:
+    """(label text, answer text, label + answer) per box: 'triangle QNP ~' + 'triangle TRS'."""
+    out = [(str(r[0]), str(r[1]), f"{r[0]} {r[1]}") for r in o.fill or [] if len(r) > 1]
+    return out + [(" ".join(str(x) for x in r[:3:2]), str(r[1]), " ".join(str(x) for x in r[:3]))
+                  for r in o.frame or []]
+
+
+def _answer_texts(o) -> list[str]:
+    """Key-only text: worked answers, key notes, and box answers."""
+    draw = getattr(o, "draw", None)
+    return as_list(o.answer) + [t for *_, t in _box_answers(o)] + (
+        [draw.key_note] if draw is not None and draw.key_note else [])
+
+
+def _ink(path) -> "np.ndarray | None":
+    """Ink mask of a figure PNG, cropped to its ink, resized to 128 px, lines thickened to forgive small shifts."""
+    import numpy as np
+    from PIL import Image, ImageFilter
+    try:
+        with Image.open(path) as im:
+            g = im.convert("L")
+    except OSError:
+        return None
+    mask = g.point(lambda v: 255 if v < 200 else 0)
+    box = mask.getbbox()
+    if not box:
+        return None
+    small = mask.crop(box).resize((128, 128), Image.BILINEAR).point(lambda v: 255 if v > 40 else 0)
+    return np.asarray(small.filter(ImageFilter.MaxFilter(7))) > 0
+
+
+def same_drawing(a, b, threshold: float = 0.45) -> bool:
+    """True when two figure images draw mostly the same ink (intersection over union of thickened masks)."""
+    x, y = _ink(a), _ink(b)
+    if x is None or y is None:
+        return False
+    return (x & y).sum() / max((x | y).sum(), 1) >= threshold
+
+
+def answer_cues(lesson: LessonSpec, rendered: dict | None = None, where: str | None = None) -> list[str]:
+    """WARN when the student copy gives away an answer the key holds:
+    - the prompt or a box label states the correspondence a box asks for ("Scale factor from NPQ to RST"
+      above a box for "triangle QNP ~ ___"), or a box label prints one of the item's short-answer numbers;
+    - another item prints this item's answer correspondence, or (assessments) a distinctive answer number
+      (not a whole number up to 20);
+    - another item's figure draws in black what this item's key adds: two or more of the key's new point
+      labels, on a figure that refers to this item ("Problem 3") or draws mostly the same ink."""
+    rendered = rendered or {}
+    out, where = [], where or lesson.stem
+    groups = [[("", it) for _, it in lesson.items()]]
+    if lesson.practice:
+        groups.append([("practice ", it) for r in lesson.practice.rows for it in r.cells])
+    fps = fingerprint(lesson, rendered)
+    for group in groups:
+        info = []
+        for pre, it in group:
+            objs = [it, *it.parts]
+            lab = f"{pre}item {it.n or '(unnumbered)'}"
+            prompts = [t for o in objs for t in _prompt_texts(o)]
+            labels = [t for o in objs for t in _box_labels(o)]
+            given = set().union(*(correspondences(t) for t in prompts))
+            # a box asks for a correspondence when its answer completes one its label starts ("QNP ~" + "TRS")
+            asked = {c for o in objs for label, ans, full in _box_answers(o)
+                     for c in correspondences(full) - correspondences(label) - correspondences(ans)}
+            # a worked answer restating a correspondence the prompt gives is not asking for it
+            answers = asked | (set().union(*(correspondences(t) for o in objs for t in _answer_texts(o))) - given)
+            shown = [t for o in objs for t in _prompt_texts(o) + list(o.choices or [])] + labels
+            fig_given = {n for t, layer in figure_labels(it.figure, rendered, lesson) if layer == "given"
+                         for n in label_letters(t)} if it.figure else set()
+            key_names = {n for t, layer in figure_labels(it.figure, rendered, lesson) if layer == "answer"
+                         for n in label_letters(t)} if it.figure else set()
+            for name in (it.key_figure, it.draw.key_figure if it.draw else None):
+                if name:
+                    key_names |= {n for t, _ in figure_labels(name, rendered, lesson) for n in label_letters(t)}
+            fp = fps.get(str(it.n)) if it.n and not pre else None
+            key_name = (it.draw.key_figure if it.draw else None) or it.key_figure or it.figure
+            kr = rendered.get(key_name or "") or {}
+            # the key's drawing: the answer layer of the item's figure, or a separate key figure as drawn
+            key_png = kr.get("key") if key_name == it.figure else (kr.get("key") or kr.get("student"))
+            student_png = None if it.draw else (rendered.get(it.figure or "") or {}).get("student")
+            info.append(dict(lab=lab, n=it.n, answers=answers, labels=labels, shown=shown, fig_given=fig_given,
+                             added=key_names - fig_given, fp=fp, key_png=key_png, student_png=student_png))
+            for c in asked:
+                for t in prompts:
+                    if _states(correspondences(t), c):
+                        out.append(f"WARN  {where} {lab}: the prompt {t[:60]!r} states {_pairs_str(c)}, the "
+                                   "correspondence its boxes ask for")
+            for t in labels:
+                for c in answers:
+                    if _states(correspondences(t), c):
+                        out.append(f"WARN  {where} {lab}: box label {t!r} states the answer correspondence "
+                                   f"{_pairs_str(c)}; name the figures another way (left/right, first/second)")
+                if fp is not None:
+                    hit = set(numbers(t)[0]) & fp.answers - fp.prompt_nums - fp.fig_shown
+                    if hit:
+                        out.append(f"WARN  {where} {lab}: box label {t!r} prints the answer {_nums(hit)}")
+        test = lesson.doc_type == "assessment"
+        for i, a in enumerate(info):
+            for j, b in enumerate(info):
+                # a test item must not help with any other; in a lesson, earlier items set up later ones on
+                # purpose, so only a later item that shows an earlier item's answer is a cue
+                if i == j or (j < i and not test):
+                    continue
+                for c in a["answers"]:
+                    if any(_states(correspondences(t), c) for t in b["shown"]):
+                        out.append(f"WARN  {where} {b['lab']} prints {_pairs_str(c)}, the correspondence "
+                                   f"{a['lab']} asks for")
+                refers = any(re.search(rf"\bProblems?\s+(?:\d+\s*(?:,|and|-|\u2013)\s*)*{re.escape(str(a['n']))}\b", t)
+                             for t in b["shown"]) if a["n"] else False
+                if (len(a["added"]) >= 2 and a["added"] <= b["fig_given"] and a["key_png"] and b["student_png"]
+                        and (refers or same_drawing(a["key_png"], b["student_png"]))):
+                    out.append(f"WARN  {where} {b['lab']}: its figure shows, in black, the drawing {a['lab']}'s key "
+                               f"adds (points {_join(a['added'])}); draw it on the answer layer or change it")
+                if test and a["fp"] is not None and b["fp"] is not None:
+                    fa, fb = a["fp"], b["fp"]
+                    hit = {x for x in (fa.answers - fa.values - fa.angles) if x.denominator > 1 or x > 20}
+                    hit &= fb.values - fb.angles
+                    if hit:
+                        out.append(f"WARN  {where} {b['lab']} prints {_nums(hit)}, {a['lab']}'s answer")
+    return out
+
+
+def _pairs_str(c: frozenset) -> str:
+    return ", ".join(f"{x}\u2192{y}" for x, y in sorted(c))
 
 
 def _match(docs: list[LessonSpec], pattern: str) -> list[LessonSpec]:

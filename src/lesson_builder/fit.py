@@ -49,7 +49,8 @@ def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = 
               "practice_key": unit.budget.practice_pages}
     scale = {"handout": 1.0, "practice": 1.0}
     while True:
-        docx = render_lesson(unit, lesson, figs, scale)
+        grown = []
+        docx = render_lesson(unit, lesson, figs, scale, grown)
         exported = docx_to_pdf(list(docx.values()))
         pdfs = {k: p for k, (p, _) in zip(docx, exported)}
         pages = {k: n for k, (_, n) in zip(docx, exported)}
@@ -60,6 +61,7 @@ def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = 
         over = {GROUP[k] for k in GROUP if k in pages and pages[k] > budget[k]}
         if not fit or not over:
             _summary(lesson, rep, budget, scale, log)
+            _grown(lesson, grown, log)
             return docx, pdfs, pages
         for k in GROUP:
             if GROUP[k] in over and rep.get(k):
@@ -78,7 +80,16 @@ def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = 
         if not shrunk:
             log(f"  {lesson.id}: still over budget at minimum workspace; cut content (lesson-scope)")
             _summary(lesson, rep, budget, scale, log)
+            _grown(lesson, grown, log)
             return docx, pdfs, pages
+
+
+def _grown(lesson: LessonSpec, grown: list, log):
+    """Workspace the builder made taller so the key's answer fits: both copies get the taller space, so the key
+    lines up with the student copy, but it can push items to the next page."""
+    for where, field, was, used in grown:
+        log(f"  {lesson.id} {where}: the key answer needs {used:.2f} in; {field} gives {was:.2f} in, so both "
+            f"copies get {used:.2f} in (shorten the answer, or set {field} >= {used:.2f} to plan for it)")
 
 
 def outputs_dir(unit: UnitSpec) -> Path:

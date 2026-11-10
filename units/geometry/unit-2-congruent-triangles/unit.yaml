@@ -9,4 +9,6 @@ budget:
   practice_pages: 2
 lessons:
   - 2.1.yaml
+  - 2.2.yaml
+  - 2.3.yaml
 figures: figures.py

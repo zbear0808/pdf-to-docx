@@ -132,6 +132,8 @@ def parallelogram() -> Figure:
 ```
 `render_all(module_or_path, out_dir) -> {name: {"student": Path, "key": Path | None, "meta": dict}}` writes `name.png`
 (given layer only) and, if the figure has an answer layer, `name_key.png` (both layers). 300 DPI, trimmed.
+`Figure(actual_size="cm" | "mm" | "in")` drops `width_in`/`height_in`: one data unit prints as one cm (mm, inch), the
+canvas fits the drawing, and `meta["actual_size"]` tells `check` to require the drawn width on the page.
 `name.json` (`meta`) holds the drawn width, the smallest text size, label lint, the label texts (read by
 `integrity`), and `key_width_in`. The cache is stale when the figure file, a `_*.py` sibling, any library file in
 `figures/`, or a file in `assets/` is newer than the outputs.
@@ -177,7 +179,16 @@ contact sheet) plus lint and printed-size checks (text under 7 pt at the item's 
 - `lesson-builder check` enforces answers and key figures, boxes ≥ 0.9 in, MC rules (choice count, duplicates,
   all/none of the above, long key, key letter range and patterns), voice (`voice.py`), targets, references, `$`
   and money, block-scalar primes, unknown figure names, `selected` numbers, TODO placeholders, figure lint and
-  printed size, asset colour and resolution, and teacher-guide punctuation.
+  printed size, actual-size figures placed at another width, asset colour and resolution, teacher-guide
+  punctuation, and answer cues (`integrity.answer_cues`: a box label or prompt stating the correspondence a box
+  asks for, a box label printing an answer, an item printing another item's correspondence or distinctive answer
+  number, a figure drawing another item's key in black).
+- Output checks (`build` and `check`, `check.check_outputs` + `check.clipped_answers`): page budget, blank pages,
+  red or `___` on the student copy, matching item numbers, a red answer for every item, every item and part label
+  within 0.5 pt of its student-copy position (`anchor_drift`), each key answer's closing words present in the PDF
+  (Word drops text that overflows a fixed box), and actual-size figures within 0.3 mm of their drawn width.
+- Workspace (`work`, `box`, `draw.height`) prints as one exact-height slot on both copies; the key answer goes
+  inside. When the key answer needs more room, the slot grows on both copies and `build` logs it.
 
 ### Build
 `lesson-builder build <unit>`: render figures (cached) → spec checks → DOCX → PDF in one Word instance → page-fill

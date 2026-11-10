@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from lesson_builder.integrity import check_set, compare, do_not_reuse, fingerprint, has_errors, numbers
+from lesson_builder.integrity import answer_cues, check_set, compare, do_not_reuse, fingerprint, has_errors, numbers
 from lesson_builder.spec import load_lesson
 
 
@@ -127,3 +127,30 @@ def test_check_set_with_figure_sources(tmp_path):
     assert any(m.startswith("ERROR Review item 1 vs PC A item 1: prints all") for m in msgs)
     assert has_errors(msgs)
     assert check_set(unit, ["nothing*"]) == ["ERROR no document matches 'nothing*'"]
+
+
+def test_subscripts_are_part_of_point_names(tmp_path):
+    """Regression (Unit 3 test): A_2..E_2 and A_7..E_7 are different points, and index digits are not values."""
+    item = {"n": 7, "prompt": r"$\overline{D_2E_2}\parallel\overline{B_2C_2}$ in $\triangle A_2B_2C_2$. Find $k$.",
+            "fill": [["$k =$", "5"]]}
+    a = _load(tmp_path, "Test A", [item])
+    b = _load(tmp_path, "Test R", [{**item, "prompt": item["prompt"].replace("_2", "_7")}])
+    assert not any("same letters" in m for m in compare(a, b))
+    assert numbers(r"$A_7B_{12}$ is 7 cm")[0] == [Fraction(7)]
+
+
+def test_answer_cues(tmp_path):
+    label = {"n": 3, "prompt": "The triangles are similar. Complete each box.",
+             "fill": [[r"$\triangle QNP\sim$", r"$\triangle TRS$"], ["Scale factor from NPQ to RST:", "3/4"]]}
+    msgs = answer_cues(_load(tmp_path, "T1", [label]))
+    assert len(msgs) == 1 and "box label 'Scale factor from NPQ to RST:' states" in msgs[0]
+    fixed = {**label, "fill": [label["fill"][0], ["Scale factor (left to right):", "3/4"]]}
+    assert answer_cues(_load(tmp_path, "T2", [fixed])) == []
+    prompt = {**fixed, "prompt": "The scale factor goes from $NPQ$ to $RST$."}
+    assert "the prompt" in answer_cues(_load(tmp_path, "T3", [prompt]))[0]
+    later = {"n": 6, "prompt": "Give a sequence taking $N(1,1)$, $P(3,1)$, $Q(1,2)$ onto $R$, $S$, $T$ in that order.",
+             "answer": "Rotate, then dilate."}
+    msgs = answer_cues(_load(tmp_path, "T4", [fixed, later]))
+    assert msgs == ["WARN  T4 item 6 prints N\u2192R, P\u2192S, Q\u2192T, the correspondence item 3 asks for"]
+    angles = {"n": 1, "prompt": r"Why are $\angle LPA$ and $\angle LQB$ equal?", "answer": "AA"}
+    assert answer_cues(_load(tmp_path, "T5", [angles, fixed])) == []

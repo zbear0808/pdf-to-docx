@@ -142,10 +142,34 @@ def test_work_defaults(tmp_path):   # S3
     its = l.sections[0].items
     assert [R._work(i) for i in its] == [0.2, 0, 0, 1.0, 0.8, 0]
     assert R._work(its[5].parts[0]) == 0.2
-    line = [p.find(qn("w:pPr") + "/" + qn("w:spacing")) for p in
-            Document(str(_render(tmp_path, l, False))).element.body.iter(qn("w:p"))]
-    lines = [s.get(qn("w:line")) for s in line if s is not None]
-    assert "288" in lines and "1440" in lines   # 0.2 in and 1.0 in of workspace (twips)
+    body = Document(str(_render(tmp_path, l, False))).element.body
+    rows = [h.get(qn("w:val")) for h in body.iter(qn("w:trHeight")) if h.get(qn("w:hRule")) == "exact"]
+    # workspace is an exact-height slot plus its 1 pt tail paragraph: 1.0 in (twips); the 0.2 in choice slots
+    # grow just enough to hold the key's "[A]" line, on both copies
+    assert str(int((1.0 - 1 / 72) * 1440)) in rows and min(map(int, rows)) >= int((0.2 - 1 / 72) * 1440)
+
+
+def test_workspace_is_the_same_on_student_and_key(tmp_path):
+    """The key's answer text sits in the same exact-height slot as the student's blank workspace, and a long
+    answer grows the slot on both copies (no student/key drift)."""
+    long = "Because " + "the corresponding sides are proportional and " * 12 + "so they are similar."
+    l = _load(tmp_path, f"""\
+        id: x
+        doc_type: assessment
+        title: T
+        sections:
+          - kind: plain
+            items:
+              - {{n: 1, prompt: p, answer: short, work: 0.5}}
+              - {{n: 2, prompt: p, answer: '{long}', work: 0.5}}
+        """)
+
+    def slots(key):
+        body = Document(str(_render(tmp_path, l, key))).element.body
+        return [h.get(qn("w:val")) for h in body.iter(qn("w:trHeight")) if h.get(qn("w:hRule")) == "exact"]
+    student, key = slots(False), slots(True)
+    assert student == key
+    assert int(max(student, key=int)) > int((0.5 - 1 / 72) * 1440)   # the long answer grew both copies
 
 
 def test_selected_auto_and_numbers(tmp_path):   # S6

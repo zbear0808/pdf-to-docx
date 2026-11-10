@@ -77,7 +77,7 @@ Never edit src/, unit.yaml, other documents, or a DOCX.
 ## Release (step 6)
 
 1. Run `uv run lesson-builder check <unit> -l <stem>` for each document; 0 errors.
-2. Exam integrity across forms: `uv run lesson-builder integrity <unit> --set "Unit 3 Test*" [--vs "Unit 3 Review"]`; 0 errors. It compares letters, numbers, MC key positions, and figure labels between forms, and checks reviews and notes (plus each document's `do_not_reuse`) against the tests. Then read for what it can't see: same contexts or motion types, a figure that gives away an answer by its shape, difficulty drift between forms.
+2. Exam integrity across forms: `uv run lesson-builder integrity <unit> --set "Unit 3 Test*" [--vs "Unit 3 Review"]`; 0 errors. It compares letters (subscripts included), numbers, MC key positions, and figure labels between forms, and checks reviews and notes (plus each document's `do_not_reuse`) against the tests. `check` covers answer cues inside each document and student/key positions, cut-off key text, and actual-size figure widths in the PDFs; don't send audit agents to measure those. Then read for what it can't see: same contexts or motion types, a figure that gives away an answer by its shape, difficulty drift between forms.
 3. Figure bundles: the build retained and verified them. Check each build's `figures retained` line, or `uv run lesson-builder retain <unit> -l <stem> --verify-only`.
 4. `uv run lesson-builder tidy <unit>`: delete temp files and caches with `--apply`; act on orphan assets, unused figures, and redundant `work:` lines through the document owners.
 5. `uv run lesson-builder status <unit>`: no open Must fix lines, nothing stale.
