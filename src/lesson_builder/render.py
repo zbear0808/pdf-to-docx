@@ -50,13 +50,14 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
     """Fill-ins, frames, write-in box, parts, then the answer workspace."""
     answer = as_list(it.answer)
     boxed = bool(it.fill or it.frame or getattr(it, "box", None))
+    if isinstance(it, Part) and it.choices:
+        h._choices(cell, it.choices, it.choice_cols, indent=indent + 0.25)
     if it.fill:
         h.fill_boxes(cell, [tuple(r) for r in it.fill], cols=it.fill_cols or 1, box_w=it.box_w,
                      indent=indent + 0.25 if isinstance(it, Part) else indent, height=0.38, row_gap=0.08)
     if it.frame:
         rows = [tuple(r) for r in it.frame]
-        h.frame(cell, rows, indent=indent + 0.25, box_w=getattr(it, "frame_box_w", 1.1), height=0.36,
-                row_gap=0.06)
+        h.frame(cell, rows, indent=indent + 0.25, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
     if getattr(it, "box", None):
         inner = h._inner_box(cell, it.box * scale, indent=indent)
         for a in answer:
@@ -68,7 +69,7 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
     if answer or work:
         h.answer(cell, answer, work * scale, indent=indent, width=width)
     for p in getattr(it, "parts", []):
-        h._line(cell, f"{p.label} {p.prompt}", indent=indent)
+        h._line(cell, f"{p.label} {p.prompt}{_pts(p.points)}", indent=indent)
         _body(h, cell, p, scale, indent, width)
 
 
@@ -81,7 +82,7 @@ def _draw(h: Handout, it: Item, figs: Figures, scale: float):
     for c in (a, b):
         db.cell_margins(c, 0, 0, 0, 60)
     h._problem_text(a, _num(it), as_list(it.prompt))
-    box = h._inner_box(b, max(2.2, d.height * scale), indent=0.1)
+    box = h._inner_box(b, max(2.2, d.height * scale), indent=0.1, exact=False)  # grows to fit the key figure
     kf = figs.get(d.key_figure or it.key_figure or it.figure, key=True)
     if h.key and kf:
         h.key_image(box, kf, d.key_fig_w, before=4)
@@ -118,11 +119,19 @@ def _table(h: Handout, it: Item):
     db.table_indent(t, 0.3625)
 
 
+def _pts(p) -> str:
+    if p is None:
+        return ""
+    return f" ({p:g} pt{'s' if p != 1 else ''})"
+
+
 def _item(h: Handout, it: Item, figs: Figures, scale: float):
     if it.draw:
         return _draw(h, it, figs, scale)
     img = figs.get(it.key_figure if (h.key and it.key_figure) else it.figure, h.key)
     lines = as_list(it.prompt)
+    if it.points is not None and lines:
+        lines = [lines[0] + _pts(it.points)] + lines[1:]
     t = h.problem(_num(it), lines, image=img, img_w=it.fig_w, work=0, after=0, choices=it.choices,
                   choice_cols=it.choice_cols, layout=it.layout)
     cell = t.rows[0].cells[0]
@@ -147,10 +156,23 @@ def _section_sub(s) -> str | None:
 def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures, out: Path,
                    scale: float = 1.0) -> Path:
     h = Handout(key=key)
-    h.footer_text(unit.footer(lesson.id) + ("  |  Key" if key else ""))
-    right = "Lesson key" if key else NAME_LINE
-    h.header(lesson.title, f"Lesson {lesson.id}", right=right)
-    h.box(lesson.framing, after=0.04)
+    lesson_doc = lesson.doc_type == "lesson"
+    label = f"Lesson {lesson.id}" if lesson_doc else ""
+    h.footer_text(unit.footer(lesson.id, doc_type=lesson.doc_type) + ("  |  Key" if key else ""))
+    if key:
+        right = "Lesson key" if lesson_doc else "Key"
+    elif lesson.header_right:
+        right = lesson.header_right
+    elif lesson.doc_type == "assessment":
+        total = lesson.total_points or lesson.points
+        right = "Name ______________  Per ___" + (f"  Score ___ / {total:g}" if total else "")
+    else:
+        right = NAME_LINE
+    h.header(lesson.title, label, right=right)
+    if lesson.framing:
+        h.box(lesson.framing, after=0.04)
+    if lesson.directions:
+        h.para(f"**{lesson.directions}**", size=10.5, after=4)
     if lesson.materials:
         h.para(f"*Materials:* {lesson.materials}", size=10, after=2)
     broke = False
@@ -159,7 +181,7 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
             if not broke:
                 h.page_break()
             broke = False
-            h.header(lesson.notes_title, f"Lesson {lesson.id}", right=right)
+            h.header(lesson.notes_title or lesson.title, label, right=right)
             h.notes_box("QuickNotes", lesson.notes_height, lines=lesson.quicknotes)
             continue
         if s.page_break_before and not broke:
@@ -196,7 +218,9 @@ def render_practice(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures
     h.header(pr.title, f"Lesson {lesson.id}", right="Practice key" if key else NAME_LINE)
     blocks, cur = [], []
     for row in pr.rows:
-        if cur and (row.heading or row.page_break_before):
+        # a new block on a heading, a page break, or a change in column count (a 1-cell row after 2-cell rows
+        # gets the full width instead of half)
+        if cur and (row.heading or row.page_break_before or len(row.cells) != len(cur[-1].cells)):
             blocks.append(cur)
             cur = []
         cur.append(row)
@@ -230,7 +254,10 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
     for r in it.fill or []:
         bits.append(f"{r[0]} {r[1]}")
     for r in it.frame or []:
-        bits.append(f"{r[0]} **{r[1]}**{r[2] if len(r) > 2 else ''}")
+        tail = str(r[2]) if len(r) > 2 and r[2] else ""
+        if tail and tail[0].isalnum():
+            tail = " " + tail
+        bits.append(f"{r[0]} **{r[1]}**{tail}")
     bits += as_list(it.answer)
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
@@ -241,20 +268,23 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
         if text:
             text += " " if text.endswith((".", "?", "!", ":", ")")) else "; "
         text += b
-    lines = [f"{prefix} {text}"] if bits else []
-    for p in getattr(it, "parts", []):
-        sub = _answers_md(p, f"   {p.label}")
-        lines += sub
-    return lines
+    parts = [ln for p in getattr(it, "parts", []) for ln in _answers_md(p, f"   {p.label}")]
+    if bits:
+        return [f"{prefix} {text}"] + parts
+    if parts:  # no stem answer: keep the item number on the first part's line
+        return [f"{prefix} {parts[0].strip()}"] + parts[1:]
+    return []
 
 
 def guide_markdown(lesson: LessonSpec) -> str:
-    out = ["## Answer key: student handout"]
+    out = ["## Answer key: student handout" if lesson.doc_type == "lesson" else "## Answer key"]
     for s in lesson.sections:
         if s.kind == "notes":
             out += ["### QuickNotes (printed on the handout and the key)"] + lesson.quicknotes
             continue
-        out.append(f"### {s.title or SECTION_TITLES[s.kind][0] or s.kind}")
+        title = s.title or SECTION_TITLES[s.kind][0]
+        if title:
+            out.append(f"### {title}")
         for it in s.items:
             out += _answers_md(it, f"{it.n}." if it.n else "-")
     if lesson.practice:
@@ -263,7 +293,7 @@ def guide_markdown(lesson: LessonSpec) -> str:
             for it in row.cells:
                 out += _answers_md(it, f"{it.n}.")
     if lesson.plan:
-        out += ["## Lesson plan", lesson.plan]
+        out += ["## Lesson plan" if lesson.doc_type == "lesson" else "## Notes for the teacher", lesson.plan]
     if lesson.guide_notes:
         out += [lesson.guide_notes]
     return "\n".join(out) + "\n"
@@ -271,19 +301,31 @@ def guide_markdown(lesson: LessonSpec) -> str:
 
 def render_guide(unit: UnitSpec, lesson: LessonSpec, out: Path) -> Path:
     h = Handout(size=10.5)
-    h.footer_text(unit.footer(lesson.id) + "  |  Teacher guide")
-    h.header(lesson.notes_title, f"Lesson {lesson.id}", right="Teacher guide")
+    h.footer_text(unit.footer(lesson.id, doc_type=lesson.doc_type) + "  |  Teacher guide")
+    label = f"Lesson {lesson.id}" if lesson.doc_type == "lesson" else ""
+    h.header(lesson.notes_title or lesson.title, label, right="Teacher guide")
     db.md_to_doc(h, guide_markdown(lesson))
     return h.save(out)
 
 
 def outputs(unit: UnitSpec, lesson: LessonSpec) -> dict[str, Path]:
-    d = unit.dir / "output" / f"Lesson {lesson.id}"
-    names = {"handout": "Student Handout", "key": "Lesson Key", "practice": "Practice Problems",
-             "practice_key": "Practice Key", "guide": "Teacher Guide"}
-    out = {k: d / f"Lesson {lesson.id} {v}.docx" for k, v in names.items()}
-    if not lesson.practice:
-        out.pop("practice"), out.pop("practice_key")
+    """Lessons: output/Lesson X/ with five files. Assessments: output/Assessments/<stem>.docx + Key (+ guide if
+    there are teacher notes). Reference sheets: output/Reference/<stem>.docx only."""
+    if lesson.doc_type == "lesson":
+        d = unit.dir / "output" / f"Lesson {lesson.id}"
+        names = {"handout": "Student Handout", "key": "Lesson Key", "practice": "Practice Problems",
+                 "practice_key": "Practice Key", "guide": "Teacher Guide"}
+        out = {k: d / f"Lesson {lesson.id} {v}.docx" for k, v in names.items()}
+        if not lesson.practice:
+            out.pop("practice"), out.pop("practice_key")
+        return out
+    title = lesson.id
+    if lesson.doc_type == "reference":
+        return {"handout": unit.dir / "output" / "Reference" / f"{title}.docx"}
+    d = unit.dir / "output" / "Assessments"
+    out = {"handout": d / f"{title}.docx", "key": d / f"{title} Key.docx"}
+    if lesson.plan or lesson.guide_notes:
+        out["guide"] = d / f"{title} Teacher Notes.docx"
     return out
 
 
@@ -291,9 +333,11 @@ def render_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, scale: dict
     scale = scale or {}
     o = outputs(unit, lesson)
     render_handout(unit, lesson, False, figs, o["handout"], scale.get("handout", 1.0))
-    render_handout(unit, lesson, True, figs, o["key"], scale.get("handout", 1.0))
-    if lesson.practice:
+    if "key" in o:
+        render_handout(unit, lesson, True, figs, o["key"], scale.get("handout", 1.0))
+    if "practice" in o:
         render_practice(unit, lesson, False, figs, o["practice"], scale.get("practice", 1.0))
         render_practice(unit, lesson, True, figs, o["practice_key"], scale.get("practice", 1.0))
-    render_guide(unit, lesson, o["guide"])
+    if "guide" in o:
+        render_guide(unit, lesson, o["guide"])
     return o

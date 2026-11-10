@@ -30,11 +30,21 @@ def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) 
     figures = figures or {}
     issues = []
     where = f"{lesson.id}"
-    if lesson.minutes > unit.budget.minutes:
-        issues.append(f"ERROR {where}: item minutes add up to {lesson.minutes:g}; budget is {unit.budget.minutes}")
-    plan_end = [int(m.group(1)) for m in re.finditer(r"^\|\s*\d+\s*-\s*(\d+)\s*\|", lesson.plan, re.M)]
-    if plan_end and max(plan_end) > unit.budget.minutes:
-        issues.append(f"ERROR {where}: plan timing table runs to {max(plan_end)} min")
+    if lesson.doc_type == "lesson":
+        if lesson.minutes > unit.budget.minutes:
+            issues.append(f"ERROR {where}: item minutes add up to {lesson.minutes:g}; budget is {unit.budget.minutes}")
+        plan_end = [int(m.group(1)) for m in re.finditer(r"^\|\s*\d+\s*-\s*(\d+)\s*\|", lesson.plan, re.M)]
+        if plan_end and max(plan_end) > unit.budget.minutes:
+            issues.append(f"ERROR {where}: plan timing table runs to {max(plan_end)} min")
+        if not lesson.notes_title or not lesson.framing:
+            issues.append(f"ERROR {where}: lessons need notes_title and framing")
+    if lesson.doc_type == "assessment" and lesson.total_points is not None and lesson.points != lesson.total_points:
+        issues.append(f"ERROR {where}: item points add up to {lesson.points:g}, total_points is "
+                      f"{lesson.total_points:g}")
+    for _, it in lesson.items():
+        if it.choices and len(it.choices) > 10:
+            issues.append(f"ERROR {where} item {it.n}: {len(it.choices)} choices; the most is 10 (A-J)")
+    needs_answers = lesson.doc_type != "reference"
 
     groups = []  # numbering restarts on the QuickNotes page
     cur = []
@@ -62,10 +72,10 @@ def check_spec(unit: UnitSpec, lesson: LessonSpec, figures: dict | None = None) 
                             issues.append(f"ERROR {plabel}: refers to Problem {k}, which isn't in this part")
                 for m in re.finditer(r"(claim|answer|work|result) from Problem (\d+)", text, re.I):
                     issues.append(f"WARN  {plabel}: '{m.group(0)}': make sure Problem {m.group(2)} supports this")
-                if not _has_answer(part) and not (isinstance(part, Item) and part.parts):
+                if needs_answers and not _has_answer(part) and not (isinstance(part, Item) and part.parts):
                     issues.append(f"ERROR {plabel}: no answer (add `answer:` or `no_answer: true`)")
             text = " ".join(t for p in [it] + list(it.parts) for t in _texts(p))
-            if DRAW.search(text) and not re.search(r"if it helps|optional", text, re.I):
+            if needs_answers and DRAW.search(text) and not re.search(r"if it helps|optional", text, re.I):
                 has_key_fig = bool(it.key_figure or (it.draw and (it.draw.key_figure or it.figure))
                                    or figures.get(it.figure or "", {}).get("key"))
                 if not has_key_fig:
@@ -135,7 +145,7 @@ def check_outputs(student: Path, key: Path, max_pages: int) -> list[str]:
         for b in pg.get_text("dict")["blocks"]:
             for ln in b.get("lines", []):
                 txt = "".join(sp["text"] for sp in ln["spans"])
-                if "___" in txt and "Name" not in txt and "Period" not in txt:
+                if "___" in txt and not re.search(r"Name|Period|Per\b|Score", txt):
                     issues.append(f"ERROR {tag} student p{i + 1}: '___' blank: {txt.strip()[:60]}")
                 if any(_red(sp["color"]) and sp["text"].strip() for sp in ln["spans"]):
                     issues.append(f"ERROR {tag} student p{i + 1}: red key text on the student copy")

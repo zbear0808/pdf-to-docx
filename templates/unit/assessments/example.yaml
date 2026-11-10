@@ -1,0 +1,40 @@
+# Example assessment (progress check, quiz, test, review). One YAML per version (A, B, Retake).
+# Builds output/Assessments/<id>.docx and <id> Key.docx (+ Teacher Notes if `plan` or `guide_notes` is set).
+id: 3.6 Progress Check A
+doc_type: assessment          # or: reference (notes sheet, no key, no answers needed)
+title: 'Progress check: lesson 3.6'
+directions: Show your work.
+total_points: 10              # must equal the sum of item/part points (lesson-builder check)
+max_pages: 2                  # page budget for this document (default: unit handout_pages)
+
+sections:
+  - kind: plain               # no heading
+    items:
+      - n: 1
+        points: 4
+        prompt: 'Dilate $\triangle ABC$ using center $P$ and scale factor 2.'
+        figure: dilate_abc    # registered figure with an answer layer (figures/<this file stem>.py)
+        work: 2.0
+        answer: 'See the red image $\triangle A''B''C''$.'
+      - n: 2
+        points: 2
+        prompt: 'Which scale factor makes the image smaller than the original?'
+        choices: ['$\frac{7}{10}$', '1', '$\frac{5}{4}$', '2']
+        choice_cols: 4
+        answer: '[A] A scale factor between 0 and 1 shrinks the figure.'
+        work: 0.2
+      - n: 3
+        prompt: 'Polygon $N$ is a dilation of polygon $M$.'
+        parts:
+          - label: a.
+            points: 2
+            prompt: What is the scale factor?
+            fill: [['Scale factor:', '$\frac{3}{2}$']]
+            work: 0
+          - label: b.
+            points: 2
+            prompt: If $x = 10$, what is $y$?
+            fill: [['$y =$', '15']]
+            work: 0
+guide_notes: |
+  **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.

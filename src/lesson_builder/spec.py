@@ -49,18 +49,23 @@ class Draw(_M):
 class Part(_M):
     label: str                       # "a."
     prompt: str
+    points: Optional[float] = None
+    choices: Optional[list[str]] = None
+    choice_cols: int = 1
     answer: Optional[Lines] = None
     work: float = 0.6
     fill: Optional[list[list[str]]] = None      # [[label, answer], ...]
     fill_cols: Optional[int] = None
     box_w: float = 1.3
     frame: Optional[list[list[Union[str, float]]]] = None   # [[before, answer, after(, box_w)], ...]
+    frame_box_w: float = 1.1
     no_answer: bool = False
 
 
 class Item(_M):
     n: Optional[str] = None          # "1" (printed "1."); None for unnumbered (warm-up, example)
     minutes: float = 0
+    points: Optional[float] = None   # printed after the prompt as "(2 pts)"; assessments
     prompt: Lines = ""
     figure: Optional[str] = None     # registered figure name or asset path
     fig_w: Optional[float] = None
@@ -109,13 +114,18 @@ class Practice(_M):
 
 
 class LessonSpec(_M):
-    id: str                          # "2.1"
+    id: str                          # "2.1", or an assessment name like "3.6 Progress Check A"
+    doc_type: Literal["lesson", "assessment", "reference"] = "lesson"   # reference: notes sheet, no key
     title: str                       # page-1 title
-    notes_title: str                 # page-3 title (QuickNotes page)
-    framing: str
+    notes_title: Optional[str] = None  # page-3 title (QuickNotes page); lessons only
+    framing: Optional[str] = None
     materials: Optional[str] = None
+    directions: Optional[str] = None   # bold line under the header (assessments: "Show your work.")
+    header_right: Optional[str] = None  # e.g. "Name ______  Period ___  Score ___ / 10"
+    total_points: Optional[float] = None
+    max_pages: Optional[int] = None    # overrides the unit's handout page budget
     sections: list[Section]
-    quicknotes: list[str]
+    quicknotes: list[str] = Field(default_factory=list)
     notes_height: float = 2.2
     practice: Optional[Practice] = None
     plan: str = ""                   # teacher lesson plan (Markdown), timing table included
@@ -131,6 +141,14 @@ class LessonSpec(_M):
     def minutes(self) -> float:
         return sum(it.minutes for _, it in self.items())
 
+    @property
+    def points(self) -> float:
+        return sum((it.points or 0) + sum(p.points or 0 for p in it.parts) for _, it in self.items())
+
+    @property
+    def stem(self) -> str:
+        return self.path.stem if self.path else self.id
+
 
 class Budget(_M):
     minutes: int = 40
@@ -144,8 +162,9 @@ class UnitSpec(_M):
     unit_title: str
     period: str = ""
     budget: Budget = Field(default_factory=Budget)
-    lessons: list[str]               # lesson YAML files, relative to lessons/
-    figures: Optional[str] = "figures.py"
+    lessons: list[str]               # lesson YAML files, relative to lessons/, in teaching order
+    assessments: list[str] = Field(default_factory=list)   # globs relative to the unit dir, e.g. assessments/*.yaml
+    figures: Optional[str] = "figures.py"   # a file, or a folder of <doc stem>.py files (one per document)
     packets: bool = True
     dir: Optional[Path] = Field(default=None, exclude=True)
 
@@ -159,12 +178,30 @@ class UnitSpec(_M):
     def _period(cls, v):
         return v or ""
 
-    def footer(self, lesson_id: str, kind: str = "") -> str:
-        parts = [self.course, f"Unit {self.unit}", f"Lesson {lesson_id}" + (f" {kind}" if kind else "")]
+    def footer(self, lesson_id: str, kind: str = "", doc_type: str = "lesson") -> str:
+        doc = f"Lesson {lesson_id}" if doc_type == "lesson" else lesson_id
+        parts = [self.course, f"Unit {self.unit}", doc + (f" {kind}" if kind else "")]
         return "  |  ".join(parts)
 
-    def lesson_specs(self) -> list[LessonSpec]:
-        return [load_lesson(self.dir / "lessons" / f) for f in self.lessons]
+    def doc_paths(self) -> list[Path]:
+        paths = [self.dir / "lessons" / f for f in self.lessons]
+        for g in self.assessments:
+            paths += sorted(self.dir.glob(g))
+        return paths
+
+    def lesson_specs(self, only: Optional[list[str]] = None) -> list[LessonSpec]:
+        """Load specs in order. `only` matches file stems or ids; unmatched files aren't parsed, so one document
+        can be built while another is mid-edit."""
+        out = []
+        for p in self.doc_paths():
+            if only and p.stem not in only:
+                try:
+                    if str(_read(p).get("id", "")) not in only:
+                        continue
+                except Exception:
+                    continue
+            out.append(load_lesson(p))
+        return out
 
 
 def _read(path: Path) -> dict:

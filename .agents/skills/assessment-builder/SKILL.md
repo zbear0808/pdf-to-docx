@@ -1,6 +1,6 @@
 ---
 name: assessment-builder
-description: One-call workflow for writing or rewriting a test, quiz, retake, or worksheet for Franklin HS room 105. Runs requirements intake, source extraction, a fair and MLL-accessible draft in teacher voice, answer key and rubric, automated checks, Worksheet AST, figures, DOCX/LaTeX packing, and a visual audit. Use whenever the user asks to make, rewrite, adapt, or fix an assessment or worksheet.
+description: One-call workflow for writing or rewriting a test, quiz, retake, or worksheet for Franklin HS room 105. Runs requirements intake, source extraction, a blueprint built with lesson-assessment-designer (targets, evidence, cognitive demand), a fair draft in teacher voice with mll-literacy-scaffolding supports, answer key and rubric, automated checks, Worksheet AST, figures, DOCX/LaTeX packing, and a visual audit. Use whenever the user asks to make, rewrite, adapt, or fix an assessment or worksheet.
 ---
 
 # Assessment builder
@@ -13,9 +13,11 @@ Load these only when the step that needs them comes up:
 |---|---|
 | 1 | `classroom-context` (only the section for the target period) |
 | 1 | `course-content-extractor` (only if there's no source file, or a retake/variant is needed) |
+| 2 | `lesson-assessment-designer` Steps 1-2 (targets, assessment evidence, performance tasks) and its readings table; Step 4 too for worksheets |
 | 2 | `lesson-scope` (lesson handouts and worksheets: 40-min budget, what to cut) |
 | 3-8 | `lesson-builder` for lesson handouts (YAML instead of `draft.md`; replaces Steps 6-7 here) |
 | 3-4 | `references/item-rules.md` (this folder), `authentic-writer`, `handout-release-check` §1-2 (fill-ins, keys) |
+| 3, 5 | `mll-literacy-scaffolding` (Period 4, or any class with MLLs): task design, stems, WIDA check, checklist |
 | 6 | `curriculum-visual-generator` |
 | 7 | `worksheet-packer` |
 | 8 | `visual-layout-checker`, `handout-release-check` (scripts, packets) |
@@ -40,13 +42,19 @@ Fill gaps from the source document and `classroom-context`. Ask the user only ab
 
 ## Step 1: Context and sources
 
-- Note the period profile in a few lines at the top of `requirements.md`. Period 4 Geometry has many MLLs, so apply section 6 of item-rules fully. Period 5 AP Stats follows CED wording and E/P/I scoring. Period 6 AP CSA follows CodeHS Java style and uses tracing.
+- Note the period profile in a few lines at the top of `requirements.md`. Period 4 Geometry has many MLLs, so apply section 6 of item-rules fully and use `mll-literacy-scaffolding` in Steps 3 and 5. Period 5 AP Stats follows CED wording and E/P/I scoring. Period 6 AP CSA follows CodeHS Java style and uses tracing.
 - Rewrite mode: get the source into an editable form.
   - `.docx` or `.pdf`: run `uv run worksheet-packer parse <src> -o _temp/specs/source_spec.json --workspace-dir _temp/assets` to collect text and figures.
   - Or read the file directly if parsing doesn't work well.
 - New mode: use `course-content-extractor` to pull matching items, keys, and figures into `_temp/specs/extracted_content.md`.
 
 ## Step 2: Blueprint
+
+Use `lesson-assessment-designer` Steps 1-2 to set this up before writing the table:
+- Write the standards and learning targets in its two forms (conceptual "understand that..." and skill "able to..."). Rewrite mode: recover them from the source and the unit, and flag any missing ones.
+- Say what evidence each target needs and whether a selected-response, constructed-response, or performance item gives it. Performance tasks follow its Step 2 rules (purpose and audience, student-facing directions, criteria shared ahead, separate communication score).
+- Worksheets follow its Step 4 structure (warm-up, investigation, check for understanding, exit ticket).
+- When you rely on a reading (Smith & Stein levels, T&N, Lotan), pull it from its readings table and only cite what the text says.
 
 Add a table to `requirements.md` with one row per item: item number, learning target, item type, cognitive demand level (memorization / procedures without connections / procedures with connections / doing math), and points. Check that it covers the targets and isn't all procedural. Rewrite mode: build the table from the existing items, then flag any item that doesn't fit a target.
 
@@ -55,6 +63,12 @@ Lesson handouts and worksheets: add a minutes column (estimates in `lesson-scope
 ## Step 3: Draft (one pass, rules applied while writing)
 
 Write `_temp/specs/draft.md` with `references/item-rules.md` and `authentic-writer` open. Apply them as you write. Don't plan a separate cleanup pass.
+
+Period 4, or any class with MLLs: also keep `mll-literacy-scaffolding` open while drafting.
+- Apply its three Roberts enhancements to each item: connect representations, unpack the language, and build up the context.
+- Run its WIDA check (words, sentences, discourse) on directions and long stems.
+- Choose optional stems by language function (explain, compare, justify, critique) from its stems section, on 1-3 explain items.
+- For word problems, note in `key.md` which items to launch with 3-Reads if the teacher reviews them in class.
 
 Rewrite mode: keep the item order, numbering, points, figures, and math unless the user asked for changes or an item breaks a rule. For each change, add one line to `_temp/specs/changes.md`: item, what changed, and why (cite the rule, e.g. "T&N7: removed 'all of the above'").
 
@@ -113,6 +127,8 @@ Fix every ERROR. Fix WARNs unless there's a reason not to; a NOT stem that's rea
 - [ ] The page budget is plausible. Step 7 confirms it.
 - [ ] No `___` blanks; every fill-in is a labeled box under its problem, naming the figure it refers to.
 - [ ] Every "Problem N" exists and supports the task.
+- [ ] `lesson-assessment-designer` final check: real reasoning (not only recipes), every item measures a Stage 1 target, contexts do mathematical work.
+- [ ] Period 4 / MLLs: the `mll-literacy-scaffolding` checklist passes, and the math goal and explain demand match what every other student gets.
 
 Lesson handouts: write a lesson YAML instead of `draft.md` and use `lesson-builder` for Steps 5-8 (it checks, renders, fits pages, and builds packets).
 

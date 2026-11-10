@@ -113,6 +113,23 @@ class Figure:
                         solid_capstyle="butt", clip_on=False)
         self._add(layer, draw, np.array([p for s in strokes for p in s]))
 
+    def parallel_marks(self, a, b, n=1, layer="given", size=0.13):
+        """n arrowheads (>, >>) at the middle of segment ab, pointing from a to b: the usual 'parallel' mark."""
+        a, b = np.asarray(a, float), np.asarray(b, float)
+        u = (b - a) / np.linalg.norm(b - a)
+        nrm = np.array([-u[1], u[0]])
+        m = (a + b) / 2
+        heads = []
+        for k in range(n):
+            tip = m + u * (k - (n - 1) / 2) * 0.9 * size + u * size / 2
+            heads.append(np.array([tip - u * size + nrm * size * 0.6, tip, tip - u * size - nrm * size * 0.6]))
+
+        def draw(ax):
+            for h in heads:
+                ax.plot(h[:, 0], h[:, 1], color=COLORS[layer], lw=1.1, zorder=3, solid_joinstyle="miter",
+                        clip_on=False)
+        self._add(layer, draw, np.vstack(heads))
+
     def arc(self, vertex, p1, p2, n=1, r=0.35, layer="given", gap=0.07):
         v, p1, p2 = (np.asarray(x, float) for x in (vertex, p1, p2))
         a1 = np.degrees(np.arctan2(*(p1 - v)[::-1]))
@@ -219,19 +236,23 @@ class Figure:
 
 
 def content_bbox(img: Image.Image, pad=TRIM_PAD):
+    """Bounding box of non-white pixels plus pad, or None if the image is blank."""
     bbox = ImageOps.invert(img.convert("L")).point(lambda v: 255 if v > 12 else 0).getbbox()
     if not bbox:
-        return (0, 0, img.width, img.height)
+        return None
     l, t, r, b = bbox
     return (max(0, l - pad), max(0, t - pad), min(img.width, r + pad), min(img.height, b + pad))
 
 
 def union_bbox(*boxes):
+    boxes = [b for b in boxes if b]
+    if not boxes:
+        return None
     return (min(b[0] for b in boxes), min(b[1] for b in boxes), max(b[2] for b in boxes), max(b[3] for b in boxes))
 
 
 def crop(img: Image.Image, bbox) -> Image.Image:
-    return img.crop(bbox)
+    return img.crop(bbox) if bbox else img
 
 
 def trim(path, pad=TRIM_PAD) -> Path:
@@ -258,6 +279,8 @@ def _module_name(path: Path) -> str:
 
 
 def load_module(path: Path) -> ModuleType:
+    """Import a figures file by path. Its folder is on sys.path while it runs, so sibling helper modules
+    (for example figures/_helpers.py) can be imported with `from _helpers import ...`."""
     path = Path(path).resolve()
     name = _module_name(path)
     for k in [k for k, fn in _REGISTRY.items() if fn.__module__ == name]:
@@ -266,11 +289,16 @@ def load_module(path: Path) -> ModuleType:
     spec = importlib.util.spec_from_file_location(name, path)
     mod = importlib.util.module_from_spec(spec)
     sys.modules[name] = mod
+    folder = str(path.parent)
+    sys.path.insert(0, folder)
     try:
         spec.loader.exec_module(mod)
     except BaseException:
         sys.modules.pop(name, None)
         raise
+    finally:
+        if folder in sys.path:
+            sys.path.remove(folder)
     return mod
 
 

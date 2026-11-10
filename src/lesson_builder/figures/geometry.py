@@ -53,6 +53,22 @@ def is_rigid_image(src, img, tol=1e-6) -> bool:
     return src.shape == img.shape and bool(np.allclose(_pairwise(src), _pairwise(img), atol=tol))
 
 
+def dilate(pts, k, center=(0, 0)) -> np.ndarray:
+    """Dilation with scale factor k about center."""
+    c = np.asarray(center, float)
+    return c + k * (_arr(pts) - c)
+
+
+def similarity_ratio(src, img, tol=1e-6):
+    """Scale factor k if img is a similar copy of src (every pairwise distance times the same k), else None."""
+    a, b = _pairwise(src), _pairwise(img)
+    nz = a > 1e-12
+    if _arr(src).shape != _arr(img).shape or not nz.any():
+        return None
+    k = float(np.median(b[nz] / a[nz]))
+    return k if np.allclose(b, k * a, atol=tol * max(1.0, k)) else None
+
+
 def signed_area(pts) -> float:
     x, y = _arr(pts).T
     return 0.5 * float(np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1)))

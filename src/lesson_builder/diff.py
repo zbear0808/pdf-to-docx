@@ -31,7 +31,7 @@ def _side_by_side(prev: Image.Image | None, new: Image.Image, out: Path) -> None
     sheet.save(out)
 
 
-def diff_renders(new_dir: Path, prev_dir: Path, out_dir: Path | None = None, threshold: float = 0.002) -> list[str]:
+def diff_renders(new_dir: Path, prev_dir: Path, out_dir: Path | None = None, threshold: float = 0.00005) -> list[str]:
     new_dir, prev_dir = Path(new_dir), Path(prev_dir)
     if out_dir is not None:
         out_dir = Path(out_dir)

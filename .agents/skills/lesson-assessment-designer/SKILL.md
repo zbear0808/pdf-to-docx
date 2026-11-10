@@ -1,6 +1,6 @@
 ---
 name: lesson-assessment-designer
-description: Designs secondary math lesson plans, unit plans (UbD backward design), inquiry worksheets, and performance tasks for Franklin HS room 105, grounded in EDTEP 573/575/582/583 readings (Smith & Stein, UbD, Taylor & Nolen, Moschkovich, Roberts et al.). For writing or rewriting a test, quiz, or worksheet document, use assessment-builder instead.
+description: Designs secondary math lesson plans, unit plans (UbD backward design), inquiry worksheets, and performance tasks for Franklin HS room 105, grounded in EDTEP 573/575/582/583 readings (Smith & Stein, UbD, Taylor & Nolen, Moschkovich, Roberts et al.). assessment-builder also loads its Steps 1-2 (targets, evidence, performance tasks), Step 4 (worksheet structure), readings table, and final check when building a test, quiz, or worksheet; assessment-builder runs the document pipeline.
 ---
 
 # Lesson and unit designer
@@ -52,7 +52,7 @@ Only cite a reading for something it actually says. If you haven't checked the t
   - Directions written to the student, covering what to make, the constraints, and the criteria.
   - Scoring criteria shared ahead of time.
   - A rubric with 3-6 specific levels, with communication scored separately from math.
-- To build the actual quiz or test document, hand off to `assessment-builder`.
+- To build the actual quiz or test document, hand off to `assessment-builder`. It brings these Stage 1-2 decisions into its blueprint (Step 2).
 
 ## Step 3: Lesson plan (Launch, Explore, Summarize)
 

@@ -1,6 +1,6 @@
 ---
 name: mll-literacy-scaffolding
-description: Classroom and lesson supports for multilingual learners (MLLs / ELs) in secondary math, from EDTEP 575 readings (Moschkovich, Roberts et al., Zwiers, Rodriguez-Mojica, WIDA, 3-Reads, translanguaging). Use when planning lessons, talk routines, or worksheets for Period 4 Geometry. For rewriting assessment items, the rules are already in assessment-builder/references/item-rules.md section 6.
+description: Classroom and lesson supports for multilingual learners (MLLs / ELs) in secondary math, from EDTEP 575 readings (Moschkovich, Roberts et al., Zwiers, Rodriguez-Mojica, WIDA, 3-Reads, translanguaging). Use when planning lessons, talk routines, worksheets, or assessments for Period 4 Geometry or any class with MLLs. assessment-builder loads it during drafting and checks, alongside the item-level rules in assessment-builder/references/item-rules.md section 6.
 ---
 
 # MLL supports for secondary math

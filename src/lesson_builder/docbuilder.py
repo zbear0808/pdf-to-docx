@@ -22,8 +22,18 @@ SYMBOLS = {
     r"\triangle": "Δ", r"\angle": "∠", r"\cong": "≅", r"\to": "→", r"\parallel": "∥", r"\perp": "⊥",
     r"\circ": "°", r"\leftrightarrow": "↔", r"\ldots": "…", r"\cdot": "·", r"\neq": "≠", r"\approx": "≈",
     r"\ell": "ℓ", r"\quad": "  ", r"\,": " ", r"\ ": " ", r"\times": "×", r"\pm": "±", r"\le": "≤",
-    r"\ge": "≥", r"\square": "□",
+    r"\ge": "≥", r"\square": "□", r"\sim": "∼", r"\div": "÷", r"\infty": "∞", r"\theta": "θ", r"\pi": "π",
+    r"\sin": "sin ", r"\cos": "cos ", r"\tan": "tan ", r"\left": "", r"\right": "", r"\colon": ":",
 }
+
+
+def _skip_sp(s, i):
+    while i < len(s) and s[i] == " ":
+        i += 1
+    return i
+
+
+CHOICE_LABELS = "ABCDEFGHIJ"
 
 
 def _esc(s):
@@ -86,6 +96,17 @@ def latex_to_omml_inner(s, size):
                 inner, i = _read_group(s, i)
                 flush()
                 out.append(_mrun(inner, size, upright=True))
+            elif cmd in (r"\frac", r"\dfrac", r"\tfrac"):
+                num, i = _read_group(s, _skip_sp(s, i))
+                den, i = _read_group(s, _skip_sp(s, i))
+                flush()
+                out.append(f"<m:f><m:num>{latex_to_omml_inner(num, size)}</m:num>"
+                           f"<m:den>{latex_to_omml_inner(den, size)}</m:den></m:f>")
+            elif cmd == r"\sqrt":
+                inner, i = _read_group(s, _skip_sp(s, i))
+                flush()
+                out.append(f'<m:rad><m:radPr><m:degHide m:val="1"/></m:radPr><m:deg/>'
+                           f"<m:e>{latex_to_omml_inner(inner, size)}</m:e></m:rad>")
             elif cmd == r"\triangle":
                 flush()
                 out.append(_mrun("Δ", size, upright=True))
@@ -110,6 +131,16 @@ def latex_to_omml_inner(s, size):
                 flush()
                 out.append(f'<m:sSup><m:e>{_mrun(base, size) if base else ""}</m:e>'
                            f'<m:sup>{latex_to_omml_inner(inner, size)}</m:sup></m:sSup>')
+        elif ch == "_":
+            i += 1
+            if i < len(s) and s[i] == "{":
+                inner, i = _read_group(s, i)
+            else:
+                inner, i = s[i], i + 1
+            base = buf.pop() if buf else ""
+            flush()
+            out.append(f'<m:sSub><m:e>{_mrun(base, size) if base else ""}</m:e>'
+                       f'<m:sub>{latex_to_omml_inner(inner, size)}</m:sub></m:sSub>')
         elif ch == "'":
             buf.append("′")
             i += 1
@@ -342,6 +373,8 @@ class Handout:
                 container.paragraphs[0]
         fmt(p, before, after, left, hanging, align, keep)
         add_rich(p, text, size or self.size, bold, italic)
+        if container is None and getattr(self, "_keep_next", False):
+            p.paragraph_format.keep_with_next = True  # intro line under a heading: keep the chain going
         return p
 
     def space(self, inches, container=None):
@@ -375,6 +408,7 @@ class Handout:
             self._first = False
         t = self.doc.add_table(rows=rows, cols=cols)
         t.alignment = WD_TABLE_ALIGNMENT.LEFT
+        self._keep_first(t)
         if bordered:
             # Word hangs the left border outside the margin by the cell's left padding; shift it back
             table_indent(t, bordered if isinstance(bordered, float) else 0.0833)
@@ -475,7 +509,17 @@ class Handout:
         if sub:
             add_rich(p, "   " + sub, self.size - 0.5, italic=True)
         if after:
-            self.space(after)
+            sp = self.space(after)
+            sp.paragraph_format.keep_with_next = True  # heading stays on the page of what follows it
+        self._keep_next = True  # the next block's first paragraph also keeps with next (see _keep_first)
+
+    def _keep_first(self, table):
+        """If a heading was just written, keep the first row of this table on the heading's page."""
+        if getattr(self, "_keep_next", False):
+            self._keep_next = False
+            for c in table.rows[0].cells:
+                for p in c.paragraphs[:1]:
+                    p.paragraph_format.keep_with_next = True
 
     # --- problems
     def problem(self, num, lines, image=None, img_w=None, work=0.8, choices=None, choice_cols=1,
@@ -532,7 +576,12 @@ class Handout:
 
     def _line(self, cell, text, indent=0.3):
         p = cell.add_paragraph()
-        m = re.match(r"^([a-z]\.|\[[A-F]\]|Step \d:)\s+(.*)$", text)
+        if text.startswith("- "):  # bullet line inside an item
+            fmt(p, before=1, left=indent + 0.2, hanging=0.2)
+            add_rich(p, "•\t" + text[2:], self.size)
+            p.paragraph_format.tab_stops.add_tab_stop(Inches(indent + 0.2))
+            return p
+        m = re.match(r"^([a-z]\.|\[[A-J]\]|Step \d:)\s+(.*)$", text)
         if m:
             lab_w = 0.25 if len(m.group(1)) <= 3 else 0.5
             fmt(p, before=2, left=indent + lab_w, hanging=lab_w)
@@ -564,7 +613,7 @@ class Handout:
 
     def _choices(self, cell, choices, cols, indent=0.3):
         if cols == 1:
-            for lab, text in zip("ABCDEF", choices):
+            for lab, text in zip(CHOICE_LABELS, choices):
                 p = cell.add_paragraph()
                 fmt(p, before=3, left=indent + 0.4, hanging=0.4)
                 add_rich(p, f"[{lab}]\t", self.size)
@@ -578,7 +627,7 @@ class Handout:
         table_no_borders(t)
         set_widths(t, [avail / cols] * cols)
         table_indent(t, indent)
-        for i, (lab, text) in enumerate(zip("ABCDEF", choices)):
+        for i, (lab, text) in enumerate(zip(CHOICE_LABELS, choices)):
             r, c = divmod(i, cols)
             cc = t.rows[r].cells[c]
             cell_margins(cc, 30, 30, 0, 40)
@@ -590,13 +639,13 @@ class Handout:
         fmt(cell.paragraphs[-1])  # python-docx already added a paragraph after the nested table
         cell.paragraphs[-1].paragraph_format.line_spacing = Pt(2)
 
-    def _inner_box(self, cell, height, indent=0.3):
+    def _inner_box(self, cell, height, indent=0.3, exact=True):
         avail = (cell.width.inches if cell.width else self.width) - indent
         t = cell.add_table(rows=1, cols=1)
         table_borders(t, sz=6, inside=False)
         set_widths(t, [avail])
         table_indent(t, indent)
-        row_height(t.rows[0], height, exact=True)
+        row_height(t.rows[0], height, exact=exact)
         p = cell.paragraphs[-1]  # python-docx already added a paragraph after the nested table
         fmt(p)
         p.paragraph_format.line_spacing_rule = WD_LINE_SPACING.EXACTLY
@@ -637,14 +686,17 @@ class Handout:
         """Fill-in-the-blank row(s): each item is (label, answer). The label sits left of a bordered box where
         students write. The key prints the answer inside the box in red. `container` is a table cell or None.
         Label width defaults to the longest label, so a single box sits right next to its label."""
+        sz = size or self.size
         cols = cols or len(items)
         if label_w is None:
-            longest = max(len(re.sub(r"\\[A-Za-z]+|[${}]", "", lab)) for lab, _ in items)
-            label_w = 0.25 + 0.085 * longest
+            label_w = 0.2 + max(_measure_rich(lab, sz) for lab, _ in items)
+        # fewer columns if the row is wider than the space (e.g. next to a figure); otherwise boxes get cut off
+        avail = (container.width.inches if container is not None and container.width else self.width) - indent
+        while cols > 1 and cols * (label_w + box_w + 0.25) > avail + 0.01:
+            cols -= 1
         widths = []
         for _ in range(cols):
             widths += [label_w, box_w, 0.25]
-        sz = size or self.size
         last = None
         for start in range(0, len(items), cols):
             chunk = items[start:start + cols]
@@ -690,7 +742,6 @@ class Handout:
         sz = size or self.size
         total = (width or ((container.width.inches if container is not None and container.width else self.width))) \
             - indent
-        per_in = 16.5 * 11 / sz  # rough Calibri characters per inch at this size
 
         def text_w(s):
             return _measure_rich(s, sz) + 0.2
@@ -702,6 +753,9 @@ class Handout:
             before, ans, after = row[:3]
             bw = row[3] if len(row) > 3 else box_w
             lw = text_w(before) if before else 0.05
+            tail_need = min(text_w(after) if after else 0.3, 1.2)
+            if lw + bw + tail_need > total:  # narrow cell (e.g. next to a figure): let the label wrap instead
+                lw = max(0.8, total - bw - tail_need)
             aw = max(0.3, total - lw - bw)
             widths = [lw, bw, aw]
             if container is None:

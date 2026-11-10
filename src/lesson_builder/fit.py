@@ -13,8 +13,9 @@ FLOOR = 0.6       # never shrink workspace below 60%
 
 def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = True, log=print):
     """Returns (docx_paths, pdf_paths, page_counts), all keyed like render.outputs()."""
-    budget = {"handout": unit.budget.handout_pages, "key": unit.budget.handout_pages,
-              "practice": unit.budget.practice_pages, "practice_key": unit.budget.practice_pages}
+    hp = lesson.max_pages or unit.budget.handout_pages
+    budget = {"handout": hp, "key": hp, "practice": unit.budget.practice_pages,
+              "practice_key": unit.budget.practice_pages}
     scale = {"handout": 1.0, "practice": 1.0}
     while True:
         docx = render_lesson(unit, lesson, figs, scale)
