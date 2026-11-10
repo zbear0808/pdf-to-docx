@@ -115,8 +115,8 @@ Scheduling:
 
 ## Suggested order of work
 
-1. Render fixes (prime, fractions, guide joins) and check rules A7. Small, and they clear about a third of the audit findings.
-2. Figure lint + auto-placement + print-size check (A1–A3). Largest time saver.
+1. **Done (Nov 9):** render fixes (prime, fractions, guide joins) and check rules A7 (box width, balanced `$`, guide punctuation).
+2. **Done (Nov 9):** figure lint + auto-placement + print-size and colour checks (A1–A2), plus `lesson-builder figs` contact sheets (A4). A3 scale asserts still open.
 3. `figs --sheet` and the page-fill report (A4, A6).
 4. `integrity` (A5), then apply the Unit 3 audit fixes (`units/geometry/unit-3-similarity/_temp/specs/audit/SUMMARY.md`).
 5. `brief` / `scaffold` / cheat sheet / wave tracking (A9–A11), plus the skill and AGENTS.md edits, before the next unit.

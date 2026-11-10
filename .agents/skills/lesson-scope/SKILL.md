@@ -7,6 +7,8 @@ description: Fits a lesson handout to a 40-minute period. Budgets minutes per it
 
 A lesson is **40 minutes**, including the warm-up and exit ticket. Write less. Students who finish early get one extension question, not more pages.
 
+Serves the **Plan** step (budget and cuts) and is reloaded by **Write+build** when a lesson runs long. See `.agents/skills/lesson-builder/references/orchestration.md`.
+
 ## Budget (Math Medic format)
 
 | Part | Min | Items |
@@ -31,7 +33,7 @@ Whole-class talk ≤ 14 min. The plan's timing table ends at 40 or less, and ite
 | Construction or drawing task | 6-8 |
 | Open "explain why" | 4 |
 
-Put the minutes in the blueprint table in `requirements.md`. If the total is over budget, cut before drafting.
+Put each item's minutes in its `minutes:` field in the lesson YAML, and in the blueprint table in `_temp/specs/<stem>/requirements.md`. If the total is over budget, cut before writing the YAML.
 
 ## What to cut first (rewrite mode)
 
@@ -45,6 +47,6 @@ Keep: the one "doing mathematics" task, the item that sets up the QuickNotes, an
 
 ## After any cut or renumber
 
-- Search the handout, key, QuickNotes, and plan for "Problem N" and fix every reference.
+- Search the lesson YAML (items, QuickNotes, `plan`, `guide_notes`, practice) for "Problem N" and fix every reference. `lesson-builder check` flags references to problems that don't exist.
 - A reference must point to work that actually supports the task. "Use your claim from Problem 4" is only valid if Problem 4's claim is the reason needed. Otherwise name the fact directly.
-- Log each cut in `changes.md`: item, reason, minutes saved.
+- Log each cut in `_temp/specs/<stem>/changes.md`, one line each: item, reason, minutes saved.

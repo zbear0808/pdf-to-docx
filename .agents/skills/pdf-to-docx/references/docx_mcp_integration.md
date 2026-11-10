@@ -8,7 +8,7 @@ The `docx-mcp` server provides comprehensive tools for inspecting, generating, a
 
 ### 1. `create_from_markdown` (Fast-Track Generator)
 Creates a complete Word document from markdown in one call.
-- **Parameters**: `output_path`, `markdown` (or `md_path`), optional `template_path`.
+- **Parameters**: `output_path`, `markdown` (inline text) or `md_path` (file path), optional `template_path`. Not verified against the running server; if a call is rejected, check the server's tool schema.
 - **Supports**: GFM tables, headings (# to ######), blockquotes, lists, images, footnotes, and bold/italic runs.
 - **When to use**: Text-heavy reports, documentation, summaries.
 

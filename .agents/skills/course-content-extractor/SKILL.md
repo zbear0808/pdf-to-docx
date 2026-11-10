@@ -10,6 +10,8 @@ description: Locates, extracts, and compiles relevant quiz questions, exam probl
 # Purpose
 Locate, extract, and compile source materials (past quizzes, unit assessments, homework problems, CodeHS exercises, lesson notes, diagrams, and answer keys) needed to construct authentic worksheets, exams, retakes, or lesson plans without hallucination.
 
+Serves the **Plan** step: the Plan subagent loads this skill (see `.agents/skills/lesson-builder/references/orchestration.md`). Without subagents, run the steps in sequence with the same files.
+
 ---
 
 ## 1. Subject Content Hubs & Search Directories
@@ -60,14 +62,16 @@ When searching for curriculum materials, problem banks, or past assessments, con
 
 ## 2. File Reading & Asset Copying Standards
 
-- **PDFs & Word Documents:** Read `.docx` files or read source `.pdf` files directly using native reading tools.
-- **Workspace Hygiene for Images/Diagrams:** When extracting diagrams, charts, or images from these external folders, **ALWAYS copy or crop the image directly into the local `_temp/assets/` directory**. Never leave external paths hardcoded in local compiler scripts, so the document workspace remains completely self-contained.
+Everything lands in the unit folder `units/<course>/<unit-slug>/` (create it with `uv run lesson-builder new-unit`). `<stem>` is the lesson id or assessment file stem.
+
+- **PDFs & Word Documents:** Copy the sources you need into the unit's `input/`, then run `uv run lesson-builder ingest <unit>/input -o <unit>/_temp/ingest`. Read the `.md` files (math kept); images are in `_media/` and page renders in `_pages/`. Open page PNGs only to see figures.
+- **Images/Diagrams:** Copy or crop a reused source image into the unit's `assets/<stem>/`. It must be black and white and ≥ 150 dpi at print size; otherwise redraw it in `figures/<stem>.py` (`curriculum-visual-generator`). Never point the YAML at an external path, so the unit stays self-contained.
 
 ---
 
 ## 3. Extraction Scope & Provenance
 
-When compiling extracted content, write the package to `_temp/specs/extracted_course_content.md`:
+When compiling extracted content, write the package to the unit's `_temp/specs/<stem>/extracted_content.md` (the file `assessment-builder` and the Plan step read):
 
 1. **Problem Stems & Code / Math Notation:**
    - Preserve exact code syntax, indentation, and variable names.
@@ -76,7 +80,7 @@ When compiling extracted content, write the package to `_temp/specs/extracted_co
    - Extract all choices (A, B, C, D) alongside the verified correct answer.
    - Note the pedagogical reason for common distractor choices (e.g., off-by-one error, integer division truncation, confusing median with mean).
 3. **Diagrams & Attached Assets:**
-   - Copy or crop diagram assets directly into `_temp/assets/` and record their exact local paths.
+   - Copy or crop diagram assets into `assets/<stem>/` and record each local path, plus the source file and page. Mark any image that needs a redraw (colour, low resolution).
 4. **Rubrics & Scoring Criteria:**
    - For FRQs, record the official E/P/I scoring guidelines or point breakdown.
 
@@ -106,7 +110,7 @@ Always record the provenance of extracted course material at the top of the comp
   - (D) ...
 - **Scoring Rubric (if FRQ):**
   - Part (a): [Essentially Correct if ...]
-- **Associated Diagram:** `_temp/assets/fig_p1_stem.png`
+- **Associated Diagram:** `assets/<stem>/fig_p1_stem.png` (from `<source file>`, page N)
 ```
 
 ---
@@ -114,10 +118,10 @@ Always record the provenance of extracted course material at the top of the comp
 ## 5. Retake & Variant Problem Generation Guidelines (Exam Integrity)
 
 > [!IMPORTANT]
-> **STRICT EXAM INTEGRITY RULE — NO VERBATIM COPYING FROM ACTUAL EXAMS:**
+> **STRICT EXAM INTEGRITY RULE: NO VERBATIM COPYING FROM ACTUAL EXAMS:**
 > When source documents include an **actual exam** given to students (e.g. Unit Tests, Mid-Unit Exams, Semester Finals):
 > - **Never copy questions exactly or verbatim** into review packets, practice tests, or retakes.
 > - **Mirror the Cognitive Skill**: Keep the targeted standard, cognitive demand level, and question archetype identical.
 > - **Vary Parameters & Scenarios**: Substantially change numerical constants, coordinate values, geometric orientations, variable names, and contextual story problems so students cannot simply memorize answers.
-> - **Form A / Form B Consistency**: In Geometry, study both Form A and Form B in the `Assessments` folder to learn the intended variation scheme (e.g., swapping a translation vector or rotation angle) before generating parallel items.
+> - **Form A / Form B Consistency**: In Geometry, study both Form A and Form B in the `Assessments` folder to learn the intended variation scheme (e.g., swapping a translation vector or rotation angle) before generating parallel items. Record the scheme so the Plan step can build the version table in `_temp/specs/<stem>/requirements.md` (`assessment-builder` owns that table).
 > - **Preserve Verified Keys**: Every adapted problem must include a verified step-by-step solution.

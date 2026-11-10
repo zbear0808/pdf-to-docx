@@ -22,7 +22,7 @@ Use this file while drafting and reviewing. Every rule was checked against the r
 - No trick items (T&N7 p5).
 - Avoid NOT/EXCEPT stems. They add cognitive load that is not the target (T&N7 p7). If one is truly needed, capitalize the negative (house rule).
 - Each distractor comes from a real student error or misconception: a sign slip, a reversed operation, confusing independent with disjoint, an off-by-one loop. Write each distractor's error in the key (T&N7 p7; Taylor22 p123). Good source: Chief Reader reports and student work.
-- Vary the position of the correct answer across the test. Never use a fixed pattern. Check the key for clues across items (T&N7 p5).
+- Vary the position of the correct answer across the test. Never use a fixed pattern. Check the key for clues across items (T&N7 p5). `lesson-builder check` doesn't check MC key letters yet (planned), so read the `[A]`-style letters in each `answer:` in order, and across forms against the version table in `_temp/specs/<stem>/requirements.md`.
 - House default is four options (A)-(D). Three good options beat four with a throwaway; if a fourth distractor would be silly, say so and use three (T&N7 p4).
 - MC items that need heavy reading or inference add bias. Prefer short constructed response for reasoning (Taylor22 p123-124, 135).
 

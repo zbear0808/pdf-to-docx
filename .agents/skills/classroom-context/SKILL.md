@@ -22,6 +22,10 @@ This skill provides the factual classroom context, instructional environment, co
 
 **Lesson format (all periods):** 40-minute periods (budget with `lesson-scope`). No slides: the class works the same handout, with the teacher under the doc camera for short "Together" parts, then long student work time. Keep direct instruction short. Student copies print black and white, double-sided; keys may use red.
 
+**Default deliverables** (built with `lesson-builder` from the unit folder `units/<course>/<unit-slug>/`, into `output/`):
+* **Lesson** (`lessons/<id>.yaml`): student handout, lesson key, practice set, practice key, teacher guide, plus the unit's duplex student and key packets (PDF and DOCX).
+* **Assessment** (`assessments/<stem>.yaml`, one YAML per form A, B, Retake): student copy, key, and teacher notes.
+
 ### Period 4: Geometry
 * **Course:** High School Geometry
 * **Demographics & Student Background:**
@@ -31,7 +35,7 @@ This skill provides the factual classroom context, instructional environment, co
 * **Instructional Focus & Pedagogical Scaffolds (Synthesizing EDTEP 575):**
   * **Language Scaffolding & Disciplinary Literacy:** Explicit vocabulary routines, unpacking polysemous words (Roberts et al., 2022), word walls, tiered sentence frames (Rodriguez-Mojica, 2018), and graphic organizers (Frayer models, CER).
   * **Translanguaging & Meaning-First Approach:** Honoring home languages as an intellectual resource (García et al., 2017; Moschkovich, 2013). Prioritizing mathematical sense-making and rough-draft talk over initial grammatical perfection.
-  * **Structured Reading Protocol (3-Reads):** Scaffolding word problems via 3-Reads (Read 1: Context/no numbers, Read 2: Quantities, Read 3: Mathematical questions) to dismantle reading barriers without diluting cognitive demand.
+  * **Structured Reading Protocol (3-Reads):** The same word problem is read three times with no calculating (Read 1: "What is this problem about?" Read 2: "What are we trying to find out?" Read 3: "What information is important?"). This removes reading barriers without lowering cognitive demand. Full routine in `mll-literacy-scaffolding`.
   * **Multimodal Representations:** Heavy use of visual diagrams, color-coding, geometric manipulatives, interactive sketches (e.g., GeoGebra/Desmos), and physical models.
   * **Peer Discourse & Low-Stakes Talk:** Structured partner talk (Turn & Talk, Accountable Talk teacher moves), desk whiteboards for group collaboration, and collective problem-solving to lower affective filters.
   * **Asset-Based Mindset:** Honoring students' home languages, non-verbal geometric intuition, and collaborative cultural orientations (Hammond's collectivist framework) rather than viewing language learning as a deficit.

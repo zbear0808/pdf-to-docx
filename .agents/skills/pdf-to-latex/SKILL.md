@@ -2,20 +2,25 @@
 name: pdf-to-latex
 description: >-
   Converts PDF documents into high-fidelity, compilable LaTeX (.tex) documents and PDFs using a multimodal
-  LaTeX Intermediate Representation (IR), PyMuPDF asset harvesting, and deterministic compilation. Runs as a
-  sequential, single-agent workflow (no subagents). Specializes in advanced mathematics, technical tables, and exam/quiz worksheets.
+  LaTeX Intermediate Representation (IR), PyMuPDF asset harvesting, and deterministic compilation. Uses one
+  subagent per page when the environment supports subagents, otherwise processes pages one at a time in the
+  current session. Specializes in advanced mathematics, technical tables, and exam/quiz worksheets from
+  arbitrary PDFs. Not for documents built by lesson-builder (lessons, keys, practice, assessments in
+  `units/`); edit their YAML or `figures/<stem>.py` and rebuild instead.
 ---
 
 # PDF to High-Fidelity LaTeX Conversion Skill
 
-This skill executes an autonomous, page-parallel pipeline to transform complex PDF documents into publication-ready, compilable LaTeX (`.tex`) documents and PDFs.
-
-## Core Principle: Sequential Single-Agent Execution (No Subagents)
+This skill executes an autonomous, page-by-page pipeline to transform complex PDF documents into publication-ready, compilable LaTeX (`.tex`) documents and PDFs.
 
 > [!IMPORTANT]
-> **Do not start subagents or use agent-delegation tools** (e.g., `invoke_subagent`, `task`). Microsoft Copilot and similar environments may not support them.
->
-> Process pages **one at a time in the current session**, writing each page’s outputs to disk (`_temp/specs/`, `_temp/assets/`, `_temp/renders/`) before moving to the next page. Keep progress durable and resume by skipping pages whose `page_*_spec.json` / `page_*.tex` output already exists.
+> **Scope.** Not for documents built by lesson-builder (lessons, keys, practice, assessments in `units/`): edit the YAML or `figures/<stem>.py` and rebuild instead (see `lesson-builder`). To read a source PDF for a lesson/assessment, use `uv run lesson-builder ingest`, not this converter.
+
+## Core Principle: Page Subagents When Available, Otherwise Sequential
+
+Use one subagent per page (or per section) when the environment supports subagents: the orchestrator renders pages, launches page subagents with the page image path (`_temp/renders/page_{k}.png`) and the output spec path (`_temp/specs/page_{k}_spec.json` or `page_{k}.tex`), and merges. If subagents are not available (e.g., Microsoft Copilot), process pages one at a time in this session with the same files.
+
+Either way, write each page's outputs to disk (`_temp/specs/`, `_temp/assets/`) before the next step. Resume by skipping pages whose `page_*_spec.json` / `page_*.tex` output already exists. Prompt templates are in [workflow_playbook.md](./references/workflow_playbook.md).
 
 ---
 
@@ -23,8 +28,8 @@ This skill executes an autonomous, page-parallel pipeline to transform complex P
 
 | Pathway | Document Characteristics | Primary Tooling | Execution Pattern |
 | :--- | :--- | :--- | :--- |
-| **Pathway 1: LaTeX AST IR (Default)** | Mathematical papers, multi-column reports, exams/quizzes, structured tables + charts + images | `pdf_to_latex` CLI AST Compiler | Extract `page_{k}_spec.json` per page sequentially; compile all specs |
-| **Pathway 2: Direct LaTeX Fragments** | Standard narrative papers, lecture notes, straightforward equations | Gemini Vision fast-path + `pdf_to_latex merge-latex` | Extract `page_{k}.tex` per page sequentially; merge |
+| **Pathway 1: LaTeX AST IR (Default)** | Mathematical papers, multi-column reports, exams/quizzes, structured tables + charts + images | `pdf_to_latex` CLI AST Compiler | Extract `page_{k}_spec.json` per page (page subagents or sequential); compile all specs |
+| **Pathway 2: Direct LaTeX Fragments** | Standard narrative papers, lecture notes, straightforward equations | Gemini Vision fast-path + `pdf_to_latex merge-latex` | Extract `page_{k}.tex` per page (page subagents or sequential); merge |
 | **Pathway 3: CodeAgent Sandbox** | Complex TikZ diagrams, dynamic geometry, specialized custom exam environments | Python / TeX script sandbox | Run dedicated scripts in the current session |
 
 ---
@@ -48,18 +53,19 @@ This guarantees that all transient files are automatically matched by gitignore 
 ## Step-by-Step Execution Workflow
 
 ```
-[ Single Agent / Current Session ]
+[ Orchestrator (this session) ]
        │
        ├─► 1. Inspect PDF structure (page count N, dimensions, local LaTeX compiler)
        ├─► 2. Render all pages to PNGs (_temp/renders/page_{k}.png)
        │
-       ├─► 3. For each page k = 1..N (sequential)
+       ├─► 3. For each page k = 1..N (one page subagent each, or sequentially here if subagents are unavailable)
        │         └──► Parse page k → _temp/specs/page_{k}_spec.json (or page_{k}.tex) and crop assets to _temp/assets/
        │              Resume by skipping pages whose output file already exists
        │
-       ├─► 4. Compile assembled specs: uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --pdf
+       ├─► 4. Assemble: uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --assets-dir _temp/assets
+       ├─► 5. Compile: latexmk -pdf -output-directory=_temp/build output/document.tex, then copy the PDF to output/
        │
-       └─► 5. Optional QA: compare compiled PDF with original renderings (diff_layout.py)
+       └─► 6. Optional QA: compare compiled PDF with source renders (scripts/pdf_to_latex/diff_layout.py)
 ```
 
 ---
@@ -71,19 +77,19 @@ This guarantees that all transient files are automatically matched by gitignore 
    uv run python scripts/pdf_to_latex/inspect_pdf.py path/to/document.pdf
    ```
 2. Create standardized subfolders:
-   ```bash
-   mkdir -p output _temp/renders _temp/assets _temp/specs _temp/build
+   ```powershell
+   New-Item -ItemType Directory -Force output, _temp/renders, _temp/assets, _temp/specs, _temp/build | Out-Null
    ```
-3. Render all pages to high-resolution PNG images (`200 DPI`) into `_temp/renders`:
+3. Render all pages to high-resolution PNG images (`200 DPI`) into `_temp/renders` (named `page_1.png`, `page_2.png`, ...; without `-o` they go to `./rendered_pages/<stem>/`):
    ```bash
    uv run python -m pdf_to_latex render-pages path/to/document.pdf -o _temp/renders
    ```
 
 ---
 
-### Phase 2: Per-Page Extraction (Sequential)
+### Phase 2: Per-Page Extraction
 
-Process each page in the current session. For every page `k` (1-indexed), run:
+For every page `k` (1-indexed), a page subagent (or this session, if subagents are unavailable) runs:
 
 ```bash
 uv run python -m pdf_to_latex parse-page path/to/document.pdf --page {k} --image _temp/renders/page_{k}.png -o _temp/specs/page_{k}_spec.json --assets-dir _temp/assets
@@ -105,10 +111,10 @@ uv run python -m pdf_to_latex to-latex-page path/to/document.pdf --page {k} --im
 Once all required page outputs exist in `_temp/specs/` (`page_*_spec.json` for Pathway 1 or `page_*.tex` for Pathway 2):
 
 #### For Pathway 1 (Block-Based IR):
-Compile the assembled `page_*_spec.json` files directly into `.tex` and `.pdf` inside `output/`:
+Assemble the `page_*_spec.json` files into `.tex` inside `output/`. Pass `--assets-dir _temp/assets` (the compiler otherwise uses `<pages_dir>/assets/` or `output/assets/`) and `--ast-path` so the merged AST stays in `_temp/` (`--save-ast` alone writes `output/document_ast.json`):
 
 ```bash
-uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --title "Document Title" --doc-class article --pdf --save-ast
+uv run python scripts/pdf_to_latex/compile_pages.py _temp/specs/ -o output/document.tex --title "Document Title" --doc-class article --assets-dir _temp/assets --ast-path _temp/specs/document_ast.json
 ```
 
 Available document classes:
@@ -120,19 +126,22 @@ Available document classes:
 #### For Pathway 2 (Direct LaTeX Fragments):
 Assemble modular page fragments into a master document:
 ```bash
-uv run python -m pdf_to_latex merge-latex .conversion_workspace/ -o document.tex --title "Document Title" --pdf
+uv run python -m pdf_to_latex merge-latex _temp/specs/ -o output/document.tex --title "Document Title"
 ```
 
 ---
 
 ### Phase 4: Local Compilation or Remote Export
 
-1. If a local LaTeX engine (`latexmk`, `tectonic`, `xelatex`, `pdflatex`, `lualatex`) is installed:
-   ```bash
-   uv run python scripts/pdf_to_latex/compile_latex.py document.tex -o output.pdf
+1. If a local LaTeX engine is installed, compile with build files routed to `_temp/build` (AGENTS.md §3.5), then copy the PDF into `output/`. Run from the workspace root so `\includegraphics` paths like `_temp/assets/...` resolve:
+   ```powershell
+   latexmk -pdf -interaction=nonstopmode -output-directory=_temp/build output/document.tex
+   # or: pdflatex -interaction=nonstopmode -output-directory=_temp/build output/document.tex   (run twice for cross-references)
+   Copy-Item _temp/build/document.pdf output/
    ```
+   Do not use the `--pdf` flag of `compile_pages.py` / `merge-latex`, `compile_latex.py`, or `pdf_to_latex compile-pdf` for deliverables: they run the engine in the `.tex` folder with no output directory, so `.aux/.log/.fls` land in `output/`, and the cwd-relative image paths that `parse-page` stores (`_temp/assets/p{k}_img{n}.png`) no longer resolve. Avoid them.
 2. If compiling remotely (e.g. Overleaf):
-   - The generated `document.tex` and `assets/` directory are completely self-contained and ready to zip and upload.
+   - Zip `output/document.tex` together with the `_temp/assets/` images, keeping the relative paths the `.tex` references.
 
 ---
 
@@ -140,7 +149,7 @@ uv run python -m pdf_to_latex merge-latex .conversion_workspace/ -o document.tex
 
 To verify visual fidelity against the original PDF:
 ```bash
-uv run python scripts/pdf_to_latex/diff_layout.py rendered_pages/page_1.png output.pdf --page 1 -o visual_diff_p1.png
+uv run python scripts/pdf_to_latex/diff_layout.py _temp/renders/page_1.png output/document.pdf --page 1 -o _temp/renders/diff_p1.png
 ```
 
 ---

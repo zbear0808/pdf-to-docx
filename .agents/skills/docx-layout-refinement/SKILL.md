@@ -2,19 +2,23 @@
 name: docx-layout-refinement
 description: >-
   Audits, polishes, and surgically edits existing Word (.docx) documents using targeted docx-mcp tools
-  and native DrawingML charts. Runs as a sequential, single-agent workflow (no subagents).
+  and native DrawingML charts. Edits run sequentially in one session (one file); a read-only audit may run
+  as a subagent. Not for documents built by lesson-builder (lessons, keys, practice, assessments in
+  `units/`); edit their YAML or `figures/<stem>.py` and rebuild instead.
 ---
 
 # Word (.docx) Layout Refinement Skill
 
 This skill performs targeted, surgical layout refinement on Word documents using `docx-mcp` tools, native Office DrawingML injection, and direct python-docx scripts.
 
-## Execution Model: Sequential, No Subagents
-
 > [!IMPORTANT]
-> **Do not start subagents or use agent-delegation tools** (e.g., `invoke_subagent`, `task`). Microsoft Copilot and similar environments may not support them.
->
-> When auditing or refining documents with multiple pages or complex tables/charts, process **one page or one logical section at a time in the current session**. Keep notes per section (target issues, actions taken, files saved) so context stays manageable without delegation.
+> **Scope.** Not for documents built by lesson-builder (lessons, keys, practice, assessments in `units/`): edit the YAML or `figures/<stem>.py` and rebuild instead (see `lesson-builder`). Edits made here to a built DOCX are lost on the next build. Use this skill for a DOCX someone else made or one produced by `pdf-to-docx` / `worksheet-packer`.
+
+## Execution Model: Sequential Edits, Optional Audit Subagent
+
+All edits run **sequentially in the current session**, because they all touch one `.docx` and parallel writers would overwrite each other. Process **one page or one logical section at a time**, keeping notes per section (target issues, actions taken, files saved) so context stays manageable.
+
+A **read-only audit** (rendering pages and listing issues, no edits) may run as a subagent when the environment supports it; it returns the issue list and the edits still happen here. If subagents are not available (e.g., Microsoft Copilot), run the audit in this session too.
 
 ---
 
@@ -88,6 +92,6 @@ Refer to [Table Styling Guide](./references/table_styling_guide.md).
 
 ## Verification & QA
 After applying refinements:
-1. Re-render the DOCX page using `diff_layout.py` or `docx-mcp: convert_to_pdf`.
+1. Re-render the DOCX page with `docx-mcp: convert_to_pdf`, or diff it against a source page render with `uv run python scripts/pdf_to_docx/diff_layout.py _temp/renders/page_{k}.png output/document.docx --page {k}` (this script compares a PNG with a DOCX; it saves its render to `.temp_render/` next to the DOCX, so delete that folder before delivery). `scripts/pdf_to_latex/diff_layout.py` is the LaTeX-PDF counterpart and does not take a DOCX.
 2. Inspect side-by-side against target design or original PDF.
 3. Confirm formatting fidelity before delivering to user.

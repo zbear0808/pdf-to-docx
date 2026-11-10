@@ -46,7 +46,7 @@ Don't swap in a fancier synonym ("pivotal" to "vital"). Rewrite the sentence so 
 - Bold only for the one word a student must not miss (NOT, units), never for decoration.
 - Bullets only for real lists or answer choices.
 - No exclamation points or cheer ("You've got this!") on student materials.
-- Name lines go in the document header only. No blank `____` answer lines in problems; use workspace.
+- Name lines go in the document header only. No blank `____` answer lines in problems; give blank space with `work:` (inches) or labeled boxes with `fill:` / `frame:` in the YAML.
 
 ## Teacher notes and plans
 
@@ -60,4 +60,5 @@ When asked only to clean up a draft:
 2. Shorten stems and directions using the rules above.
 3. Fix punctuation and heading case.
 4. Leave numbering, choices (A)-(D), numbers, formulas, code, figures, and layout untouched.
-5. If `.agents/skills/assessment-builder/scripts/check_draft.py` is available, run it with `--voice-only` on the file and fix what it flags.
+5. Check the cut-word list and punctuation rules above by reading the YAML text (prompts, choices, answers, `plan`, `guide_notes`). `lesson-builder check` doesn't flag banned words yet (planned), and this file stays the source for the list.
+6. Edit the lesson or assessment YAML, never the built DOCX.

@@ -1,105 +1,84 @@
 ---
 name: visual-layout-checker
-description: Critically audits rendered DOCX and PDF document page images for visual alignment, diagram legibility, whitespace balance, multi-column symmetry, and typography formatting. Use after rendering to ensure high-fidelity deliverables without visual defects or page overflows.
+description: Read-only Audit step for lesson-builder documents. Runs `lesson-builder check`, then inspects built page renders and figure sheets for what scripts can't judge (legibility, figure fidelity to the problem, crowding, split items, room to write, B&W student copies, key matching the student layout, retained figures) and writes `_temp/specs/<stem>/audit.md` with Must fix / Should fix / Looks fine, each mapped to a YAML or figure-file fix. Never edits files.
 ---
 
-# Visual & Layout Critical Checker Skill
+# Visual layout checker (Audit step)
 
-This skill provides an objective, rigorous visual inspection protocol for evaluating rendered Microsoft Word (`.docx`) and LaTeX (`.pdf`) assessment pages.
+This skill is designed to run as a read-only subagent; it never edits files. It reports what to fix and where; the YAML or Figures step makes the fix. If subagents aren't available, run it in sequence in the same session, still without editing. Teaching quality (wording, MLL supports, rubrics, frames that give answers away) is judged by `assessment-builder`, `mll-literacy-scaffolding`, and `handout-release-check`. This skill covers how the pages look and whether the figures are right.
 
-It inspects rendered high-resolution page PNGs to verify that all figures, coordinate grids, mathematical notation, and student work areas are visually aligned, perfectly legible, and packed with balanced whitespace.
+## Inputs
 
-When a figure itself needs correction (geometry, labels, styling), edit its saved Python generator, rerun it, and rebuild the affected documents before re-auditing. Keep the corrected source and the actual used student/key images in the lesson/assessment workspace: standalone bundles in `output/figures/`; lesson-builder images in `output/figures/<lesson-id>/` with the canonical unit `figures.py`. Update the figure README's item-to-script mapping and regeneration command. Check that retained images match the final documents; temporary previews alone are not a figure handoff.
+- Unit `units/<course>/<unit-slug>/` and document stem (YAML file stem).
+- `_temp/specs/<stem>/requirements.md` (blueprint and figure plan) and `changes.md` (GAP lines, known workarounds).
+- Built PDFs in `output/`, page renders in `_temp/renders/current/<stem>/` (`<pdf>_p<n>.png`), diffs in `_temp/renders/diff/<stem>/`.
+- Figure contact sheet `_temp/figures/<stem>_sheet.png` and figure source `figures/<stem>.py`.
+- Retained figures in `output/figures/<stem>/` with `README.md`.
 
----
+All `_temp/` and `output/` paths are inside the unit folder.
 
-## 1. Page Rendering Protocol
+## Procedure
 
-Always render pages into `_temp/renders/` before inspection:
+1. Run `uv run lesson-builder check units/<course>/<unit-slug> -l <stem>` and `uv run lesson-builder figs units/<course>/<unit-slug> -l <stem>`. Copy every ERROR and WARN line into `audit.md` as written. Don't re-judge them by eye.
+2. Open the pages listed under "pages to review" first, then the rest of the student copy and the key page by page. The build renders at 110 dpi; for a close look at small text, save a script in `_temp/build/` that calls `lesson_builder.export.pdf_to_pngs(pdf, out_dir, dpi=200)` with `out_dir` under `_temp/renders/audit/<stem>/`, and run it with `uv run python _temp/build/<script>.py`. Don't use `python -c`.
+3. Open the contact sheet and compare each figure to its item and to the figure plan.
+4. For a PDF not built from YAML, use `uv run lesson-builder check-pdfs <student.pdf> <key.pdf> --max-pages <n>` and render it with the same saved-script approach.
+5. Work through the checklist, then write `audit.md`.
 
-### A. Word Documents (.docx)
-```bash
-uv run worksheet-packer render-docx-pages output/Assessment.docx -o _temp/renders/docx_pages --dpi 200
+## Checklist
+
+**Figures**
+- Labels, numbers, and angle marks are readable at print size and don't touch lines, dots, or each other.
+- The figure matches the problem: given lengths and angles look like their values, shapes the prompt calls equal or different look that way, points named in the prompt are on the figure, primes sit against the letter.
+- No circles squashed or figures stretched. Background is white.
+- Student copy is black and white with no red and no answer marks. Source images carry no colour and aren't blurry.
+- Key figure shows the full answer in red on the same frame as the student figure.
+
+**Page layout**
+- No item, part list, or figure split across a page break; no heading stranded at the bottom of a page.
+- Room to write matches the task: about 0 to 0.3 in for a choice or one number, 0.6 to 1.0 in for multi-step work, 1.0 to 1.5 in for a proof, construction, or drawing.
+- Side-by-side figures don't crowd the prompt; wide figures are stacked. No large empty block on one page while another is crammed.
+- Fill-in boxes and frames are labeled and wide enough; no `___` blanks.
+- Page count is within budget; no trailing page with a few lines.
+
+**Key and retention**
+- Key has the same pages and item positions as the student copy; every item and part has an answer in red. Red appears only on the key.
+- Retained images in `output/figures/<stem>/` match the figures in the final PDFs (same names, same content, key and student both present), and the README maps each item to its figure function and gives the `figs` regeneration command.
+
+## Fix table
+
+Recommend the fix in the source. Never the DOCX, never a font size change.
+
+| Defect | Fix |
+|---|---|
+| Figure text small or label warning | Raise the item's `fig_w` (the check message gives the value for 9 pt); if the figure is crowded, enlarge `width_in`/`height_in` or move points apart in `figures/<stem>.py` |
+| Label in the wrong place for the math | `direction=` on that label; `fixed=True` only if the auto spot is wrong |
+| Figure doesn't match the problem | Change the points in `figures/<stem>.py` and add an assert for the value |
+| Answer visible on the student copy | Move that ink to `layer="answer"` |
+| Figure crowds the prompt | `layout: stacked` on the item, or smaller `fig_w` if text stays ≥ 9 pt |
+| Wide figure squeezed beside text | `layout: stacked` |
+| Too little room to write | Raise the item's `work:` |
+| Item split or heading stranded | `page_break_after: true` on the item before, or `page_break_before: true` on the section or practice row |
+| Over the page budget or blank space at the end | Cut content with `lesson-scope`; don't shrink fonts or `work` below what the task needs |
+| Colour or blurry source image | Redraw it as an `@figure`, or replace with a B&W image at ≥ 150 dpi at `fig_w` |
+| Key layout differs from student | Report as Must fix with page and item; it is a builder issue for the orchestrator (GAP line) |
+| Retained figures stale or missing | Re-copy from `_temp/figures/<stem>/` and update the README |
+
+## `audit.md` format
+
+```markdown
+# Audit: <stem>  (<date>)
+Inputs: <PDFs, render folder, sheet>
+Script results: <N errors, M warnings>, then each line as printed
+
+## Must fix
+- <student|key> p<n>, item <k>: <what is wrong> -> <fix from the table, file and field>
+
+## Should fix
+- ...
+
+## Looks fine
+- <short list of what was checked and passed>
 ```
-*(Uses headless LibreOffice or Windows Word COM to render pixel-perfect page images `page_1.png`, `page_2.png`).*
 
-### B. LaTeX / PDF Documents (.pdf)
-Render PDF pages using PyMuPDF:
-```bash
-uv run python -c "import fitz, pathlib; doc = fitz.open('output/Assessment.pdf'); [page.get_pixmap(dpi=200).save(f'_temp/renders/pdf_pages/page_{i+1}.png') for i, page in enumerate(doc)]"
-```
-
----
-
-## 2. Visual Layout Audit Checklist
-
-When reviewing rendered page images, evaluate every item against these 6 core criteria:
-
-```mermaid
-flowchart TD
-    A[Inspect Rendered Pages] --> B1[1. Diagram Legibility & Fine Details]
-    A --> B2[2. Aspect Ratio & Distortion Check]
-    A --> B3[3. Multi-Column Symmetry & Slack Distribution]
-    A --> B4[4. Side-by-Side vs Stacked Layout Harmony]
-    A --> B5[5. Clean Whitespace & Handwriting Budget]
-    A --> B6[6. Page Budget & Overflow Prevention]
-```
-
-### 1. Diagram Legibility & Fine Details
-- **Angle Marks & Arc Symbols:** Are angle labels (e.g., $120^\circ$, $x^\circ$, $\angle AHB$) crisp and clearly readable?
-- **Point & Vertex Labels:** Are letters ($A, B, C, P, Q$) distinct and properly positioned near their vertices, not colliding with polygon edges?
-- **Coordinate Grids:** Are grid lines visible, axis ticks numbered, and origin $(0,0)$ clear?
-- **Code / Monospace Blocks:** Is code text legible with clean indentation and no clipping?
-
-### 2. Aspect Ratio & Distortion Check
-- **No Non-Uniform Stretching:** Circles must remain circular, squares must remain square. Diagrams must never be squished horizontally or stretched vertically.
-- **Appropriate Scaling Ceiling:** Diagrams must look naturally proportioned—not cartoonishly oversized or microscopic.
-- **No Dark/Dirty Backgrounds:** All diagram backgrounds must be pure white (`#FFFFFF`) or transparent, seamlessly matching the page background.
-
-### 3. Multi-Column Symmetry & Slack Distribution
-- **Column Balance:** In a 2-column layout, problems must be evenly distributed across columns (e.g. 3 questions in Column 0, 3 in Column 1). One column must never be crowded while the adjacent column has 5 inches of empty void.
-- **Vertical Slack Fill:** Check that inter-problem spacing distributes vertical slack smoothly so questions fill the full height of the page naturally without abrupt gaps at the bottom.
-
-### 4. Side-by-Side vs Stacked Layout Harmony
-- **Side-by-Side Containers:** Square-ish or portrait diagrams ($0.55 \le AR \le 1.50$) should sit side-by-side with question text in borderless table cells. The diagram cell and text cell must have consistent vertical alignment (top-aligned).
-- **Stacked Containers:** Wide diagrams (e.g. wide coordinate planes, multi-figure comparisons) must span the column width or page width with text positioned cleanly above the image.
-- **No Text Collisions:** Text must never overlap or clip diagram borders.
-
-### 5. Clean Whitespace & Handwriting Budget
-- **Zero Blank Underlines:** Strictly verify that NO blank underlines (`_______` or `\hrule`) exist for student work.
-- **Sufficient Work Area:** Blank workspace gaps must provide adequate space for student calculations:
-  - 1-step arithmetic / simple MCQs: minimal whitespace or `workspace.type = none`.
-  - Multi-step algebraic work: $0.6 - 1.0$ inches of clean whitespace.
-  - Coordinate transformations or proofs: $1.0 - 1.5$ inches.
-
-### 6. Page Budget & Overflow Prevention
-- **Strict Page Count:** A 2-page document must be exactly 2 pages.
-- **No Orphan Spills:** A single problem or answer line must never spill onto an unintended trailing page (e.g., Page 3 having only 2 lines of text).
-
----
-
-## 3. Surgical Remediation Recipes
-
-If the visual audit identifies issues, apply these direct fixes in `_temp/specs/worksheet_spec.json` and re-pack:
-
-| Visual Defect | Root Cause | Surgical Fix in `worksheet_spec.json` |
-| :--- | :--- | :--- |
-| **Diagram too small / illegible** | `min_width_in` or `preferred_width_in` too low | Increase `min_width_in` to $2.0$ in or set `layout_hint = "stacked"` |
-| **Diagram oversized** | `max_width_in` too high for column | Reduce `max_width_in` to $3.0$ in or `preferred_width_in` to $2.2$ in |
-| **Awkward 1-line spill to next page** | Workspace heights or font slightly too large | Decrease `default_font_size_pt` by $0.5$ pt (e.g. $10.0 \to 9.5$) or reduce `workspace.approx_height_in` by $0.1$ in |
-| **Uneven columns (4 vs 2)** | Section ordering constraint or tall problem | Set `"ordering": "flexible"` or set `layout_hint = "side_by_side"` |
-| **Diagram stretched or blurry** | Generated raster image resolution low | Regenerate diagram script at `--dpi 300` and ensure aspect ratio matches native pixels |
-
----
-
-## 4. Audit Procedure (Sequential, No Subagents)
-
-> [!IMPORTANT]
-> **Do not start subagents or use agent-delegation tools** (e.g., `invoke_subagent`, `task`). Microsoft Copilot and similar environments may not support them.
-
-Perform the visual audit in the current session:
-1. Render page images to `_temp/renders/docx_pages/` (or `pdf_pages/`).
-2. Inspect each page against the Visual Layout Audit Checklist (legibility/aspect ratio, column balance/slack, layout harmony, clean whitespace, page budget/overflow).
-3. Record a short per-page verdict and any defects.
-4. If issues are found, update `_temp/specs/worksheet_spec.json` (or the relevant source), re-pack with `uv run worksheet-packer pack`, and re-render; re-audit affected pages.
-5. Report the final verdict: `PASS` or `CORRECTED`, with a brief summary of changes.
+Must fix: wrong or missing answers, figures that contradict the problem, unreadable text, answers or red on the student copy, split items, over budget. Should fix: tight work space, crowding, uneven pages, stale retained figures. Keep each line to one defect with its page, item, and fix.

@@ -65,7 +65,8 @@ def _read_group(s, i):
     raise ValueError(f"unbalanced braces in {s!r}")
 
 
-def latex_to_omml_inner(s, size):
+def latex_to_omml_inner(s, size, bar=False):
+    """bar=True inside \\overline / arrows: primes stay plain glyphs (a superscript under a bar sits too high)."""
     out, buf = [], []
 
     def flush():
@@ -85,7 +86,7 @@ def latex_to_omml_inner(s, size):
                     i += 1
                 inner, i = _read_group(s, i)
                 flush()
-                body = latex_to_omml_inner(inner, size)
+                body = latex_to_omml_inner(inner, size, bar=True)
                 if cmd == r"\overline":
                     out.append(f'<m:bar><m:barPr><m:pos m:val="top"/></m:barPr><m:e>{body}</m:e></m:bar>')
                 else:
@@ -147,7 +148,7 @@ def latex_to_omml_inner(s, size):
             while i + n < len(s) and s[i + n] == "'":
                 n += 1
             i += n
-            if buf and buf[-1].strip():
+            if buf and buf[-1].strip() and not bar:
                 base = buf.pop()
                 flush()
                 out.append(f'<m:sSup><m:e>{_mrun(base, size)}</m:e><m:sup>{_mrun("′" * n, size)}</m:sup></m:sSup>')

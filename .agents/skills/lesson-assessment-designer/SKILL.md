@@ -5,7 +5,7 @@ description: Designs secondary math lesson plans, unit plans (UbD backward desig
 
 # Lesson and unit designer
 
-Run the steps in order, in this session. Don't use subagents. For period profiles, load `classroom-context`. For item-level rules (MC, short answer, rubrics, language access, contexts), use `.agents/skills/assessment-builder/references/item-rules.md`. Don't restate those rules here. For voice, use `authentic-writer`.
+Run the steps in order. Steps 1-3 serve the **Plan** step and Step 4 the **Write+build** step; each step's subagent loads this skill (see `.agents/skills/lesson-builder/references/orchestration.md`). Without subagents, run the steps in sequence with the same files. Record Stage 1-2 decisions and the timing in `_temp/specs/<stem>/requirements.md` in the unit folder. For period profiles, load `classroom-context`. For item-level rules (MC, short answer, rubrics, language access, contexts), use `.agents/skills/assessment-builder/references/item-rules.md`. Don't restate those rules here. For voice, use `authentic-writer`.
 
 ## Readings and templates
 
@@ -81,10 +81,10 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
   - investigation (core task with guiding questions)
   - check for understanding
   - exit ticket
-- Leave room to write. Use labeled diagrams and tables. Add a vocabulary callout only for dual-meaning words.
-- Fill-ins and frames follow `handout-release-check` §1 (labeled boxes, clear referent).
-- Teacher key: full solutions, anticipated difficulties, what to say. Every item, part, and box answered; drawing tasks get a labeled answer figure.
-- To produce the DOCX/PDF, write the lesson as a lesson YAML and build it with `lesson-builder` (handout, key, practice, practice key, teacher guide, packets).
+- Leave room to write (`work:` in inches, or `box:`). Use labeled diagrams and tables. Add a vocabulary callout only for dual-meaning words.
+- Fill-ins and frames follow `handout-release-check` §1 (labeled boxes via `fill:` / `frame:`, clear referent).
+- Teacher key: full solutions, anticipated difficulties, what to say. Every item and part has an `answer:`; drawing tasks get a labeled answer figure (`key_figure` drawn in `figures/<stem>.py`).
+- To produce the DOCX/PDF, write the lesson as `lessons/<id>.yaml` in the unit folder and build it with `lesson-builder` (handout, key, practice, practice key, teacher guide, packets). Fix the YAML or figure file, never the DOCX.
 
 ## Final check
 
@@ -92,4 +92,4 @@ Add MLL supports from `mll-literacy-scaffolding`, specific to this lesson's lang
 - [ ] Every assessment piece measures a Stage 1 target.
 - [ ] MLL access is built into the task (visuals, a clear context, optional stems, talk in any language) without lowering the math.
 - [ ] Contexts are familiar to students and do actual mathematical work.
-- [ ] The lesson fits 40 minutes (`lesson-scope`), and `lesson-builder check` passes (`handout-release-check`).
+- [ ] The lesson fits 40 minutes (`lesson-scope`), and `uv run lesson-builder check <unit> -l <stem>` passes (`handout-release-check`).

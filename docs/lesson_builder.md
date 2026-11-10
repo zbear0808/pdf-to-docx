@@ -47,8 +47,19 @@ def parallelogram() -> Figure:
     f.label(D, "D", layer="answer")
     return f
 ```
-`render_all(module_or_path, out_dir) -> {name: {"student": Path, "key": Path | None}}` writes `name.png` (given
-layer only) and, if the figure has an answer layer, `name_key.png` (both layers). 300 DPI, trimmed.
+`render_all(module_or_path, out_dir) -> {name: {"student": Path, "key": Path | None, "meta": dict}}` writes `name.png`
+(given layer only) and, if the figure has an answer layer, `name_key.png` (both layers). 300 DPI, trimmed.
+`name.json` (`meta`) holds the drawn width, the smallest text size, and label lint.
+
+**Label placement (`figures/layout.py`).** Every label (`label`, `label_poly`, `side_label`, `angle_label`, `text`)
+carries candidate spots, the requested one first. `Figure.place()` draws all layers' ink once and keeps, per label,
+the first candidate whose ink box (measured from the glyphs) clears lines ≥ 0.6 pt wide, dots, arrows, and earlier
+labels, and (for point labels) is nearer its own point than any other. Student and key share the result. Labels with
+no clear spot keep the least-bad one and become lint ("touches a line"). Deterministic; `fixed=True` opts out. Primes
+in mathtext labels are set as U+2032 so they sit against the letter.
+
+`lesson-builder figs <unit> [-l stem]` renders figures only and writes `_temp/figures/<stem>_sheet.png` (print-size
+contact sheet) plus lint and printed-size checks (text under 7 pt at the item's `fig_w` is an error).
 
 ### Lesson YAML (see `templates/unit/lessons/example.yaml` for every field)
 - Sections (`kind`): `warmup`, `together`, `partner`, `notes` (new page: header + printed QuickNotes), `cyu`, `exit`,
@@ -60,7 +71,9 @@ layer only) and, if the figure has an answer layer, `name_key.png` (both layers)
 - Practice: `rows` of 1-2 `cells` (items), optional `heading` / `page_break_before`, `selected` answers.
 - `plan` (Markdown with a timing table) and `guide_notes` go into the teacher guide, after an answer key that is
   generated from the items.
-- Every item and part needs an answer; drawing items need a key figure. `lesson-builder check` enforces both.
+- Every item and part needs an answer; drawing items need a key figure. `lesson-builder check` enforces both, plus
+  fill/frame boxes ≥ 0.9 in, balanced `$`, figure lint and printed size, colour/resolution of image assets, and
+  teacher-guide punctuation.
 
 ### Build
 `lesson-builder build <unit>`: render figures (cached) → DOCX → PDF in one Word instance → shrink workspace ×0.88 per
