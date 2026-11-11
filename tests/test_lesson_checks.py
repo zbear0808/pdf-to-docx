@@ -3,7 +3,7 @@ import textwrap
 
 import pymupdf
 
-from lesson_builder.check import _labels, actual_size_issues, anchor_drift, check_spec
+from lesson_builder.check import _labels, actual_size_issues, anchor_drift, check_spec, frame_drift
 from lesson_builder.spec import UnitSpec, load_lesson
 from lesson_builder.voice import voice_issues
 
@@ -186,3 +186,18 @@ def test_actual_size_figures(tmp_path):
     assert actual_size_issues(good, good, [("ruler", png, png)], "T") == []
     bad = actual_size_issues(pdf(1.8), good, [("ruler", png, None)], "T")
     assert len(bad) == 1 and bad[0].startswith("ERROR T student p1: actual-size figure ruler prints 45.7 mm")
+
+
+def test_box_positions_inside_an_item():
+    def boxes(ys):
+        doc = pymupdf.open()
+        pg = doc.new_page()
+        for y in ys:
+            pg.draw_rect(pymupdf.Rect(100, y, 200, y + 30), color=(0, 0, 0))
+        return doc
+    student = boxes([100, 300])
+    assert frame_drift(student, boxes([100, 300.3]), "T") == []
+    key = boxes([100, 417])
+    key[0].draw_rect(pymupdf.Rect(300, 50, 320, 60), color=(0, 0, 0))   # extra key-only drawing is ignored
+    issues = frame_drift(student, key, "T")
+    assert len(issues) == 1 and "117.0 pt lower on the key" in issues[0]

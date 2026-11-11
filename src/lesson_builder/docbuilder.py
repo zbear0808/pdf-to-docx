@@ -25,7 +25,10 @@ SYMBOLS = {
     r"\ell": "ℓ", r"\quad": "  ", r"\,": " ", r"\ ": " ", r"\times": "×", r"\pm": "±", r"\le": "≤",
     r"\ge": "≥", r"\square": "□", r"\sim": "∼", r"\div": "÷", r"\infty": "∞", r"\theta": "θ", r"\pi": "π",
     r"\sin": "sin ", r"\cos": "cos ", r"\tan": "tan ", r"\left": "", r"\right": "", r"\colon": ":", r"\prime": "′",
+    r"\alpha": "α", r"\beta": "β", r"\gamma": "γ", r"\delta": "δ", r"\phi": "φ", r"\varphi": "φ",
+    r"\Delta": "Δ", r"\lt": "<", r"\gt": ">",
 }
+FUNCTIONS = {r"\sin", r"\cos", r"\tan", r"\arcsin", r"\arccos", r"\arctan", r"\log", r"\ln"}
 
 
 def _skip_sp(s, i):
@@ -108,13 +111,45 @@ def latex_to_omml_inner(s, size, bar=False):
                 out.append(f"<m:f><m:num>{latex_to_omml_inner(num, fs, pb)}</m:num>"
                            f"<m:den>{latex_to_omml_inner(den, fs, pb)}</m:den></m:f>")
             elif cmd == r"\sqrt":
-                inner, i = _read_group(s, _skip_sp(s, i))
+                j = _skip_sp(s, i)
+                deg = ""
+                if j < len(s) and s[j] == "[":   # \sqrt[3]{x}: the index prints small, up left
+                    k = s.index("]", j)
+                    deg, j = s[j + 1:k], k + 1
+                inner, i = _read_group(s, _skip_sp(s, j))
                 flush()
-                out.append(f'<m:rad><m:radPr><m:degHide m:val="1"/></m:radPr><m:deg/>'
-                           f"<m:e>{latex_to_omml_inner(inner, size)}</m:e></m:rad>")
+                if deg:
+                    out.append(f"<m:rad><m:radPr/><m:deg>{latex_to_omml_inner(deg, size)}</m:deg>"
+                               f"<m:e>{latex_to_omml_inner(inner, size)}</m:e></m:rad>")
+                else:
+                    out.append(f'<m:rad><m:radPr><m:degHide m:val="1"/></m:radPr><m:deg/>'
+                               f"<m:e>{latex_to_omml_inner(inner, size)}</m:e></m:rad>")
             elif cmd == r"\triangle":
                 flush()
                 out.append(_mrun("Δ", size, upright=True))
+            elif cmd in FUNCTIONS:
+                # sin, cos, tan, ... print upright (roman), as in print; "\sin^{-1}" keeps the superscript
+                start = i - len(m.group(0))
+                before = s[:start].rstrip()
+                flush()
+                if before and (before[-1].isalnum() or before[-1] in ")}"):
+                    out.append(_mrun("\u2006", size, upright=True))   # 18 sin 41°, not 18sin 41°
+                name = cmd[1:]
+                j = _skip_sp(s, i)
+                if j < len(s) and s[j] == "^":
+                    j += 1
+                    if s[j] == "{":
+                        sup, j = _read_group(s, j)
+                    else:
+                        sup, j = s[j], j + 1
+                    out.append(f'<m:sSup><m:e>{_mrun(name, size, upright=True)}</m:e>'
+                               f'<m:sup>{latex_to_omml_inner(sup, size)}</m:sup></m:sSup>')
+                    i = j
+                else:
+                    out.append(_mrun(name, size, upright=True))
+                k = _skip_sp(s, i)
+                if k < len(s) and s[k] not in "(^":
+                    out.append(_mrun("\u2006", size, upright=True))   # thin space before a bare argument
             elif cmd in SYMBOLS:
                 buf.append(SYMBOLS[cmd])
             else:
@@ -219,7 +254,7 @@ class A:
         self.height = height
 
 
-TALL_MATH = re.compile(r"\\[dt]?frac|\\sqrt|\\overline|\\overrightarrow|\\overleftrightarrow|\^\{|_\{")
+TALL_MATH = re.compile(r"\\[dt]?frac|\\sqrt|\\overline|\\overrightarrow|\\overleftrightarrow")   # stacked forms
 
 
 def answer_height(lines, width_in, size):
@@ -779,6 +814,11 @@ class Handout:
         avail = (container.width.inches if container is not None and container.width else self.width) - indent
         while cols > 1 and cols * (label_w + box_w + 0.25) > avail + 0.01:
             cols -= 1
+        if label_w + box_w + 0.25 > avail + 0.01:
+            # one box still doesn't fit (long label in a narrow cell): wrap the label, keep the whole box,
+            # or Word cuts the box column (and the key's answers) off at the cell edge
+            box_w = min(box_w, max(0.9, avail - 0.25 - 0.8))
+            label_w = max(0.6, avail - box_w - 0.25)
         widths = []
         for _ in range(cols):
             widths += [label_w, box_w, 0.25]
@@ -794,7 +834,9 @@ class Handout:
             table_indent(t, indent)
             row = t.rows[0]
             row_cant_split(row)
-            row_height(row, height)
+            tall = any(a and TALL_MATH.search(str(a)) for _, a in chunk) and not any(
+                TALL_MATH.search(str(lab)) for lab, _ in chunk)   # key-only stacked answer: same on both copies
+            row_height(row, max(height, 0.46) if tall else height)
             for c, (label, ans) in enumerate(chunk):
                 lab, box = row.cells[3 * c], row.cells[3 * c + 1]
                 for cc in (lab, box):
@@ -852,7 +894,12 @@ class Handout:
             table_indent(t, indent)
             r = t.rows[0]
             row_cant_split(r)
-            row_height(r, height)
+            # a stacked fraction in the answer (or the frame text) needs a taller box; both copies get it
+            # a stacked fraction only in the key answer: give both copies its height (a stacked label already
+            # makes the row tall on both copies)
+            tall = bool(ans) and bool(TALL_MATH.search(str(ans))) and not any(
+                TALL_MATH.search(str(x)) for x in (before, after) if x)
+            row_height(r, max(height, 0.46) if tall else height)
             lab, box, tail = r.cells
             for cc in (lab, box, tail):
                 cell_margins(cc, 10, 10, 30, 30)
@@ -919,9 +966,29 @@ class Handout:
         r.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
 
     def save(self, path):
+        self._trim_tail()
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         self.doc.save(str(path))
         return path
+
+    def _trim_tail(self):
+        """Blank spacer paragraphs at the very end can't hold anything, but one that lands below a full page makes
+        Word print a blank last page. Drop them, keeping one 1 pt paragraph (Word needs a paragraph after a
+        final table)."""
+        body = self.doc.element.body
+        kids = [k for k in body if k.tag != qn("w:sectPr")]
+
+        def empty(p):
+            return p.tag == qn("w:p") and not "".join(p.itertext()).strip() and not p.findall(".//" + qn("w:drawing")) \
+                and not p.findall(".//" + qn("w:br")) and not p.findall(".//" + qn("m:oMath"))
+        while len(kids) > 1 and empty(kids[-1]) and empty(kids[-2]):
+            body.remove(kids.pop())
+        if kids and empty(kids[-1]):
+            from docx.text.paragraph import Paragraph
+            pf = Paragraph(kids[-1], self.doc._body).paragraph_format
+            pf.space_before = pf.space_after = Pt(0)
+            pf.line_spacing_rule = WD_LINE_SPACING.EXACTLY
+            pf.line_spacing = Pt(1)
 
 
 # ----------------------------------------------------------------------------- practice-set grid

@@ -84,12 +84,13 @@ def _pairs(unit, l):
 def _output_issues(unit, l, figs: dict, pdfs: dict) -> list[str]:
     """Output checks for each student/key pair that exists, with the document's actual-size figures, and the
     key's answers checked for text Word cut off."""
-    from .check import actual_figures, check_outputs, clipped_answers
+    from .check import actual_figures, check_outputs, clipped_answers, no_answer_labels
     actual = actual_figures(l, figs)
+    skip = no_answer_labels(l)
     out = []
     for a, b, n in _pairs(unit, l):
         if a in pdfs and b in pdfs and pdfs[a].exists() and pdfs[b].exists():
-            out += check_outputs(pdfs[a], pdfs[b], n, actual=actual[a])
+            out += check_outputs(pdfs[a], pdfs[b], n, actual=actual[a], no_answer=skip[a])
             out += clipped_answers(l, pdfs[b], a, Path(pdfs[a]).stem)
     return out
 

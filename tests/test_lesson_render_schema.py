@@ -315,3 +315,70 @@ def test_templates_use_new_fields_and_pass_checks(tmp_path):
     assert "| 3a | LT1 |  | pwoc | 2 |" in md
     key = R.render_handout(u, a, True, R.Figures(u, fake), tmp_path / "ak.docx")
     assert "[A] A scale factor" in _red(key) and "4: All three image points" in _red(key)
+
+
+def test_guide_unnumbered_practice_cell(tmp_path):
+    """Regression (Unit 4 lesson 4.1): an unnumbered practice cell printed "None." in the teacher guide key."""
+    l = _load(tmp_path, """\
+        id: x
+        doc_type: assessment
+        title: T
+        sections: [{kind: plain, items: [{n: 1, prompt: p, answer: a}]}]
+        practice:
+          title: P
+          rows: [{cells: [{prompt: q, answer: shown}]}]
+        """)
+    md = R.guide_markdown(l)
+    assert "None." not in md and "shown" in md
+
+
+def test_fill_box_fits_a_narrow_cell():
+    """Regression (Unit 4 lesson 4.7): a long fill label in a half-width practice cell pushed the box (and the
+    key's answer) past the cell edge."""
+    from docx.shared import Inches
+    from lesson_builder.docbuilder import Handout, set_widths
+    h = Handout(key=True)
+    t = h._table(1, 2, [3.4, 3.9])
+    cell = t.rows[0].cells[0]
+    set_widths(t, [3.4, 3.9])
+    inner = h.fill_boxes(cell, [("True or false: the ladder reaches the window ledge", "True")])
+    total = sum(c.width.inches for c in inner.rows[0].cells)
+    assert total <= 3.4 - 0.3 + 0.02 and inner.rows[0].cells[1].width.inches >= 0.9
+
+
+def test_draw_item_keeps_fill_and_parts(tmp_path):
+    """Regression (Unit 4 Review, 4.6-4.7 check): a draw item silently dropped its fill boxes and parts."""
+    l = _load(tmp_path, """\
+        id: x
+        doc_type: assessment
+        title: T
+        sections:
+          - kind: plain
+            items:
+              - n: 1
+                prompt: Sketch the tree and its shadow.
+                draw: {height: 2.0}
+                answer: sketch
+                fill: [['$h =$', '31 ft']]
+                parts: [{label: b., prompt: Which ratio did you use, answer: tangent}]
+        """)
+    student, key = _text(_render(tmp_path, l, False)), _render(tmp_path, l, True)
+    assert "Which ratio did you use" in student and "h=" in student.replace(" ", "")
+    assert "31 ft" in _red(key) and "tangent" in _red(key)
+
+
+def test_guide_joins_frame_rows_of_one_sentence(tmp_path):
+    """Regression (Unit 4 Test Retake): two frame rows of one sentence printed as 'the angle is; less than'."""
+    l = _load(tmp_path, """\
+        id: x
+        doc_type: assessment
+        title: T
+        sections:
+          - kind: plain
+            items:
+              - n: 1
+                prompt: Is the ladder safe?
+                frame: [['The ladder', 'is not', 'safe because the angle is'], ['', 'less', 'than 70 degrees.']]
+        """)
+    md = R.guide_markdown(l)
+    assert "the angle is **less** than 70 degrees." in md and "is; " not in md

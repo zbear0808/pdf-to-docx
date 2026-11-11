@@ -122,7 +122,16 @@ def _draw(h: Handout, it: Item, figs: Figures, scale: float):
     a, b = t.rows[0].cells
     for c in (a, b):
         db.cell_margins(c, 0, 0, 0, 60)
-    h._problem_text(a, _num(it), _prompt_lines(it, points=False))
+    h._problem_text(a, _num(it), _prompt_lines(it))
+    # fill-ins, frames, and parts go under the steps (left cell); the drawing box stays on the right
+    if it.fill:
+        h.fill_boxes(a, [tuple(r) for r in it.fill], cols=it.fill_cols or 1, box_w=it.box_w, height=0.38,
+                     row_gap=0.08)
+    if it.frame:
+        h.frame(a, [tuple(r) for r in it.frame], indent=0.55, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
+    for p in it.parts:
+        h._line(a, f"{p.label} {p.prompt}{_pts(p.points)}", indent=0.3)
+        _body(h, a, p, scale, 0.3, d.steps_w, f"item {it.n or '(unnumbered)'} part {p.label}")
     kf = figs.get(d.key_figure or it.key_figure or it.figure, key=True)
     kw = draw_key_width(d, figs.rendered, d.key_figure or it.key_figure or it.figure)
     room = h.width - d.steps_w - 0.25
@@ -421,15 +430,21 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
             bits.append(f"*{head}* " + _join(ans))
     for r in it.fill or []:
         bits.append(f"{r[0]} {r[1]}")
-    for r in it.frame or []:
+    for k, r in enumerate(it.frame or []):
         tail = str(r[2]) if len(r) > 2 and r[2] else ""
         if tail and tail[0] not in ".,;:!?)'’":
             tail = " " + tail
-        bits.append(f"{r[0]} **{r[1]}**{tail}")
+        piece = f"{r[0]} **{r[1]}**{tail}".strip()
+        # a row that continues the previous row's sentence ("... the angle is" / "[less] than 70°") joins it
+        if k and bits and (not str(r[0]).strip() or str(r[0]).strip()[:1].islower()) \
+                and not re.sub(r"[*$\s]+$", "", bits[-1]).endswith((".", "?", "!")):
+            bits[-1] = f"{bits[-1]} {piece}"
+        else:
+            bits.append(piece)
     bits += _answer_lines(it)
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
-        bits.append("(labeled sample drawing on the lesson key)")
+        bits.append("(labeled sample drawing on the key)")
     text = _join(bits)
     if it.scoring == "epi":
         text = f"{text} (scored E/P/I)".strip()
@@ -518,7 +533,7 @@ def guide_markdown(lesson: LessonSpec) -> str:
         out.append("## Practice problems: answer key")
         for row in lesson.practice.rows:
             for it in row.cells:
-                out += _answers_md(it, f"{it.n}.")
+                out += _answers_md(it, f"{it.n}." if it.n else "-")
     out += _distractors_md(lesson) + _blueprint_md(lesson)
     if lesson.plan:
         out += ["## Lesson plan" if lesson.doc_type == "lesson" else "## Notes for the teacher", lesson.plan]

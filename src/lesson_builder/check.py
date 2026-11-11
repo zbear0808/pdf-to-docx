@@ -621,8 +621,61 @@ def clipped_answers(lesson: LessonSpec, key_pdf, group: str, tag: str) -> list[s
     return out
 
 
-def check_outputs(student: Path, key: Path, max_pages: int, actual: list | None = None) -> list[str]:
-    """actual: [(figure name, student png, key png or None)] for figures drawn at actual size."""
+def no_answer_labels(lesson: LessonSpec) -> dict[str, set[str]]:
+    """{"handout" | "practice": {"7.", ...}}: numbered items marked `no_answer: true` with no answer text."""
+    out = {"handout": set(), "practice": set()}
+    groups = [("handout", it) for _, it in lesson.items()]
+    groups += [("practice", it) for r in (lesson.practice.rows if lesson.practice else []) for it in r.cells]
+    for g, it in groups:
+        if it.n and it.no_answer and not as_list(it.answer) and not it.parts:
+            out[g].add(f"{it.n}.")
+    return out
+
+
+def _frames(doc) -> list[list[tuple]]:
+    """Per page: black or gray vector rectangles and rules (box borders, table lines), as rounded tuples. Red
+    key drawings are left out."""
+    out = []
+    for pg in doc:
+        rows = []
+        for d in pg.get_drawings():
+            c = d.get("color") or d.get("fill")
+            if c and c[0] > 0.6 and c[1] < 0.3 and c[2] < 0.3:
+                continue
+            r = d["rect"]
+            if r.width < 3 and r.height < 3:
+                continue
+            rows.append((round(r.x0, 1), round(r.y0, 1), round(r.x1, 1), round(r.y1, 1)))
+        out.append(sorted(rows, key=lambda t: (t[1], t[0])))
+    return out
+
+
+def frame_drift(s, k, tag: str, tol: float = ANCHOR_TOL_PT) -> list[str]:
+    """Answer boxes and rules must sit at the same spot on both copies (catches a shift inside an item, which
+    the label check can't see). Each student box is matched to the key box of the same size and x position
+    nearest in y; the key's extra drawings are ignored. One ERROR per page, at the first box that moved."""
+    out = []
+    for pi, (a, b) in enumerate(zip(_frames(s), _frames(k))):
+        for x in a:
+            w, h = x[2] - x[0], x[3] - x[1]
+            same = [y for y in b if abs(y[0] - x[0]) <= tol and abs((y[2] - y[0]) - w) <= tol
+                    and abs((y[3] - y[1]) - h) <= tol]
+            if not same:
+                continue
+            y = min(same, key=lambda t: abs(t[1] - x[1]))
+            dy = y[1] - x[1]
+            if abs(dy) > tol:
+                out.append(f"ERROR {tag} key p{pi + 1}: the box or rule at y={x[1] / 72:.2f} in is {abs(dy):.1f} pt "
+                           f"{'lower' if dy > 0 else 'higher'} on the key (limit {tol:g} pt); something above it in "
+                           "the same item is taller on the key (a key-only figure or note)")
+                break
+    return out
+
+
+def check_outputs(student: Path, key: Path, max_pages: int, actual: list | None = None,
+                  no_answer: set | None = None) -> list[str]:
+    """actual: [(figure name, student png, key png or None)] for figures drawn at actual size.
+    no_answer: item labels ("7.") whose YAML says `no_answer: true`; the key needs no red answer for them."""
     import pymupdf
     issues = []
     s, k = pymupdf.open(student), pymupdf.open(key)
@@ -650,6 +703,8 @@ def check_outputs(student: Path, key: Path, max_pages: int, actual: list | None 
         issues.append(f"ERROR {tag}: item numbers differ between student and key")
     else:
         issues += anchor_drift(ls, lk, tag)
+        if not any(i.startswith(f"ERROR {tag} key") for i in issues):   # one cause, one report
+            issues += frame_drift(s, k, tag)
     if actual:
         issues += actual_size_issues(s, k, actual, tag)
     simg = {p: s[p].get_image_info() for p in {l["page"] for l in ls}}
@@ -670,6 +725,8 @@ def check_outputs(student: Path, key: Path, max_pages: int, actual: list | None 
             y1 = min([m["y"] for m in later], default=H)
             nxt = min(later, key=lambda m: m["y"]) if later else None
             if l["kind"] == "num" and nxt is not None and nxt["kind"] == "part":
+                continue
+            if l["kind"] == "num" and l["text"] in (no_answer or set()):
                 continue
             si = [i for i in simg.get(pi, []) if x0 - 5 <= i["bbox"][0] < x1 and l["y"] <= i["bbox"][1] < y1]
             if not _answered(pg, x0, x1, l["y"] - 2, y1, len(si)):
