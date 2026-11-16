@@ -407,6 +407,13 @@ practice:
           proof:
             rows:
               - ['$AB = CD$', {ans: 'Given'}]
+        - prompt: 'Two parts.'
+          parts:
+            - label: a.
+              prompt: 'Prove it.'
+              proof:
+                rows:
+                  - [{ans: '$EF = GH$'}, 'Given']
 """
 
 
@@ -428,6 +435,8 @@ def test_proof_table_blanks_and_key(tmp_path):
                 if r.get(qn("w:hRule")) == "exact"]
     assert heights(s) == heights(k) and len(heights(s)) == 3   # same table height on both copies
     pr = R.render_practice(_unit(tmp_path), l, True, R.Figures(_unit(tmp_path), {}), tmp_path / "pk.docx")
-    assert "Given" in _red(pr)
+    assert "Given" in _red(pr) and "EF = GH" not in _text(R.render_practice(
+        _unit(tmp_path), l, False, R.Figures(_unit(tmp_path), {}), tmp_path / "ps.docx"))
+    assert "EF" in _red(pr)   # a proof inside a part, answered on the key
     with pytest.raises(Exception):
         Proof(rows=[["only one cell"]])

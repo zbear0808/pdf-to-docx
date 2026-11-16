@@ -92,6 +92,8 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
     if it.frame:
         rows = [tuple(r) for r in it.frame]
         h.frame(cell, rows, indent=indent + 0.25, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
+    if isinstance(it, Part) and it.proof:
+        _proof(h, it, cell, width, indent=indent + 0.25)
     if getattr(it, "box", None):
         room = width - indent - 0.15
         need = db.answer_height(answer, room, 10) + db.answer_height(_rubric_lines(it), room, 9)
@@ -183,12 +185,12 @@ def _table(h: Handout, it: Item):
     db.table_indent(t, 0.3625)
 
 
-def _proof(h: Handout, it: Item, container=None, width: float | None = None):
+def _proof(h: Handout, it: Item | Part, container=None, width: float | None = None, indent: float | None = None):
     """Two-column proof, on the page or inside a cell (practice, two-column sections). Row heights come from
     the longer of the printed text and the key answer, set exactly, so student and key tables are the same
     height."""
     pf = it.proof
-    indent = 0.3625 if container is None else 0.3
+    indent = indent if indent is not None else (0.3625 if container is None else 0.3)
     total = (width or h.width) - indent - 0.1
     ws = [total * pf.statement_w, total * (1 - pf.statement_w)]
     for lab, txt in (("Given:", pf.given), ("Prove:", pf.prove)):
@@ -497,7 +499,7 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
         bits.append("(labeled sample drawing on the key)")
-    if isinstance(it, Item) and it.proof and it.proof.blanks():
+    if it.proof and it.proof.blanks():
         bits.append("proof: " + "; ".join(it.proof.blanks()))
     text = _join(bits)
     if it.scoring == "epi":

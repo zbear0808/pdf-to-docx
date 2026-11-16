@@ -77,7 +77,7 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 | `fill`* / `fill_cols`* / `box_w`* | None / one row / 1.3 | `[['$x =$', '15']]` |
 | `frame`* / `frame_box_w`* | None / 1.1 | rows `[before, answer, after(, w)]` or `{before, answer, after, w}` |
 | `box` / `table` / `columns` / `draw` / `parts` | None | write-in box; arrow table; notice/wonder; steps + drawing box; a./b. |
-| `proof` | None | two-column proof: `given`, `prove`, `rows: [[statement, reason], ...]`; a cell `{ans: '...'}` is a blank (red on the key); `statement_w` 0.55, `height` 0.38. Works in practice cells too |
+| `proof` | None | two-column proof: `given`, `prove`, `rows: [[statement, reason], ...]`; a cell `{ans: '...'}` is a blank (red on the key); `statement_w` 0.55, `height` 0.38. Works in practice cells and on parts (`parts: [{label, prompt, proof}]`) |
 | `source`* / `after` / `page_break_after` / `no_answer`* | | provenance; 0.08; false; false |
 
 **`work` default** (render `_work`): explicit value wins; else 0 if the item has `fill`, `frame`, `box`, `parts`, `table`, `columns`, `draw`, or `proof`; 0.2 with `choices`; else 0.8 (part 0.6). Don't write `work:` lines equal to the default (`tidy` reports them). Figure-only items still get 0.8.

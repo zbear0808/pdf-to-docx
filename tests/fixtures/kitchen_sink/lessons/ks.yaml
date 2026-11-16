@@ -184,6 +184,12 @@ practice:
             rows:
               - ['$\overline{AB} \cong \overline{CD}$', 'Given']
               - [{ans: '$AB = CD$'}, {ans: 'Congruent segments have equal lengths'}]
+          parts:
+            - label: a.
+              prompt: 'Finish the second proof.'
+              proof:
+                rows:
+                  - [{ans: '$CD = AB$'}, 'Symmetric property']
     - heading: Mixed review
       cells:
         - id: rectangles

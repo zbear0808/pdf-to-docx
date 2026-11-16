@@ -29,7 +29,7 @@ def _texts(it: Item | Part) -> list[str]:
 def _has_answer(it: Item | Part) -> bool:
     if it.no_answer or as_list(it.answer) or it.fill or it.frame:
         return True
-    if isinstance(it, Item) and it.proof and it.proof.blanks():
+    if it.proof and it.proof.blanks():
         return True
     if isinstance(it, Item) and (it.table or (it.columns and it.columns.answers) or it.draw or it.choices and
                                  as_list(it.answer)):
@@ -189,9 +189,10 @@ def _student_texts(lesson: LessonSpec) -> list[tuple[str, str]]:
         out += [(f"{label} step", t) for t in it.steps]
         out += [(f"{label} table", t) for t in ([it.table.row_label] + it.table.header if it.table else [])]
         out += [(f"{label} columns", t) for t in (it.columns.headers if it.columns else [])]
-        if it.proof:
-            out += [(f"{label} proof", t) for t in [it.proof.given or "", it.proof.prove or ""]
-                    + [c for r in it.proof.rows for c in r if isinstance(c, str)] if t]
+        for p, pl in _with_parts(it, label):
+            if p.proof:
+                out += [(f"{pl} proof", t) for t in [p.proof.given or "", p.proof.prove or ""]
+                        + [c for r in p.proof.rows for c in r if isinstance(c, str)] if t]
     for q in lesson.quicknotes:
         out += [("quicknotes", t) for t in ([q] if isinstance(q, str) else [q.title or ""] + q.bullets)]
     if lesson.practice:
@@ -593,7 +594,7 @@ def _key_texts(lesson: LessonSpec) -> dict[str, list[tuple[str, str]]]:
                 texts += (o.table.answers if o.table else []) + [a for c in (o.columns.answers if o.columns else [])
                                                                  for a in c]
                 texts += [o.draw.key_note] if o.draw and o.draw.key_note else []
-                texts += o.proof.blanks() if o.proof else []
+            texts += o.proof.blanks() if o.proof else []
             out[g] += [(lab, t) for t in texts if t]
     return out
 

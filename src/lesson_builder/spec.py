@@ -155,6 +155,7 @@ class Part(_Scored):
     box_w: float = 1.3
     frame: Optional[list[list[Union[str, float]]]] = None   # [[before, answer, after(, box_w)], ...] or mappings
     frame_box_w: float = 1.1
+    proof: Optional[Proof] = None    # two-column proof under this part
     no_answer: bool = False
 
 
