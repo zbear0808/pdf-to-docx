@@ -184,3 +184,13 @@ def test_onlyoffice_real_conversion(tmp_path, monkeypatch):
     assert pdf == (tmp_path / "pdf" / "A & B doc.pdf").resolve() and n == 2 and not logs
     with pymupdf.open(pdf) as d:
         assert "Alpha 2" in d[1].get_text()
+
+
+def test_label_widths_use_real_font_metrics():
+    import pytest
+    from lesson_builder.docbuilder import _font, _measure_rich
+    if not (_font("calibri.ttf", 11) and _font("cambria.ttc", 11)):
+        pytest.skip("neither Calibri/Cambria nor Carlito/Caladea is installed")
+    # a real font, not the 0.5 em-per-character guess (which gives 0.229 in for 3 characters at 11 pt)
+    assert _measure_rich("$NM \\cong$", 11) > 0.3
+    assert _measure_rich("abc", 11) < 0.25

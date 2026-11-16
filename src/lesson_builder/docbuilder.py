@@ -1,5 +1,6 @@
 """Small python-docx toolkit for black-and-white worksheet handouts with native Word math (OMML)."""
 import math
+import os
 import re
 from pathlib import Path
 
@@ -273,20 +274,39 @@ def answer_height(lines, width_in, size):
 _FONTS = {}
 
 
+_FALLBACK = {"calibri.ttf": ["Carlito-Regular.ttf"], "cambria.ttc": ["Caladea-Regular.ttf"]}   # metric twins
+
+
 def _font(name, size):
     from PIL import ImageFont
     key = (name, size)
     if key not in _FONTS:
-        try:
-            _FONTS[key] = ImageFont.truetype(name, int(size * 10))
-        except OSError:
-            _FONTS[key] = None
+        _FONTS[key] = None
+        for n in [name] + _FALLBACK.get(name, []):
+            try:
+                _FONTS[key] = ImageFont.truetype(n, int(size * 10))
+                break
+            except OSError:
+                continue
     return _FONTS[key]
+
+
+def _math_fonts(size):
+    """Fonts the math may print in: Cambria Math in Word, Asana Math in OnlyOffice (measure the wider)."""
+    out = [f for f in (_font("cambria.ttc", size),) if f]
+    asana = os.environ.get("LESSON_BUILDER_MATH_FONT") or next(
+        (p for p in ("/Applications/ONLYOFFICE.app/Contents/Resources/login/fonts/asana/ASANA.ttc",
+                     r"C:\Program Files\ONLYOFFICE\DesktopEditors\fonts\asana\ASANA.ttc") if Path(p).exists()), None)
+    if asana:
+        f = _font(asana, size)
+        if f:
+            out.append(f)
+    return out or [f for f in (_font("calibri.ttf", size),) if f]
 
 
 def _measure_rich(text, size):
     """Printed width in inches of a rich string ($math$ and **bold** markup), measured with Calibri and
-    Cambria Math at 10x scale."""
+    Cambria Math at 10x scale (Carlito / Caladea / Asana Math stand in where those aren't installed)."""
     total = 0.0
     for k, part in enumerate(text.split("$")):
         if k % 2:
@@ -295,15 +315,15 @@ def _measure_rich(text, size):
                 s = s.replace(cmd, ch)
             s = s.replace(r"\triangle", "Δ").replace("'", "′")
             s = re.sub(r"[{}\s]", "", s)
-            f = _font("cambria.ttc", size) or _font("calibri.ttf", size)
+            fonts = _math_fonts(size)
             factor = 1.08
         else:
             s = part.replace("*", "")
-            f = _font("calibri.ttf", size)
+            fonts = [f for f in (_font("calibri.ttf", size),) if f]
             factor = 1.03
         if not s:
             continue
-        w = f.getlength(s) if f else len(s) * size * 0.5 * 10
+        w = max(f.getlength(s) for f in fonts) if fonts else len(s) * size * 0.5 * 10
         total += w * factor / 10 / 72  # points -> inches
     return total
 
