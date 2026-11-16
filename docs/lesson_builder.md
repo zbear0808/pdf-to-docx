@@ -28,7 +28,8 @@ src/lesson_builder/
   status.py       per-document table: handoffs, Must fix, GAPs, outputs, stale, retained
   scaffold.py     skeleton YAML, figures/<stem>.py, handoff files; registers the file in unit.yaml
   brief.py        one-file brief per step subagent (_temp/specs/<stem>/brief_<step>.md)
-  export.py       DOCX -> PDF (one Word instance via pywin32; LibreOffice fallback), PDF -> PNG
+  export.py       DOCX -> PDF (Word via pywin32, else OnlyOffice x2t, else LibreOffice), PDF -> PNG
+  env.py          load .env (cwd, repo root) into os.environ without overriding
   diff.py         compare page renders to the previous build; list changed pages (clears old diffs)
   packet.py       duplex PDF and DOCX packets
   ingest.py       source DOCX/PDF -> Markdown with math, images, page renders
@@ -191,11 +192,17 @@ contact sheet) plus lint and printed-size checks (text under 7 pt at the item's 
   inside. When the key answer needs more room, the slot grows on both copies and `build` logs it.
 
 ### Build
-`lesson-builder build <unit>`: render figures (cached) → spec checks → DOCX → PDF in one Word instance → page-fill
+`lesson-builder build <unit>`: render figures (cached) → spec checks → DOCX → PDF (one Word instance, or OnlyOffice / LibreOffice) → page-fill
 report per PDF; shrink workspace ×0.88 per round (floor 0.6) while a document is over budget, logging which item
 overflows and whether a page break pins it → PDF checks → page-fill summary (slack and items per page, uneven pages,
 key/student page mismatch) → retain + verify the figure bundle (`--no-retain` skips) → page PNGs → diff against the
-last build → packets (full build only).
+last build → packets (full build only; without Word only the PDF packets).
+
+PDF engines: Word (Windows, pywin32) → OnlyOffice (`x2t`) → LibreOffice (`soffice`); `build` prints the one it uses.
+Set paths in `.env` at the repo root (copy `.env.example`): `LESSON_BUILDER_X2T`, `LESSON_BUILDER_ONLYOFFICE_FONTS`
+(the folder with `AllFonts.js`), `LESSON_BUILDER_SOFFICE`; `LESSON_BUILDER_PDF_ENGINE=word|onlyoffice|libreoffice`
+forces one. OnlyOffice matches Word's page breaks but text sits a few pt off, so a key/student drift or a wider math
+label in a non-Word build can be a renderer difference; confirm in Word before release.
 
 ### Workflow commands
 ```python
@@ -211,7 +218,8 @@ pagefill.page_report(pdf) -> list[PageFill]; overflow / pinned / uneven / mismat
 
 ### Export / diff / ingest / packet
 ```python
-export.docx_to_pdf(paths: list[Path]) -> list[tuple[Path, int]]   # (pdf, pages)
+export.docx_to_pdf(paths: list[Path], out_dir=None, log=None) -> list[tuple[Path, int]]   # (pdf, pages)
+export.pdf_engine() -> "word" | "onlyoffice" | "libreoffice" | None; export.onlyoffice_paths() -> (x2t, fonts) | None
 export.pdf_to_pngs(pdf: Path, out_dir: Path, dpi=110) -> list[Path]
 diff.diff_renders(new_dir, prev_dir, out_dir=None) -> list[str]     # changed page names
 ingest.ingest(files: list[Path], out_dir: Path, render=True) -> list[Path]

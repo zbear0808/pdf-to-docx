@@ -51,7 +51,7 @@ def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = 
     while True:
         grown = []
         docx = render_lesson(unit, lesson, figs, scale, grown)
-        exported = docx_to_pdf(list(docx.values()))
+        exported = docx_to_pdf(list(docx.values()), log=log)
         pdfs = {k: p for k, (p, _) in zip(docx, exported)}
         pages = {k: n for k, (_, n) in zip(docx, exported)}
         rep = _reports(pdfs, log)

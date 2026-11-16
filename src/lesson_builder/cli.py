@@ -138,7 +138,7 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
     """Figures -> DOCX -> PDF (fit to page budget) -> renders, diff, checks, figure bundle, packets."""
     from .check import check_spec, summarize
     from .diff import diff_renders, snapshot
-    from .export import pdf_to_pngs
+    from .export import pdf_engine, pdf_to_pngs
     from .fit import build_lesson
     from .render import Figures
     from .retain import retain as retain_figs
@@ -147,6 +147,9 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
     if lesson and not specs:
         raise typer.BadParameter(f"no document matches {lesson}")
     figs = _figures(unit, force_figures, docs={l.stem for l in specs})
+    engine = pdf_engine()
+    _out(f"PDF engine: {engine or 'none found'}" + ("" if engine in ("word", None) else
+         " (not Word: line positions and wrapping can differ from Word's PDFs by a few pt)"))
     issues = []
     tmp = unit.dir / "_temp"
     for l in specs:
@@ -185,7 +188,9 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
 
 
 def _packets(unit):
-    """Duplex packets of the lessons (handout + practice; key + practice key). Assessments stay separate."""
+    """Duplex packets of the lessons (handout + practice; key + practice key). Assessments stay separate.
+    The DOCX packets need Microsoft Word; without it only the PDF packets are built."""
+    from .export import word_available
     from .packet import docx_packet, pdf_packet
     from .render import outputs as out_paths
     out = unit.dir / "output"
@@ -193,6 +198,9 @@ def _packets(unit):
     lessons = [l for l in unit.lesson_specs() if l.doc_type == "lesson"]
     if not lessons:
         return
+    word = word_available()
+    if not word:
+        _out("DOCX packets skipped: merging DOCX files needs Microsoft Word. Building the PDF packets only.")
     for label, kinds in (("Student Packet", ("handout", "practice")), ("Key Packet", ("key", "practice_key"))):
         groups = []
         for l in lessons:
@@ -203,8 +211,13 @@ def _packets(unit):
             _out(f"{label}: skipped, not built yet: {', '.join(p.stem for p in missing)}")
             continue
         n, starts = pdf_packet([[p.with_suffix(".pdf") for p in g] for g in groups], out / f"{name} {label}.pdf")
-        m = docx_packet(groups, out / f"{name} {label}.docx")
-        _out(f"{name} {label}: PDF {n}p (lessons start {starts}), DOCX {m}p")
+        docx = out / f"{name} {label}.docx"
+        if word:
+            m = docx_packet(groups, docx)
+            _out(f"{name} {label}: PDF {n}p (lessons start {starts}), DOCX {m}p")
+        else:
+            old = f"; {docx.name} is from an older build" if docx.exists() else ""
+            _out(f"{name} {label}: PDF {n}p (lessons start {starts}), DOCX skipped{old}")
 
 
 @app.command()
