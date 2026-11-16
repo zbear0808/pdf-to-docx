@@ -1,5 +1,5 @@
 id: 3.6
-title: Same shape, any size
+title: Similarity and transformations
 notes_title: Similarity and transformations
 framing: >-
   Rigid motions make copies that are the same shape and the same size. Dilations make copies that are the same
@@ -8,7 +8,7 @@ framing: >-
 sections:
   - kind: warmup
     items:
-      - minutes: 4
+      - minutes: 5
         prompt: 'Lee says $GHFE$ is a dilation of $ADCB$ with center $P$. What is wrong? Fill in each box.'
         figure: 3.6_warmup
         key_figure: 3.6_warmup_key
@@ -25,14 +25,14 @@ sections:
     box: ['**Move bank**  translate  |  rotate around a point  |  reflect across a line  |  dilate (center, scale factor)']
     items:
       - n: 1
-        minutes: 2
+        minutes: 3
         prompt: 'Can you move $\triangle ABC$ onto $\triangle DEF$ using only translations, rotations, and reflections? Explain.'
         figure: 3.6_together
         fig_w: 2.9
         work: 1.2
         answer: 'No. Each side of $\triangle DEF$ is half as long as the matching side of $\triangle ABC$ (4 and 8, 3 and 6, 5 and 10). Rigid motions do not change lengths.'
       - n: 2
-        minutes: 4
+        minutes: 5
         prompt: 'Finish a sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$. Write each answer in its box.'
         fill:
           - ['Step 1: Translate $A$ to point', '$D$']
@@ -46,44 +46,7 @@ sections:
   - kind: partner
     items:
       - n: 3
-        minutes: 5
-        prompt: '$\triangle QOR$ and $\triangle PON$ overlap. One transformation takes $\triangle QOR$ onto $\triangle PON$. Hint: sketch the two triangles separately.'
-        figure: 3.6_nested
-        key_figure: 3.6_nested_key
-        fig_w: 2.6
-        parts:
-          - label: a.
-            prompt: 'Name the transformation.'
-            fill: [['Transformation:', 'dilation'], ['Center:', '$O$'], ['Scale factor:', '$\frac{3}{2}$']]
-            box_w: 1.0
-            answer: '$\frac{NP}{RQ} = \frac{7.5}{5} = \frac{3}{2}$. $Q$ lands on $P$, $R$ lands on $N$, and $O$ stays put.'
-            work: 0
-          - label: b.
-            prompt: 'Write a similarity statement. Match the letters in order.'
-            frame:
-              - ['$\triangle QOR \sim \triangle$', '$PON$', '']
-      - n: 4
-        minutes: 5
-        prompt: 'Squares $F$ and $G$ share vertex $V$.'
-        figure: 3.6_squares
-        fig_w: 1.8
-        parts:
-          - label: a.
-            prompt: 'Finish a sequence that takes square $F$ onto square $G$.'
-            fill:
-              - ['Step 1: Rotate $F$ around $V$ by', '$180^\circ$']
-              - ['Step 2: Dilate with center $V$ and scale factor', '4']
-            box_w: 0.9
-            answer: '$\frac{12}{3} = 4$. Also accept dilate by 4, then rotate $180^\circ$ around $V$.'
-            work: 0
-          - label: b.
-            prompt: 'How does your sequence change if you move square $G$ onto square $F$?'
-            fill: [['New scale factor:', '$\frac{1}{4}$']]
-            box_w: 0.9
-            answer: 'Dilate with center $V$ by $\frac{1}{4}$, then rotate $180^\circ$ around $V$ (either order).'
-            work: 0.5
-      - n: 5
-        minutes: 5
+        minutes: 9
         prompt: 'In the figure, $\overline{AB} \parallel \overline{QR}$ and $\overline{AE} \parallel \overline{QT}$.'
         figure: 3.6_soup
         fig_w: 2.0
@@ -123,7 +86,7 @@ sections:
     intro: 'Decide if each statement must be true, could be true, or can''t be true. Explain.'
     items:
       - n: 2
-        minutes: 5
+        minutes: 7
         prompt: 'Congruent figures and similar figures.'
         parts:
           - label: a.
@@ -265,22 +228,27 @@ plan: |
   **Quick look (40 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up | Students, 1 min share |
-  | 4-10 | Together: Problems 1-2 | Teacher + class |
-  | 10-25 | With a partner: Problems 3-5 | Students (pairs) |
-  | 25-29 | QuickNotes | Teacher + class |
-  | 29-37 | CYU 1 and exit ticket 2 | Students |
+  | 0-5 | Warm-up | Students, 1 min share |
+  | 5-13 | Together: Problems 1-2 | Teacher + class |
+  | 13-23 | With a partner: Problem 3 | Students (pairs) |
+  | 23-27 | QuickNotes | Teacher + class |
+  | 27-37 | CYU 1 and exit ticket 2 | Students |
   | 37-40 | Collect exit ticket, assign practice | Teacher |
 
-  **Together (6 min).** Read the framing box. Problem 1: take a quick vote, then ask "what would we need to add to the move bank?" Problem 2: do it on patty paper under the doc camera; trace, translate, rotate, then show that halving lands $B$ on $E$.
+  **Warm-up (5 min).** 4 min to fill the boxes, 1 min share. Ask "which length broke the rule?"
 
-  **Partner work (15 min).** About 5 min each. Problem 3: if pairs are stuck, point to the hint and have them redraw the two triangles. Problem 4: push on "does order matter?" (it doesn't here, since both moves use center $V$). Problem 5c is the key talk: ask "which vertex does $E$ match? How do you know?"
-  - MLL supports: move bank with the four transformation words, fill-in boxes for every step, Problems 3b and 5b use a sentence frame. Any language is fine for partner talk.
-  - Watch for: students who write the statement in alphabetical order, or who name the scale factor upside down.
+  **Together (8 min).** Read the framing box. Problem 1 (3 min): take a quick vote, then ask "what would we need to add to the move bank?" Problem 2 (5 min): do it on patty paper under the doc camera; trace, translate, rotate, then show that halving lands $B$ on $E$.
 
-  **QuickNotes (4 min).** Read the definition together. Connect the last LT 2 bullet to Problem 5c.
+  **Partner work (10 min).** Problem 3 (about 9 min, including a 2 min share of 3c), plus 1 min to get into pairs. 3a: pairs check all three ratios before writing $\frac{2}{5}$. 3c is the key talk: ask "which vertex does $E$ match? How do you know?"
+  - Extension for early finishers (say it, don't print it): "What sequence takes $\triangle TQR$ back onto $\triangle EAB$?" (translate $Q$ to $A$, then dilate with center $A$ and scale factor $\frac{5}{2}$). This sets up the $\frac{1}{k}$ bullet in the QuickNotes.
+  - MLL supports: move bank with the four transformation words, fill-in boxes for every step, Problem 3b uses a sentence frame. Any language is fine for partner talk.
+  - Watch for: students who write the statement in alphabetical order, or who name the scale factor upside down ($\frac{5}{2}$ instead of $\frac{2}{5}$).
 
-  **CYU and exit (8 min).** CYU 1 checks letter order. The exit ticket checks the definition; look for "scale factor 1" in part b.
+  **QuickNotes (4 min).** Read the definition together. For the $\frac{1}{k}$ bullet, point back to Problem 2: $\triangle ABC$ to $\triangle DEF$ uses $\frac{1}{2}$, so going back uses 2. Connect the last LT 2 bullet to Problem 3c.
+
+  **CYU and exit (10 min).** CYU 1 (3 min) checks letter order. The exit ticket (7 min) checks the definition; look for "scale factor 1" in part b.
 
 guide_notes: |
+  **Nov 16: trimmed to 40 minutes.** Cut: the nested-triangles problem ($\triangle QOR$ and $\triangle PON$; same "find $k$, write the statement" as Problem 3a-b, and practice 7 covers a dilation with a shared vertex) and the squares problem (squares $F$ and $G$; same rotate-then-dilate as Problem 2, and practice 1 and 2 cover the squares sequence and $\frac{1}{k}$). Alphabet Soup is now Problem 3.
+
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", or a home-language word for congruent. Accept answers that list the moves in a different valid order.

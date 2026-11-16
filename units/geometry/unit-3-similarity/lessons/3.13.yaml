@@ -1,5 +1,5 @@
 id: 3.13
-title: Tangled triangles
+title: Altitude to the hypotenuse
 notes_title: Altitude to the hypotenuse
 framing: >-
   Draw the altitude from the right angle of a right triangle and you get two smaller triangles. Today's question:
@@ -9,49 +9,32 @@ materials: patty paper
 sections:
   - kind: warmup
     items:
-      - minutes: 4
-        prompt: 'Review: the Pythagorean theorem says $a^2 + b^2 = c^2$, where $c$ is the hypotenuse.'
+      - minutes: 3
+        prompt: 'Review: the Pythagorean theorem says $a^2 + b^2 = c^2$, where $c$ is the hypotenuse. Find $x$.'
         figure: 3.13_warmup
         fig_w: 1.5
         after: 0.04
-        parts:
-          - label: a.
-            prompt: 'Find $x$.'
-            fill: [['$x =$', '9']]
-            box_w: 0.9
-            answer: '$x^2 + 12^2 = 15^2$, so $x^2 = 225 - 144 = 81$ and $x = 9$.'
-            work: 0.6
-          - label: b.
-            prompt: 'A triangle has sides 10, 25, and 26. Is it a right triangle? Fill in each box.'
-            fill: [['$10^2 + 25^2 =$', '725'], ['$26^2 =$', '676'], ['Right triangle? (yes or no)', 'no']]
-            box_w: 0.9
-            answer: '$725 \neq 676$, so it is not a right triangle (converse of the Pythagorean theorem). Since $725 > 676$, it is acute.'
-            work: 0
+        fill: [['$x =$', '9']]
+        box_w: 0.9
+        answer: '$x^2 + 12^2 = 15^2$, so $x^2 = 225 - 144 = 81$ and $x = 9$.'
+        work: 0.6
 
   - kind: together
     items:
       - n: 1
-        minutes: 3
-        prompt: 'Is $\triangle ADC \sim \triangle CDB$? Use the angles. Fill in each box.'
+        id: minimum
+        minutes: 4
+        prompt: 'Pretend all the measurements in the figure are erased. You only know that $\angle ACB$ and $\angle ADC$ are right angles. Can you prove $\triangle ADC \sim \triangle CDB$ by adding just one measurement? Which one? Explain.'
         figure: 3.13_together
         fig_w: 2.7
-        after: 0.04
-        frame:
-          - ['$m\angle ACD = 180^\circ - 90^\circ - 53^\circ =$', '$37^\circ$', '.']
-          - ['$m\angle DCB = 180^\circ - 90^\circ - 37^\circ =$', '$53^\circ$', '.']
-          - ['So $\triangle ADC \sim \triangle CDB$ by', 'AA', '.', 0.9]
-        answer: '$\angle A \cong \angle DCB$ ($53^\circ$) and $\angle ADC \cong \angle CDB$ (right angles). Check with sides: $\frac{CD}{AD} = \frac{7.2}{5.4}$, $\frac{DB}{CD} = \frac{9.6}{7.2}$, $\frac{CB}{AC} = \frac{12}{9}$. All equal $\frac{4}{3}$.'
-        work: 0
-      - n: 2
-        minutes: 2
-        prompt: 'Pretend all the measurements in Problem 1 are erased. You only know that $\angle ACB$ and $\angle ADC$ are right angles. Can you prove $\triangle ADC \sim \triangle CDB$ by adding just one measurement? Which one? Explain.'
         work: 0.8
         answer: 'Yes. One acute angle is enough, for example $m\angle A = 53^\circ$. Then $m\angle ACD = 37^\circ$ and $m\angle DCB = 90^\circ - 37^\circ = 53^\circ$, so AA. Any value works the same way ($x$ and $90^\circ - x$), so the triangles are always similar.'
 
   - kind: partner
     page_break_before: true
     items:
-      - n: 3
+      - n: 2
+        id: hfe
         minutes: 2
         prompt: 'In right $\triangle HFE$, $\overline{EG}$ is the altitude to the hypotenuse. How many right triangles are in the figure? Name them.'
         figure: 3.13_hfe
@@ -61,10 +44,11 @@ sections:
         box_w: 2.6
         answer: 'Right angles: $\angle HEF$, $\angle HGE$, $\angle EGF$.'
         work: 0
-      - n: 4
-        minutes: 5
+      - n: 3
+        id: untangle
+        minutes: 7
         prompt:
-          - 'Untangle the triangles from Problem 3.'
+          - 'Untangle the triangles from {ref:hfe}.'
           - 'Step 1: Trace $\triangle HEG$ and $\triangle EFG$ on separate pieces of patty paper.'
           - 'Step 2: Turn or flip each one so the hypotenuse is on top and the right angle is at the bottom, like $\triangle HFE$.'
           - 'Step 3: Draw both triangles in the box. Label the vertices, the lengths you know, and the angle measures.'
@@ -73,24 +57,27 @@ sections:
           key_figure: 3.13_redraw
           key_fig_w: 3.3
           key_note: '$\triangle HEG$: $\angle H = 53^\circ$, $\angle E = 37^\circ$, $\angle G = 90^\circ$. $\triangle EFG$: $\angle E = 53^\circ$, $\angle F = 37^\circ$, $\angle G = 90^\circ$.'
-      - n: 5
+      - n: 4
+        id: statement
         minutes: 3
         prompt: 'Write the similarity statement. Match the vertices by angle. Fill in each box.'
         after: 0.04
         frame:
           - ['$\triangle HFE \sim \triangle$', '$HEG$', '.']
           - ['$\triangle HFE \sim \triangle$', '$EFG$', '.']
-          - ['In Problem 4, each pair of triangles has two congruent angles, so they are similar by', 'AA', '.', 0.9]
+          - ['In {ref:untangle}, each pair of triangles has two congruent angles, so they are similar by', 'AA', '.', 0.9]
         answer: 'Order: the $53^\circ$ angle, then the $37^\circ$ angle, then the right angle.'
         work: 0
-      - n: 6
+      - n: 5
+        id: hf
         minutes: 2
-        prompt: 'Use the Pythagorean theorem to find $HF$ in Problem 3.'
+        prompt: 'Use the Pythagorean theorem to find $HF$ in {ref:hfe}.'
         fill: [['$HF =$', '20']]
         box_w: 0.9
         answer: '$12^2 + 16^2 = 144 + 256 = 400$, so $HF = 20$.'
         work: 0.6
-      - n: 7
+      - n: 6
+        id: lengths
         minutes: 4
         prompt: 'Use similarity to find $HG$, $GE$, and $GF$. Write a proportion for each one.'
         fill: [['$HG =$', '7.2'], ['$GE =$', '9.6'], ['$GF =$', '12.8']]
@@ -104,21 +91,11 @@ sections:
 
   - kind: notes
 
-  - kind: cyu
-    items:
-      - n: 1
-        minutes: 3
-        prompt: 'In right $\triangle PQR$, $\overline{QS}$ is the altitude to the hypotenuse. Which similarity statement is true?'
-        figure: 3.13_cyu
-        fig_w: 2.0
-        choices: ['$\triangle PQR \sim \triangle PQS$', '$\triangle PQR \sim \triangle SQR$', '$\triangle PQR \sim \triangle PSQ$', '$\triangle PQR \sim \triangle QRS$']
-        choice_cols: 2
-        answer: '[C] $P \to P$, right angle $Q \to$ right angle $S$, $R \to Q$. [A] copies the letters from the figure; [B] pairs $P$ with the right angle $S$; [D] pairs the right angle $Q$ with $\angle R$.'
-        work: 0.1
   - kind: exit
     items:
-      - n: 2
-        minutes: 5
+      - n: 1
+        id: exit
+        minutes: 6
         prompt: 'Find $AB$ and $BD$. Then check $BD$ a different way. Show your work.'
         figure: 3.13_exit
         fig_w: 2.3
@@ -139,7 +116,6 @@ quicknotes:
   - '- Match each vertex of $\triangle ABC$ to the vertex with the same angle. The right angle $C$ goes with the right angle $D$.'
   - '**LT 2: I can use the Pythagorean theorem and similarity to find lengths.**'
   - '- Pythagorean theorem: in a right triangle, $a^2 + b^2 = c^2$. The hypotenuse $c$ is across from the right angle and is the longest side.'
-  - '- Converse: if $a^2 + b^2 = c^2$, then the triangle is a right triangle.'
   - '- Similarity: write a proportion with matching sides, for example $\frac{AD}{AC} = \frac{AC}{AB}$. Then check with the other method.'
 
 practice:
@@ -210,24 +186,27 @@ plan: |
   **Quick look (40 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up (Pythagorean review) | Students, 1 min share |
-  | 4-9 | Together: Problems 1-2 | Teacher + class |
-  | 9-25 | With a partner: Problems 3-7 | Students (pairs) |
-  | 25-29 | QuickNotes | Teacher + class |
-  | 29-37 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 0-3 | Warm-up (Pythagorean review) | Students, 1 min share |
+  | 3-8 | Together: {ref:minimum}, then hand out patty paper | Teacher + class |
+  | 8-27 | With a partner: Problems 2-6 | Students (pairs) |
+  | 27-31 | QuickNotes | Teacher + class |
+  | 31-37 | Exit ticket {num:exit} | Students (individual) |
   | 37-40 | Collect exit ticket, assign practice | Teacher |
 
-  **Together (5 min, doc camera).** Problem 1: fill the angle boxes with the class, then check the side ratios (all $\frac{4}{3}$). Problem 2 (from Math Medic 6.4): ask "what is the least we need to know?" Push to "any one acute angle," then "actually nothing: $x$ and $90^\circ - x$ always work."
+  **Together (4 min, doc camera).** {ref:minimum} (from Math Medic 6.4): ask "what is the least we need to know?" Start from the $53^\circ$ in the figure: $m\angle ACD = 37^\circ$ and $m\angle DCB = 53^\circ$, so AA (write this on the board as the worked case). Push to "any one acute angle," then "actually nothing: $x$ and $90^\circ - x$ always work."
 
-  **Work time (16 min, pairs).**
-  - Problem 4 is the core. Students trace each small triangle and turn or flip it until the right angle is at the bottom. Assessing: "Which angle in $\triangle HEG$ is $53^\circ$? How do you know?" Advancing: "Which side of $\triangle HEG$ matches $\overline{HF}$?"
-  - Common error in Problem 5: copying letters in figure order ($\triangle HGE$). Send them back to the angles in Problem 4.
-  - Problem 7: if a pair is stuck, point to the hypotenuse of each triangle: 20, 12, 16 gives scale factors 0.6 and 0.8.
-  - MLL supports: labeled figure, frames on Problems 1 and 5, any language in pair talk. Keep the words *altitude*, *hypotenuse*, *leg*.
+  **Work time (19 min, pairs, 1 min check-in at the end).**
+  - {ref:untangle} is the core. Students trace each small triangle and turn or flip it until the right angle is at the bottom. Assessing: "Which angle in $\triangle HEG$ is $53^\circ$? How do you know?" Advancing: "Which side of $\triangle HEG$ matches $\overline{HF}$?"
+  - Common error in {ref:statement}: copying letters in figure order ($\triangle HGE$). Send them back to the angles in {ref:untangle}.
+  - {ref:lengths}: if a pair is stuck, point to the hypotenuse of each triangle: 20, 12, 16 gives scale factors 0.6 and 0.8.
+  - Early finishers: practice 1 (select the similar triangles) or practice 3 (find $h$).
+  - MLL supports: labeled figures, frames on {ref:statement}, any language in pair talk. Keep the words *altitude*, *hypotenuse*, *leg*.
 
-  **QuickNotes (4 min).** Printed on page 3. Connect the AA bullet to Problem 2 and the proportion bullet to Problem 7.
+  **QuickNotes (4 min).** Printed on page 3. Connect the AA bullet to {ref:minimum} and the proportion bullet to {ref:lengths}.
 
-  **CYU (8 min).** CYU 1 shows who matches vertices by angle. The exit ticket asks for two methods; full credit for either method plus a correct check.
+  **Exit ticket (6 min).** The exit ticket asks for two methods; full credit for either method plus a correct check. Vertex matching (LT 1) is checked in pairs on {ref:statement} and on practice 1 tonight.
 
 guide_notes: |
+  **Nov 16: trimmed to 40 minutes.** Cut: warm-up b (converse check 10, 25, 26; nothing later uses it), old Together Problem 1 (the same $53^\circ$/$37^\circ$ angle chase students do on the patty paper; the new {ref:minimum} walks through it), and CYU 1 (similarity statement MC; practice 1 covers it). The converse bullet came out of the QuickNotes with warm-up b. Title changed from "Tangled triangles" to "Altitude to the hypotenuse."
+
   **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (2,4) and home-language words.

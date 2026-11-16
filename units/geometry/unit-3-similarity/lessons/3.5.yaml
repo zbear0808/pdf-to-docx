@@ -1,5 +1,5 @@
 id: 3.5
-title: Halfway there
+title: The midsegment of a triangle
 notes_title: The midsegment of a triangle
 framing: >-
   Connect the midpoints of two sides of a triangle. Today's question: how is that segment related to the third
@@ -34,7 +34,7 @@ sections:
         answer: '$AB = 2 \cdot AM$ and $AC = 2 \cdot AN$, so a dilation from $A$ with scale factor 2 takes $M$ to $B$ and $N$ to $C$.'
         work: 0
       - n: 2
-        minutes: 3
+        minutes: 4
         prompt: 'Prove that $BC = 2MN$. Fill in each box.'
         frame:
           - ['In Problem 1, the dilation takes $M$ to $B$ and $N$ to', '$C$', '.']
@@ -46,7 +46,7 @@ sections:
     page_break_before: true
     items:
       - n: 3
-        minutes: 3
+        minutes: 5
         prompt: 'What else must be true, now that $\triangle ABC$ is a dilation of $\triangle AMN$? Fill in each box. Then mark the parallel segments and the congruent angles on the figure.'
         frame:
           - ['A dilation takes a line to a', 'parallel', 'line, so $\overline{MN} \parallel \overline{BC}$.']
@@ -56,7 +56,7 @@ sections:
         fig_w: 1.8
         answer: 'Marks: see the red figure.'
       - n: 4
-        minutes: 4
+        minutes: 6
         prompt: '$M$ is $\frac{2}{3}$ of the way from $A$ to $B$. $N$ is $\frac{2}{3}$ of the way from $A$ to $C$.'
         figure: 3.5_two_thirds
         fig_w: 1.9
@@ -72,33 +72,6 @@ sections:
             fill: [['$MN$ is this fraction of $BC$:', '$\frac{2}{3}$'], ['$MN =$', '6']]
             answer: '$MN = \frac{2}{3} \cdot 9 = 6$, and $\overline{MN} \parallel \overline{BC}$.'
             work: 0
-      - n: 5
-        minutes: 3
-        prompt: 'In each column, $\frac{AM}{AB} = \frac{AN}{AC}$. $BC = 12$. Find $MN$.'
-        work: 0
-        table:
-          header: ['$\frac{AM}{AB} = \frac{AN}{AC}$', '$\frac{1}{2}$', '$\frac{2}{3}$', '$\frac{1}{3}$', '$\frac{3}{4}$']
-          row_label: '$MN$'
-          answers: ['6', '8', '4', '9']
-          first_w: 1.6
-      - n: 6
-        minutes: 4
-        prompt: 'Look at the warm-up figure again. Each corner triangle ($\triangle AMN$, $\triangle MBL$, $\triangle NLC$) is a dilation of $\triangle ABC$.'
-        figure: 3.5_midpoints
-        fig_w: 1.7
-        answer: 'Each center is the vertex the corner triangle shares with $\triangle ABC$.'
-        parts:
-          - label: a.
-            prompt: 'Name the center of each dilation and the scale factor.'
-            fill: [['$\triangle AMN$ center:', '$A$'], ['$\triangle MBL$ center:', '$B$'], ['$\triangle NLC$ center:', '$C$'], ['Scale factor:', '$\frac{1}{2}$']]
-            fill_cols: 2
-            box_w: 0.9
-            work: 0
-          - label: b.
-            prompt: 'Explain why $\triangle MBL$ is a dilation of $\triangle ABC$. Fill in each box.'
-            frame:
-              - ['$BM$ is half of $BA$, and $BL$ is half of', '$BC$', '.']
-              - ['So the center is $B$ and the scale factor is', '$\frac{1}{2}$', '.']
 
   - kind: notes
 
@@ -134,7 +107,7 @@ quicknotes:
   - '- Problem 4: $\frac{2}{3}$ of the way along each side, so $MN = \frac{2}{3} BC$.'
 
 practice:
-  title: 'Splitting triangle sides, part 1: practice'
+  title: 'The midsegment of a triangle: practice'
   rows:
     - cells:
         - n: 1
@@ -201,20 +174,25 @@ plan: |
   | Time | Part | Who talks |
   |---|---|---|
   | 0-4 | Warm-up: notice and wonder | Students, 1 min share |
-  | 4-10 | Together: Problems 1-2 | Teacher + class |
-  | 10-24 | With a partner: Problems 3-6 | Students (pairs) |
+  | 4-11 | Together: Problems 1-2 | Teacher + class |
+  | 11-24 | With a partner: Problems 3-4 | Students (pairs) |
   | 24-28 | QuickNotes | Teacher + class |
-  | 28-36 | CYU 1 and exit ticket 2 | Students (individual) |
-  | 36-39 | Collect exit ticket, assign practice | Teacher |
+  | 28-37 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 37-40 | Collect exit ticket, assign practice | Teacher |
 
-  **Together (6 min, doc camera).** Problem 1: measure $AM$ and $AB$ with a ruler under the camera; ask "Where does $M$ land if we dilate from $A$ by 2?" Problem 2: fill the frame together; stress that the dilation moves the whole segment $\overline{MN}$ onto $\overline{BC}$.
+  **Warm-up (4 min).** 3 min to write, 1 min share. Take one notice about $\overline{NL}$ (parallel, half as long) and one wonder; that notice leads into Problem 1. If "Are the 4 small triangles congruent?" comes up, say yes and that we'll see why with dilations.
 
-  **Partner work (14 min).**
-  - Problem 3 first (3 min). Students mark the Problem 3 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
-  - Problem 4: common error is scale factor $\frac{2}{3}$ (the image is bigger, so $k = \frac{3}{2}$). Ask: "Is $\triangle ABC$ bigger or smaller than $\triangle AMN$?"
-  - Problem 5 is the pattern for the QuickNotes theorem. Problem 6 links back to the warm-up wonders. In the debrief, answer "Are the 4 small triangles congruent?": yes, each has sides $\frac{1}{2}$ of $\triangle ABC$'s sides.
-  - MLL supports: Problems 2, 3, and 6b are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
+  **Together (7 min, doc camera).** Problem 1 (3 min): measure $AM$ and $AB$ with a ruler under the camera; ask "Where does $M$ land if we dilate from $A$ by 2?" Problem 2 (4 min): fill the frame together; stress that the dilation moves the whole segment $\overline{MN}$ onto $\overline{BC}$.
 
-  **QuickNotes (4 min).** Read the bullets; point to Problem 2 for "$BC = 2MN$" and Problem 5 for the theorem.
+  **Partner work (13 min).**
+  - Problem 3 first (5 min, after 1 min to get into pairs). Students mark the Problem 3 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
+  - Problem 4 (6 min, then a 1 min share): common error is scale factor $\frac{2}{3}$ (the image is bigger, so $k = \frac{3}{2}$). Ask: "Is $\triangle ABC$ bigger or smaller than $\triangle AMN$?" Problem 4 is the example for the QuickNotes theorem.
+  - Early finishers (extension, not on the handout): on the warm-up figure, explain why $\triangle MBL$ is a dilation of $\triangle ABC$ (center $B$, scale factor $\frac{1}{2}$). Then: are the 4 small triangles congruent? (Yes, each has sides $\frac{1}{2}$ of $\triangle ABC$'s sides.)
+  - MLL supports: Problems 2 and 3 are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
 
-  **CYU and exit (8 min).** CYU 1 shows whether students double the right side. The exit ticket checks the theorem: students must show both fractions equal $\frac{1}{3}$ before claiming parallel.
+  **QuickNotes (4 min).** Read the bullets; point to Problem 2 for "$BC = 2MN$" and Problem 4 for the theorem.
+
+  **CYU and exit (9 min: CYU 3, exit 5, 1 to hand out).** CYU 1 shows whether students double the right side. The exit ticket checks the theorem: students must show both fractions equal $\frac{1}{3}$ before claiming parallel.
+
+guide_notes: |
+  Nov 16: trimmed to 40 minutes. Cut: the fraction table (same idea as Problem 4 with new numbers) and the corner-triangles item (the midsegment dilation again with center $B$ or $C$; practice 2 covers the midpoint triangle). The corner-triangles item is now the early-finisher extension in the plan. Minutes re-timed honestly (the old plan said 39, the period ran about an hour).

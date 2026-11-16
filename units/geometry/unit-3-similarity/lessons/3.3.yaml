@@ -1,5 +1,5 @@
 id: 3.3
-title: Stretch it, measure it
+title: Measuring dilations
 notes_title: Measuring dilations
 framing: >-
   In Lesson 3.1 you dilated points: each image point is $k$ times as far from the center. Today's question:
@@ -9,15 +9,7 @@ materials: ruler or a strip of paper
 sections:
   - kind: warmup
     items:
-      - n: A
-        minutes: 3
-        prompt: 'Dilate $\triangle FGH$ using center $C$ and scale factor 3. Label the image $\triangle F''G''H''$.'
-        figure: 3.3_warm_dilate
-        fig_w: 2.3
-        work: 0
-        answer: '$F''$, $G''$, and $H''$ are each 3 times as far from $C$ as $F$, $G$, and $H$.'
-      - n: B
-        minutes: 2
+      - minutes: 4
         prompt: 'Kai dilated $\triangle JKL$ using center $C$ and scale factor 2. One image point is wrong. Count grid units to check. Fill in each box.'
         figure: 3.3_warm_error
         fig_w: 2.2
@@ -29,7 +21,7 @@ sections:
   - kind: together
     items:
       - n: 1
-        minutes: 3
+        minutes: 2
         prompt: 'Here is center $C$ and $\triangle EFG$. Count grid units to find the side lengths. $FG = 5$ is given.'
         figure: 3.3_efg
         fig_w: 3.0
@@ -54,7 +46,7 @@ sections:
         answer: 'Red triangle on the Problem 1 grid. $E$ is over 1 and up 1 from $C$, so $E''$ is over 2 and up 2. In the same way, $F''$ is over 2 and up 8, and $G''$ is over 10 and up 2.'
         work: 0.5
       - n: 4
-        minutes: 4
+        minutes: 5
         prompt:
           - 'Measure $\triangle E''F''G''$. Count units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along $\overline{F''G''}$.'
           - 'Then fill in the table.'
@@ -70,29 +62,7 @@ sections:
           height: 0.5
       - n: 5
         minutes: 4
-        prompt: 'Another pair dilated $\triangle EFG$ from $C$ with scale factor $\frac{1}{2}$. Answer without making the drawing.'
-        answer: 'Multiply each length by $\frac{1}{2}$.'
-        parts:
-          - label: a.
-            prompt: 'Find the side lengths of their image.'
-            fill: [['image of $EF$:', '1.5'], ['image of $EG$:', '2'], ['image of $FG$:', '2.5']]
-            fill_cols: 3
-            box_w: 0.9
-            work: 0
-          - label: b.
-            prompt: 'Find the perimeter of each triangle.'
-            fill: [['$\triangle EFG$:', '12'], ['their image:', '6']]
-            fill_cols: 2
-            box_w: 0.9
-            work: 0
-          - label: c.
-            prompt: 'Is their image larger or smaller than $\triangle EFG$? Fill in each box.'
-            frame:
-              - ['Their image is', 'smaller', '.']
-              - ['I know because the scale factor $\frac{1}{2}$ is', 'less', ' than 1.']
-      - n: 6
-        minutes: 3
-        prompt: 'Sum it up. Use Problems 4 and 5. Fill in each box.'
+        prompt: 'Sum it up. Use Problem 4. Fill in each box.'
         frame:
           - ['When a figure is dilated with scale factor $k$, every side length is multiplied by', '$k$', '.']
           - ['Image length divided by original length equals', '$k$', '.']
@@ -224,23 +194,27 @@ plan: |
   **Quick look (40 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-5 | Warm-up A and B | Students (individual), 1 min share |
-  | 5-11 | Together: Problems 1-2 | Teacher + class |
-  | 11-28 | With a partner: Problems 3-6 | Students (pairs) |
-  | 28-32 | QuickNotes | Teacher + class |
-  | 32-40 | CYU 1 and exit ticket 2; collect, assign practice | Students (individual) |
+  | 0-4 | Warm-up | Students (individual), 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-5 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-37 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 37-40 | Collect, assign practice | Teacher |
 
-  **Warm-up (5 min).** A reviews 3.1. B: ask "How far is $L$ from $C$? How far is $L'$?" Students count "over 2, up 2" and "over 6, up 6."
+  **Warm-up (4 min).** Reviews 3.1. Ask "How far is $L$ from $C$? How far is $L'$?" Students count "over 2, up 2" and "over 6, up 6."
 
-  **Together (6 min, doc camera).** Problem 1: count $EF$ and $EG$ together. Problem 2: take three predictions and write them on the board. Don't confirm; Problem 4 checks them.
+  **Together (6 min, doc camera).** Problem 1 (2 min): count $EF$ and $EG$ together. Problem 2 (3 min): take three predictions and write them on the board. Don't confirm; Problem 4 checks them. About 1 min to get pairs started on page 2.
 
-  **With a partner (17 min).**
-  - Problem 3: count from $C$ to each vertex ("over, up"), then double. Watch for students who double the side lengths from $E$ instead of from $C$; ask where $E'$ is.
-  - Problem 4: show the paper-strip move once. Compare with the predictions from Problem 2.
-  - Problem 5 uses $k = \frac{1}{2}$ so students see a reduction without drawing. Problem 6 is the summary that leads into QuickNotes.
-  - MLL supports: labeled grid, short sentences, fill-in boxes on Warm-up B, 5c, and 6. Any language is fine for partner talk.
-  - Optional (if time): pairs with different scale factors trace their triangles and line them up. The images have the same shape.
+  **With a partner (15 min).**
+  - Problem 3 (6 min): count from $C$ to each vertex ("over, up"), then double. Watch for students who double the side lengths from $E$ instead of from $C$; ask where $E'$ is.
+  - Problem 4 (5 min): show the paper-strip move once. Compare with the predictions from Problem 2.
+  - Problem 5 (4 min, 1 of it a share-out) is the summary that leads into QuickNotes. For the perimeter box, students add the sides in Problem 4: 12 and 24.
+  - MLL supports: labeled grid, short sentences, fill-in boxes on the warm-up and Problem 5. Any language is fine for partner talk.
+  - Early finishers (say it, don't print it): "Another pair used $k = \frac{1}{2}$. Without drawing, find their side lengths and perimeter. Is their image larger or smaller?" (1.5, 2, 2.5; perimeter 6; smaller because $\frac{1}{2} < 1$.)
 
-  **QuickNotes (4 min).** Printed on page 3. Read each bullet against Problem 4 and Problem 5.
+  **QuickNotes (4 min).** Printed on page 3. Read each bullet against Problem 4. For the $0 < k < 1$ bullet, point ahead to CYU 1.
 
   **CYU and exit (8 min).** CYU 1 shows who flips the ratio (choice 4) or subtracts (choice 6). The exit ticket checks "larger or smaller" and one image length.
+
+guide_notes: |
+  Nov 16: trimmed to 40 minutes. Cut: Warm-up A (dilate $FGH$ with $k = 3$; Problem 3 is the same drawing move), old Problem 5 ($k = \frac{1}{2}$ lengths, perimeter, larger or smaller; now the early-finisher extension, and Practice 2-3 and the exit ticket cover it). Old Problem 6 is now Problem 5.

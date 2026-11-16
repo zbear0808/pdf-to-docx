@@ -1,5 +1,5 @@
 id: 3.9
-title: Essentials only
+title: Angle-Angle similarity
 notes_title: Angle-Angle similarity
 framing: >-
   Two triangles have six parts: three sides and three angles. Today's question: what is the least information
@@ -9,7 +9,7 @@ materials: protractor, ruler (cm)
 sections:
   - kind: warmup
     items:
-      - minutes: 4
+      - minutes: 5
         prompt: '$\triangle P''Q''R''$ is the image of $\triangle PQR$ after a dilation with scale factor $\frac{1}{2}$. Matching arcs show congruent angles. Fill in each box.'
         figure: 3.9_warmup
         fig_w: 2.3
@@ -28,7 +28,7 @@ sections:
   - kind: together
     items:
       - n: 1
-        minutes: 4
+        minutes: 6
         prompt:
           - 'Draw 2 triangles in the box. Each triangle has a $45^\circ$ angle.'
           - 'Make them as different as you can: different shape and different size.'
@@ -51,7 +51,7 @@ sections:
   - kind: partner
     items:
       - n: 3
-        minutes: 6
+        minutes: 8
         prompt:
           - 'Draw 2 triangles in the box. Each triangle has a $45^\circ$ angle and a $30^\circ$ angle.'
           - 'Triangle 1: the side between the $45^\circ$ and $30^\circ$ angles is 2 cm.'
@@ -63,7 +63,7 @@ sections:
           key_fig_w: 2.8
           key_note: 'Drawn to scale. Both triangles have angles $45^\circ$, $30^\circ$, $105^\circ$. Triangle 2 is 3 times as big.'
       - n: 4
-        minutes: 3
+        minutes: 4
         prompt: 'Use your triangles from Problem 3.'
         parts:
           - label: a.
@@ -82,31 +82,12 @@ sections:
           - ['A dilation does not change', 'angle measures', '.', 1.6]
           - ['So the dilated triangle and the second triangle are congruent by', 'ASA', '.']
           - ['A dilation, then rigid motions, take one onto the other. They are', 'similar', '.']
-      - n: 6
-        minutes: 3
-        prompt: 'You want to prove $\triangle JKL\sim\triangle XYZ$. Can you do it by adding exactly one angle measure to $\triangle XYZ$? Which one?'
-        figure: 3.9_p6
-        fig_w: 2.9
-        fill: [['Measurement to add:', '$m\angle Y=70^\circ$']]
-        box_w: 1.6
-        answer: '$m\angle Z=60^\circ$ also works: in $\triangle JKL$, $m\angle L=180^\circ-50^\circ-70^\circ=60^\circ$. Then 2 pairs of angles match (AA).'
 
   - kind: notes
 
-  - kind: cyu
-    items:
-      - n: 1
-        minutes: 3
-        prompt: '$\overline{AD}\parallel\overline{CB}$. Prove $\triangle DEA$ is similar to another triangle. Fill in each box.'
-        figure: 3.9_cyu
-        fig_w: 1.9
-        frame:
-          - ['$\angle A\cong$', '$\angle C$', ' (alternate interior angles, $\overline{AD}\parallel\overline{CB}$)']
-          - ['$\angle DEA\cong$', '$\angle BEC$', '(vertical angles)']
-          - ['So $\triangle DEA\sim$', '$\triangle BEC$', 'by AA.']
   - kind: exit
     items:
-      - n: 2
+      - n: 1
         minutes: 5
         prompt: '$\triangle ABC$ has a $40^\circ$ angle and a $60^\circ$ angle. $\triangle DFE$ has a $40^\circ$ angle and an $80^\circ$ angle. Lengths are in cm.'
         figure: 3.9_exit
@@ -234,27 +215,29 @@ plan: |
   **Quick look (40 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up (ASA as a tool) | Students, 1 min share |
-  | 4-10 | Together: Problems 1-2 | Teacher + class |
-  | 10-25 | With a partner: Problems 3-6 | Students (pairs) |
-  | 25-29 | QuickNotes | Teacher + class |
-  | 29-37 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 0-5 | Warm-up (ASA as a tool) | Students, 1 min share |
+  | 5-13 | Together: Problems 1-2 | Teacher + class |
+  | 13-28 | With a partner: Problems 3-5 | Students (pairs) |
+  | 28-32 | QuickNotes | Teacher + class |
+  | 32-37 | Exit ticket 1 | Students (individual) |
   | 37-40 | Collect exit ticket, assign practice | Teacher |
 
-  **Together (6 min, doc camera).** Read the framing box. Problem 1: draw one skinny and one right triangle with a $45^\circ$ angle; ask for a student drawing too. Problem 2: one angle is not enough.
+  **Together (8 min, doc camera).** Read the framing box. Problem 1 (6 min): draw one skinny and one right triangle with a $45^\circ$ angle; ask for a student drawing too. Problem 2 (2 min): one angle is not enough.
 
   **Partner work (15 min).**
-  - Problem 3 needs a protractor. Model step 1 if pairs stall. Pairs compare with the next pair: every Triangle 2 looks like Triangle 1, only bigger.
-  - Problem 4b: measurements give about 3, not exactly 3. That is fine.
-  - Problem 5 links back to the warm-up. Ask: "Which triangle in the warm-up is the dilated one?" ($\triangle P'Q'R'$).
-  - Problem 6 (from Math Medic 6.4): push for "only one". Some say "a side"; ask whether one side can prove similarity.
-  - MLL supports: frames on warm-up, Problems 2 and 5, and exit 2a; labeled figures; any language for talk.
+  - Problem 3 (8 min) needs a protractor. Model step 1 if pairs stall. Pairs compare with the next pair: every Triangle 2 looks like Triangle 1, only bigger.
+  - Problem 4 (4 min). 4b: measurements give about 3, not exactly 3. That is fine.
+  - Problem 5 (3 min) links back to the warm-up. Ask: "Which triangle in the warm-up is the dilated one?" ($\triangle P'Q'R'$).
+  - Early finishers (project it, not on the handout): the Math Medic 6.4 "add exactly one angle" question (figure `3.9_p6`: which one angle measure added to $\triangle XYZ$ proves $\triangle JKL\sim\triangle XYZ$? Answer: $m\angle Y=70^\circ$ or $m\angle Z=60^\circ$). Push for "only one". Some say "a side"; ask whether one side can prove similarity.
+  - MLL supports: frames on warm-up, Problems 2 and 5, and exit 1a; labeled figures; any language for talk.
 
-  **QuickNotes (4 min).** Printed on page 3. Connect bullet 2 to Problem 5, bullet 3 to Problem 1, and bullet 4 to CYU 1.
+  **QuickNotes (4 min).** Printed on page 3. Connect bullet 2 to Problem 5, bullet 3 to Problem 1, and bullet 4 to practice 3 (vertical angles).
 
-  **CYU and exit (8 min).** CYU 1 checks alternate interior angles, vertical angles, and letter order. Exit 2: $\triangle DFE$ sits on its 8.1 side, so watch for students who match 8.1 with 4.6 because both are "the bottom side". The angles decide the match: 8.1 is across from the $60^\circ$ angle F, so it matches $x$.
+  **Exit (5 min).** Exit 1: $\triangle DFE$ sits on its 8.1 side, so watch for students who match 8.1 with 4.6 because both are "the bottom side". The angles decide the match: 8.1 is across from the $60^\circ$ angle F, so it matches $x$.
 
 guide_notes: |
+  **Nov 16: trimmed to 40 minutes.** Cut: the "add exactly one angle" partner problem (repeats the third-angle step in Problem 4a and exit 1a; practice 2 covers it; now an early-finisher extension in the plan) and the CYU parallel-lines bowtie proof (the exit ticket already checks an AA frame; practice 3 covers vertical angles). The exit ticket is now item 1.
+
   **Changes from the source.** Exit ticket numbers changed so the triangles really exist (the source's 3, 6, 8, 5 can't all go with $40^\circ$, $60^\circ$, $80^\circ$ triangles).
 
   **Scoring notes.** Accept "same angles" or "two angles match" for AA. Accept measured scale factors from 2.8 to 3.2 in Problem 4b.

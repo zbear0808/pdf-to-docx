@@ -1,5 +1,5 @@
 id: 3.11
-title: The road back home
+title: The side splitter theorem
 notes_title: The side splitter theorem
 framing: >-
   Two streets leave the library, and two parallel streets cut across both of them. Today's question: when a line
@@ -11,7 +11,7 @@ notes_fig_w: 1.2
 sections:
   - kind: warmup
     items:
-      - minutes: 3
+      - minutes: 4
         prompt: '$\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$. What do you notice? What do you wonder?'
         figure: 3.11_warmup
         fig_w: 2.0
@@ -27,16 +27,7 @@ sections:
   - kind: together
     items:
       - n: 1
-        minutes: 3
-        prompt: 'Use the warm-up figure. Fill in each box.'
-        after: 0.06
-        frame:
-          - ['$\angle ABC \cong$', '$\angle MBN$', '(the same angle).']
-          - ['$\angle BAC \cong$', '$\angle BMN$', '.']
-          - ['These are', 'corresponding', 'angles because $\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$.', 1.4]
-          - ['So $\triangle ABC \sim$', '$\triangle MBN$', 'by AA.']
-      - n: 2
-        minutes: 4
+        minutes: 6
         prompt: '$\overline{BD} \parallel \overline{FG}$, $EG = 12$, and $EB = 2.5$. Find $ED$ and $EF$. Show your work.'
         figure: 3.11_t2
         fig_w: 2.4
@@ -44,12 +35,12 @@ sections:
         fill: [['$ED =$', '4'], ['$EF =$', '7.5']]
         box_w: 0.9
         answer: '$\triangle EBD \sim \triangle EFG$ (AA). Scale factor: $15 \div 5 = 3$. $ED = 12 \div 3 = 4$ and $EF = 2.5 \times 3 = 7.5$.'
-        page_break_after: true
 
   - kind: partner
     intro: 'Two roads leave the library ($L$): Oak Ave. and Lincoln Rd. Maple St. and Chestnut St. are parallel.'
     items:
-      - n: 3
+      - n: 2
+        id: map_aa
         minutes: 4
         prompt: 'On the map, mark the congruent angles. Then fill in each box.'
         figure: 3.11_map
@@ -57,18 +48,18 @@ sections:
         work: 0
         after: 0.06
         frame:
-          - ['$\triangle LPA$ and $\triangle LQB$ share', '$\angle L$', '.']
+          - ['The small and large triangles share', '$\angle L$', '.']
           - ['$\angle LPA$ and $\angle LQB$ are', 'corresponding', 'angles.']
           - ['So $\triangle LPA \sim$', '$\triangle LQB$', 'by AA.']
-      - n: 4
+      - n: 3
         minutes: 4
-        prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use $\triangle LPA \sim \triangle LQB$ from Problem 3. Show your work.'
-        work: 1.2
+        prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use the similar triangles from {ref:map_aa}. Show your work.'
+        work: 0.9
         fill: [['$LB =$', '2000 ft']]
         box_w: 1.1
         answer: 'Scale factor: $LQ \div LP = 1500 \div 900 = \frac{5}{3}$. $LB = 1200 \cdot \frac{5}{3} = 2000$ ft.'
-      - n: 5
-        minutes: 3
+      - n: 4
+        minutes: 4
         prompt: 'Compare the parts of each road between the streets.'
         parts:
           - label: a.
@@ -82,15 +73,14 @@ sections:
             fill: [['Lincoln Rd.: $LP \div PQ =$', '1.5'], ['Oak Ave.: $LA \div AB =$', '1.5']]
             fill_cols: 2
             box_w: 0.9
-            answer: '$900 \div 600 = 1.5$ and $1200 \div 800 = 1.5$'
             work: 0
           - label: c.
             prompt: 'Fill in the box.'
             frame:
               - ['Maple St. splits Lincoln Rd. and Oak Ave. into parts with', 'the same', 'ratio.']
             work: 0
-      - n: 6
-        minutes: 3
+      - n: 5
+        minutes: 4
         prompt: 'A bike path crosses Lincoln Rd. 300 ft from the library. It crosses Oak Ave. 450 ft from the library. Is the bike path parallel to Maple St.? Fill in each box.'
         after: 0.04
         frame:
@@ -101,22 +91,10 @@ sections:
 
   - kind: notes
 
-  - kind: cyu
-    items:
-      - n: 1
-        minutes: 4
-        prompt: 'Find $AB$ with $a^2 + b^2 = c^2$. Then use $\overline{AB} \parallel \overline{EF}$, $\overline{AD} \perp \overline{DB}$, and $DE = 7.5$ to find $DF$ and $EF$.'
-        figure: 3.11_cyu
-        fig_w: 2.1
-        work: 1.3
-        fill: [['$AB =$', '5'], ['$DF =$', '10'], ['$EF =$', '12.5']]
-        box_w: 0.9
-        answer: '$AB = \sqrt{3^2 + 4^2} = 5$. Scale factor: $7.5 \div 3 = 2.5$. $DF = 4 \times 2.5 = 10$ and $EF = 5 \times 2.5 = 12.5$.'
-        after: 0.06
   - kind: exit
     items:
-      - n: 2
-        minutes: 4
+      - n: 1
+        minutes: 5
         prompt: '$\overline{DE} \parallel \overline{AC}$. Find $AC$ and $AD$. Show your work.'
         figure: 3.11_exit
         fig_w: 2.3
@@ -241,21 +219,25 @@ plan: |
   **Quick look (40 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-3 | Warm-up (notice and wonder) | Students, 1 min share |
-  | 3-10 | Together: Problems 1-2 | Teacher + class |
-  | 10-24 | With a partner: Problems 3-6 (street map) | Students (pairs) |
-  | 24-28 | QuickNotes | Teacher + class |
-  | 28-36 | CYU 1 and exit ticket 2 | Students (individual) |
-  | 36-40 | Collect exit ticket, assign practice, buffer | Teacher |
+  | 0-4 | Warm-up (notice and wonder) | Students, 1 min share |
+  | 4-10 | Together: Problem 1 | Teacher + class |
+  | 10-26 | With a partner: Problems 2-5 (street map) | Students (pairs) |
+  | 26-30 | QuickNotes | Teacher + class |
+  | 30-35 | Exit ticket 1 | Students (individual) |
+  | 35-40 | Collect exit ticket, assign practice, transitions | Teacher |
 
-  **Together (7 min, doc camera).** Problem 1: ask "Which angle is in both triangles?" then "Which lines are parallel? What does that give us?" Problem 2: find the scale factor from the two parallel sides first ($15 \div 5$), then use it both ways (divide for $ED$, multiply for $EF$).
+  **Together (6 min, doc camera).** Start from the warm-up wonder "Are the triangles similar?" On the warm-up figure, ask "Which angle is in both triangles?" then "Which lines are parallel? What does that give us?" (AA). Then Problem 1: name $\triangle EBD \sim \triangle EFG$ the same way, find the scale factor from the two parallel sides first ($15 \div 5$), then use it both ways (divide for $ED$, multiply for $EF$).
 
-  **Partner work (14 min).** The street map is from Math Medic 6.5 with new streets and numbers.
-  - Problem 3: students mark arcs on the map before they fill in the boxes.
-  - Problem 4: watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
-  - Problem 5 sets up the theorem; Problem 6 is the converse. If time is short, do Problem 6 in the QuickNotes.
-  - MLL supports: frames on Problems 1, 3, and 6; street names stay on the map; any language in pair talk.
+  **Partner work (16 min).** The street map is from Math Medic 6.5 with new streets and numbers.
+  - Problem 2: students mark arcs on the map before they fill in the boxes.
+  - Problem 3: watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
+  - Problem 4 sets up the theorem; Problem 5 is the converse. If time is short, do Problem 5 in the QuickNotes.
+  - MLL supports: frames on Problems 2 and 5; street names stay on the map; any language in pair talk.
+  - Early finishers (on the board, not the handout): right triangle with legs $DA = 3$ and $DB = 4$, $\overline{AB} \parallel \overline{EF}$, $E$ on ray $DA$ with $DE = 7.5$, $F$ on ray $DB$. Find $AB$, $DF$, $EF$ (5, 10, 12.5).
 
   **QuickNotes (4 min).** Read the two theorems. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
 
-  **CYU and exit (8 min).** CYU 1 checks the scale factor along a side; the exit ticket checks whether students add the pieces ($BC = 4 + 6$) before scaling.
+  **Exit ticket (5 min).** Checks whether students add the pieces ($BC = 4 + 6$) before scaling.
+
+guide_notes: |
+  Nov 16: trimmed to 40 minutes and retitled "The side splitter theorem" (was "The road back home"). Cut: old Together 1 (AA frame on the warm-up figure; Problem 2 does the same frame on the map, and its questions are now asked out loud before Problem 1) and old CYU 1 (the exit ticket checks the same scale-factor move; practice 1 and 3 cover it; now an early-finisher extension in the plan). Old Problems 2-6 are now 1-5; the exit ticket is 1.
