@@ -1,0 +1,233 @@
+id: 3.4
+title: Dilating lines and angles
+notes_title: Dilating lines and angles
+framing: >-
+  A dilation makes every length longer or shorter by the scale factor. Today's question: what does a dilation do
+  to the angles of a figure, and what does it do to lines?
+materials: ruler
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        prompt:
+          - '$\triangle A''B''C''$ is a dilation of $\triangle ABC$ with center $P$ and scale factor 2.'
+          - 'a. What do you think is true about the angles of $\triangle A''B''C''$ compared to the angles of $\triangle ABC$?'
+          - 'b. Do you think this is true for every dilation?'
+        figure: 3.4_warmup
+        fig_w: 2.0
+        work: 0.9
+        answer: ['a. Sample: they look the same. $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, $\angle C \cong \angle C''$. The image is bigger but has the same shape.', 'b. Sample: yes, a dilation changes size, not shape.']
+
+  - kind: together
+    items:
+      - n: 1
+        minutes: 4
+        prompt:
+          - 'Estimate each dilation. Use center $C$ for all of them. Label each image.'
+          - 'a. Dilate point $A$ with scale factor $\frac{3}{4}$. Label the image $A''$.'
+          - 'b. Dilate point $B$ with scale factor $\frac{1}{3}$. Label the image $B''$.'
+          - 'c. Dilate point $D$ with scale factor $\frac{3}{2}$. Label the image $D''$.'
+          - 'd. Dilate line $CE$ with scale factor 2. Label the image $C''E''$.'
+        figure: 3.4_lines
+        fig_w: 3.0
+        work: 0.2
+        answer: '$A''$, $B''$, $D''$ all land on line $AB$ (same side of $C$ as the point). $C'' = C$, and $E''$ is on line $CE$ with $CE'' = 2CE$. Line $C''E''$ is line $CE$.'
+      - n: 2
+        minutes: 2
+        prompt: 'Look at your work in Problem 1. What happens when you dilate a line using a center that is ON the line? Fill in the box.'
+        frame:
+          - ['A line through the center of a dilation lands on', 'itself', '.']
+        page_break_after: true
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 5
+        prompt:
+          - '$\triangle A''B''C''$ is a dilation of $\triangle ABC$ with center $P$ and scale factor 2. $P$ is at the origin. Each square is 1 unit.'
+          - 'a. Find the slope of each side. Write it in the box.'
+        figure: 3.4_grid
+        fig_w: 1.9
+        fill:
+          - ['slope of $\overline{AB}$:', '$-\frac{1}{2}$']
+          - ['slope of $\overline{A''B''}$:', '$-\frac{1}{2}$']
+          - ['slope of $\overline{AC}$:', '$-2$']
+          - ['slope of $\overline{A''C''}$:', '$-2$']
+          - ['slope of $\overline{BC}$:', '1']
+          - ['slope of $\overline{B''C''}$:', '1']
+        fill_cols: 2
+        box_w: 0.9
+        work: 0
+        parts:
+          - label: b.
+            prompt: 'What do the slopes tell you? Fill in the box.'
+            frame:
+              - ['Each side of $\triangle ABC$ is', 'parallel', 'to its image, because they have the same slope.', 1.2]
+      - n: 4
+        minutes: 7
+        prompt:
+          - 'Jada says each side of $\triangle ABC$ is parallel to its image in $\triangle A''B''C''$ (same dilation: center $P$, scale factor 2). Prove it for $\overline{BC}$.'
+          - 'a. Mark a point $E$ on $\overline{PB}$, between $P$ and $B$.'
+          - 'b. Estimate the dilation of $E$ with center $P$ and scale factor 2. Label it $E''$.'
+        figure: 3.4_proof
+        fig_w: 2.2
+        layout: stacked
+        work: 0
+        answer: 'Sample $E$ and $E''$ in red. $E''$ is on ray $PB$, twice as far from $P$ as $E$.'
+        parts:
+          - label: c.
+            prompt: 'Compare $\angle EBC$ and $\angle E''B''C''$. Then finish the proof. Fill in each box.'
+            frame:
+              - ['$\angle E''B''C''$ is the image of $\angle EBC$, so the two angles are', 'congruent', '.']
+              - ['In the Problem 4 figure, they are', 'corresponding', 'angles for the transversal $\overleftrightarrow{PB}$.', 1.4]
+              - ['Congruent corresponding angles mean $\overline{BC}$ is', 'parallel', 'to $\overline{B''C''}$.']
+            answer: 'The same steps with a point on $\overline{PC}$ or $\overline{PA}$ prove $\overline{AC} \parallel \overline{A''C''}$ and $\overline{AB} \parallel \overline{A''B''}$.'
+      - n: 5
+        minutes: 3
+        prompt: 'In Jada''s figure the scale factor was greater than 1. Would your proof in Problem 4 change if the scale factor was less than 1? Explain.'
+        box: 1.0
+        answer: 'No. The image would be closer to $P$, but $\angle E''B''C''$ is still the image of $\angle EBC$, so the angles are still congruent corresponding angles, and the sides are still parallel.'
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 2
+        prompt: '$\angle ABC$ measures $48^\circ$. It is dilated with center $P$ and scale factor 3. What is the measure of its image, $\angle A''B''C''$?'
+        choices: ['$16^\circ$', '$48^\circ$', '$51^\circ$', '$144^\circ$']
+        choice_cols: 4
+        work: 0
+        answer: '[B] A dilation does not change angle measures. ([A] divides by 3, [C] adds 3, [D] multiplies by 3.)'
+      - n: 2
+        minutes: 2
+        prompt: 'Line $\ell$ does NOT pass through point $O$. Line $\ell$ is dilated with center $O$ and scale factor $\frac{1}{2}$. Which describes the image?'
+        choices: ['line $\ell$ itself', 'a line perpendicular to $\ell$', 'a line parallel to $\ell$', 'a line through $O$']
+        choice_cols: 2
+        work: 0
+        answer: '[C] A line not through the center goes to a parallel line. ([A] is only true when $O$ is on $\ell$.)'
+  - kind: exit
+    items:
+      - n: 3
+        minutes: 5
+        prompt: '$\triangle ABC$ is dilated with center $D$ and scale factor 2. Use the figure. Fill in each box.'
+        figure: 3.4_cyu
+        fig_w: 1.9
+        work: 0
+        fill:
+          - ['a. $\angle ABC$ and $\angle A''B''C''$ are', 'congruent']
+          - ['b. $\overline{A''B''}$ and $\overline{AB}$ are', 'parallel']
+          - ['c. $A''B''$ is how many times $AB$?', '2']
+          - ['d. $A''D$ is how many times $AD$?', '2']
+        box_w: 1.2
+        parts:
+          - label: e.
+            prompt: 'Explain why line $BC$ is the same line as line $B''C''$. Fill in each box.'
+            frame:
+              - ['Line $BC$ passes through', '$D$', ', the center of the dilation.']
+              - ['A line through the center lands on', 'itself', ', so line $B''C''$ is line $BC$.']
+
+quicknotes:
+  - '**LT 1: I can explain what a dilation does to angles.**'
+  - '- A dilation does not change angle measures. Corresponding angles are congruent.'
+  - '- If $\triangle A''B''C''$ is a dilation of $\triangle ABC$, then $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, and $\angle C \cong \angle C''$.'
+  - '**LT 2: I can explain what a dilation does to lines.**'
+  - '- A line through the center of the dilation does not change. It lands on itself.'
+  - '- A line that does not pass through the center goes to a parallel line. Example: $\overline{AB} \parallel \overline{A''B''}$ in Problem 3.'
+  - '- Why: the angles at $B$ and $B''$ in Problem 4 are congruent corresponding angles, so $\overline{BC} \parallel \overline{B''C''}$.'
+
+practice:
+  title: 'Dilating lines and angles: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: '$\angle A''B''C''$ is a dilation of $\angle ABC$ with center $P$ and scale factor 3. The measure of $\angle ABC$ is $21^\circ$. What is the measure (how many degrees) of $\angle A''B''C''$?'
+          work: 0.8
+          answer: '$21^\circ$. A dilation does not change angle measures.'
+        - n: 2
+          prompt: 'Here is a diagram with 5 lines. Select **all** the lines that could be the image of line $m$ by a dilation.'
+          figure: 3.4_five_lines
+          fig_w: 1.9
+          layout: stacked
+          choices: ['$\ell$', '$m$', '$n$', '$o$', '$p$']
+          choice_cols: 5
+          work: 0.1
+          answer: '[B], [C], [E]. $m$ itself (center on $m$), or a line parallel to $m$: $n$ and $p$.'
+    - cells:
+        - n: 3
+          prompt: 'Line $f$ is dilated with scale factor 2. The image is line $g$. Which labeled point could be the center of this dilation?'
+          figure: 3.4_center
+          fig_w: 1.9
+          layout: stacked
+          choices: ['$A$', '$B$', '$C$', '$D$']
+          choice_cols: 4
+          work: 0.1
+          answer: '[D]. $g$ is twice as far from the center as $f$, on the same side, so the center is on the far side of $f$ from $g$. A center on $f$ ($C$) or $g$ ($B$) would leave that line in place.'
+        - n: 4
+          prompt: 'Quadrilateral $A''B''C''E''$ is the image of quadrilateral $ABCE$ after a dilation with center $F$. Find the scale factor of this dilation.'
+          figure: 3.4_quad
+          fig_w: 2.2
+          layout: stacked
+          work: 0.6
+          answer: '$\frac{1}{2}$, since $\frac{1.5}{3} = \frac{3}{6} = \frac{2.5}{5} = \frac{1}{2}$.'
+    - cells:
+        - n: 5
+          prompt: 'A polygon has a perimeter of 18 units. It is dilated with a scale factor of $\frac{3}{2}$. What is the perimeter of its image? (Lesson 3.3)'
+          choices: ['12 units', '24 units', '27 units', '30 units']
+          choice_cols: 2
+          work: 0.6
+          answer: '[C] $18 \cdot \frac{3}{2} = 27$ units'
+        - n: 6
+          prompt: 'Solve the equation for $x$: $\frac{4}{7} = \frac{10}{x}$'
+          work: 1.0
+          answer: ['$4x = 70$', '$x = \frac{35}{2} = 17.5$']
+    - cells:
+        - n: 7
+          prompt:
+            - 'Here are some measurements for $\triangle ABC$ and $\triangle XYZ$: $\angle CAB$ and $\angle ZXY$ are both $30^\circ$, $AC$ and $XZ$ are both 3 units, and $CB$ and $ZY$ are both 2 units.'
+            - 'Clare says the triangles might not be congruent. Start from the $30^\circ$ angle and side $AC$ below. Sketch 2 triangles with these measurements that are NOT congruent. (Unit 2)'
+          figure: 3.4_ssa
+          fig_w: 2.3
+          work: 0.3
+          answer: 'Solid: $\triangle ABC$. Dashed: $\triangle XYZ$ drawn with $X$ on $A$ and $Z$ on $C$. Both have a $30^\circ$ angle, a side of 3, and a side of 2 ($CB = ZY = 2$), but $AB \neq XY$, so they are not congruent.'
+    - heading: SBA review
+      cells:
+        - n: 8
+          prompt: 'What is the value of $k$ so that the slope between the points $(3, k)$ and $(1, -3)$ is 5?'
+          work: 1.2
+          answer: ['$\frac{k - (-3)}{3 - 1} = 5$', '$k + 3 = 10$, so $k = 7$']
+        - n: 9
+          prompt: ['Solve this system of equations for $x$ and $y$.', '$x = \frac{1}{2}y + 3$', '$y = 4x - 2$']
+          work: 1.2
+          answer: ['$x = \frac{1}{2}(4x - 2) + 3 = 2x + 2$, so $x = -2$', '$y = 4(-2) - 2 = -10$; $(-2, -10)$']
+  selected: [[1, '$21^\circ$'], [2, 'B, C, E'], [3, D], [4, '$\frac{1}{2}$'], [5, C], [6, '$\frac{35}{2}$'], [8, '$k = 7$'], [9, '$(-2, -10)$']]
+
+plan: |
+  **Overview.** Lessons 3.1 and 3.3 set up dilations and showed lengths scale by $k$. Today: angles stay the same, and lines either stay put (through the center) or go to parallel lines. Lesson 3.5 uses the parallel result for the midsegment.
+
+  **Objectives.** (1) Explain why corresponding angles in a dilation are congruent. (2) Explain what a dilation does to a line through the center and to a line not through the center. **Standards.** G-SRT.A.1a, G-SRT.A.2. SMP 3, 7.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-5 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-38 | CYU 1-2 and exit ticket 3 | Students |
+  | 38-40 | Collect, assign practice | Teacher |
+
+  **Warm-up.** Take "they look the same" and ask "how could we check?" Protractor on one angle at the doc camera. Name it the assertion (LT 1 in QuickNotes).
+
+  **Together (6 min, doc camera).** Problem 1: use a ruler along line $AB$ from $C$. Stress that $D'$ stays on $D$'s side of $C$. Problem 2: one box, call on two pairs.
+
+  **Partners (15 min).**
+  - Problem 3 first (counting rise/run on the grid). Common error: sign of the slope of $\overline{AB}$ and $\overline{AC}$.
+  - Problem 4: the key move is seeing $\overleftrightarrow{PB}$ as a transversal. Assessing: "Which line cuts both $\overline{BC}$ and $\overline{B'C'}$?" Advancing: "Does this work for $\overline{AC}$ too?"
+  - Skip Problem 5 if time is short, or do it as a turn-and-talk.
+  - MLL supports: labeled figures, fill boxes on 2, 3, 4c, and exit 3e; any language in talk.
+
+  **QuickNotes (4 min).** Read together. Connect bullet 3 of LT 2 to a student's Problem 4.
+
+  **CYU + exit.** CYU 1 checks whether students scale the angle. Exit part e: credit "the line goes through $D$" plus the reason (the frame gives both).

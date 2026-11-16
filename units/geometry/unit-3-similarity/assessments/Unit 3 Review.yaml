@@ -1,0 +1,162 @@
+id: Unit 3 Review
+doc_type: assessment
+title: 'Unit 3 review: similarity'
+directions: Show your work. Write each answer in its box.
+max_pages: 3
+
+sections:
+  - kind: plain
+    title: 'Scale factor and dilations (3.1-3.4)'
+    items:
+      - n: 1
+        prompt:
+          - 'A map of Seattle uses this scale: 1 inch represents 2.5 miles.'
+          - 'a. On the map, Franklin High School is 2 inches from the Space Needle. How far apart are they in real life?'
+          - 'b. Two light rail stations are 7.5 miles apart. How far apart are they on the map?'
+        fill: [['a. Real distance:', '5 miles'], ['b. Map distance:', '3 inches']]
+        fill_cols: 2
+        box_w: 1.2
+        answer: 'a. $2 \times 2.5 = 5$ miles. b. $7.5 \div 2.5 = 3$ inches.'
+        work: 0.45
+      - n: 2
+        prompt: 'Use the grid.'
+        figure: Unit 3 Review_dilate
+        fig_w: 2.6
+        parts:
+          - label: a.
+            prompt: 'Dilate $EFGH$ using center $C$ and scale factor 2. Label the image $E''F''G''H''$.'
+            answer: 'See the red image. Count from $C$ to each point, then double: $E$ is 2 left and 1 up, so $E''$ is 4 left and 2 up.'
+            work: 0.45
+          - label: b.
+            prompt: 'How does $\angle E''$ compare to $\angle E$?'
+            fill: [['$\angle E''$ is', 'congruent to $\angle E$']]
+            box_w: 1.8
+            work: 0
+          - label: c.
+            prompt: 'Compare $\overline{E''H''}$ to $\overline{EH}$. Fill in each box.'
+            frame:
+              - ['$EH =$', '4', 'units.', 0.9]
+              - ['$E''H'' =$', '8', 'units.', 0.9]
+              - ['$E''H''$ is', '2', 'times as long as $EH$.', 0.9]
+              - ['$\overline{E''H''}$ and $\overline{EH}$ are', 'parallel', '.', 1.1]
+            work: 0
+      - n: 3
+        prompt: 'A rectangle is 6 cm long and 4 cm wide. It is dilated with scale factor 2.5. What is the perimeter of the image?'
+        choices: ['20 cm', '30 cm', '50 cm', '125 cm']
+        choice_cols: 4
+        answer: '[C] The perimeter is $2(6 + 4) = 20$ cm, and $20 \times 2.5 = 50$ cm. [A] does not use the scale factor. [B] adds 2.5 to each side. [D] multiplies by $(2.5)^2 = 6.25$.'
+        work: 0.5
+
+  - kind: plain
+    title: 'Splitting triangle sides (3.5)'
+    items:
+      - n: 4
+        prompt: '$M$ is the midpoint of $\overline{AB}$. $N$ is the midpoint of $\overline{AC}$. Find $MN$ and $m\angle AMN$.'
+        figure: Unit 3 Review_midseg
+        fig_w: 2.0
+        fill: [['$MN =$', '9'], ['$m\angle AMN =$', '$64^\circ$']]
+        box_w: 0.9
+        answer: '$MN = \frac{1}{2} \cdot 18 = 9$ (midsegment). $\overline{MN} \parallel \overline{BC}$, so $\angle AMN \cong \angle ABC$ (corresponding angles).'
+        work: 0.5
+        page_break_after: true
+      - n: 5
+        prompt: '$\overline{ST} \parallel \overline{QR}$. Find $ST$ and $TR$. Show your work.'
+        figure: Unit 3 Review_pqr
+        fig_w: 2.5
+        fill: [['$ST =$', '10'], ['$TR =$', '6']]
+        box_w: 0.9
+        answer:
+          - '$PQ = 5 + 3 = 8$. $\triangle PST \sim \triangle PQR$, scale factor $\frac{5}{8}$ from $\triangle PQR$ to $\triangle PST$.'
+          - '$ST = \frac{5}{8} \cdot 16 = 10$. $PR = 10 \cdot \frac{8}{5} = 16$, so $TR = 16 - 10 = 6$.'
+          - 'Common error: $\frac{5}{3} \cdot 16$ (uses a piece, not the whole side $\overline{PQ}$).'
+        work: 1.0
+
+  - kind: plain
+    title: 'Similar triangles (3.6-3.9)'
+    items:
+      - n: 6
+        prompt: 'Use the two triangles.'
+        figure: Unit 3 Review_rst
+        fig_w: 2.9
+        parts:
+          - label: a.
+            prompt: 'Are the triangles similar? Fill in each box.'
+            frame:
+              - ['In $\triangle RST$: $m\angle S =$', '$95^\circ$', '.', 0.9]
+              - ['$\angle R \cong \angle Z$ and $\angle S \cong$', '$\angle Y$', '.', 0.9]
+              - ['So the triangles are similar by', 'AA', '.', 0.9]
+            work: 0
+          - label: b.
+            prompt: 'Complete the similarity statement.'
+            fill: [['$\triangle RST \sim$', '$\triangle ZYX$']]
+            box_w: 1.1
+            answer: 'Match by angles: $R \to Z$ ($50^\circ$), $S \to Y$ ($95^\circ$), $T \to X$ ($35^\circ$).'
+            work: 0.3
+          - label: c.
+            prompt: 'Find the scale factor from $\triangle RST$ to $\triangle ZYX$, and find $XY$.'
+            fill: [['Scale factor:', '1.5'], ['$XY =$', '12']]
+            fill_cols: 2
+            box_w: 0.9
+            answer: '$k = \frac{ZY}{RS} = \frac{9}{6} = 1.5$. $\overline{XY}$ matches $\overline{TS}$, so $XY = 8 \cdot 1.5 = 12$.'
+            work: 0.4
+          - label: d.
+            prompt: 'Write a sequence of transformations that moves $\triangle RST$ onto $\triangle ZYX$.'
+            answer: 'Sample: dilate from $R$ with scale factor 1.5. Rotate $90^\circ$ clockwise around $R$. Translate $R$ to $Z$. Accept any sequence that works.'
+            work: 0.9
+      - n: 7
+        prompt: '$\triangle MNQ \sim \triangle UVW$. Select **all** the true statements.'
+        choices: ['$\frac{MN}{UV} = \frac{NQ}{VW}$', '$\angle N \cong \angle V$', '$\frac{MQ}{UW} = \frac{UV}{MN}$', '$\frac{NQ}{VW} = \frac{MQ}{UV}$', '$\frac{MN}{NQ} = \frac{UV}{VW}$']
+        choice_cols: 5
+        answer: '[A], [B], [E]. Matching letters: $M \to U$, $N \to V$, $Q \to W$. [C] flips one ratio. [D] pairs $\overline{MQ}$ with $\overline{UV}$, which do not match. [E] is true: $UV = k \cdot MN$ and $VW = k \cdot NQ$, so $\frac{UV}{VW} = \frac{MN}{NQ}$.'
+        work: 0.55
+        page_break_after: true
+      - n: 8
+        prompt: 'What value of $x$ makes the two triangles similar? There are two answers. Find both.'
+        figure: Unit 3 Review_dogcat
+        fig_w: 2.9
+        fill: [['$x =$', '75'], ['or $x =$', '40']]
+        box_w: 0.9
+        answer:
+          - 'In $\triangle DOG$, $m\angle G = 180^\circ - 40^\circ - 75^\circ = 65^\circ$, so $\angle C \cong \angle G$.'
+          - '$x = 75$: $\angle A \cong \angle O$, so $\triangle DOG \sim \triangle TAC$ (AA).'
+          - '$x = 40$: $\angle A \cong \angle D$, so $\triangle DOG \sim \triangle ATC$ (AA).'
+          - 'Common error: $x = 65$ (then $\triangle CAT$ has two $65^\circ$ angles).'
+        work: 0.9
+
+  - kind: plain
+    title: 'Side splitter and right triangles (3.11-3.13)'
+    items:
+      - n: 9
+        prompt: '$P$ is on $\overline{KL}$ and $Q$ is on $\overline{KM}$. Which lengths make $\overline{PQ} \parallel \overline{LM}$?'
+        figure: Unit 3 Review_splitter
+        fig_w: 1.6
+        choices: ['$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 8$', '$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 9$', '$KP = 4$, $PL = 6$, $KQ = 9$, $QM = 6$', '$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 15$']
+        choice_cols: 1
+        answer: '[B] $\frac{4}{6} = \frac{6}{9}$: same ratio on both sides (converse of the side splitter theorem). [A] adds 2 instead of multiplying. [C] pairs $KP$ with $QM$. [D] uses a piece over a whole side: $\frac{4}{10} = \frac{6}{15}$.'
+        work: 0.75
+      - n: 10
+        prompt: '$\triangle ACB$ has a right angle at $C$. $\overline{CD}$ is the altitude to the hypotenuse.'
+        figure: Unit 3 Review_altitude
+        fig_w: 2.5
+        parts:
+          - label: a.
+            prompt: 'Complete the similarity statement. Name all three similar triangles.'
+            fill: [['$\triangle ADC \sim$', '$\triangle CDB$'], ['$\sim$', '$\triangle ACB$']]
+            fill_cols: 2
+            box_w: 1.1
+            answer: 'Both small triangles have a right angle at $D$, and $\angle A \cong \angle DCB$ (each is $90^\circ - m\angle B$). AA. $\triangle ACB$ shares $\angle A$ with $\triangle ADC$ and has its right angle at $C$, so $A \to A$, $D \to C$, $C \to B$.'
+            work: 0.3
+          - label: b.
+            prompt: 'Find $h$ and $AC$. Show your work.'
+            fill: [['$h =$', '12'], ['$AC =$', '20']]
+            fill_cols: 2
+            box_w: 0.9
+            answer:
+              - '$\frac{AD}{CD} = \frac{CD}{DB}$: $\frac{16}{h} = \frac{h}{9}$, so $h^2 = 144$ and $h = 12$.'
+              - '$AC^2 = 16^2 + 12^2 = 400$, so $AC = 20$.'
+            work: 1.2
+
+guide_notes: |
+  **How to use.** Students work in pairs for one class period before the Unit 3 Test, then check answers with the key at the doc camera. Section titles name the lessons, so students can go back to that lesson's QuickNotes.
+
+  **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (1,5), home-language words, and everyday wording ("same angle," "they never cross").

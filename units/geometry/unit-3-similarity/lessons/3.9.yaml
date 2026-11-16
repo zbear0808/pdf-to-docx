@@ -1,0 +1,260 @@
+id: 3.9
+title: Essentials only
+notes_title: Angle-Angle similarity
+framing: >-
+  Two triangles have six parts: three sides and three angles. Today's question: what is the least information
+  you need to know that two triangles are similar?
+materials: protractor, ruler (cm)
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        prompt: '$\triangle P''Q''R''$ is the image of $\triangle PQR$ after a dilation with scale factor $\frac{1}{2}$. Matching arcs show congruent angles. Fill in each box.'
+        figure: 3.9_warmup
+        fig_w: 2.3
+        layout: stacked
+        parts:
+          - label: a.
+            prompt: 'Why is $\triangle P''Q''R''\cong\triangle STU$? Given: $\angle Q''\cong\angle T$, $Q''R''=TU=1$, $\angle R''\cong\angle U$.'
+            frame:
+              - ['Congruent by', 'ASA', '.']
+          - label: b.
+            prompt: 'Why is $\triangle PQR\sim\triangle STU$?'
+            frame:
+              - ['First, dilate $\triangle PQR$ with scale factor', '$\frac{1}{2}$', 'to get $\triangle P''Q''R''$.']
+              - ['Then rigid motions take $\triangle P''Q''R''$ onto', '$\triangle STU$', ', because they are congruent.']
+
+  - kind: together
+    items:
+      - n: 1
+        minutes: 4
+        prompt:
+          - 'Draw 2 triangles in the box. Each triangle has a $45^\circ$ angle.'
+          - 'Make them as different as you can: different shape and different size.'
+          - 'Use a protractor. Label the $45^\circ$ angle in each triangle.'
+        draw:
+          height: 2.4
+          key_figure: 3.9_p1_key
+          key_fig_w: 2.5
+          key_note: 'Sample. Any two triangles with a $45^\circ$ angle work. The other angles can be anything that adds to $135^\circ$.'
+      - n: 2
+        minutes: 2
+        prompt: 'Look at your two triangles from Problem 1. Are two triangles with one pair of congruent angles always similar?'
+        fill: [['Always similar? (yes / no)', 'no']]
+        box_w: 1.0
+        frame:
+          - ['In Problem 1, the other two angles in my triangles', 'are different', '.', 1.6]
+        answer: 'One angle is not enough. In the sample, Triangle 1 has angles $45^\circ$, $100^\circ$, $35^\circ$ and Triangle 2 has $45^\circ$, $90^\circ$, $45^\circ$.'
+        page_break_after: true
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 6
+        prompt:
+          - 'Draw 2 triangles in the box. Each triangle has a $45^\circ$ angle and a $30^\circ$ angle.'
+          - 'Triangle 1: the side between the $45^\circ$ and $30^\circ$ angles is 2 cm.'
+          - 'Triangle 2: the side between the $45^\circ$ and $30^\circ$ angles is 6 cm.'
+        steps: ['Draw the side.', 'Draw each angle at one end.', 'Extend the sides until they meet.']
+        draw:
+          height: 2.4
+          key_figure: 3.9_p3_key
+          key_fig_w: 2.8
+          key_note: 'Drawn to scale. Both triangles have angles $45^\circ$, $30^\circ$, $105^\circ$. Triangle 2 is 3 times as big.'
+      - n: 4
+        minutes: 3
+        prompt: 'Use your triangles from Problem 3.'
+        parts:
+          - label: a.
+            prompt: 'Find the third angle in each triangle.'
+            fill: [['Third angle:', '$105^\circ$']]
+            answer: '$180^\circ-45^\circ-30^\circ=105^\circ$ in both triangles.'
+          - label: b.
+            prompt: 'Measure the other two sides of each triangle with a ruler. Divide each Triangle 2 side by the matching Triangle 1 side.'
+            fill: [['Scale factor, Triangle 1 to Triangle 2:', '3']]
+            box_w: 1.0
+            answer: 'About 3 for every pair (about 1.5 cm to 4.4 cm and 1.0 cm to 3.1 cm). Measuring error is OK.'
+      - n: 5
+        minutes: 3
+        prompt: 'Two triangles have two pairs of congruent angles. Explain why they must be similar. Use the warm-up as a model. Start by dilating the first triangle so the side between the two angles matches the second triangle. Fill in each box.'
+        frame:
+          - ['A dilation does not change', 'angle measures', '.', 1.6]
+          - ['So the dilated triangle and the second triangle are congruent by', 'ASA', '.']
+          - ['A dilation, then rigid motions, take one onto the other. They are', 'similar', '.']
+      - n: 6
+        minutes: 3
+        prompt: 'You want to prove $\triangle JKL\sim\triangle XYZ$. Can you do it by adding exactly one angle measure to $\triangle XYZ$? Which one?'
+        figure: 3.9_p6
+        fig_w: 2.9
+        fill: [['Measurement to add:', '$m\angle Y=70^\circ$']]
+        box_w: 1.6
+        answer: '$m\angle Z=60^\circ$ also works: in $\triangle JKL$, $m\angle L=180^\circ-50^\circ-70^\circ=60^\circ$. Then 2 pairs of angles match (AA).'
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: '$\overline{AD}\parallel\overline{CB}$. Prove $\triangle DEA$ is similar to another triangle. Fill in each box.'
+        figure: 3.9_cyu
+        fig_w: 1.9
+        frame:
+          - ['$\angle A\cong$', '$\angle C$', ' (alternate interior angles, $\overline{AD}\parallel\overline{CB}$)']
+          - ['$\angle DEA\cong$', '$\angle BEC$', '(vertical angles)']
+          - ['So $\triangle DEA\sim$', '$\triangle BEC$', 'by AA.']
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 5
+        prompt: '$\triangle ABC$ has a $40^\circ$ angle and a $60^\circ$ angle. $\triangle DFE$ has a $40^\circ$ angle and an $80^\circ$ angle. Lengths are in cm.'
+        figure: 3.9_exit
+        fig_w: 3.0
+        layout: stacked
+        parts:
+          - label: a.
+            prompt: 'Explain how you know the triangles are similar.'
+            frame:
+              - ['In $\triangle ABC$, $m\angle C=$', '$80^\circ$', '.']
+              - ['So $\angle A\cong\angle D$ and $\angle C\cong$', '$\angle E$', '. The triangles are similar by AA.']
+          - label: b.
+            prompt: 'Find $x$ and $y$. Show your work.'
+            fill: [['$x=$', '4.05'], ['$y=$', '9.2']]
+            fill_cols: 2
+            box_w: 1.0
+            work: 0.9
+            answer: '$k=\frac{FE}{BC}=\frac{6}{3}=2$. $x=8.1\div2=4.05$ (matches $DE$). $y=4.6\times2=9.2$ (matches $AB$).'
+
+quicknotes:
+  - '**LT: I can explain why the Angle-Angle (AA) Triangle Similarity Theorem works.**'
+  - '- **AA similarity:** if two angles of one triangle are congruent to two angles of another triangle, then the triangles are similar.'
+  - '- Why it works: dilate one triangle so the side between the two angles matches. Dilations keep angle measures, so the new triangle is congruent to the other one by ASA. A dilation plus rigid motions means similar.'
+  - '- Two angles are enough: the third angle is $180^\circ$ minus the other two, so it matches too. One angle is NOT enough (Problem 1).'
+  - '- Look for congruent angles: marked angles, vertical angles, and angles from parallel lines.'
+  - '- After you know the triangles are similar, match the sides by the angles across from them. Find the scale factor, then the missing sides.'
+
+practice:
+  title: 'Angle-Angle similarity: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'Find the length of $\overline{DF}$. Show your work. Not drawn to scale.'
+          figure: 3.9_pr1
+          fig_w: 2.4
+          layout: stacked
+          work: 0.7
+          answer: ['$\angle A\cong\angle D$ and $\angle B\cong\angle F$, so $\triangle ABC\sim\triangle DFE$ (AA).', '$DE=18$ matches $AC=6$, so $k=3$. $DF$ matches $AB=8$: $DF=24$.']
+        - n: 2
+          prompt: ['In $\triangle ABC$, $m\angle A=35^\circ$ and $m\angle B=20^\circ$.', 'Find $m\angle C$. Then select **all** the triangles that are similar to $\triangle ABC$.']
+          choices: ['$\triangle DEF$: $m\angle D=35^\circ$, $m\angle E=20^\circ$', '$\triangle GHI$: $m\angle G=35^\circ$, $m\angle I=30^\circ$', '$\triangle JKL$: $m\angle J=35^\circ$, $m\angle L=125^\circ$', '$\triangle MNO$: $m\angle N=20^\circ$, $m\angle O=125^\circ$', '$\triangle PQR$: $m\angle Q=20^\circ$, $m\angle R=30^\circ$']
+          fill: [['$m\angle C=$', '$125^\circ$']]
+          box_w: 1.0
+          work: 0.3
+          answer: ['[A], [C], [D]. $m\angle C=180^\circ-35^\circ-20^\circ=125^\circ$.', '[C]: $m\angle K=20^\circ$. [D]: $m\angle M=35^\circ$. [B] and [E] have a $30^\circ$ angle; $\triangle ABC$ does not.']
+    - cells:
+        - n: 3
+          prompt: 'Is $\triangle ABC\sim\triangle DEC$? Explain how you know.'
+          figure: 3.9_pr3
+          fig_w: 2.3
+          layout: stacked
+          work: 1.0
+          answer: ['Yes. $\angle A\cong\angle D$ (both $36^\circ$).', '$\angle ACB\cong\angle DCE$ (vertical angles, both $123^\circ$). So $\triangle ABC\sim\triangle DEC$ by AA.']
+        - n: 4
+          prompt: 'Lin wants to convince Andre that all circles are similar. Write a reason Lin could use.'
+          work: 1.6
+          answer: 'Translate the center of one circle onto the center of the other. Then dilate from that center with scale factor (radius of second) $\div$ (radius of first). The first circle lands on the second, so they are similar.'
+    - cells:
+        - n: 5
+          prompt: 'Quadrilaterals $P$ and $Q$ are similar. What is the scale factor of the dilation that takes $P$ onto $Q$?'
+          figure: 3.9_pr5
+          fig_w: 2.0
+          choices: ['$\frac{3}{5}$', '$\frac{4}{5}$', '$\frac{5}{4}$', '$\frac{5}{3}$']
+          choice_cols: 2
+          work: 0.1
+          answer: ['[C] $\frac{5}{4}$: $4\to5$ and $2\to2.5$.', '[B] is $Q$ onto $P$. [A] and [D] match 3 with 5, which are not matching sides.']
+        - n: 6
+          prompt: 'Decide if each statement must be true, is maybe true, or cannot be true. Explain.'
+          parts:
+            - label: a.
+              prompt: 'An equilateral triangle and a right triangle are similar.'
+              fill: [['Choice:', 'cannot be true']]
+              box_w: 1.4
+              work: 0.5
+              answer: 'Every angle of an equilateral triangle is $60^\circ$. A right triangle has a $90^\circ$ angle.'
+            - label: b.
+              prompt: 'A right triangle and an isosceles triangle are similar.'
+              fill: [['Choice:', 'maybe true']]
+              box_w: 1.4
+              work: 0.5
+              answer: 'True only if both are $45^\circ$-$45^\circ$-$90^\circ$ triangles. Otherwise not.'
+    - cells:
+        - n: 7
+          prompt: 'Are parallelograms $ABCD$ and $WXYZ$ similar? Explain how you know.'
+          figure: 3.9_pr7
+          fig_w: 2.2
+          layout: stacked
+          work: 0.9
+          answer: 'We can''t tell. The sides are proportional ($\frac{9}{6}=\frac{3}{2}$), but no angles are given. If $\angle A\cong\angle W$, they are similar. If not, they are not.'
+        - n: 8
+          prompt: 'The circle centered at $Q$ is a scaled copy of the circle centered at $R$. Circle $R$ has diameter 5. Circle $Q$ has diameter 20. Each triangle has one side on a diameter. Not drawn to scale.'
+          figure: 3.9_pr8
+          fig_w: 2.6
+          layout: stacked
+          parts:
+            - label: a.
+              prompt: 'Find the scale factor from circle $R$ to circle $Q$.'
+              fill: [['Scale factor:', '4']]
+              box_w: 1.0
+              work: 0.3
+              answer: 'Diameters: $20\div5=4$.'
+            - label: b.
+              prompt: 'Find $x$.'
+              fill: [['$x=$', '4']]
+              box_w: 1.0
+              work: 0.3
+              answer: 'The side 16 matches $x$: $x=16\div4=4$.'
+    - heading: SBA review
+      cells:
+        - n: 9
+          prompt: 'The point $(k,13)$ is on the line $y=-3x+4$. What is the value of $k$?'
+          work: 1.0
+          answer: ['$13=-3k+4$', '$9=-3k$, so $k=-3$']
+        - n: 10
+          prompt: 'Write an equation in slope-intercept form for the line with slope 2 that passes through $(-4,-3)$.'
+          work: 1.0
+          answer: ['$-3=2(-4)+b$, so $b=5$', '$y=2x+5$']
+  selected: [[1, '24'], [2, 'A, C, D'], [3, 'yes (AA)'], [5, C], [6, 'a. cannot; b. maybe'], [8, 'a. 4; b. 4'], [9, '$k=-3$'], [10, '$y=2x+5$']]
+
+plan: |
+  **Overview.** Students know similarity as a dilation followed by rigid motions (3.6-3.7) and ASA from Unit 2. Today they find that two pairs of congruent angles are enough (AA) and explain why with a dilation plus ASA. Lesson 3.11 uses AA to prove the side splitter theorem; 3.13 uses it for the altitude to the hypotenuse.
+
+  **Objective.** Students will explain why AA works and use it to show triangles are similar and find missing sides. **Standards.** G-SRT.A.3, G-SRT.B.5. SMP 3, 5 (protractor and ruler).
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up (ASA as a tool) | Students, 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-6 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-37 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 37-40 | Collect exit ticket, assign practice | Teacher |
+
+  **Together (6 min, doc camera).** Read the framing box. Problem 1: draw one skinny and one right triangle with a $45^\circ$ angle; ask for a student drawing too. Problem 2: one angle is not enough.
+
+  **Partner work (15 min).**
+  - Problem 3 needs a protractor. Model step 1 if pairs stall. Pairs compare with the next pair: every Triangle 2 looks like Triangle 1, only bigger.
+  - Problem 4b: measurements give about 3, not exactly 3. That is fine.
+  - Problem 5 links back to the warm-up. Ask: "Which triangle in the warm-up is the dilated one?" ($\triangle P'Q'R'$).
+  - Problem 6 (from Math Medic 6.4): push for "only one". Some say "a side"; ask whether one side can prove similarity.
+  - MLL supports: frames on warm-up, Problems 2 and 5, and exit 2a; labeled figures; any language for talk.
+
+  **QuickNotes (4 min).** Printed on page 3. Connect bullet 2 to Problem 5, bullet 3 to Problem 1, and bullet 4 to CYU 1.
+
+  **CYU and exit (8 min).** CYU 1 checks alternate interior angles, vertical angles, and letter order. Exit 2: $\triangle DFE$ sits on its 8.1 side, so watch for students who match 8.1 with 4.6 because both are "the bottom side". The angles decide the match: 8.1 is across from the $60^\circ$ angle F, so it matches $x$.
+
+guide_notes: |
+  **Changes from the source.** Exit ticket numbers changed so the triangles really exist (the source's 3, 6, 8, 5 can't all go with $40^\circ$, $60^\circ$, $80^\circ$ triangles).
+
+  **Scoring notes.** Accept "same angles" or "two angles match" for AA. Accept measured scale factors from 2.8 to 3.2 in Problem 4b.

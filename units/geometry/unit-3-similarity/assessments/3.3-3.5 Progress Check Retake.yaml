@@ -1,0 +1,90 @@
+id: 3.3-3.5 Progress Check Retake
+doc_type: assessment
+title: '3.3-3.5 Progress Check, Retake'
+directions: Show your work.
+total_points: 10
+max_pages: 2
+
+sections:
+  - kind: plain
+    title: 'Dilations and lengths (Lessons 3.1, 3.3)'
+    items:
+      - n: 1
+        points: 2
+        prompt: 'Dilate $\triangle RST$ using center $O$ and scale factor $\frac{1}{2}$. Label the image $\triangle R''S''T''$.'
+        figure: 3.3-3.5 Progress Check Retake_dilate
+        fig_w: 3.0
+        work: 0
+        answer: 'Red triangle. Each image point is halfway from $O$ to its point. From $O$: $R''$ is left 3, up 3; $S''$ is left 1, up 3; $T''$ is left 3, up 1.'
+      - n: 2
+        points: 1
+        prompt: 'Parallelogram $EFGH$ is dilated to parallelogram $E''F''G''H''$. Which scale factor makes the image **larger** than the original?'
+        choices: ['$\frac{8}{9}$', '$\frac{5}{4}$', '$\frac{1}{2}$', '$1$']
+        choice_cols: 4
+        work: 0.1
+        answer: '[B] $\frac{5}{4}$ is the only scale factor greater than 1. ([A] is close to 1 but less than 1, so the image is smaller. [C] makes it half as big. [D] keeps the same size.)'
+      - n: 3
+        prompt: 'Polygon $V$ is a dilation of polygon $U$.'
+        figure: 3.3-3.5 Progress Check Retake_rects
+        fig_w: 2.6
+        parts:
+          - label: a.
+            points: 1
+            prompt: 'What is the scale factor?'
+            fill: [['$k =$', '$\frac{5}{2}$']]
+            box_w: 0.9
+            answer: '$k = \frac{20}{8} = \frac{5}{2}$ (image length $\div$ original length).'
+            work: 0.7
+          - label: b.
+            points: 1
+            prompt: 'If $x = 25$, what is $y$?'
+            fill: [['$y =$', '10']]
+            box_w: 0.9
+            answer: '$x$ is on the image, so divide: $y = 25 \div \frac{5}{2} = 10$. Check: $\frac{5}{2} \cdot 10 = 25$.'
+            work: 1.2
+
+  - kind: plain
+    title: 'Angles, lines, and splitting sides (Lessons 3.3-3.5)'
+    page_break_before: true
+    items:
+      - n: 4
+        points: 1
+        prompt: 'Here are $\triangle KLM$ and $\triangle KL''M''$. What is the length of $\overline{L''M''}$?'
+        figure: 3.3-3.5 Progress Check Retake_split
+        fig_w: 2.8
+        fill: [['$L''M'' =$', '12']]
+        box_w: 0.9
+        work: 1.0
+        answer: '$\frac{KM''}{KM} = \frac{6}{8} = \frac{3}{4}$ and $\frac{KL''}{KL} = \frac{9}{12} = \frac{3}{4}$. Both sides are cut by the same fraction, so $\overline{L''M''} \parallel \overline{ML}$ and $L''M'' = \frac{3}{4} \cdot 16 = 12$.'
+      - n: 5
+        points: 2
+        prompt:
+          - 'Select **all** the lines that could be the image of line $c$ after a dilation.'
+          - '($\frac{2}{3}$ point for each correct choice. $\frac{1}{4}$ point off for each wrong choice.)'
+        figure: 3.3-3.5 Progress Check Retake_lines
+        fig_w: 2.1
+        choices: ['$a$', '$b$', '$c$', '$d$', '$e$']
+        work: 0
+        answer: '[B], [C], and [E]. Line $c$ itself (if the center is on $c$), or a line parallel to $c$: $b$ and $e$. Lines $a$ and $d$ cross $c$.'
+      - n: 6
+        points: 2
+        prompt:
+          - '$\triangle ABC$ is dilated with scale factor 3. The image is $\triangle DEF$. Select **all** the statements that are true.'
+          - '($\frac{2}{3}$ point for each correct choice. $\frac{1}{4}$ point off for each wrong choice.)'
+        figure: 3.3-3.5 Progress Check Retake_k3
+        fig_w: 1.9
+        choices: ['$m\angle D = 3 \cdot m\angle A$', '$\angle D \cong \angle A$', '$\frac{AB}{DE} = 3$', '$\frac{DE}{AB} = 3$', '$\overline{AB} \cong \overline{DE}$', '$\overline{AB} \parallel \overline{DE}$']
+        choice_cols: 2
+        work: 0
+        answer: ['[B], [D], and [F]. A dilation keeps angles ([A] is false), multiplies lengths by 3 so $DE = 3 \cdot AB$ ([C] flips the ratio, [E] says same length), and takes $\overline{AB}$ to a parallel segment.']
+
+guide_notes: |
+  **Scoring.**
+  - 1 (2 pts): 1 point for image points halfway along each ray from $O$ (all three), 1 point for a labeled triangle $R'S'T'$. Small drawing error (half a grid unit): full credit if the halfway idea is clear.
+  - 2, 3a, 3b, 4 (1 pt each). In 3b, $y = 62.5$ means the student multiplied instead of dividing; $x$ is on the image.
+  - 5 and 6 (2 pts each): $\frac{2}{3}$ point for each correct choice, minus $\frac{1}{4}$ for each wrong choice. Lowest score 0.
+  - 4: a student who writes 16 or 6 likely thinks $\overline{L'M'}$ matches $\overline{ML}$ or $\overline{KM'}$; ask "What fraction of each side is the small triangle?"
+
+  **Why 3b is different.** On A and B, $x$ is on the original, so students multiply by $k$. Here $x$ is on the image, so they divide. This is on purpose: it checks whether a student who missed 3b knows which way $k$ goes, not just the multiplication step. A student who multiplies gets 62.5; point back to which polygon is the image.
+
+  **Scoring notes (MLLs).** Score the math, not grammar or spelling. Accept a decimal comma (2,5 = 2.5), home-language words, and answers written as a drawing or labeled figure.

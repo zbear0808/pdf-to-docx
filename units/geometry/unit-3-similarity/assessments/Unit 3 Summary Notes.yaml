@@ -1,0 +1,125 @@
+id: Unit 3 Summary Notes
+doc_type: reference
+title: 'Unit 3: Similarity summary notes'
+max_pages: 4
+directions: One section per lesson. Use these notes with your lesson handouts when you study.
+
+sections:
+  - kind: plain
+    title: 'Lesson 3.1: Dilations'
+    items:
+      - prompt:
+          - '**Scale factor $k$:** the number every length in the original is multiplied by to make a scaled copy.'
+          - '• A **dilation** with center $P$ and scale factor $k$ moves each point $A$ along $\overrightarrow{PA}$ to $A''$, so $PA'' = k \cdot PA$.'
+          - '• The center does not move.'
+          - '• $k > 1$: **enlargement**. The image is larger, and points move away from $P$.'
+          - '• $0 < k < 1$: **reduction**. The image is smaller, and points move closer to $P$.'
+          - '• $k = 1$: the image is the same as the original.'
+          - '• On a grid: count right/left and up/down from $P$ to the point, multiply both counts by $k$, then count again from $P$.'
+        figure: Unit 3 Summary Notes_3.1
+        fig_w: 2.1
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.3: Measuring dilations'
+    items:
+      - prompt:
+          - '• All lengths are multiplied by $k$: side lengths ($A''B'' = k \cdot AB$), distances from the center ($CA'' = k \cdot CA$), and the perimeter.'
+          - '• To find $k$, divide: $k = \frac{\text{image length}}{\text{original length}}$, for example $k = \frac{A''B''}{AB}$.'
+          - '• In the figure, $k = \frac{8}{4} = 2$. Check another side: $\frac{10}{5} = 2$.'
+          - '• Going back from the image to the original: divide by $k$.'
+        figure: Unit 3 Summary Notes_3.3
+        fig_w: 2.2
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.4: Dilating lines and angles'
+    items:
+      - prompt:
+          - '• A dilation does not change angle measures. Corresponding angles are **congruent**.'
+          - '• If $\triangle A''B''C''$ is a dilation of $\triangle ABC$, then $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, and $\angle C \cong \angle C''$.'
+          - '• Corresponding sides are **proportional** (each one is multiplied by $k$).'
+          - '• A line that does NOT pass through the center goes to a **parallel** line: $m \parallel m''$, so $\overleftrightarrow{DE} \parallel \overleftrightarrow{D''E''}$.'
+          - '• A line through the center does not change. It lands on **itself** (line $n$).'
+        figure: Unit 3 Summary Notes_3.4
+        fig_w: 2.0
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.5: The midsegment of a triangle'
+    items:
+      - prompt:
+          - '• A **midsegment** joins the midpoints of two sides of a triangle.'
+          - '• If $M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$, a dilation with center $A$ and scale factor 2 takes $\triangle AMN$ onto $\triangle ABC$.'
+          - '• A dilation takes a line to a parallel line, so $\overline{MN} \parallel \overline{BC}$.'
+          - '• A dilation multiplies lengths by the scale factor, so $BC = 2MN$, or $MN = \frac{1}{2} BC$. In the figure, $MN = \frac{1}{2}(10) = 5$.'
+          - '• **Theorem:** $M$ is on $\overline{AB}$ and $N$ is on $\overline{AC}$. If $\frac{AM}{AB} = \frac{AN}{AC}$, then $\overline{MN} \parallel \overline{BC}$. Also, $MN = \frac{AM}{AB} \cdot BC$.'
+        figure: Unit 3 Summary Notes_3.5
+        fig_w: 2.1
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.6: Similarity and transformations'
+    items:
+      - prompt:
+          - '• Two figures are **similar** if a sequence of rigid motions (translations, rotations, reflections) and dilations takes one figure onto the other. Same shape, any size.'
+          - '• Rigid motions keep lengths and angles. A dilation keeps angles and multiplies lengths by $k$.'
+          - '• Going back from the image to the original uses scale factor $\frac{1}{k}$.'
+          - '• Congruent figures are always similar ($k = 1$).'
+          - '• $\sim$ means "is similar to." $\triangle ABC \sim \triangle DEF$ matches letters by position: $A \to D$, $B \to E$, $C \to F$.'
+          - '• Any vertex order works if both names use the same matching: $\triangle BCA \sim \triangle EFD$ says the same thing.'
+        figure: Unit 3 Summary Notes_3.6
+        fig_w: 2.3
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.7: Corresponding parts of similar triangles'
+    items:
+      - prompt:
+          - '• In similar triangles, corresponding angles are **congruent** and corresponding sides are **proportional**.'
+          - '• If $\triangle ABC \sim \triangle DEF$: $\angle A \cong \angle D$, $\angle B \cong \angle E$, $\angle C \cong \angle F$, and $\frac{DE}{AB} = \frac{EF}{BC} = \frac{DF}{AC} = k$.'
+          - '• In the figure: $\frac{9}{3} = \frac{15}{5} = \frac{18}{6} = 3$, so $k = 3$.'
+          - '• The letter order in the statement shows the matches. Write the scale factor as image side over original side.'
+          - '• To show two triangles are NOT similar, match shortest side to shortest side (and longest to longest). Then find two pairs of corresponding sides with different ratios.'
+        figure: Unit 3 Summary Notes_3.7
+        fig_w: 2.4
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.9: Angle-Angle similarity'
+    items:
+      - prompt:
+          - '• **AA similarity:** if two angles of one triangle are congruent to two angles of another triangle, then the triangles are similar.'
+          - '• Two angles are enough: the third angle is $180^\circ$ minus the other two, so it matches too. One angle is NOT enough.'
+          - '• Look for congruent angles: marked angles, vertical angles, and angles from parallel lines.'
+          - '• In the figure: $\angle A \cong \angle C$ and $\angle DEA \cong \angle BEC$ (vertical angles), so $\triangle DEA \sim \triangle BEC$ by AA.'
+          - '• Then match sides by the angles across from them, find $k$, and find the missing sides.'
+        figure: Unit 3 Summary Notes_3.9
+        fig_w: 2.1
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.11: The side splitter theorem'
+    items:
+      - prompt:
+          - '• If $\overline{DE} \parallel \overline{AC}$, then $\angle BDE \cong \angle BAC$ (corresponding angles) and $\angle B$ is shared, so $\triangle DBE \sim \triangle ABC$ by AA.'
+          - '• **Side splitter theorem:** a line parallel to one side of a triangle divides the other two sides proportionally: $\frac{BD}{DA} = \frac{BE}{EC}$. In the figure, $\frac{4}{2} = \frac{6}{3}$.'
+          - '• **Converse:** if a line divides two sides proportionally, it is parallel to the third side.'
+          - '• To find the parallel side, use whole sides: $\frac{DE}{AC} = \frac{BD}{BA} = \frac{BE}{BC}$. Here $\frac{DE}{AC} = \frac{4}{6}$.'
+        figure: Unit 3 Summary Notes_3.11
+        fig_w: 2.1
+        work: 0
+
+  - kind: plain
+    title: 'Lesson 3.13: Pythagorean theorem and similarity'
+    items:
+      - prompt:
+          - '• **Pythagorean theorem:** in a right triangle, $a^2 + b^2 = c^2$. The legs are $a$ and $b$. The **hypotenuse** $c = AB$ is across from the right angle and is the longest side.'
+          - '• Converse: if $a^2 + b^2 = c^2$, the triangle is a right triangle.'
+          - '• An **altitude** goes from a vertex to the opposite side and is perpendicular to it.'
+          - '• Altitude $\overline{CD}$ to the hypotenuse makes three similar triangles: $\triangle ABC \sim \triangle ACD \sim \triangle CBD$ (each has a right angle and shares an acute angle with $\triangle ABC$, so AA).'
+          - '• Match each vertex of $\triangle ABC$ to the vertex with the same angle. The right angle $C$ goes with the right angle $D$.'
+          - '• Use a proportion with matching sides, for example $\frac{AD}{AC} = \frac{AC}{AB}$ or $\frac{AD}{CD} = \frac{CD}{DB}$. Then check with the other method.'
+        figure: Unit 3 Summary Notes_3.13
+        fig_w: 2.3
+        work: 0

@@ -1,0 +1,286 @@
+id: 3.6
+title: Same shape, any size
+notes_title: Similarity and transformations
+framing: >-
+  Rigid motions make copies that are the same shape and the same size. Dilations make copies that are the same
+  shape but a new size. Today's question: when can we call two figures similar, and how do we write it?
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        prompt: 'Lee says $GHFE$ is a dilation of $ADCB$ with center $P$. What is wrong? Fill in each box.'
+        figure: 3.6_warmup
+        key_figure: 3.6_warmup_key
+        fig_w: 2.6
+        frame:
+          - ['$GH = 2 \cdot AD$, and $GE =$', '$1 \cdot AB$', '']
+          - ['Every length should be multiplied by the', 'same', '']
+          - ['$E$ and $F$ should be on rays', '$PB$, $PC$', '']
+        answer: 'Sample: $GH$ was multiplied by 2, but $GE$ was multiplied by 1. So $GHFE$ is a rectangle, not a square, and it is not the same shape as $ADCB$. The red dashed square is the real image.'
+        work: 0
+        after: 0.06
+
+  - kind: together
+    box: ['**Move bank**  translate  |  rotate around a point  |  reflect across a line  |  dilate (center, scale factor)']
+    items:
+      - n: 1
+        minutes: 2
+        prompt: 'Can you move $\triangle ABC$ onto $\triangle DEF$ using only translations, rotations, and reflections? Explain.'
+        figure: 3.6_together
+        fig_w: 2.9
+        work: 1.2
+        answer: 'No. Each side of $\triangle DEF$ is half as long as the matching side of $\triangle ABC$ (4 and 8, 3 and 6, 5 and 10). Rigid motions do not change lengths.'
+      - n: 2
+        minutes: 4
+        prompt: 'Finish a sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$. Write each answer in its box.'
+        fill:
+          - ['Step 1: Translate $A$ to point', '$D$']
+          - ['Step 2: Rotate counterclockwise around $D$ by', '$90^\circ$']
+          - ['Step 3: Dilate with center $D$ and scale factor', '$\frac{1}{2}$']
+        box_w: 1.0
+        answer: 'After Step 2, $B$ is on ray $DE$ and $C$ is on ray $DF$. The dilation halves every length, so $B$ lands on $E$ and $C$ lands on $F$.'
+        work: 0
+        after: 0.06
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 5
+        prompt: '$\triangle QOR$ and $\triangle PON$ overlap. One transformation takes $\triangle QOR$ onto $\triangle PON$. Hint: sketch the two triangles separately.'
+        figure: 3.6_nested
+        key_figure: 3.6_nested_key
+        fig_w: 2.6
+        parts:
+          - label: a.
+            prompt: 'Name the transformation.'
+            fill: [['Transformation:', 'dilation'], ['Center:', '$O$'], ['Scale factor:', '$\frac{3}{2}$']]
+            box_w: 1.0
+            answer: '$\frac{NP}{RQ} = \frac{7.5}{5} = \frac{3}{2}$. $Q$ lands on $P$, $R$ lands on $N$, and $O$ stays put.'
+            work: 0
+          - label: b.
+            prompt: 'Write a similarity statement. Match the letters in order.'
+            frame:
+              - ['$\triangle QOR \sim \triangle$', '$PON$', '']
+      - n: 4
+        minutes: 5
+        prompt: 'Squares $F$ and $G$ share vertex $V$.'
+        figure: 3.6_squares
+        fig_w: 1.8
+        parts:
+          - label: a.
+            prompt: 'Finish a sequence that takes square $F$ onto square $G$.'
+            fill:
+              - ['Step 1: Rotate $F$ around $V$ by', '$180^\circ$']
+              - ['Step 2: Dilate with center $V$ and scale factor', '4']
+            box_w: 0.9
+            answer: '$\frac{12}{3} = 4$. Also accept dilate by 4, then rotate $180^\circ$ around $V$.'
+            work: 0
+          - label: b.
+            prompt: 'How does your sequence change if you move square $G$ onto square $F$?'
+            fill: [['New scale factor:', '$\frac{1}{4}$']]
+            box_w: 0.9
+            answer: 'Dilate with center $V$ by $\frac{1}{4}$, then rotate $180^\circ$ around $V$ (either order).'
+            work: 0.5
+      - n: 5
+        minutes: 5
+        prompt: 'In the figure, $\overline{AB} \parallel \overline{QR}$ and $\overline{AE} \parallel \overline{QT}$.'
+        figure: 3.6_soup
+        fig_w: 2.0
+        parts:
+          - label: a.
+            prompt: 'Finish a sequence that takes $\triangle EAB$ onto $\triangle TQR$.'
+            fill:
+              - ['Step 1: Dilate with center $A$ and scale factor', '$\frac{2}{5}$']
+              - ['Step 2: Translate $A$ to point', '$Q$']
+            box_w: 0.9
+            answer: '$\frac{6}{15} = \frac{3.2}{8} = \frac{6.8}{17} = \frac{2}{5}$. The sides are parallel, so no rotation is needed.'
+            work: 0
+          - label: b.
+            prompt: 'Write a similarity statement.'
+            frame:
+              - ['$\triangle EAB \sim \triangle$', '$TQR$', '']
+          - label: c.
+            prompt: 'Your partner wrote two more statements. Is each one right or wrong?'
+            fill: [['$\triangle ABE \sim \triangle QRT$', 'right'], ['$\triangle EAB \sim \triangle RQT$', 'wrong']]
+            fill_cols: 2
+            box_w: 0.9
+            answer: 'Order matters: $E \to T$, $A \to Q$, $B \to R$. The second one pairs $E$ with $R$.'
+            work: 0
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: '$\triangle MNP \sim \triangle STU$. Which statement must be true?'
+        choices: ['$\angle N \cong \angle U$', '$\angle P \cong \angle U$', '$MN = ST$', '$\overline{NP}$ matches $\overline{SU}$']
+        choice_cols: 2
+        answer: '[B] $P$ is third in both names, so $P \to U$. [A] mixes up the order; [C] treats similar as congruent; [D] $\overline{NP}$ matches $\overline{TU}$.'
+        work: 0.1
+  - kind: exit
+    intro: 'Decide if each statement must be true, could be true, or can''t be true. Explain.'
+    items:
+      - n: 2
+        minutes: 5
+        prompt: 'Congruent figures and similar figures.'
+        parts:
+          - label: a.
+            prompt: 'Congruent figures are similar.'
+            fill: [['Must, could, or can''t:', 'must be true']]
+            box_w: 1.5
+            answer: 'A sequence of rigid motions takes one figure onto the other. The definition of similar allows rigid motions with no dilation, so the figures are similar (scale factor 1).'
+            work: 1.0
+          - label: b.
+            prompt: 'Similar figures are congruent.'
+            fill: [['Must, could, or can''t:', 'could be true']]
+            box_w: 1.5
+            answer: 'Only when the scale factor is 1. For example, $\triangle ABC \sim \triangle DEF$ on page 1, but their sides have different lengths, so they are not congruent.'
+            work: 0.8
+
+quicknotes:
+  - '**LT 1: I know the definition of similarity.**'
+  - '- Two figures are **similar** if a sequence of rigid motions and/or dilations takes one figure onto the other.'
+  - '- Rigid motions keep lengths and angles. A dilation keeps angles and multiplies every length by the scale factor $k$.'
+  - '- Going back from the image to the original uses scale factor $\frac{1}{k}$.'
+  - '- Congruent figures are always similar ($k = 1$). Similar figures are congruent only when $k = 1$.'
+  - '**LT 2: I can write similarity statements.**'
+  - '- The symbol $\sim$ means "is similar to."'
+  - '- $\triangle ABC \sim \triangle DEF$ matches letters by position: $A \to D$, $B \to E$, $C \to F$. So $\angle A \cong \angle D$, and $\overline{AB}$ matches $\overline{DE}$.'
+  - '- You can list the vertices in any order, as long as both names use the same matching: $\triangle BCA \sim \triangle EFD$ says the same thing.'
+
+practice:
+  title: 'Similarity and transformations: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'Write a sequence of transformations that takes square $ABCD$ onto square $EFGH$.'
+          figure: 3.6_pr_squares
+          fig_w: 2.2
+          layout: stacked
+          answer: 'Sample: Translate $A$ to $E$. Rotate around $E$ until $B$ is on ray $EF$. Dilate with center $E$ and scale factor $\frac{2}{5}$.'
+          work: 1.0
+        - n: 2
+          prompt: 'Quadrilaterals $P$ and $Q$ are similar.'
+          figure: assets/3.6/prac2_PQ.png
+          fig_w: 1.95
+          layout: stacked
+          parts:
+            - label: a.
+              prompt: 'What is the scale factor of the dilation that takes $P$ onto $Q$?'
+              fill: [['Scale factor:', '$\frac{5}{4}$']]
+              box_w: 0.9
+              answer: '$\frac{5}{4} = \frac{2.5}{2} = 1.25$'
+              work: 0
+            - label: b.
+              prompt: 'What is the scale factor of the dilation that takes $Q$ onto $P$?'
+              fill: [['Scale factor:', '$\frac{4}{5}$']]
+              box_w: 0.9
+              answer: 'Going back uses $\frac{1}{k} = \frac{4}{5}$.'
+              work: 0
+    - cells:
+        - n: 3
+          prompt: 'Which is our definition of similar?'
+          choices:
+            - 'Two figures with the same angles are similar.'
+            - 'Two figures with proportional sides are similar.'
+            - 'Two figures are similar if a sequence of rigid motions takes one onto the other.'
+            - 'Two figures are similar if a sequence of rigid motions and dilations takes one onto the other.'
+          answer: '[D] [A] and [B] are not our definition (and fail for some polygons). [C] describes congruent figures.'
+          work: 0.1
+        - n: 4
+          prompt: '$\triangle DEF$ is made by connecting the midpoints of the sides of $\triangle ABC$. The side lengths of $\triangle DEF$ are shown. What is $BC$?'
+          figure: assets/3.6/prac4_midsegment.png
+          fig_w: 1.95
+          choices: ['3 units', '4 units', '6 units', '8 units']
+          choice_cols: 2
+          answer: '[D] $\overline{DF}$ joins the midpoints of $\overline{AB}$ and $\overline{AC}$, so $BC = 2 \cdot DF = 2 \cdot 4 = 8$.'
+          work: 0.1
+    - cells:
+        - n: 5
+          prompt: 'Right angle $ABC$ is dilated with center $P$ and scale factor $\frac{1}{2}$. The image is $\angle A''B''C''$. What is $m\angle A''B''C''$?'
+          fill: [['$m\angle A''B''C'' =$', '$90^\circ$']]
+          box_w: 0.9
+          answer: 'Dilations do not change angle measures.'
+          work: 0.3
+        - n: 6
+          prompt: 'A polygon has a perimeter of 12. It is dilated with scale factor $k$. The image has a perimeter of 8. What is $k$?'
+          choices: ['$\frac{1}{2}$', '$\frac{2}{3}$', '$\frac{3}{4}$', '$\frac{4}{3}$']
+          choice_cols: 4
+          answer: '[B] Every side is multiplied by $k$, so the perimeter is too: $\frac{8}{12} = \frac{2}{3}$. [D] flips the ratio ($\frac{12}{8}$).'
+          work: 0.2
+    - cells:
+        - n: 7
+          prompt: 'A dilation with center $C$ takes $\triangle ABC$ onto $\triangle A''B''C$.'
+          figure: 3.6_pr_dil7
+          fig_w: 2.4
+          parts:
+            - label: a.
+              prompt: 'Find the scale factor.'
+              fill: [['Scale factor:', '$\frac{2}{3}$']]
+              box_w: 0.9
+              answer: '$CB = 9$ and $CB'' = 6$, so $k = \frac{6}{9} = \frac{2}{3}$. Check: $CA = 6$ and $CA'' = 4$, and $\frac{4}{6} = \frac{2}{3}$.'
+              work: 0.3
+            - label: b.
+              prompt: '$AB = 12$. Find $A''B''$.'
+              fill: [['$A''B'' =$', '8']]
+              box_w: 0.9
+              answer: '$\frac{2}{3} \cdot 12 = 8$'
+              work: 0.3
+        - n: 8
+          prompt: ['Use the figure.', 'a. Dilate point $C$ using center $D$ and scale factor $\frac{3}{4}$. Label the image $C''$.', 'b. Dilate segment $AB$ using center $D$ and scale factor $\frac{1}{2}$. Label the image $A''B''$.']
+          figure: 3.6_pr_dilate
+          fig_w: 2.2
+          answer: 'See the red points. $C''$ is on ray $DC$ with $DC'' = \frac{3}{4} DC$. $A''$ and $B''$ are on ray $DB$ with $DA'' = \frac{1}{2} DA$ and $DB'' = \frac{1}{2} DB$.'
+          work: 0.2
+    - cells:
+        - n: 9
+          prompt: 'Select **all** the statements that must be true.'
+          choices:
+            - 'A parallelogram has 4 congruent sides.'
+            - 'Both pairs of opposite sides of a parallelogram are parallel and congruent.'
+            - 'A trapezoid is a parallelogram.'
+            - 'The diagonals of a parallelogram bisect each other.'
+            - 'The diagonals of a parallelogram are congruent.'
+          answer: '[B], [D]. [A] is only true for a rhombus; [E] only for a rectangle; a trapezoid can have just one pair of parallel sides.'
+          work: 0.1
+    - heading: SBA review
+      cells:
+        - n: 10
+          prompt: 'The point $(k, 8)$ is on the line $y = 3x + 5$. What is $k$?'
+          answer: ['$8 = 3k + 5$', '$3 = 3k$', '$k = 1$']
+          work: 1.3
+        - n: 11
+          prompt: 'A line passes through $(2, 8)$ and has a $y$-intercept of 4. What is its slope?'
+          answer: ['The line passes through $(0, 4)$ and $(2, 8)$.', '$m = \frac{8 - 4}{2 - 0} = 2$']
+          work: 1.3
+  selected: [[1, 'translate, rotate, dilate by $\frac{2}{5}$'], [2, 'a. $\frac{5}{4}$  b. $\frac{4}{5}$'], [3, D], [5, '$90^\circ$'], [6, B], [7, 'a. $\frac{2}{3}$  b. 8'], [9, 'B, D'], [10, '$k = 1$'], [11, '$m = 2$']]
+
+plan: |
+  **Overview.** Lessons 3.1-3.5 built dilations and showed they scale lengths and keep angles. Today we define similar with transformations (rigid motions and/or dilations) and write similarity statements. Lesson 3.7 uses this definition to reason about angles and sides; 3.9 shortens it to AA.
+
+  **Objectives.** (1) Write a sequence of rigid motions and dilations that takes one figure onto another. (2) Write a similarity statement with the vertices in matching order. **Standards.** G-SRT.A.2, G-SRT.A.1b. SMP 3, 6.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-5 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-37 | CYU 1 and exit ticket 2 | Students |
+  | 37-40 | Collect exit ticket, assign practice | Teacher |
+
+  **Together (6 min).** Read the framing box. Problem 1: take a quick vote, then ask "what would we need to add to the move bank?" Problem 2: do it on patty paper under the doc camera; trace, translate, rotate, then show that halving lands $B$ on $E$.
+
+  **Partner work (15 min).** About 5 min each. Problem 3: if pairs are stuck, point to the hint and have them redraw the two triangles. Problem 4: push on "does order matter?" (it doesn't here, since both moves use center $V$). Problem 5c is the key talk: ask "which vertex does $E$ match? How do you know?"
+  - MLL supports: move bank with the four transformation words, fill-in boxes for every step, Problems 3b and 5b use a sentence frame. Any language is fine for partner talk.
+  - Watch for: students who write the statement in alphabetical order, or who name the scale factor upside down.
+
+  **QuickNotes (4 min).** Read the definition together. Connect the last LT 2 bullet to Problem 5c.
+
+  **CYU and exit (8 min).** CYU 1 checks letter order. The exit ticket checks the definition; look for "scale factor 1" in part b.
+
+guide_notes: |
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", or a home-language word for congruent. Accept answers that list the moves in a different valid order.

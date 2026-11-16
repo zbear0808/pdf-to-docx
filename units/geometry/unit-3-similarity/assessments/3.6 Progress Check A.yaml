@@ -1,0 +1,45 @@
+id: 3.6 Progress Check A
+doc_type: assessment
+title: 'Progress check 3.6: Version A'
+directions: 'Show all work for full credit. No work = no credit.'
+total_points: 10
+max_pages: 1
+
+sections:
+  - kind: plain
+    items:
+      - n: 1
+        points: 6
+        prompt: 'Write a sequence of transformations that moves $\triangle FED$ onto $\triangle CBA$. Write one move in each box. For a dilation, name the center and the scale factor.'
+        figure: 3.6 Progress Check A_triangles
+        fig_w: 2.2
+        fill:
+          - ['Step 1:', 'Reflect across line $DE$.']
+          - ['Step 2:', 'Translate $E$ to $B$.']
+          - ['Step 3:', 'Dilate with center $B$ and scale factor 2.']
+        box_w: 3.0
+        answer: 'Scale factor $\frac{AC}{FD} = \frac{6}{3} = 2$. The triangles face opposite ways, so a reflection is needed. After Steps 1-2, $E$ is on $B$, $F$ is on $\overline{BC}$, and $D$ is on $\overline{BA}$. The dilation lands $F$ on $C$ and $D$ on $A$.'
+        work: 0.2
+      - n: 2
+        points: 3
+        prompt: 'If $FE = 1.5$, how long is $BC$? Show your work.'
+        fill: [['$BC =$', '3']]
+        box_w: 0.9
+        answer: ['Scale factor: $\frac{6}{3} = 2$', '$BC = 2 \cdot FE = 2 \cdot 1.5 = 3$']
+        work: 1.1
+      - n: 3
+        points: 1
+        prompt: 'Write a similarity statement for the 2 triangles. Match the letters in order.'
+        fill: [['$\triangle$', '$FED$'], ['$\sim \triangle$', '$CBA$']]
+        fill_cols: 2
+        box_w: 1.0
+        answer: 'Any order that keeps $F \to C$, $E \to B$, $D \to A$ (for example $\triangle DEF \sim \triangle ABC$).'
+        work: 0
+
+guide_notes: |
+  **Scoring (10 pts).**
+  - Problem 1 (6 pts): 2 pts per move. A reflection across a line that works with the other moves (for example line $DE$ or line $AB$), a translation (says where it goes), and a dilation by 2 with a center named. Accept any valid order, for example translate $E$ to $B$, reflect across line $AB$, dilate with center $B$ by 2. Take 1 pt off a dilation with no center or with scale factor $\frac{1}{2}$. A sequence with no reflection can't work (the triangles face opposite ways); give credit only for the moves that are right.
+  - Problem 2 (3 pts): 1 pt scale factor 2, 1 pt multiplying the matching side, 1 pt for 3. Follow through on a wrong scale factor.
+  - Problem 3 (1 pt): any order with $F \to C$, $E \to B$, $D \to A$.
+
+  **MLL notes.** Score the math, not grammar or spelling. Accept "flip", "slide", "turn", "make bigger by 2", or a home-language word for a move, if the line, distance, center, or scale factor is clear. Accept the moves written as a list or arrows.

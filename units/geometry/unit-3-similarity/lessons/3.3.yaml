@@ -1,0 +1,246 @@
+id: 3.3
+title: Stretch it, measure it
+notes_title: Measuring dilations
+framing: >-
+  In Lesson 3.1 you dilated points: each image point is $k$ times as far from the center. Today's question:
+  what happens to the lengths of the sides?
+materials: ruler or a strip of paper
+
+sections:
+  - kind: warmup
+    items:
+      - n: A
+        minutes: 3
+        prompt: 'Dilate $\triangle FGH$ using center $C$ and scale factor 3. Label the image $\triangle F''G''H''$.'
+        figure: 3.3_warm_dilate
+        fig_w: 2.3
+        work: 0
+        answer: '$F''$, $G''$, and $H''$ are each 3 times as far from $C$ as $F$, $G$, and $H$.'
+      - n: B
+        minutes: 2
+        prompt: 'Kai dilated $\triangle JKL$ using center $C$ and scale factor 2. One image point is wrong. Count grid units to check. Fill in each box.'
+        figure: 3.3_warm_error
+        fig_w: 2.2
+        frame:
+          - ['The wrong point is', '$L''$', '.']
+          - ['$L$ is over 2 and up 2 from $C$. $L''$ is over 6 and up', '6', '.']
+          - ['So $L''$ is', '3', ' times as far from $C$ as $L$. It should be 2 times as far.']
+
+  - kind: together
+    items:
+      - n: 1
+        minutes: 3
+        prompt: 'Here is center $C$ and $\triangle EFG$. Count grid units to find the side lengths. $FG = 5$ is given.'
+        figure: 3.3_efg
+        fig_w: 3.0
+        fill: [['$EF =$', '3'], ['$EG =$', '4']]
+        box_w: 0.9
+        answer: 'The key grid also shows $\triangle E''F''G''$ from Problem 3.'
+        work: 0
+      - n: 2
+        minutes: 3
+        prompt: 'You will dilate $\triangle EFG$ using center $C$ and scale factor 2. Predict the side lengths of the image.'
+        fill: [['$E''F'' =$', '6'], ['$E''G'' =$', '8'], ['$F''G'' =$', '10']]
+        fill_cols: 3
+        box_w: 0.9
+        work: 0
+        page_break_after: true
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 6
+        prompt: 'Dilate $\triangle EFG$ on the grid in Problem 1. Use center $C$ and scale factor 2. Label the image $\triangle E''F''G''$.'
+        answer: 'Red triangle on the Problem 1 grid. $E$ is over 1 and up 1 from $C$, so $E''$ is over 2 and up 2. In the same way, $F''$ is over 2 and up 8, and $G''$ is over 10 and up 2.'
+        work: 0.5
+      - n: 4
+        minutes: 4
+        prompt:
+          - 'Measure $\triangle E''F''G''$. Count units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along $\overline{F''G''}$.'
+          - 'Then fill in the table.'
+        fill: [['$E''F'' =$', '6'], ['$E''G'' =$', '8'], ['$F''G'' =$', '10']]
+        fill_cols: 3
+        box_w: 0.9
+        work: 0
+        table:
+          header: ['Ratio', '$\frac{E''F''}{EF}$', '$\frac{E''G''}{EG}$', '$\frac{F''G''}{FG}$']
+          row_label: 'Value'
+          answers: ['$\frac{6}{3} = 2$', '$\frac{8}{4} = 2$', '$\frac{10}{5} = 2$']
+          first_w: 1.0
+          height: 0.5
+      - n: 5
+        minutes: 4
+        prompt: 'Another pair dilated $\triangle EFG$ from $C$ with scale factor $\frac{1}{2}$. Answer without making the drawing.'
+        answer: 'Multiply each length by $\frac{1}{2}$.'
+        parts:
+          - label: a.
+            prompt: 'Find the side lengths of their image.'
+            fill: [['image of $EF$:', '1.5'], ['image of $EG$:', '2'], ['image of $FG$:', '2.5']]
+            fill_cols: 3
+            box_w: 0.9
+            work: 0
+          - label: b.
+            prompt: 'Find the perimeter of each triangle.'
+            fill: [['$\triangle EFG$:', '12'], ['their image:', '6']]
+            fill_cols: 2
+            box_w: 0.9
+            work: 0
+          - label: c.
+            prompt: 'Is their image larger or smaller than $\triangle EFG$? Fill in each box.'
+            frame:
+              - ['Their image is', 'smaller', '.']
+              - ['I know because the scale factor $\frac{1}{2}$ is', 'less', ' than 1.']
+      - n: 6
+        minutes: 3
+        prompt: 'Sum it up. Use Problems 4 and 5. Fill in each box.'
+        frame:
+          - ['When a figure is dilated with scale factor $k$, every side length is multiplied by', '$k$', '.']
+          - ['Image length divided by original length equals', '$k$', '.']
+          - ['If $k > 1$, the image is', 'larger', '. If $0 < k < 1$, the image is smaller.']
+          - ['The perimeter is also multiplied by', '$k$', '.']
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: '$\overline{AB}$ is 8 cm long. After a dilation, its image $\overline{A''B''}$ is 2 cm long. What is the scale factor?'
+        choices: ['$4$', '$\tfrac{1}{4}$', '$6$', '$16$']
+        choice_cols: 4
+        answer: '[B] $k = \frac{2}{8} = \frac{1}{4}$. The image is shorter, so $k$ is less than 1.'
+        work: 0.1
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 5
+        prompt: '$\triangle P''Q''R''$ is a dilation of $\triangle PQR$ using center $C$ and scale factor 1.5.'
+        figure: 3.3_exit
+        fig_w: 1.8
+        parts:
+          - label: a.
+            prompt: 'Is $\triangle P''Q''R''$ larger or smaller than $\triangle PQR$? Fill in each box.'
+            frame:
+              - ['$\triangle P''Q''R''$ is', 'larger', '.']
+              - ['I know because the scale factor 1.5 is', 'greater', ' than 1.']
+          - label: b.
+            prompt: 'Find $P''Q''$. Explain how you know.'
+            fill: [['$P''Q'' =$', '7.5']]
+            box_w: 0.9
+            answer: 'Multiply by the scale factor: $1.5 \cdot 5 = 7.5$. A dilation multiplies every length by the scale factor.'
+            work: 0.7
+
+quicknotes:
+  - '**LT: I know that when a figure is dilated by scale factor $k$, all lengths in the figure are multiplied by $k$.**'
+  - '- Distances from the center: $CA'' = k \cdot CA$ (Lesson 3.1).'
+  - '- Side lengths: $A''B'' = k \cdot AB$ for every side. The perimeter is multiplied by $k$ too.'
+  - '- To find $k$, divide: $k$ = image length $\div$ original length. For example, $k = A''B'' \div AB$.'
+  - '- $k > 1$: the image is larger (enlargement). $0 < k < 1$: the image is smaller (reduction). $k = 1$: same size.'
+  - '- Angles do not change in a dilation, so the image has the same shape (Lesson 3.4).'
+
+practice:
+  title: 'Measuring dilations: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'Pentagon $A''B''C''D''E''$ is the image of pentagon $ABCDE$ after a dilation with center $F$. What is the scale factor?'
+          figure: 3.3_prac_pentagon
+          fig_w: 2.7
+          layout: stacked
+          fill: [['$k =$', '$\frac{5}{3}$']]
+          box_w: 0.9
+          answer: '$A''B'' \div AB = 5 \div 3$ and $B''C'' \div BC = 10 \div 6$, so $k = \frac{5}{3}$.'
+          work: 0.3
+        - n: 2
+          prompt: 'A polygon has perimeter 12 units. It is dilated with scale factor $\frac{3}{4}$. What is the perimeter of its image?'
+          choices: ['9 units', '12 units', '16 units', 'It cannot be determined.']
+          answer: '[A] Every side is multiplied by $\frac{3}{4}$, so the perimeter is $12 \cdot \frac{3}{4} = 9$.'
+          work: 0.4
+    - cells:
+        - n: 3
+          prompt: '$\triangle ABC$ is dilated to $\triangle A''B''C''$. Which scale factors give an image that is **larger** than $\triangle ABC$? Choose **all** that work.'
+          choices: ['$\frac{3}{5}$', '$\frac{13}{17}$', '$1$', '$\frac{4}{3}$']
+          choice_cols: 2
+          answer: '[D] only. $\frac{4}{3}$ is the only scale factor greater than 1. A scale factor of 1 gives the same size.'
+          work: 0.4
+        - n: 4
+          prompt: 'Dilate quadrilateral $ABCD$ using center $D$ and scale factor 2. Label the image.'
+          figure: 3.3_prac_quad
+          fig_w: 2.6
+          layout: stacked
+          answer: '$D$ is the center, so $D'' = D$. Each other vertex moves 2 times as far from $D$.'
+          work: 0
+    - page_break_before: true
+      cells:
+        - n: 5
+          prompt: 'Dilate Figure $G$ using center $B$ and scale factor 3. Label the image $G''$.'
+          figure: 3.3_prac_cone
+          fig_w: 2.6
+          layout: stacked
+          answer: 'Each marked point moves 3 times as far from $B$. The half circle becomes a half circle 3 times as wide.'
+          work: 0
+        - n: 6
+          prompt: 'Polygon $Q$ is a dilation of polygon $P$. The side marked 4 matches the side marked 3, and $x$ matches $y$.'
+          answer: 'Image side 3 matches original side 4.'
+          figure: 3.3_prac_polygons
+          fig_w: 2.4
+          layout: stacked
+          parts:
+            - label: a.
+              prompt: 'What is the scale factor?'
+              fill: [['$k =$', '$\frac{3}{4}$']]
+              box_w: 0.9
+              answer: 'Image side $\div$ original side $= 3 \div 4$. You do not need $x$.'
+              work: 0.3
+            - label: b.
+              prompt: 'If $x = 6$, find $y$.'
+              fill: [['$y =$', '4.5']]
+              box_w: 0.9
+              answer: 'Multiply $x$ by the scale factor: $\frac{3}{4} \cdot 6 = 4.5$.'
+              work: 0.5
+    - heading: SBA review
+      cells:
+        - n: 7
+          prompt: 'Find the roots of the equation $3x^2 + 5x + 2 = 0$.'
+          fill: [['Roots:', '$-\frac{2}{3}$ and $-1$']]
+          box_w: 1.6
+          answer: '$(3x + 2)(x + 1) = 0$'
+          work: 1.4
+        - n: 8
+          prompt: 'Find the roots and the vertex of $y = x^2 + 6x + 5$. Then sketch the graph.'
+          figure: 3.3_prac_parabola
+          fig_w: 1.9
+          fill: [['Roots:', '$-1$ and $-5$'], ['Vertex:', '$(-3, -4)$']]
+          box_w: 1.2
+          answer: '$(x + 1)(x + 5) = 0$. The vertex is halfway between the roots: $x = -3$, $y = 9 - 18 + 5 = -4$.'
+          work: 0.3
+  selected: [[1, '$\frac{5}{3}$'], [2, 'A'], [3, 'D'], ['6a', '$\frac{3}{4}$'], ['6b', '4.5'], [7, '$-\frac{2}{3}$, $-1$'], [8, 'vertex $(-3, -4)$']]
+
+plan: |
+  **Overview.** Second lesson of Unit 3. In 3.1 students dilated points (distance from the center times $k$). Today they measure an image and find that every side length, and the perimeter, is multiplied by $k$. Lesson 3.4 adds lines and angles.
+
+  **Objectives.** Students will be able to: (1) find image lengths from a scale factor; (2) find a scale factor from an image length and an original length; (3) tell from $k$ whether the image is larger or smaller. **Standards.** G-SRT.A.1b, G-SRT.A.2. SMP 5, 6, 8.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-5 | Warm-up A and B | Students (individual), 1 min share |
+  | 5-11 | Together: Problems 1-2 | Teacher + class |
+  | 11-28 | With a partner: Problems 3-6 | Students (pairs) |
+  | 28-32 | QuickNotes | Teacher + class |
+  | 32-40 | CYU 1 and exit ticket 2; collect, assign practice | Students (individual) |
+
+  **Warm-up (5 min).** A reviews 3.1. B: ask "How far is $L$ from $C$? How far is $L'$?" Students count "over 2, up 2" and "over 6, up 6."
+
+  **Together (6 min, doc camera).** Problem 1: count $EF$ and $EG$ together. Problem 2: take three predictions and write them on the board. Don't confirm; Problem 4 checks them.
+
+  **With a partner (17 min).**
+  - Problem 3: count from $C$ to each vertex ("over, up"), then double. Watch for students who double the side lengths from $E$ instead of from $C$; ask where $E'$ is.
+  - Problem 4: show the paper-strip move once. Compare with the predictions from Problem 2.
+  - Problem 5 uses $k = \frac{1}{2}$ so students see a reduction without drawing. Problem 6 is the summary that leads into QuickNotes.
+  - MLL supports: labeled grid, short sentences, fill-in boxes on Warm-up B, 5c, and 6. Any language is fine for partner talk.
+  - Optional (if time): pairs with different scale factors trace their triangles and line them up. The images have the same shape.
+
+  **QuickNotes (4 min).** Printed on page 3. Read each bullet against Problem 4 and Problem 5.
+
+  **CYU and exit (8 min).** CYU 1 shows who flips the ratio (choice 4) or subtracts (choice 6). The exit ticket checks "larger or smaller" and one image length.

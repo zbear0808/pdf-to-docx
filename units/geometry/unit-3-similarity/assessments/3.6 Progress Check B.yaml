@@ -1,0 +1,45 @@
+id: 3.6 Progress Check B
+doc_type: assessment
+title: 'Progress check 3.6: Version B'
+directions: 'Show all work for full credit. No work = no credit.'
+total_points: 10
+max_pages: 1
+
+sections:
+  - kind: plain
+    items:
+      - n: 1
+        points: 6
+        prompt: 'Write a sequence of transformations that moves $\triangle MKL$ onto $\triangle RPQ$. Write one move in each box. For a dilation, name the center and the scale factor.'
+        figure: 3.6 Progress Check B_triangles
+        fig_w: 2.8
+        fill:
+          - ['Step 1:', 'Reflect across line $LK$.']
+          - ['Step 2:', 'Translate $L$ to $Q$.']
+          - ['Step 3:', 'Dilate with center $Q$ and scale factor $\frac{1}{2}$.']
+        box_w: 2.9
+        answer: 'Scale factor $\frac{PR}{KM} = \frac{4.5}{9} = \frac{1}{2}$. The triangles face opposite ways, so a reflection is needed. After Steps 1-2, $L$ is on $Q$, $K$ is on ray $QP$, and $M$ is on ray $QR$. The dilation lands $K$ on $P$ and $M$ on $R$.'
+        work: 0.2
+      - n: 2
+        points: 3
+        prompt: 'If $LM = 5$, how long is $QR$? Show your work.'
+        fill: [['$QR =$', '2.5']]
+        box_w: 0.9
+        answer: ['Scale factor: $\frac{4.5}{9} = \frac{1}{2}$', '$QR = \frac{1}{2} \cdot LM = \frac{1}{2} \cdot 5 = 2.5$']
+        work: 1.1
+      - n: 3
+        points: 1
+        prompt: 'Write a similarity statement for the 2 triangles. Match the letters in order.'
+        fill: [['$\triangle$', '$MKL$'], ['$\sim \triangle$', '$RPQ$']]
+        fill_cols: 2
+        box_w: 1.0
+        answer: 'Any order that keeps $M \to R$, $K \to P$, $L \to Q$ (for example $\triangle KLM \sim \triangle PQR$).'
+        work: 0
+
+guide_notes: |
+  **Scoring (10 pts).**
+  - Problem 1 (6 pts): 2 pts per move. A reflection across a line that works with the other moves (for example line $LK$ or line $QP$), a translation (says where it goes), and a dilation by $\frac{1}{2}$ with a center named. Accept any valid order, for example translate $L$ to $Q$, reflect across line $QP$, dilate with center $Q$ by $\frac{1}{2}$. Take 1 pt off a dilation with no center or with scale factor 2. A sequence with no reflection can't work (the triangles face opposite ways); give credit only for the moves that are right.
+  - Problem 2 (3 pts): 1 pt scale factor $\frac{1}{2}$, 1 pt multiplying the matching side, 1 pt for 2.5. Follow through on a wrong scale factor.
+  - Problem 3 (1 pt): any order with $M \to R$, $K \to P$, $L \to Q$.
+
+  **MLL notes.** Score the math, not grammar or spelling. Accept "flip", "slide", "turn", "make smaller by half", or a home-language word for a move, if the distance, center, angle, or scale factor is clear. Accept the moves written as a list or arrows.

@@ -1,0 +1,261 @@
+id: 3.11
+title: The road back home
+notes_title: The side splitter theorem
+framing: >-
+  Two streets leave the library, and two parallel streets cut across both of them. Today's question: when a line
+  is parallel to one side of a triangle, how does it split the other two sides?
+materials: calculator
+notes_figure: 3.11_notes
+notes_fig_w: 1.2
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        prompt: '$\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$. What do you notice? What do you wonder?'
+        figure: 3.11_warmup
+        fig_w: 2.0
+        work: 0
+        after: 0.04
+        columns:
+          headers: [I notice..., I wonder...]
+          italic: true
+          answers:
+            - ['$M$ is on $\overline{AB}$ and $N$ is on $\overline{BC}$.', 'There is a small triangle $MBN$ inside $\triangle ABC$.']
+            - ['Are $\triangle MBN$ and $\triangle ABC$ similar?', 'Is $\overline{MN}$ a dilation of $\overline{AC}$ from $B$?']
+
+  - kind: together
+    items:
+      - n: 1
+        minutes: 3
+        prompt: 'Use the warm-up figure. Fill in each box.'
+        after: 0.06
+        frame:
+          - ['$\angle ABC \cong$', '$\angle MBN$', '(the same angle).']
+          - ['$\angle BAC \cong$', '$\angle BMN$', '.']
+          - ['These are', 'corresponding', 'angles because $\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$.', 1.4]
+          - ['So $\triangle ABC \sim$', '$\triangle MBN$', 'by AA.']
+      - n: 2
+        minutes: 4
+        prompt: '$\overline{BD} \parallel \overline{FG}$, $EG = 12$, and $EB = 2.5$. Find $ED$ and $EF$. Show your work.'
+        figure: 3.11_t2
+        fig_w: 2.4
+        work: 1.8
+        fill: [['$ED =$', '4'], ['$EF =$', '7.5']]
+        box_w: 0.9
+        answer: '$\triangle EBD \sim \triangle EFG$ (AA). Scale factor: $15 \div 5 = 3$. $ED = 12 \div 3 = 4$ and $EF = 2.5 \times 3 = 7.5$.'
+        page_break_after: true
+
+  - kind: partner
+    intro: 'Two roads leave the library ($L$): Oak Ave. and Lincoln Rd. Maple St. and Chestnut St. are parallel.'
+    items:
+      - n: 3
+        minutes: 4
+        prompt: 'On the map, mark the congruent angles. Then fill in each box.'
+        figure: 3.11_map
+        fig_w: 2.8
+        work: 0
+        after: 0.06
+        frame:
+          - ['$\triangle LPA$ and $\triangle LQB$ share', '$\angle L$', '.']
+          - ['$\angle LPA$ and $\angle LQB$ are', 'corresponding', 'angles.']
+          - ['So $\triangle LPA \sim$', '$\triangle LQB$', 'by AA.']
+      - n: 4
+        minutes: 4
+        prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use $\triangle LPA \sim \triangle LQB$ from Problem 3. Show your work.'
+        work: 1.2
+        fill: [['$LB =$', '2000 ft']]
+        box_w: 1.1
+        answer: 'Scale factor: $LQ \div LP = 1500 \div 900 = \frac{5}{3}$. $LB = 1200 \cdot \frac{5}{3} = 2000$ ft.'
+      - n: 5
+        minutes: 3
+        prompt: 'Compare the parts of each road between the streets.'
+        parts:
+          - label: a.
+            prompt: 'On Oak Ave., how far is it from Maple St. to Chestnut St.?'
+            fill: [['$AB =$', '800 ft']]
+            box_w: 1.1
+            answer: '$2000 - 1200 = 800$ ft'
+            work: 0.3
+          - label: b.
+            prompt: 'Write each ratio as a decimal.'
+            fill: [['Lincoln Rd.: $LP \div PQ =$', '1.5'], ['Oak Ave.: $LA \div AB =$', '1.5']]
+            fill_cols: 2
+            box_w: 0.9
+            answer: '$900 \div 600 = 1.5$ and $1200 \div 800 = 1.5$'
+            work: 0
+          - label: c.
+            prompt: 'Fill in the box.'
+            frame:
+              - ['Maple St. splits Lincoln Rd. and Oak Ave. into parts with', 'the same', 'ratio.']
+            work: 0
+      - n: 6
+        minutes: 3
+        prompt: 'A bike path crosses Lincoln Rd. 300 ft from the library. It crosses Oak Ave. 450 ft from the library. Is the bike path parallel to Maple St.? Fill in each box.'
+        after: 0.04
+        frame:
+          - ['On Lincoln Rd.: $300 \div 900 =$', '$\frac{1}{3}$', '.']
+          - ['On Oak Ave.: $450 \div 1200 =$', '$\frac{3}{8}$', '.']
+          - ['The two ratios are', 'not equal', '.']
+          - ['So the bike path', 'is not', 'parallel to Maple St.']
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 4
+        prompt: 'Find $AB$ with $a^2 + b^2 = c^2$. Then use $\overline{AB} \parallel \overline{EF}$, $\overline{AD} \perp \overline{DB}$, and $DE = 7.5$ to find $DF$ and $EF$.'
+        figure: 3.11_cyu
+        fig_w: 2.1
+        work: 1.3
+        fill: [['$AB =$', '5'], ['$DF =$', '10'], ['$EF =$', '12.5']]
+        box_w: 0.9
+        answer: '$AB = \sqrt{3^2 + 4^2} = 5$. Scale factor: $7.5 \div 3 = 2.5$. $DF = 4 \times 2.5 = 10$ and $EF = 5 \times 2.5 = 12.5$.'
+        after: 0.06
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 4
+        prompt: '$\overline{DE} \parallel \overline{AC}$. Find $AC$ and $AD$. Show your work.'
+        figure: 3.11_exit
+        fig_w: 2.3
+        work: 1.8
+        fill: [['$AC =$', '12.5'], ['$AD =$', '3']]
+        box_w: 0.9
+        answer: ['$\triangle DBE \sim \triangle ABC$. $BC = 4 + 6 = 10$, so the scale factor is $10 \div 4 = 2.5$.', '$AC = 5 \times 2.5 = 12.5$. $BA = 2 \times 2.5 = 5$, so $AD = 5 - 2 = 3$.', 'Common error: $\frac{6}{4} \times 5 = 7.5$ (uses a piece, not the whole side $BC$).']
+
+quicknotes:
+  - '**LT 1: I can explain why a segment parallel to one side of a triangle makes a similar triangle.**'
+  - '- In $\triangle PQR$, $M$ is on $\overline{QP}$ and $N$ is on $\overline{QR}$. If $\overline{MN} \parallel \overline{PR}$, then $\angle QMN \cong \angle QPR$ (corresponding angles) and $\angle Q$ is shared. So $\triangle MQN \sim \triangle PQR$ by AA.'
+  - '- The small triangle is a dilation of the large triangle, centered at the shared vertex $Q$.'
+  - '**LT 2: I can use the side splitter theorem to find lengths and to test for parallel lines.**'
+  - '- **Side splitter theorem:** a line parallel to one side of a triangle divides the other two sides proportionally: $\frac{QM}{MP} = \frac{QN}{NR}$.'
+  - '- **Converse:** if a line divides two sides of a triangle proportionally, then it is parallel to the third side.'
+  - '- To find the parallel side, use whole sides: $\frac{MN}{PR} = \frac{QM}{QP} = \frac{QN}{QR}$. $\overline{MN}$ matches the whole side $\overline{PR}$.'
+
+practice:
+  title: 'The side splitter theorem: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: '$\overline{A''B''} \parallel \overline{AB}$.'
+          figure: 3.11_p1
+          fig_w: 2.2
+          work: 0
+          parts:
+            - label: a.
+              prompt: 'Find $AB$.'
+              answer: 'Scale factor: $9 \div 6 = 1.5$. $AB = 5 \times 1.5 = 7.5$'
+              work: 1.2
+            - label: b.
+              prompt: 'Find $B''B$.'
+              answer: '$CB = 7 \times 1.5 = 10.5$, so $B''B = 10.5 - 7 = 3.5$'
+              work: 1.2
+        - n: 2
+          prompt: 'Explain how you know that $\overline{DE}$ is **not** parallel to $\overline{BC}$.'
+          figure: 3.11_p2
+          fig_w: 2.5
+          layout: stacked
+          work: 1.1
+          answer: '$AD \div DB = 4 \div 2 = 2$, but $AE \div EC = 9 \div 5 = 1.8$. The sides are not split proportionally, so $\overline{DE}$ is not parallel to $\overline{BC}$ (converse of the side splitter theorem).'
+    - cells:
+        - n: 3
+          prompt: '$\overline{MN} \parallel \overline{XZ}$. Find $NZ$ and $XZ$.'
+          figure: 3.11_p3
+          fig_w: 1.9
+          work: 1.1
+          fill: [['$NZ =$', '3'], ['$XZ =$', '12']]
+          box_w: 0.9
+          answer: '$YX = 10$, so the scale factor is $10 \div 5 = 2$. $YZ = 3 \times 2 = 6$, so $NZ = 3$. $XZ = 6 \times 2 = 12$.'
+        - n: 4
+          prompt: 'In right $\triangle ABC$, $AC = 4$ and $BC = 5$. $D$ and $E$ are the midpoints of $\overline{AC}$ and $\overline{BC}$. Area of a triangle $= \frac{bh}{2}$.'
+          figure: 3.11_p4
+          fig_w: 1.5
+          work: 0
+          parts:
+            - label: a.
+              prompt: 'Find the area of $\triangle ABC$.'
+              answer: '$\frac{4 \cdot 5}{2} = 10$ square units'
+              work: 0.7
+            - label: b.
+              prompt: 'Find the area of $\triangle DEC$.'
+              answer: '$\frac{2 \cdot 2.5}{2} = 2.5$ square units'
+              work: 0.7
+            - label: c.
+              prompt: 'The sides of $\triangle DEC$ are $\frac{1}{2}$ as long as the sides of $\triangle ABC$. Is its area also $\frac{1}{2}$ as large? Explain.'
+              answer: 'No. $2.5 \div 10 = \frac{1}{4}$. The area scales by $\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$.'
+              work: 1.0
+    - page_break_before: true
+      cells:
+        - n: 5
+          prompt: 'Use the two triangles.'
+          figure: 3.11_p5
+          fig_w: 2.4
+          work: 0
+          parts:
+            - label: a.
+              prompt: 'Are $\triangle ABC$ and $\triangle DEF$ similar? Explain.'
+              answer: 'Yes. $m\angle B = 180^\circ - 47^\circ - 33^\circ = 100^\circ$. So $\angle A \cong \angle D$ and $\angle B \cong \angle E$, and $\triangle ABC \sim \triangle DEF$ by AA.'
+              work: 1.0
+            - label: b.
+              prompt: 'If possible, find $EF$. If not, explain why not.'
+              answer: '$DE$ matches $AB$: scale factor $12 \div 9 = \frac{4}{3}$. $EF$ matches $BC$: $EF = 12 \cdot \frac{4}{3} = 16$.'
+              work: 1.0
+        - n: 6
+          prompt: 'Find $DF$. The triangles are not drawn to scale.'
+          figure: 3.11_p6
+          fig_w: 2.7
+          layout: stacked
+          work: 1.3
+          answer: ['$\angle A \cong \angle D$ and $\angle B \cong \angle F$, so $\triangle ABC \sim \triangle DFE$ (AA).', '$DE$ matches $AC$: scale factor $8 \div 2 = 4$. $DF$ matches $AB$: $DF = 4 \times 4 = 16$.']
+    - cells:
+        - n: 7
+          prompt: 'Which statement is true?'
+          choices: ['If 1 pair of angles is congruent, the triangles are similar.', 'If 1 pair of sides is congruent, the triangles are similar.', 'If 2 pairs of angles are congruent, the triangles are similar.', 'If 2 pairs of sides are congruent, the triangles are similar.']
+          work: 0.1
+          answer: '[C] Angle-Angle (AA) similarity.'
+        - n: 8
+          prompt: '$\triangle ABC$ is dilated onto $\triangle A''B''C''$. Select **all** the scale factors that make the image smaller than $\triangle ABC$.'
+          choices: ['$\frac{1}{2}$', '$\frac{8}{9}$', '$1$', '$\frac{3}{2}$', '$2$']
+          choice_cols: 3
+          work: 0.1
+          answer: '[A], [B]. A scale factor between 0 and 1 shrinks the figure.'
+    - heading: SBA review
+      cells:
+        - n: 9
+          prompt: 'The slope of the line through $(k, 12)$ and $(6, 4)$ is $-2$. Find $k$.'
+          work: 1.2
+          answer: ['$\frac{4 - 12}{6 - k} = -2$', '$-8 = -2(6 - k)$, so $6 - k = 4$', '$k = 2$']
+        - n: 10
+          prompt: 'A lemonade recipe uses 4 cups of water and 2 cups of lemon juice to make 6 cups of lemonade. How many cups of lemon juice do you need for 30 cups of lemonade?'
+          work: 1.2
+          answer: ['$30 \div 6 = 5$ batches', '$5 \times 2 = 10$ cups of lemon juice']
+  selected: [[1, 'a. 7.5, b. 3.5'], [3, 'NZ = 3, XZ = 12'], [4, 'a. 10, b. 2.5, c. No, 1/4'], [5, 'b. 16'], [6, '16'], [8, 'A, B'], [9, 'k = 2'], [10, '10 cups']]
+
+plan: |
+  **Overview.** Second lesson on splitting triangle sides. Lesson 3.5 did the midsegment (k = 1/2). Today any segment parallel to one side makes a similar triangle (AA), and the sides split proportionally. The converse tests for parallel lines. Lesson 3.13 uses similar triangles inside a right triangle.
+
+  **Objectives.** Students will be able to: (1) explain with AA why a segment parallel to one side of a triangle makes a similar triangle; (2) use the side splitter theorem and its converse to find lengths and test for parallel lines. **Standards.** G-SRT.B.4, G-SRT.B.5. SMP 3, 7.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up (notice and wonder) | Students, 1 min share |
+  | 3-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-24 | With a partner: Problems 3-6 (street map) | Students (pairs) |
+  | 24-28 | QuickNotes | Teacher + class |
+  | 28-36 | CYU 1 and exit ticket 2 | Students (individual) |
+  | 36-40 | Collect exit ticket, assign practice, buffer | Teacher |
+
+  **Together (7 min, doc camera).** Problem 1: ask "Which angle is in both triangles?" then "Which lines are parallel? What does that give us?" Problem 2: find the scale factor from the two parallel sides first ($15 \div 5$), then use it both ways (divide for $ED$, multiply for $EF$).
+
+  **Partner work (14 min).** The street map is from Math Medic 6.5 with new streets and numbers.
+  - Problem 3: students mark arcs on the map before they fill in the boxes.
+  - Problem 4: watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
+  - Problem 5 sets up the theorem; Problem 6 is the converse. If time is short, do Problem 6 in the QuickNotes.
+  - MLL supports: frames on Problems 1, 3, and 6; street names stay on the map; any language in pair talk.
+
+  **QuickNotes (4 min).** Read the two theorems. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
+
+  **CYU and exit (8 min).** CYU 1 checks the scale factor along a side; the exit ticket checks whether students add the pieces ($BC = 4 + 6$) before scaling.

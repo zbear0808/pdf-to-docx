@@ -1,0 +1,249 @@
+id: 3.1
+title: Stretch it, shrink it
+notes_title: Dilations
+framing: >-
+  A photo can be made bigger or smaller and still look right, or it can look stretched. Today's question: what
+  exactly happens to every point when we make a scaled copy?
+materials: ruler
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        prompt: 'Diego took a photo of a game controller (left). Then he made two edited copies, A (middle) and B (right). One copy is a scaled copy. The other copy is stretched.'
+        figure: assets/3.1/controllers.png
+        fig_w: 4.6
+        layout: stacked
+        work: 0
+        parts:
+          - label: a.
+            prompt: 'Which copy is the scaled copy? Which copy is stretched?'
+            fill: [['Scaled copy:', 'B'], ['Stretched:', 'A']]
+            fill_cols: 2
+            work: 0
+          - label: b.
+            prompt: 'What could you measure to check? Name two lengths.'
+            fill: [['Length 1:', 'width'], ['Length 2:', 'height']]
+            fill_cols: 2
+            answer: 'Sample: the width and the height of the controller, or the size of a button. In B, the width and height both shrink to about 0.8 of the original. In A, the width stays the same but the height gets smaller.'
+
+  - kind: together
+    intro: 'A **dilation** with center $P$ and scale factor $k$ moves each point along the ray from $P$ through the point. The new point is $k$ times as far from $P$.'
+    items:
+      - n: 1
+        minutes: 3
+        prompt: '$H$ is 2 units right and 1 unit up from $C$. Dilate $H$ using center $C$ and scale factor 3. Plot and label the image $H''$.'
+        figure: 3.1_t1
+        fig_w: 2.4
+        fill: [['$H''$ is this many units right of $C$:', '6'], ['$H''$ is this many units up from $C$:', '3']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: '$H''$ is 3 times as far from $C$: 6 right and 3 up.'
+        work: 0
+      - n: 2
+        minutes: 3
+        prompt: 'Dilate point $K$ using center $O$ and scale factor $\frac{3}{4}$. Plot and label $K''$.'
+        figure: 3.1_t2
+        fig_w: 1.7
+        fill: [['$K''$ is this many units right of $O$:', '3'], ['$K''$ is this many units up from $O$:', '3']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: '$\frac{3}{4}$ of 4 is 3, so $K''$ is 3 right and 3 up. It is closer to $O$ than $K$.'
+        work: 0
+        page_break_after: true
+
+  - kind: partner
+    items:
+      - n: 3
+        minutes: 6
+        prompt:
+          - 'Dilate $\triangle ABC$ using center $P$ and scale factor 2.'
+          - 'Step 1: Draw a ray from $P$ through each vertex.'
+          - 'Step 2: Count from $P$ to $A$ on the grid. Go twice as far along the ray. Label that point $A''$.'
+          - 'Step 3: Do the same for $B$ and $C$. Connect $A''$, $B''$, and $C''$.'
+        figure: 3.1_p3
+        fig_w: 2.8
+        work: 0
+        answer: '$A$ is 1 right, 2 up from $P$, so $A''$ is 2 right, 4 up. Same for $B$ (3 right, 1 up, so $B''$ is 6 right, 2 up) and $C$ (2 right, 3 up, so $C''$ is 4 right, 6 up).'
+      - n: 4
+        minutes: 6
+        prompt:
+          - 'Dilate quadrilateral $DEFG$ using center $P$ and scale factor $\frac{1}{2}$.'
+          - 'Use the same steps as Problem 3, but go half as far from $P$. Label the image $D''E''F''G''$.'
+        figure: 3.1_p4
+        fig_w: 2.8
+        work: 0
+        answer: '$D$ is 6 right, 4 up from $P$, so $D''$ is 3 right, 2 up. $E''$: 4 right, 2 up. $F''$: 4 right, 4 up. $G''$: 2 right, 4 up.'
+      - n: 5
+        minutes: 3
+        prompt: 'Compare Problems 3 and 4. Fill in each box.'
+        frame:
+          - ['In Problem 3, the scale factor is 2, so $\triangle A''B''C''$ is', 'larger', 'than $\triangle ABC$.']
+          - ['In Problem 4, the scale factor is $\frac{1}{2}$, so $D''E''F''G''$ is', 'smaller', 'than $DEFG$.']
+          - ['In both problems, each image point is on the ray from', '$P$', 'through the original point.']
+          - ['A scale factor less than 1 moves each point', 'closer to', 'the center.', 1.4]
+        page_break_after: true
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        minutes: 3
+        prompt: 'Each $\overline{FG}$ is dilated using center $F$. Then the image is moved up to make $\overline{F''G''}$. In every case, $FG = 12$. Use the length of $\overline{F''G''}$ to find each scale factor.'
+        work: 0
+        answer: 'Scale factor $= F''G'' \div FG$. For example, $18 \div 12 = \frac{3}{2}$.'
+        table:
+          header: ['$F''G''$', '18', '8', '12', '6', '24']
+          row_label: 'Scale factor'
+          answers: ['$\frac{3}{2}$', '$\frac{2}{3}$', '1', '$\frac{1}{2}$', '2']
+      - n: 2
+        minutes: 2
+        prompt: '$Q''$ is the image of $Q$ after a dilation with center $O$ and scale factor 3. $OQ = 5$ cm. Find $OQ''$.'
+        choices: ['8 cm', '$\frac{5}{3}$ cm', '15 cm', '10 cm']
+        choice_cols: 4
+        answer: '[C] $3 \times 5 = 15$. (8: added 3. $\frac{5}{3}$: divided by 3. 10: that is $QQ''$, the distance from $Q$ to $Q''$.)'
+        work: 0.1
+  - kind: exit
+    items:
+      - n: 3
+        minutes: 4
+        prompt: 'Dilate $\overline{ST}$ using center $P$ and scale factor $\frac{1}{3}$. Label the image $\overline{S''T''}$. Then fill in the boxes.'
+        figure: 3.1_exit
+        fig_w: 2.2
+        fill: [['$S''$ is this many units right of $P$:', '2'], ['$S''$ is this many units up from $P$:', '1']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: '$S$ is 6 right, 3 up from $P$, so $S''$ is 2 right, 1 up. $T$ is 3 right, 6 up, so $T''$ is 1 right, 2 up.'
+        work: 0
+
+quicknotes:
+  - '**LT: I can dilate a figure given a scale factor and center.**'
+  - '- **Scale factor:** the number every length in the original is multiplied by to make a scaled copy.'
+  - '- A **dilation** with center $P$ and scale factor $k$ moves each point $A$ along $\overrightarrow{PA}$ to $A''$, so that $PA'' = k \cdot PA$.'
+  - '- The center does not move. A point on the center stays put.'
+  - '- $k > 1$: **enlargement**. The image is larger, and points move away from $P$.'
+  - '- $0 < k < 1$: **reduction**. The image is smaller, and points move closer to $P$.'
+  - '- $k = 1$: the image is the same as the original.'
+  - '- To dilate on a grid: count right/left and up/down from $P$ to the point, multiply both counts by $k$, and count again from $P$.'
+
+practice:
+  title: 'Dilations: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'Dilate $\triangle JKL$ using center $J$ and scale factor 2. Label the image $J''K''L''$.'
+          figure: 3.1_prac1
+          fig_w: 1.7
+          work: 0
+          answer: '$J$ is the center, so $J'' = J$. $K''$ is 4 right of $J$ and $L''$ is 4 up from $J$.'
+        - n: 2
+          prompt: 'Polygon $Q$ is a scaled copy of Polygon $P$.'
+          figure: 3.1_prac2
+          fig_w: 1.9
+          layout: stacked
+          work: 0
+          parts:
+            - label: a.
+              prompt: 'Find the scale factor from $P$ to $Q$.'
+              fill: [['Scale factor:', '$\frac{3}{4}$']]
+              answer: 'The top side goes from 4 to 3, so $k = \frac{3}{4}$.'
+              work: 0.3
+            - label: b.
+              prompt: '$x = 6$. Find $y$.'
+              fill: [['$y =$', '4.5']]
+              answer: '$y = \frac{3}{4} \cdot 6 = 4.5$'
+              work: 0.4
+    - cells:
+        - n: 3
+          prompt: 'Figure $f$ is a scaled copy of Figure $e$. $AB = 6$, $CD = 3$, $XY = 4$, and $ZW = a$. Select **all** true equations.'
+          figure: 3.1_prac3
+          fig_w: 2.6
+          layout: stacked
+          choices: ['$\frac{6}{3} = \frac{4}{a}$', '$\frac{6}{4} = \frac{3}{a}$', '$\frac{3}{4} = \frac{6}{a}$', '$\frac{6}{3} = \frac{a}{4}$', '$\frac{6}{4} = \frac{a}{3}$', '$\frac{3}{4} = \frac{a}{6}$']
+          choice_cols: 3
+          answer: '[A], [B]. $AB$ matches $XY$ and $CD$ matches $ZW$, so $a = 2$. Only A ($2 = 2$) and B ($1.5 = 1.5$) are true.'
+          work: 0.1
+        - n: 4
+          prompt: 'Solve each equation.'
+          work: 0
+          parts:
+            - label: a.
+              prompt: '$\frac{2}{5} = \frac{x}{15}$'
+              fill: [['$x =$', '6']]
+              answer: '$x = 15 \cdot \frac{2}{5} = 6$'
+              work: 0.45
+            - label: b.
+              prompt: '$\frac{4}{3} = \frac{x}{7}$'
+              fill: [['$x =$', '$\frac{28}{3}$']]
+              answer: '$x = 7 \cdot \frac{4}{3} = \frac{28}{3}$'
+              work: 0.45
+            - label: c.
+              prompt: '$\frac{7}{5} = \frac{28}{x}$'
+              fill: [['$x =$', '20']]
+              answer: '$7x = 140$, so $x = 20$'
+              work: 0.45
+            - label: d.
+              prompt: '$\frac{11}{4} = \frac{5}{x}$'
+              fill: [['$x =$', '$\frac{20}{11}$']]
+              answer: '$11x = 20$, so $x = \frac{20}{11}$'
+              work: 0.45
+    - page_break_before: true
+      cells:
+        - n: 5
+          prompt: 'Which shape always has $180^\circ$ rotational symmetry?'
+          choices: ['rhombus', 'right trapezoid', 'isosceles trapezoid', 'kite']
+          choice_cols: 2
+          answer: '[A] rhombus. A $180^\circ$ rotation around the point where its diagonals meet takes it onto itself.'
+          work: 0.1
+        - n: 6
+          prompt: 'Name a type of quadrilateral where a diagonal is also a line of symmetry. Explain how you know.'
+          fill: [['Quadrilateral:', 'rhombus']]
+          box_w: 1.4
+          answer: 'Sample: rhombus $ABCD$ with diagonal $AC$. $AB = AD$, $CB = CD$, and $AC = AC$, so $\triangle ABC \cong \triangle ADC$ by SSS. $A$ and $C$ are each the same distance from $B$ and $D$, so $\overleftrightarrow{AC}$ is the perpendicular bisector of $\overline{BD}$. Reflecting across $\overleftrightarrow{AC}$ swaps $B$ and $D$ and keeps $A$ and $C$, so it takes the rhombus onto itself. Also accept square or kite.'
+          work: 1.3
+    - cells:
+        - n: 7
+          prompt: 'Lines $f$ and $g$ are parallel. List **all** the other angles that are congruent to $\angle 1$.'
+          figure: assets/3.1/prac_parallel_fg.jpeg
+          fig_w: 1.8
+          fill: [['Angles:', '4, 5, 8']]
+          box_w: 1.4
+          answer: '$\angle 4$ (vertical angles), $\angle 5$ (corresponding angles), and $\angle 8$ (vertical to $\angle 5$).'
+          work: 0.1
+    - heading: SBA review
+      cells:
+        - n: 8
+          prompt: 'A recipe uses 3 eggs and 4 cups of flour to make 12 cupcakes. How many eggs do you need to make 36 cupcakes?'
+          work: 1.3
+          answer: ['36 cupcakes is $36 \div 12 = 3$ batches.', '$3 \times 3 = 9$ eggs']
+        - n: 9
+          prompt: 'Write an equation of the line through $(-4, -3)$ and $(-1, 12)$.'
+          work: 1.3
+          answer: ['slope $= \frac{12 - (-3)}{-1 - (-4)} = \frac{15}{3} = 5$', '$-3 = 5(-4) + b$, so $b = 17$', '$y = 5x + 17$']
+  selected: [[2, 'a. $\frac{3}{4}$  b. 4.5'], [4, 'a. 6  b. $\frac{28}{3}$  c. 20  d. $\frac{20}{11}$'], [6, 'rhombus, square, or kite'], [7, '4, 5, 8'], [8, 9 eggs], [9, '$y = 5x + 17$']]
+
+plan: |
+  **Overview.** First lesson of Unit 3. Students already know rigid motions keep lengths the same. Today they meet a transformation that changes size: a dilation with a center and a scale factor. Lesson 3.3 measures what happens to lengths; Lesson 3.4 looks at lines and angles.
+
+  **Objective.** I can dilate a figure given a scale factor and center. **Standards.** G-SRT.A.1, G-CO.A.2. SMP 5, 6.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up: controllers | Students, 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-5 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-38 | CYU 1-2 and exit ticket 3 | Students (individual) |
+  | 38-40 | Collect exit ticket, assign practice | Teacher |
+
+  **Warm-up.** B is the scaled copy. Push for "what would you measure": width, height, button size. Don't define scale factor yet; let "every length shrinks by the same amount" come from students.
+
+  **Together (6 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Problem 2: same counts times $\frac{3}{4}$. Ask: "Is $K'$ farther or closer? Why?"
+
+  **Partner work (15 min).** Problems 3-4 use the same steps. Common error: counting from $D$ instead of from $P$. Ask: "Where did you start counting?" Problem 5 sets up the QuickNotes. MLL support: Problem 5 is a frame with labeled boxes; the steps in Problem 3 are short and numbered.
+
+  **QuickNotes (4 min).** Printed. Connect enlargement to Problem 3 and reduction to Problem 4.
+
+  **CYU and exit.** CYU 1 is the source cool-down as a table. CYU 2 distractors show adding, dividing, or finding $QQ'$. The exit ticket shows whether students count from the center.
