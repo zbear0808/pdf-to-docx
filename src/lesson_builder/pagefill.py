@@ -10,7 +10,8 @@ import pymupdf
 from .check import _labels, _red
 
 BOTTOM_MARGIN = 0.5   # in; docbuilder.Handout page margin
-FOOTER_ZONE = 0.5     # in from the page bottom; Word puts the footer here (top at about 0.45 in), not content
+FOOTER_ZONE = 0.55    # in from the page bottom; the footer starts here, not content (Word: top at about 0.45 in,
+                      # OnlyOffice: 0.50 in). Content ends at the 0.5 in margin, so nothing real starts below 0.55 in.
 TOP_TOL = 12          # pt; an item number or heading this close to the top content starts the page
 FULL = 0.5            # in; a page with less slack than this is full
 EMPTY = 2.0           # in; a page with more slack than this, next to a full page, is uneven fill
