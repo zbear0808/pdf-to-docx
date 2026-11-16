@@ -108,9 +108,18 @@ practice:
           prompt: 'Practice item.'
           answer: 'Answer.'
           work: 1.0
+    - cells:
+        - n: 3
+          prompt: 'Finish the proof.'
+          proof:                  # two-column proof; {ans: ...} cells are blank for students, red on the key
+            given: '$\overline{AB} \cong \overline{CD}$'
+            prove: '$AB = CD$'
+            rows:
+              - ['$\overline{AB} \cong \overline{CD}$', 'Given']
+              - [{ans: '$AB = CD$'}, {ans: 'Congruent segments have equal lengths'}]
     - heading: SBA review         # optional heading above a row; `page_break_before: true` also works
       cells:
-        - n: 3
+        - n: 4
           prompt: 'Spiral review item.'
           answer: 'Answer.'
           work: 1.0

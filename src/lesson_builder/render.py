@@ -1,6 +1,7 @@
 """LessonSpec -> student handout, lesson key, practice, practice key, teacher guide (DOCX)."""
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 
@@ -9,7 +10,7 @@ from PIL import Image
 from . import docbuilder as db
 from .check import draw_key_width
 from .docbuilder import Handout
-from .spec import Item, LessonSpec, Part, UnitSpec, as_list
+from .spec import Blank, Item, LessonSpec, Part, UnitSpec, as_list
 
 NAME_LINE = "Name ____________________  Period ____"
 SECTION_TITLES = {"warmup": ("Warm-up", "on your own"), "together": ("Together", None),
@@ -54,7 +55,7 @@ def _work(it: Item | Part) -> float:
     """Explicit `work` wins. Otherwise 0 when the item has its own place to write, 0.2 for choices."""
     if _explicit(it, "work"):
         return it.work
-    if it.fill or it.frame or any(getattr(it, f, None) for f in ("box", "parts", "table", "columns", "draw")):
+    if it.fill or it.frame or any(getattr(it, f, None) for f in ("box", "parts", "table", "columns", "draw", "proof")):
         return 0
     return 0.2 if it.choices else it.work
 
@@ -182,6 +183,53 @@ def _table(h: Handout, it: Item):
     db.table_indent(t, 0.3625)
 
 
+def _proof(h: Handout, it: Item, container=None, width: float | None = None):
+    """Two-column proof, on the page or inside a cell (practice, two-column sections). Row heights come from
+    the longer of the printed text and the key answer, set exactly, so student and key tables are the same
+    height."""
+    pf = it.proof
+    indent = 0.3625 if container is None else 0.3
+    total = (width or h.width) - indent - 0.1
+    ws = [total * pf.statement_w, total * (1 - pf.statement_w)]
+    for lab, txt in (("Given:", pf.given), ("Prove:", pf.prove)):
+        if txt:
+            h.para(f"**{lab}** {txt}", left=indent, after=2, container=container)
+    line_h = h.size * 1.25 / 72
+
+    def need(c, w):
+        txt = c.ans if isinstance(c, Blank) else c
+        lines = max(1, math.ceil((db._measure_rich("10. " + str(txt), h.size) + 0.15) / max(w - 0.12, 0.5)))
+        return lines * line_h + 0.12
+
+    rows = len(pf.rows) + 1
+    if container is None:
+        t = h._table(rows, 2, ws)
+    else:
+        t = container.add_table(rows=rows, cols=2)
+        db.set_widths(t, ws)
+    db.table_borders(t, sz=6, inside=True)
+    db.table_indent(t, indent)
+    for r in range(rows):
+        row = t.rows[r]
+        db.row_cant_split(row)
+        if r:
+            db.row_height(row, max(pf.height, *(need(c, w) for c, w in zip(pf.rows[r - 1], ws))), exact=True)
+        for k in range(2):
+            cell = row.cells[k]
+            db.cell_margins(cell, 30, 30, 70, 70)
+            if r == 0:
+                h.cell_text(cell, "Statement" if k == 0 else "Reason", bold=True, align="center", size=10)
+                continue
+            c = pf.rows[r - 1][k]
+            p = h.cell_text(cell, f"{r}." if isinstance(c, Blank) else f"{r}. {c}", size=h.size)
+            if isinstance(c, Blank) and h.key:
+                db.add_rich(p, " " + c.ans, h.size - 0.5, color=db.ANS)
+    if container is not None:
+        db.fmt(container.paragraphs[-1])   # Word needs a paragraph after a nested table
+    else:
+        h.space(0.04)
+
+
 def _pts(p) -> str:
     if p is None:
         return ""
@@ -200,6 +248,8 @@ def _item(h: Handout, it: Item, figs: Figures, scale: float):
         _columns(h, it)
     if it.table:
         _table(h, it)
+    if it.proof:
+        _proof(h, it)
     h.space(it.after)
 
 
@@ -276,6 +326,8 @@ def _cell_item(h: Handout, cell, it: Item, figs: Figures, scale: float, points: 
     db.cell_problem(h, cell, _num(it), _prompt_lines(it, points), image=img, img_w=it.width, choices=it.choices,
                     choice_cols=it.choice_cols, work=0)
     _body(h, cell, it, scale, 0.3, _cell_w(cell, h), f"{where} {it.n or '(unnumbered)'}")
+    if it.proof:
+        _proof(h, it, cell, _cell_w(cell, h))
 
 
 def _two_columns(h: Handout, items: list[Item], figs: Figures, scale: float) -> bool:
@@ -445,6 +497,8 @@ def _answers_md(it: Item | Part, prefix: str) -> list[str]:
     if isinstance(it, Item) and it.draw:
         bits += [b for b in (it.draw.key_note,) if b]
         bits.append("(labeled sample drawing on the key)")
+    if isinstance(it, Item) and it.proof and it.proof.blanks():
+        bits.append("proof: " + "; ".join(it.proof.blanks()))
     text = _join(bits)
     if it.scoring == "epi":
         text = f"{text} (scored E/P/I)".strip()

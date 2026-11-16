@@ -77,14 +77,15 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 | `fill`* / `fill_cols`* / `box_w`* | None / one row / 1.3 | `[['$x =$', '15']]` |
 | `frame`* / `frame_box_w`* | None / 1.1 | rows `[before, answer, after(, w)]` or `{before, answer, after, w}` |
 | `box` / `table` / `columns` / `draw` / `parts` | None | write-in box; arrow table; notice/wonder; steps + drawing box; a./b. |
+| `proof` | None | two-column proof: `given`, `prove`, `rows: [[statement, reason], ...]`; a cell `{ans: '...'}` is a blank (red on the key); `statement_w` 0.55, `height` 0.38. Works in practice cells too |
 | `source`* / `after` / `page_break_after` / `no_answer`* | | provenance; 0.08; false; false |
 
-**`work` default** (render `_work`): explicit value wins; else 0 if the item has `fill`, `frame`, `box`, `parts`, `table`, `columns`, or `draw`; 0.2 with `choices`; else 0.8 (part 0.6). Don't write `work:` lines equal to the default (`tidy` reports them). Figure-only items still get 0.8.
+**`work` default** (render `_work`): explicit value wins; else 0 if the item has `fill`, `frame`, `box`, `parts`, `table`, `columns`, `draw`, or `proof`; 0.2 with `choices`; else 0.8 (part 0.6). Don't write `work:` lines equal to the default (`tidy` reports them). Figure-only items still get 0.8.
 
 **Workspace is one fixed height on both copies.** `work`, `box`, and `draw.height` print as exact-height slots; the key's red answer goes inside. When the key answer needs more room than the field gives, the builder makes the slot taller on **both** copies (build log: `the key answer needs ...`) so later items still line up. A long worked answer under a `fill`/`frame`/`parts` item (work 0) therefore adds blank space to the student copy: shorten it or plan for it with `work:`.
 
 **Table:** `header`, `answers` (one fewer), `row_label` "Lands on", `first_w` 1.45, `height` 0.42. **Columns:** `headers`, `answers` (list per column), `height` 0.85, `italic`. **Draw:** `height` 3.0, `steps_w` 3.05, `key_figure`, `key_fig_w` 2.5, `key_note`.
-**Practice:** `title`, `rows: [{cells: [Item, Item?], heading?, page_break_before?}]`, `selected: auto | ['1', '4', '6a'] | [['1', 'D'], ...]` (bare numbers take the item's `key`/`answer`), `font_size` 10.5. Cells ignore `draw`, `table`, `columns`.
+**Practice:** `title`, `rows: [{cells: [Item, Item?], heading?, page_break_before?}]`, `selected: auto | ['1', '4', '6a'] | [['1', 'D'], ...]` (bare numbers take the item's `key`/`answer`), `font_size` 10.5. Cells ignore `draw`, `table`, `columns` (`proof` works).
 **QuickNotes:** strings, or blocks `{target: LT1, title: '...', bullets: ['...']}` (bold heading + bullets).
 
 ## 4. Figures API (`from lesson_builder.figures import ...`)

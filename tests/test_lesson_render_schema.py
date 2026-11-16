@@ -382,3 +382,52 @@ def test_guide_joins_frame_rows_of_one_sentence(tmp_path):
         """)
     md = R.guide_markdown(l)
     assert "the angle is **less** than 70 degrees." in md and "is; " not in md
+
+
+PROOF = """\
+id: '9.2'
+title: Proof lesson
+numbering: auto
+sections:
+  - kind: partner
+    items:
+      - prompt: 'Finish the proof.'
+        proof:
+          given: '$\\overline{AB} \\parallel \\overline{DC}$'
+          prove: '$\\triangle ABD \\cong \\triangle CDB$'
+          rows:
+            - ['$\\overline{AB} \\parallel \\overline{DC}$', 'Given']
+            - [{ans: '$\\angle ABD \\cong \\angle CDB$'}, 'Alternate interior angles']
+            - ['$\\overline{BD} \\cong \\overline{DB}$', {ans: 'A segment is congruent to itself'}]
+practice:
+  title: Practice
+  rows:
+    - cells:
+        - prompt: 'Practice proof.'
+          proof:
+            rows:
+              - ['$AB = CD$', {ans: 'Given'}]
+"""
+
+
+def test_proof_table_blanks_and_key(tmp_path):
+    from lesson_builder.check import check_spec
+    import pytest
+    from lesson_builder.spec import Proof
+    l = _load(tmp_path, PROOF)
+    assert l.sections[0].items[0].proof.blanks() == ['$\\angle ABD \\cong \\angle CDB$',
+                                                     'A segment is congruent to itself']
+    assert not [e for e in check_spec(_unit(tmp_path), l, {}) if "no answer" in e.lower()]
+    s, k = _render(tmp_path, l, False), _render(tmp_path, l, True)
+    assert "Statement" in _text(s) and "Reason" in _text(s) and "2. Alternate interior angles" in _text(s)
+    assert "congruent to itself" not in _text(s) and "congruent to itself" in _red(k)
+    assert "Given:" in _text(s) and "Prove:" in _text(s)
+
+    def heights(p):
+        return [r.get(qn("w:val")) for r in Document(str(p)).element.body.iter(qn("w:trHeight"))
+                if r.get(qn("w:hRule")) == "exact"]
+    assert heights(s) == heights(k) and len(heights(s)) == 3   # same table height on both copies
+    pr = R.render_practice(_unit(tmp_path), l, True, R.Figures(_unit(tmp_path), {}), tmp_path / "pk.docx")
+    assert "Given" in _red(pr)
+    with pytest.raises(Exception):
+        Proof(rows=[["only one cell"]])

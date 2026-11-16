@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Literal, Optional, Union
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from .problem_models import ScaledRectangles
 
@@ -108,6 +108,31 @@ class Columns(_M):
     italic: bool = False
 
 
+class Blank(_M):
+    """A proof cell students fill in: empty on the student copy, `ans` in red on the key."""
+    ans: str
+
+
+class Proof(_M):
+    """Two-column proof (Statement | Reason). Plain strings print on both copies; {ans: ...} cells are blank
+    for students and answered on the key. Rows are numbered 1., 2., ... in both columns."""
+    given: Optional[str] = None
+    prove: Optional[str] = None
+    rows: list[list[Union[str, Blank]]]   # [statement, reason] per row
+    statement_w: float = 0.55             # fraction of the width for the Statement column
+    height: float = 0.38                  # minimum row height (in); grows on both copies for long text or answers
+
+    @model_validator(mode="after")
+    def _two_cells(self):
+        bad = [i + 1 for i, r in enumerate(self.rows) if len(r) != 2]
+        if bad:
+            raise ValueError(f"proof rows need [statement, reason]; rows {bad} don't have 2 cells")
+        return self
+
+    def blanks(self) -> list[str]:
+        return [c.ans for r in self.rows for c in r if isinstance(c, Blank)]
+
+
 class Draw(_M):
     """Steps on the left, drawing box on the right. The key shows `key_figure` (or the item figure's key layer)."""
     height: float = 3.0
@@ -158,6 +183,7 @@ class Item(_Scored):
     table: Optional[Table] = None
     columns: Optional[Columns] = None
     draw: Optional[Draw] = None
+    proof: Optional[Proof] = None    # two-column proof table under the prompt (given/prove, statement | reason)
     parts: list[Part] = Field(default_factory=list)
     after: float = 0.08
     page_break_after: bool = False

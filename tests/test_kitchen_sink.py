@@ -74,7 +74,7 @@ def test_every_field_is_used(ks):
     assert used_scored == scored, f"_Scored fields never set: {sorted(scored - used_scored)}"
     exempt = {S.LessonSpec: {"header_right", "path", "raw"}, S.UnitSpec: {"dir"}}
     for cls in (S.UnitSpec, S.Budget, S.Target, S.LessonSpec, S.Section, S.Item, S.Part, S.Table, S.Columns,
-                S.Draw, S.Practice, S.PracticeRow, S.RubricLevel, S.NoteBlock):
+                S.Draw, S.Proof, S.Blank, S.Practice, S.PracticeRow, S.RubricLevel, S.NoteBlock):
         want = set(cls.model_fields) - exempt.get(cls, set()) - (scored if cls in (S.Item, S.Part) else set())
         missing = want - seen.get(cls, set())
         assert not missing, f"{cls.__name__} fields never set in the fixture: {sorted(missing)}"
@@ -94,7 +94,7 @@ def test_auto_numbers_and_refs(ks):
     _, _, docs, _ = ks
     l = docs["ks"]
     assert [it.n for _, it in l.items()] == [None, None, "1", "2", "3", "4", "5", "1", "2", "3", "4"]
-    assert [c.n for r in l.practice.rows for c in r.cells] == [str(k) for k in range(1, 8)]
+    assert [c.n for r in l.practice.rows for c in r.cells] == [str(k) for k in range(1, 9)]
     items = {it.id: it for _, it in l.items() if it.id}
     assert items["arrow_table"].prompt == "Where does each vertex in Problem 1 land?"
     assert items["why_frame"].prompt == "Use your table from Problem 2. Fill in each box."
@@ -104,7 +104,7 @@ def test_auto_numbers_and_refs(ks):
     assert "Partner problem 4 replaced" in l.guide_notes and "Part 5a has" in l.guide_notes
     assert [it.n for _, it in docs["KS Test A"].items()] == [str(k) for k in range(1, 8)]
     sel = selected_answers(l)
-    assert sel[0][0] == "1" and ("2", "4") in sel and ("3", "1.5") in sel and len(sel) == 7
+    assert sel[0][0] == "1" and ("2", "4") in sel and ("4", "1.5") in sel and len(sel) == 7
     assert next(l.items())[1].width == S.FIG_SIZES["small"]
 
 
