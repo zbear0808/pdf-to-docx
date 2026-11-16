@@ -109,8 +109,10 @@ class Columns(_M):
 
 
 class Blank(_M):
-    """A proof cell students fill in: empty on the student copy, `ans` in red on the key."""
+    """A proof cell students fill in: empty on the student copy, `ans` in red on the key. `before` prints on
+    both copies ahead of the blank (a half-printed cell such as "$\\triangle KBQ \\cong \\triangle$")."""
     ans: str
+    before: str = ""
 
 
 class Proof(_M):

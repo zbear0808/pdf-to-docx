@@ -189,7 +189,7 @@ practice:
               prompt: 'Finish the second proof.'
               proof:
                 rows:
-                  - [{ans: '$CD = AB$'}, 'Symmetric property']
+                  - [{before: '$CD =$', ans: '$AB$'}, 'Symmetric property']
     - heading: Mixed review
       cells:
         - id: rectangles

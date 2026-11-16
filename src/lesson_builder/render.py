@@ -199,7 +199,7 @@ def _proof(h: Handout, it: Item | Part, container=None, width: float | None = No
     line_h = h.size * 1.25 / 72
 
     def need(c, w):
-        txt = c.ans if isinstance(c, Blank) else c
+        txt = f"{c.before} {c.ans}" if isinstance(c, Blank) else c
         lines = max(1, math.ceil((db._measure_rich("10. " + str(txt), h.size) + 0.15) / max(w - 0.12, 0.5)))
         return lines * line_h + 0.12
 
@@ -223,7 +223,8 @@ def _proof(h: Handout, it: Item | Part, container=None, width: float | None = No
                 h.cell_text(cell, "Statement" if k == 0 else "Reason", bold=True, align="center", size=10)
                 continue
             c = pf.rows[r - 1][k]
-            p = h.cell_text(cell, f"{r}." if isinstance(c, Blank) else f"{r}. {c}", size=h.size)
+            lead = (f"{r}. {c.before}" if c.before else f"{r}.") if isinstance(c, Blank) else f"{r}. {c}"
+            p = h.cell_text(cell, lead, size=h.size)
             if isinstance(c, Blank) and h.key:
                 db.add_rich(p, " " + c.ans, h.size - 0.5, color=db.ANS)
     if container is not None:

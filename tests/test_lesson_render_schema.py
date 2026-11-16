@@ -399,6 +399,7 @@ sections:
             - ['$\\overline{AB} \\parallel \\overline{DC}$', 'Given']
             - [{ans: '$\\angle ABD \\cong \\angle CDB$'}, 'Alternate interior angles']
             - ['$\\overline{BD} \\cong \\overline{DB}$', {ans: 'A segment is congruent to itself'}]
+            - [{before: '$\\triangle ABD \\cong \\triangle$', ans: '$CDB$'}, {ans: 'ASA'}]
 practice:
   title: Practice
   rows:
@@ -423,7 +424,7 @@ def test_proof_table_blanks_and_key(tmp_path):
     from lesson_builder.spec import Proof
     l = _load(tmp_path, PROOF)
     assert l.sections[0].items[0].proof.blanks() == ['$\\angle ABD \\cong \\angle CDB$',
-                                                     'A segment is congruent to itself']
+                                                     'A segment is congruent to itself', '$CDB$', 'ASA']
     assert not [e for e in check_spec(_unit(tmp_path), l, {}) if "no answer" in e.lower()]
     s, k = _render(tmp_path, l, False), _render(tmp_path, l, True)
     assert "Statement" in _text(s) and "Reason" in _text(s) and "2. Alternate interior angles" in _text(s)
@@ -433,7 +434,8 @@ def test_proof_table_blanks_and_key(tmp_path):
     def heights(p):
         return [r.get(qn("w:val")) for r in Document(str(p)).element.body.iter(qn("w:trHeight"))
                 if r.get(qn("w:hRule")) == "exact"]
-    assert heights(s) == heights(k) and len(heights(s)) == 3   # same table height on both copies
+    assert heights(s) == heights(k) and len(heights(s)) == 4
+    assert "4.ΔABD≅Δ" in _text(s).replace(" ", "") and "CDB" not in _text(s).split("4.")[-1]   # same table height on both copies
     pr = R.render_practice(_unit(tmp_path), l, True, R.Figures(_unit(tmp_path), {}), tmp_path / "pk.docx")
     assert "Given" in _red(pr) and "EF = GH" not in _text(R.render_practice(
         _unit(tmp_path), l, False, R.Figures(_unit(tmp_path), {}), tmp_path / "ps.docx"))

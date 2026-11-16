@@ -192,7 +192,7 @@ def _student_texts(lesson: LessonSpec) -> list[tuple[str, str]]:
         for p, pl in _with_parts(it, label):
             if p.proof:
                 out += [(f"{pl} proof", t) for t in [p.proof.given or "", p.proof.prove or ""]
-                        + [c for r in p.proof.rows for c in r if isinstance(c, str)] if t]
+                        + [c if isinstance(c, str) else c.before for r in p.proof.rows for c in r] if t]
     for q in lesson.quicknotes:
         out += [("quicknotes", t) for t in ([q] if isinstance(q, str) else [q.title or ""] + q.bullets)]
     if lesson.practice:
