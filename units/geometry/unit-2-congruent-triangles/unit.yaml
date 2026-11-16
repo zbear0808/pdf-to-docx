@@ -4,11 +4,15 @@ unit: 2
 unit_title: Congruent triangles
 period: Period 4
 budget:
-  minutes: 45        # built before the 40-minute rule (11/9); new units use 40
+  minutes: 40        # lesson-scope: every lesson fits a 40-minute period (2.1 was built at 45 before the rule)
   handout_pages: 3
   practice_pages: 2
-lessons:
+lessons:             # one YAML per lesson (handout + practice), teaching order
   - 2.1.yaml
-  - 2.2.yaml
-  - 2.3.yaml
-figures: figures.py
+  - 2.5.yaml
+  - 2.6.yaml
+  - 2.7.yaml
+  - 2.9.yaml
+assessments:         # progress checks, review, test, summary notes (doc_type: assessment | reference)
+  - assessments/*.yaml
+figures: figures.py  # shared figures (2.1); per-document figures go in figures/<doc stem>.py

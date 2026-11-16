@@ -1,0 +1,274 @@
+id: '2.6'
+title: Side-Angle-Side triangle congruence
+notes_title: SAS and two-column proofs
+framing: >-
+  In Lesson 2.5 you wrote proofs about segments. Today's question: which three parts of a triangle are enough to
+  know two triangles are congruent, and how do we prove it?
+materials: ruler, protractor
+source: 2.6 Student Notes.docx, 2.6 Practice Problems.docx
+targets:
+  - id: LT1
+    understand: 'Two sides and the angle between them fix one triangle, so two triangles with those three parts congruent are congruent.'
+    able_to: 'Name the included angle, write the SAS congruence statement, and explain why SAS works.'
+    standard: G-CO.B.8
+  - id: LT2
+    understand: 'A proof starts with the givens and gives a reason for every statement, ending with what you want to prove.'
+    able_to: 'Complete a two-column proof with SAS and CPCTC (vertical angles, reflexive property, an auxiliary line).'
+    standard: G-CO.C.10, G-SRT.B.5
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 6
+        target: LT1
+        prompt: 'Use a ruler and a protractor. Draw $\triangle DEF$ with $m\angle E = 50^\circ$, $DE = 4$ cm, and $EF = 5$ cm.'
+        steps:
+          - 'Draw $\overline{EF}$ 5 cm long.'
+          - 'Draw a $50^\circ$ angle at $E$.'
+          - 'Mark $D$ on the new ray, 4 cm from $E$. Connect $D$ to $F$.'
+        frame:
+          - ['Put your triangle on a partner''s. The triangles are', 'congruent', '.']
+          - ['We used two sides and', 'the angle between them', '.', 1.6]
+        draw:
+          height: 2.6
+          steps_w: 3.7
+          key_figure: '2.6_warmup'
+          key_note: 'Actual size. Every correct triangle matches this one.'
+        answer: 'Two sides and the angle between them fix one triangle.'
+
+  - kind: together
+    box:
+      - '**Proofs.** Start with what is given. End with what you want to prove. Every statement needs a reason.'
+      - '**Reason bank**  Given  |  Vertical angles are congruent  |  Reflexive property (a segment is congruent to itself)  |  Definition of angle bisector  |  SAS  |  CPCTC'
+    items:
+      - n: 1
+        minutes: 3
+        target: LT1
+        prompt:
+          - '**Side-Angle-Side (SAS) Triangle Congruence Theorem:** If two sides and the angle between them in one triangle are congruent to two sides and the angle between them in another triangle, then the triangles are congruent.'
+          - 'Use the marks in the figure. Fill in each box.'
+        figure: '2.6_sas'
+        fill:
+          - ['$\overline{AB} \cong$', '$\overline{GB}$']
+          - ['$\overline{BC} \cong$', '$\overline{BC}$']
+          - ['$\angle ABC \cong$', '$\angle GBC$']
+          - ['$\triangle ABC \cong$', '$\triangle GBC$']
+        fill_cols: 2
+        box_w: 0.9
+        page_break_after: true
+      - n: 2
+        id: bowtie
+        minutes: 5
+        target: LT2
+        prompt:
+          - 'The marks in the figure are given. Prove $\triangle POQ \cong \triangle ROS$.'
+        figure: '2.6_bowtie'
+        fig_w: 1.0
+        proof:
+          rows:
+            - [{ans: '$\overline{PO} \cong \overline{RO}$'}, 'Given']
+            - [{ans: '$\overline{QO} \cong \overline{SO}$'}, {ans: 'Given'}]
+            - [{ans: '$\angle POQ \cong \angle ROS$'}, {ans: 'Vertical angles are congruent'}]
+            - [{ans: '$\triangle POQ \cong \triangle ROS$'}, {ans: 'SAS'}]
+
+  - kind: partner
+    items:
+      - n: 3
+        id: iso
+        minutes: 10
+        target: LT2
+        prompt:
+          - '$\triangle ABP$ is isosceles with $\overline{BP} \cong \overline{AP}$. Prove $\angle A \cong \angle B$.'
+          - '**Auxiliary line:** an extra line you draw in a figure to show hidden structure.'
+        figure: '2.6_iso'
+        fig_w: 1.4
+        steps:
+          - 'Draw an auxiliary line: the bisector of $\angle BPA$. Call the point where it meets $\overline{BA}$ point $M$. Mark the congruent angles at $P$.'
+          - 'Finish the proof. Use the reason bank on page 1.'
+        proof:
+          rows:
+            - [{ans: '$\overline{BP} \cong \overline{AP}$'}, 'Given']
+            - [{ans: '$\angle BPM \cong \angle APM$'}, {ans: 'Definition of angle bisector'}]
+            - [{ans: '$\overline{PM} \cong \overline{PM}$'}, {ans: 'Reflexive property'}]
+            - [{ans: '$\triangle BPM \cong \triangle APM$'}, {ans: 'SAS'}]
+            - [{ans: '$\angle B \cong \angle A$'}, {ans: 'CPCTC'}]
+        answer: 'Step 1: red $\overline{PM}$ and arcs in the figure.'
+        work: 0.1
+      - n: 4
+        minutes: 1
+        target: LT2
+        prompt: 'Your proof in {ref:iso} works for every isosceles triangle. Fill in the box.'
+        frame:
+          - ['**Isosceles Triangle Theorem:** The base angles of an isosceles triangle are', 'congruent', '.']
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - n: 1
+        id: square
+        minutes: 4
+        target: LT2
+        prompt:
+          - 'Draw an auxiliary line in square $FEHG$ that would help you prove that a diagonal of a square makes $45^\circ$ angles with the sides. Start the line at $F$.'
+          - 'Fill in each box.'
+        figure: '2.6_square'
+        frame:
+          - ['By SAS, $\triangle FEH \cong \triangle$', '$HGF$', '.']
+          - ['In $\triangle FEH$, $\overline{FE} \cong \overline{EH}$, so $\angle EFH \cong$', '$\angle EHF$', '.']
+          - ['The two angles add to', '$90^\circ$', ', so each is $45^\circ$.']
+        answer: 'Diagonal $\overline{FH}$. $m\angle E = 90^\circ$, so the base angles of $\triangle FEH$ add to $90^\circ$.'
+
+  - kind: exit
+    items:
+      - n: 2
+        minutes: 5
+        target: LT1
+        prompt: 'Draw and mark two triangles that are congruent by SAS.'
+        steps:
+          - 'Draw $\triangle ABC$ and $\triangle DEF$.'
+          - 'Mark $\overline{AB} \cong \overline{DE}$ with one tick each. Mark $\overline{BC} \cong \overline{EF}$ with two ticks each.'
+          - 'Mark the pair of angles that SAS needs with arcs.'
+        fill: [['Angle pair:', '$\angle B \cong \angle E$']]
+        box_w: 1.3
+        draw:
+          height: 2.0
+          steps_w: 3.7
+          key_figure: '2.6_exit'
+          key_fig_w: 2.4
+        answer: 'Sample. The arcs go on the angle between the two marked sides.'
+
+quicknotes:
+  - target: LT1
+    title: I can explain why the SAS Triangle Congruence Theorem works.
+    bullets:
+      - '**SAS:** If two sides and the angle between them are congruent to the matching parts of another triangle, then the triangles are congruent.'
+      - 'Why: a rigid motion takes one side onto its match. The congruent angle puts the second side on the same ray, and the same length ends it at the same point. That is why every $\triangle DEF$ in the warm-up matched.'
+      - 'The angle must be **between** the two sides.'
+  - target: LT2
+    title: I can use the SAS Triangle Congruence Theorem in a proof.
+    bullets:
+      - 'Start with what is GIVEN. End with what you want to PROVE. Every statement needs a reason.'
+      - 'You CAN assume: lines are straight, two lines meet at one point, and what you are given is true.'
+      - 'You CANNOT assume that lines are parallel or perpendicular, or that parts are congruent, unless the figure is marked or the givens say so.'
+      - 'Use proven facts and theorems (SAS, vertical angles, CPCTC) as reasons, not "I moved it." Transformations still help you match corresponding parts.'
+      - 'An **auxiliary line** is an extra line you draw, like $\overline{PM}$ in {ref:iso}.'
+      - '**Isosceles Triangle Theorem:** The base angles of an isosceles triangle are congruent.'
+
+practice:
+  title: 'SAS triangle congruence: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt:
+            - 'Put the statements in order to prove that figure $ABC$ is congruent to figure $DEF$.'
+            - 'Statement 1: If needed, reflect the image of figure $ABC$ across $\overline{DE}$ so that the image of $C$, called $C''$, is on the same side of $\overline{DE}$ as $F$.'
+            - 'Statement 2: $C''$ must be on $\overrightarrow{EF}$, because $C''$ and $F$ are on the same side of $\overline{DE}$ and make the same angle with it at $E$.'
+            - 'Statement 3: $\overline{AB}$ and $\overline{DE}$ are the same length, so they are congruent. So there is a rigid motion that takes $\overline{AB}$ to $\overline{DE}$. Apply that rigid motion to figure $ABC$.'
+            - 'Statement 4: $C''$ and $F$ are the same distance along the same ray from $E$, so they are the same point.'
+            - 'Statement 5: So figure $ABC$ is congruent to figure $DEF$.'
+          figure: '2.6_pr_order'
+          fill: [['Order:', '3, 1, 2, 4, 5']]
+          box_w: 1.6
+    - cells:
+        - n: 2
+          prompt:
+            - 'Complete the proof with the missing statements and reasons.'
+            - '**Reason bank**  Given | Definition of midpoint | Vertical angles | Definition of angle bisector | Reflexive property | SAS | CPCTC'
+          figure: '2.6_pr_mid'
+          proof:
+            given: '$\overline{AC} \cong \overline{EC}$, and $C$ is the midpoint of $\overline{BD}$.'
+            prove: '$\overline{AB} \cong \overline{ED}$'
+            rows:
+              - ['$\overline{AC} \cong \overline{EC}$', {ans: 'Given'}]
+              - ['$C$ is the midpoint of $\overline{BD}$', 'Given']
+              - [{ans: '$\overline{BC} \cong \overline{DC}$'}, 'Definition of midpoint']
+              - [{ans: '$\angle ACB \cong \angle ECD$'}, 'Vertical angles']
+              - ['$\triangle ABC \cong \triangle EDC$', {ans: 'SAS'}]
+              - [{ans: '$\overline{AB} \cong \overline{ED}$'}, 'CPCTC']
+    - cells:
+        - n: 3
+          prompt: 'Write a two-column proof.'
+          figure: '2.6_pr_kite'
+          proof:
+            given: '$\overline{QK} \cong \overline{QA}$, and $\overline{QB}$ bisects $\angle KQA$.'
+            prove: '$\overline{KB} \cong \overline{AB}$'
+            rows:
+              - [{ans: '$\overline{QK} \cong \overline{QA}$'}, {ans: 'Given'}]
+              - [{ans: '$\angle KQB \cong \angle AQB$'}, {ans: 'Definition of angle bisector'}]
+              - [{ans: '$\overline{QB} \cong \overline{QB}$'}, {ans: 'Reflexive property'}]
+              - [{ans: '$\triangle KQB \cong \triangle AQB$'}, {ans: 'SAS'}]
+              - [{ans: '$\overline{KB} \cong \overline{AB}$'}, {ans: 'CPCTC'}]
+    - cells:
+        - n: 4
+          prompt: 'Find $m\angle T$.'
+          figure: '2.6_pr_t'
+          fill: [['$m\angle T =$', '$64^\circ$']]
+          box_w: 0.9
+        - n: 5
+          prompt: 'Find $m\angle G$.'
+          figure: '2.6_pr_g'
+          fill: [['$m\angle G =$', '$45^\circ$']]
+          box_w: 0.9
+    - cells:
+        - n: 6
+          prompt: 'Find $x$.'
+          figure: '2.6_pr_x'
+          fill: [['$x =$', '$125^\circ$']]
+          box_w: 0.9
+          work: 0.3
+        - n: 7
+          prompt: '$\overline{PR} \cong \overline{QR}$ and $\overline{QS} \cong \overline{RS}$. $m\angle RSQ = 120^\circ$. Find $m\angle QPR$.'
+          figure: '2.6_pr_qpr'
+          layout: stacked
+          fill: [['$m\angle QPR =$', '$15^\circ$']]
+          box_w: 0.9
+          work: 0.3
+    - heading: SBA review
+      cells:
+        - n: 8
+          prompt: 'Solve for $x$: $\frac{1}{4}(4 + 2x) = 3$'
+          answer: ['$4 + 2x = 12$', '$2x = 8$', '$x = 4$']
+          work: 0.8
+        - n: 9
+          prompt: 'A student does 5 math problems every 10 minutes. How many problems can the student do in 16 minutes?'
+          answer: ['$\frac{5}{10} = \frac{1}{2}$ problem per minute', '$\frac{1}{2} \cdot 16 = 8$ problems']
+          work: 0.8
+  selected: [['1', '3, 1, 2, 4, 5'], ['8', '$x = 4$'], ['9', '8 problems']]
+
+plan: |
+  **Overview.** Lesson 2.5 wrote proofs about segments. Today students see why two sides and the included angle fix a triangle (SAS), then use SAS in their first two-column triangle proofs, including the Isosceles Triangle Theorem with an auxiliary line. Lesson 2.7 adds ASA and 2.9 adds SSS.
+
+  **Objectives.** (1) Explain why SAS works and name the included angle. (2) Complete a two-column proof with SAS and CPCTC. **Standards.** G-CO.B.8, G-CO.C.10, G-SRT.B.5. SMP 3, 5 (ruler and protractor), 6.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-6 | Warm-up: draw $\triangle DEF$ | Students, 1 min share |
+  | 6-14 | Together: Problems 1-2 | Teacher + class |
+  | 14-25 | With a partner: Problems 3-4 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-38 | CYU 1 and exit ticket 2 | Students |
+  | 38-40 | Collect exit ticket, assign practice | Teacher |
+
+  **Warm-up (6 min).** 4 min to draw, 2 min to stack triangles with a partner and fill the frame. Ask "Did anyone get a different triangle?" Then: "Which three parts did we use?" Point at the angle: it sits between the two sides.
+
+  **Together (8 min).** Read the box first. Problem 1 (3 min): read the theorem once aloud; students fill the boxes from the marks. $\overline{BC} \cong \overline{BC}$ is the new idea; name it the reflexive property and point to the bank. Problem 2 (5 min): model the first two-column proof under the doc camera. Say each line as "I know ___ because ___." Ask "Where do the vertical angles come from? Nobody marked them."
+
+  **Partner work (11 min).** Problem 3: Step 1 (auxiliary line) 2 min, the proof 7 min. Problem 4 and a 1 min share. The auxiliary line is the hard part; if pairs are stuck after 2 min, ask "What would split the triangle into two triangles you could compare?" Then "Which side do the two triangles share?"
+  - Extension for early finishers (say it, don't print it): Synthesis 2 from the source notes. In a quadrilateral with both pairs of opposite sides congruent and one pair of opposite angles congruent, draw an auxiliary line that would help prove opposite sides are parallel (a diagonal).
+  - MLL supports: reason bank, a numbered statement/reason table with reason 1 printed, frames on the warm-up and Problem 4, the definition of auxiliary line printed in the problem. Partner talk in any language.
+  - Watch for: SAS with the angle not between the sides; "Given" for $\overline{PM} \cong \overline{PM}$; writing $\angle A \cong \angle B$ before the triangles are congruent (that needs CPCTC after SAS).
+
+  **QuickNotes (4 min).** Read the CAN and CANNOT bullets together; connect "can't assume congruent" to Problem 2, where the vertical angles needed a reason. Point to $\overline{PM}$ for the auxiliary line bullet.
+
+  **CYU and exit (9 min).** CYU 1 (4 min): the auxiliary line is diagonal $\overline{FH}$; the 45° comes from the Isosceles Triangle Theorem. Exit 2 (5 min): check that the arcs sit at $B$ and $E$; drawings vary.
+
+guide_notes: |
+  **Nov 16: fit to 40 minutes.** The source notes run about an hour. Kept in source order: warm-up, SAS theorem fill, the bowtie proof, the isosceles proof with an auxiliary line, the Isosceles Triangle Theorem, Synthesis 1 (now CYU 1), and the cool-down (now the exit ticket). Cut: the Activity 1 fill-ins (vertical angles, linear pairs, alternate interior, corresponding angles; they repeat the Lesson 2.5 warm-up), the ASA, SSS, and SAA reference boxes (taught in 2.7 and 2.9), and Synthesis 2 (now an extension in the plan). The "can and cannot assume" text moved to the QuickNotes, and the proof format and reasons moved to the box above Problem 1. All figures were redrawn from the source layout (the source images print under 150 dpi).
+
+  **Practice.** From the two source practice sets: notes practice 3 (practice 1), the midpoint proof (practice 2), practice problems 5 (practice 3), 6, 7, 8, and 13, and the SBA review. Cut: practice problems 1 / notes practice 4 (prove $\angle C \cong \angle F$; same SAS then CPCTC steps as practice 2, and it did not fit 2 pages), the parallel-lines proof (practice problems 2 and notes practice 5; it needs AAS, not SAS), the "bisect each other" proof (same steps as practice 2), practice problems 9-12 (they need the converse of the Isosceles Triangle Theorem), and notes practice 1, 2, and 6 (page budget; 6 repeats Lesson 2.1). Proofs use two-column tables; the cells the source printed are printed, the rest are blanks (practice 3 is fully blank, as in the source).
+
+  **Practice solutions.** 4: $m\angle I = 58^\circ$, so $m\angle T = 180^\circ - 116^\circ = 64^\circ$. 5: $\angle A \cong \angle G$ and they add to $90^\circ$, so $45^\circ$. 6: inside angle $180^\circ - 110^\circ = 70^\circ$, base angles $55^\circ$, $x = 180^\circ - 55^\circ = 125^\circ$ (linear pair). 7: in $\triangle QRS$ the base angles are $30^\circ$, so $m\angle QRP = 150^\circ$; in $\triangle PQR$, $(180^\circ - 150^\circ) \div 2 = 15^\circ$.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept short reasons ("vert. angles", "bisector", "same side") and home-language words when the idea is right. In a proof, accept statements in a different valid order, and either letter order for a correct congruence ($\angle A \cong \angle B$ or $\angle B \cong \angle A$).

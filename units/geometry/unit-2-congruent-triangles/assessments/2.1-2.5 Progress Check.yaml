@@ -1,0 +1,133 @@
+id: '2.1-2.5 Progress Check'
+doc_type: assessment
+schema_version: 1
+numbering: auto
+title: 'Progress check: lessons 2.1-2.5'
+directions: 'Use the marks on each diagram.'
+total_points: 10
+max_pages: 2
+source: '2.1- 2.5 Progress Check.docx (Version A, page 1 top and page 2)'
+targets:
+  - id: LT1
+    understand: 'Students will understand that a rigid motion or a congruence statement tells which parts correspond, and corresponding parts of congruent figures are congruent.'
+    able_to: 'Students will be able to name corresponding parts from a rigid motion, a congruence statement, or the marks on a diagram, and write a congruence statement with the vertices in matching order.'
+    standard: 'G-CO.B.6, G-CO.B.7'
+  - id: LT2
+    understand: 'Students will understand that SSS, SAS, ASA, and SAA each give enough matching parts to know two triangles are congruent.'
+    able_to: 'Students will be able to decide from marked parts whether two triangles are congruent and write a congruence statement in matching order.'
+    standard: G-CO.B.8
+
+sections:
+  - kind: plain
+    title: 'LT1: corresponding parts and congruence statements (lessons 2.1-2.2)'
+    target: LT1
+    columns: 2
+    items:
+      - id: q1
+        points: 2
+        target: LT1
+        type: sr
+        demand: pwc
+        source: 'Version A #1'
+        prompt:
+          - '$\triangle HEF$ is the image of $\triangle FGH$ after a $180^\circ$ rotation around point $K$.'
+          - 'Select **all** the statements that must be true. Each wrong or missing choice loses $\frac{1}{2}$ point.'
+        figure: '2.1-2.5 Progress Check_q1'
+        layout: stacked
+        choices: ['$\angle E \cong \angle G$', '$\angle GHK \cong \angle EFK$', '$\overline{EH} \cong \overline{FG}$', '$\overline{GH} \cong \overline{HK}$', '$\triangle HGF \cong \triangle FEH$', '$\triangle EFH \cong \triangle GFH$']
+        choice_cols: 2
+        select_all: true
+        key: 'A, B, C, E'
+        answer: ['[A], [B], [C], [E]. The rotation takes $F \to H$, $G \to E$, $H \to F$.', '[A] $\angle G \to \angle E$. [B] $\angle GHK \to \angle EFK$. [C] $\overline{FG} \to \overline{HE}$. [E] $H \to F$, $G \to E$, $F \to H$.']
+        distractors:
+          D: '$\overline{GH}$ and $\overline{HK}$ share point $H$; $\overline{HK}$ is half of diagonal $\overline{HF}$, not the image of $\overline{GH}$'
+          F: 'matches $E$ with $G$ but keeps $F$ and $H$ in place; the rotation swaps $F$ and $H$ (true: $\triangle EFH \cong \triangle GHF$)'
+      - id: q2
+        points: 2
+        target: LT1
+        type: sr
+        demand: pwc
+        source: 'Version A #2'
+        prompt:
+          - 'Use $\triangle GHI \cong \triangle JKL$.'
+          - 'Select **all** the statements that must be true. Each wrong or missing choice loses $\frac{1}{2}$ point.'
+        choices: ['$\overline{GI} \cong \overline{JL}$', '$\angle I \cong \angle K$', 'A translation moves $\triangle GHI$ onto $\triangle JKL$.', '$\triangle HGI \cong \triangle KJL$', '$m\angle G + m\angle H + m\angle L = 180^\circ$']
+        select_all: true
+        key: 'A, D, E'
+        answer: ['[A], [D], [E]. Match by position: $G \leftrightarrow J$, $H \leftrightarrow K$, $I \leftrightarrow L$.', '[D] lists the same pairs in a new order. [E] $m\angle L = m\angle I$, so the sum is $m\angle G + m\angle H + m\angle I = 180^\circ$.']
+        distractors:
+          B: 'matches $I$ with $K$ instead of by position ($I$ matches $L$)'
+          C: 'thinks congruent means a translation; any sequence of rigid motions works'
+      - id: q3
+        points: 1
+        target: LT1
+        type: cr
+        demand: pwoc
+        source: 'Version A #3'
+        prompt: 'Use $\triangle QRS \cong \triangle FHG$. Complete each congruence statement.'
+        fill: [['$\angle RSQ \cong$', '$\angle HGF$'], ['$\overline{GH} \cong$', '$\overline{SR}$']]
+        fill_cols: 1
+        box_w: 1.1
+        answer: ['$Q \leftrightarrow F$, $R \leftrightarrow H$, $S \leftrightarrow G$.', 'Accept $\angle FGH$ or $\angle G$, and $\overline{RS}$.']
+      - id: q4
+        points: 1
+        target: LT1
+        type: cr
+        demand: pwoc
+        source: 'Version A #4'
+        prompt: 'Use the marks on the diagram. Complete the congruence statement.'
+        figure: '2.1-2.5 Progress Check_q4'
+        layout: stacked
+        frame:
+          - ['$\triangle CND \cong \triangle$', '$LNM$', '']
+        answer: 'Same marks: $C \leftrightarrow L$ (2 arcs), $N \leftrightarrow N$ (vertical angles), $D \leftrightarrow M$ (3 arcs).'
+
+  - kind: plain
+    title: 'LT2: decide if triangles are congruent (lessons 2.3-2.5)'
+    target: LT2
+    columns: 2
+    page_break_before: true
+    items:
+      - id: q5
+        points: 2
+        target: LT2
+        type: cr
+        demand: pwc
+        source: 'Version A, back #1'
+        prompt: ['Are the triangles congruent? Write yes or no.', 'If yes, complete the congruence statement.']
+        figure: '2.1-2.5 Progress Check_q5'
+        layout: stacked
+        fill: [['Congruent?', 'yes']]
+        box_w: 1.0
+        frame:
+          - ['$\triangle JAR \cong \triangle$', '$DIL$', '']
+        answer: ['SAA: $\angle R \cong \angle L$, $\angle A \cong \angle I$, $\overline{JR} \cong \overline{DL}$.', 'Or (full credit): $\angle J \cong \angle D$ by the triangle sum, then ASA with $\overline{JR}$ between $\angle J$ and $\angle R$.', '$J \leftrightarrow D$, $A \leftrightarrow I$, $R \leftrightarrow L$.']
+      - id: q6
+        points: 2
+        target: LT2
+        type: cr
+        demand: pwoc
+        source: 'Version A, back #2'
+        prompt: ['Are the triangles congruent? Write yes or no.', 'If yes, complete the congruence statement.']
+        figure: '2.1-2.5 Progress Check_q6'
+        layout: stacked
+        fill: [['Congruent?', 'yes']]
+        box_w: 1.0
+        frame:
+          - ['$\triangle MDX \cong \triangle$', '$MTY$', '']
+        answer: ['SAS: $\overline{DM} \cong \overline{TM}$, $\angle DMX \cong \angle TMY$, $\overline{XM} \cong \overline{YM}$.', '$M \leftrightarrow M$, $D \leftrightarrow T$, $X \leftrightarrow Y$.']
+
+guide_notes: |
+  **Targets.** Items 1-4 (6 pts): LT1, corresponding parts from a rotation, a congruence statement, or marks (lessons 2.1-2.2). Items 5-6 (4 pts): LT2, decide congruence from marks (lessons 2.3-2.5). The front page is LT1 and the back page is LT2, as in the source.
+
+  **Scoring.**
+  - Items 1 and 2 (2 pts each): start at 2 and take off $\frac{1}{2}$ for each wrong or missing choice. Minimum 0. Selecting every choice scores 1 pt.
+  - Item 3 (1 pt): $\frac{1}{2}$ pt per box.
+  - Item 4 (1 pt): all three letters in matching order.
+  - Items 5 and 6 (2 pts each): 1 pt for "yes", 1 pt for the statement in matching order. The theorem is not asked; give no extra credit and take nothing off if a student adds one.
+
+  **Watch for.** Statements in alphabetical order instead of matching order. Item 1F: students who see two triangles sharing $\overline{FH}$ and match $E$ with $G$ but keep $F$ and $H$ in place. Item 2C: "congruent" read as "a translation". Item 5: lesson 2.5 teaches SSS, SAS, and ASA, and SAA is only on the Unit 2 Summary Notes. Give full credit for SAA or for the triangle-sum route ($\angle J \cong \angle D$, then ASA). A "no" usually means the student didn't use the triangle sum to find the third angle; go over it in the review.
+
+  **For the retake.** Items 4-6 all answer "yes". The retake should include an SSA case where the answer is "no", so LT2 checks both outcomes.
+
+  **Scoring notes (MLL).** Score the math, not English. Accept "sí", "same", or a home-language word for yes, lowercase letters, and $\angle G$ for $\angle HGF$ in item 3. No word problems here, so no 3-Reads launch is needed if you go over it in class.

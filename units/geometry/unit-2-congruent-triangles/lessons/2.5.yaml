@@ -1,0 +1,323 @@
+id: '2.5'
+title: Using triangle congruence theorems
+notes_title: Using triangle congruence theorems
+framing: >-
+  SSS, SAS, and ASA tell us when three pairs of parts are enough to know two triangles are congruent.
+  Today's question: when does a diagram give us enough information to use one of them?
+materials: colored pencils (optional) for marking diagrams
+numbering: auto
+source: 2.5 Student Notes.docx, 2.5 Practice Problems.docx
+targets:
+  - id: LT1
+    understand: 'Students will understand that SSS, SAS, and ASA each fix a whole triangle, so those three matching parts are enough to know two triangles are congruent, and two sides with an angle that is not between them (SSA) is not enough.'
+    able_to: 'Students will be able to decide from given or marked parts (including a shared side or vertical angles) whether two triangles are congruent, name the theorem, and write a congruence statement with the vertices in matching order.'
+    standard: G-CO.B.8
+  - id: LT2
+    understand: 'Students will understand that once two triangles are congruent, every pair of corresponding parts is congruent.'
+    able_to: 'Students will be able to use a congruence statement to set matching sides equal and solve for unknowns.'
+    standard: G-SRT.B.5
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 4
+        target: LT1
+        source: 2.5 Student Notes, warm-up 1, 2, 6
+        prompt: 'Are angles $a$ and $b$ congruent, supplementary, or neither? Name the angle relationship (vertical angles, alternate interior angles, corresponding angles, linear pair, or neither). Write an equation if you can.'
+        figure: 2.5_warmup
+        fig_w: 4.6
+        layout: stacked
+        after: 0.04
+        columns:
+          headers: ['1.', '2.', '3.']
+          height: 0.8
+          answers:
+            - ['Alternate interior angles.', 'Congruent: $a = b$']
+            - ['Vertical angles.', 'Congruent: $a = b$']
+            - ['Neither. The lines are not marked parallel, so we can''t say.', 'No equation']
+
+  - kind: together
+    intro: 'Are the triangles congruent? If yes, name the theorem and finish the congruence statement.'
+    box:
+      - '**SSS:** 3 pairs of congruent sides.'
+      - '**SAS:** 2 pairs of congruent sides and the **included** angle (the angle between those two sides).'
+      - '**ASA:** 2 pairs of congruent angles and the **included** side (the side between those two angles).'
+    items:
+      - id: p_sas
+        minutes: 3
+        target: LT1
+        source: 2.5 Student Notes, Activity 1 #1
+        prompt: 'Use the side lengths and the angle in each triangle.'
+        figure: 2.5_sas
+        fig_w: 2.3
+        fill: [['Congruent?', 'yes'], ['Theorem:', 'SAS']]
+        fill_cols: 2
+        box_w: 1.0
+        frame:
+          - ['$\triangle LZU \cong \triangle$', '$IAD$', '']
+      - id: p_sss
+        minutes: 3
+        target: LT1
+        source: 2.5 Student Notes, Activity 1 #2
+        prompt: 'Use the side lengths in each triangle.'
+        figure: 2.5_sss
+        fig_w: 2.2
+        fill: [['Congruent?', 'yes'], ['Theorem:', 'SSS']]
+        fill_cols: 2
+        box_w: 1.0
+        frame:
+          - ['$\triangle SDI \cong \triangle$', '$JNA$', '']
+
+  - kind: partner
+    intro: 'Decide if the triangles are congruent. If yes, name the theorem and write your own congruence statement.'
+    items:
+      - id: p_asa
+        minutes: 3
+        target: LT1
+        source: 2.5 Student Notes, Activity 1 #3
+        prompt: 'Use the marks on the diagram.'
+        figure: 2.5_asa
+        fig_w: 2.0
+        fill: [['Congruent?', 'yes'], ['Theorem:', 'ASA']]
+        fill_cols: 2
+        box_w: 1.0
+        frame:
+          - ['Congruence statement:', '$\triangle CAY \cong \triangle BMW$', '', 2.0]
+      - id: p_ssa
+        minutes: 3
+        target: LT1
+        source: 2.5 Student Notes, Activity 1 #5
+        prompt: 'Use the marks on the diagram.'
+        figure: 2.5_ssa
+        fig_w: 1.9
+        fill: [['Congruent?', 'no'], ['Theorem:', 'none']]
+        fill_cols: 2
+        box_w: 1.0
+        frame:
+          - ['Congruence statement:', 'none', '', 2.0]
+        answer: 'Cannot be proven: SSA. $\angle D$ is not between the marked sides.'
+
+  - kind: partner
+    title: 'With a partner: what else do I know?'
+    intro: 'First, find another pair of congruent parts and mark it on the diagram. Then decide if there is enough information to say the triangles are congruent.'
+    items:
+      - id: p_kite
+        minutes: 4
+        target: LT1
+        source: 2.5 Student Notes, Activity 2 #1
+        prompt: 'Diagonal $\overline{CV}$ cuts quadrilateral $CEVA$ into two triangles.'
+        figure: 2.5_kite
+        fig_w: 1.9
+        parts:
+          - label: a.
+            prompt: 'What congruent parts are given?'
+            fill: [['Given:', '$\overline{CE} \cong \overline{CA}$'], ['and', '$\overline{EV} \cong \overline{AV}$']]
+            fill_cols: 2
+            box_w: 1.3
+          - label: b.
+            prompt: 'Mark another pair of congruent parts on the diagram. Why are they congruent?'
+            fill: [['Another pair:', '$\overline{CV} \cong \overline{CV}$'], ['Why?', 'shared side']]
+            fill_cols: 2
+            box_w: 1.5
+          - label: c.
+            prompt: 'Are the triangles congruent? If yes, name the theorem and write a congruence statement.'
+            fill: [['Congruent?', 'yes'], ['Theorem:', 'SSS']]
+            fill_cols: 2
+            box_w: 1.0
+            frame:
+              - ['Congruence statement:', '$\triangle CEV \cong \triangle CAV$', '', 2.0]
+      - id: p_bowtie
+        minutes: 4
+        target: LT1
+        source: 2.5 Student Notes, Activity 2 #2
+        prompt: '$\overline{VY}$ and $\overline{UX}$ cross at $W$.'
+        figure: 2.5_bowtie
+        fig_w: 1.9
+        parts:
+          - label: a.
+            prompt: 'What congruent parts are given?'
+            fill: [['Given:', '$\overline{VW} \cong \overline{YW}$'], ['and', '$\overline{UW} \cong \overline{XW}$']]
+            fill_cols: 2
+            box_w: 1.3
+          - label: b.
+            prompt: 'Mark another pair of congruent parts on the diagram. Why are they congruent?'
+            fill: [['Another pair:', '$\angle VWU \cong \angle YWX$'], ['Why?', 'vertical angles']]
+            fill_cols: 2
+            box_w: 1.5
+          - label: c.
+            prompt: 'Are the triangles congruent? If yes, name the theorem and write a congruence statement.'
+            fill: [['Congruent?', 'yes'], ['Theorem:', 'SAS']]
+            fill_cols: 2
+            box_w: 1.0
+            frame:
+              - ['Congruence statement:', '$\triangle VWU \cong \triangle YWX$', '', 2.0]
+
+  - kind: notes
+
+  - kind: cyu
+    items:
+      - minutes: 3
+        target: LT1
+        source: 2.5 Student Notes, Activity 1 #4
+        prompt: 'Are the two triangles congruent? If yes, name the theorem and write a congruence statement.'
+        figure: 2.5_sss_marks
+        fig_w: 2.0
+        fill: [['Congruent?', 'yes'], ['Theorem:', 'SSS']]
+        fill_cols: 2
+        box_w: 1.0
+        frame:
+          - ['Congruence statement:', '$\triangle TAN \cong \triangle EFL$', '', 2.0]
+
+  - kind: exit
+    items:
+      - minutes: 4
+        target: LT2
+        source: 2.5 Student Notes, cool down
+        prompt: '$\triangle ABC \cong \triangle ADC$. Solve for $x$ and $y$. Show your work.'
+        figure: 2.5_cooldown
+        fig_w: 1.8
+        work: 1.5
+        fill: [['$x =$', '4'], ['$y =$', '8']]
+        fill_cols: 2
+        box_w: 0.9
+        answer: ['$\overline{AB}$ matches $\overline{AD}$: $2y = 16$, so $y = 8$.', '$\overline{CB}$ matches $\overline{CD}$: $x + 4 = y = 8$, so $x = 4$.', 'Check: $DB = 8 + 8 = 16$.']
+
+quicknotes:
+  - target: LT1
+    title: 'I can decide if triangles are congruent by SSS, SAS, or ASA.'
+    bullets:
+      - '**SSS:** 3 pairs of congruent sides. **SAS:** 2 pairs of sides and the included angle. **ASA:** 2 pairs of angles and the included side.'
+      - '**Included** means between: the included angle sits between the two sides, and the included side sits between the two angles.'
+      - 'Two sides and an angle that is not between them (SSA) is not enough. Two different triangles can have those parts.'
+      - 'Use only what is given or marked. Lines are parallel only when they are marked parallel.'
+      - 'Look for parts the diagram gives for free: a side shared by both triangles is congruent to itself, and vertical angles are congruent.'
+      - 'Write the congruence statement in matching order: vertices with the same marks go in the same spot.'
+  - target: LT2
+    title: 'I can use congruent triangles to find unknown measures.'
+    bullets:
+      - 'Corresponding parts of congruent triangles are congruent. Set matching sides (or angles) equal and solve.'
+
+practice:
+  title: 'Practice: triangle congruence theorems'
+  rows:
+    - cells:
+        - n: 1
+          source: 2.5 Practice Problems #1
+          prompt: ['Write a sequence of rigid motions to take figure $ABC$ to figure $DEF$.', '$\overline{CB} \cong \overline{FE}$,  $\overline{BA} \cong \overline{ED}$,  $\angle B \cong \angle E$']
+          figure: assets/2.5/prac1_rigid.png
+          fig_w: 2.5
+          layout: stacked
+          work: 1.2
+          answer: 'Sample: translate $B$ to $E$. Rotate around $E$ until $C$ lands on $F$ ($CB = FE$). $\angle B \cong \angle E$, so ray $BA$ lands on ray $ED$. $BA = ED$, so $A$ lands on $D$.'
+        - n: 2
+          source: 2.5 Practice Problems #2
+          prompt: ['Prove the circle centered at $A$ is congruent to the circle centered at $C$.', '$\overline{BA} \cong \overline{DC}$']
+          figure: 2.5_pr_circles
+          layout: stacked
+          work: 1.2
+          answer: 'A rigid motion takes $\overline{AB}$ to $\overline{CD}$ (same length). Apply it to circle $A$. Once the centers and radii match, every point of the circles matches.'
+    - cells:
+        - n: 3
+          source: 2.5 Practice Problems #3
+          prompt: 'Which conjecture is possible to prove?'
+          choices:
+            - 'All quadrilaterals with at least one side length of 3 cm are congruent.'
+            - 'All rectangles with at least one side length of 3 cm are congruent.'
+            - 'All rhombuses with at least one side length of 3 cm are congruent.'
+            - 'All squares with at least one side length of 3 cm are congruent.'
+          key: D
+          answer: 'Every side of the square is 3 cm and every angle is $90^\circ$.'
+        - n: 4
+          source: 2.5 Practice Problems #5
+          prompt: '$\triangle HEF$ is the image of $\triangle HGF$ after a reflection across $\overleftrightarrow{FH}$. Complete the congruence statement.'
+          figure: 2.5_pr_reflect
+          layout: stacked
+          frame:
+            - ['$\triangle HFG \cong \triangle$', '$HFE$', '']
+    - cells:
+        - n: 5
+          source: 2.5 Practice Problems #4
+          prompt: ['Match each statement with a figure. Use only the information shown in the figure.', '**A:** 2 sides and the included angle of one triangle are congruent to 2 sides and the included angle of the other triangle.', '**B:** 2 angles and the included side of one triangle are congruent to 2 angles and the included side of the other triangle.', '**C:** The two triangles have 3 pairs of congruent sides.']
+          figure: assets/2.5/prac4_match.png
+          fig_w: 4.8
+          layout: stacked
+          fill: [['Statement A: Figure', '3'], ['B: Figure', '1'], ['C: Figure', '2']]
+          fill_cols: 3
+          box_w: 0.9
+    - cells:
+        - n: 6
+          source: 2.5 Practice Problems #6
+          prompt: 'This design began from the construction of a regular hexagon. Is quadrilateral $JKLO$ congruent to the other two quadrilaterals in the middle hexagon? Explain how you know.'
+          figure: assets/2.5/prac6_hexagon.png
+          fig_w: 1.8
+          layout: stacked
+          work: 1.1
+          answer: 'Yes. $O$ is the center of regular hexagon $GHIJKL$. Rotating $120^\circ$ and $240^\circ$ around $O$ takes $JKLO$ to $HIJO$ and to $LGHO$. Rotations are rigid motions.'
+        - n: 7
+          source: 2.5 Practice Problems #7
+          prompt: '$\triangle ABC \cong \triangle EDF$. So Lin knows that there is a sequence of rigid motions that takes $\triangle ABC$ to $\triangle EDF$. Select **all** true statements after the transformation.'
+          figure: assets/2.5/prac7_lin.png
+          fig_w: 2.0
+          layout: stacked
+          choices:
+            - 'Angle $A$ coincides with angle $F$.'
+            - 'Angle $B$ coincides with angle $D$.'
+            - 'Angle $C$ coincides with angle $E$.'
+            - 'Segment $BA$ coincides with segment $DE$.'
+            - 'Segment $BC$ coincides with segment $FE$.'
+          select_all: true
+          key: 'B, D'
+          answer: '$A \to E$, $B \to D$, $C \to F$.'
+    - heading: SBA review
+      cells:
+        - n: 8
+          source: 2.5 Practice Problems #8
+          prompt: ['Solve for $x$ and $y$.', '$y = 3x$', '$2x + 2y = -16$']
+          work: 1.2
+          answer: ['$2x + 2(3x) = -16$, so $8x = -16$ and $x = -2$.', '$y = 3(-2) = -6$. The solution is $(-2, -6)$.']
+        - n: 9
+          source: 2.5 Practice Problems #9
+          prompt: 'Write an equation of the line that passes through the point $(-2, 6)$ and has a $y$-intercept of 2.'
+          work: 1.2
+          answer: ['slope $= \frac{6 - 2}{-2 - 0} = -2$', '$y = -2x + 2$']
+  selected: [[2, 'A rigid motion takes $\overline{AB}$ to $\overline{CD}$; the circles then match.'], [3, D], [4, $HFE$], [5, 'A: 3, B: 1, C: 2'], [7, 'B, D'], [8, '$(-2, -6)$'], [9, '$y = -2x + 2$']]
+
+plan: |
+  **Overview.** Students already have SSS, SAS, and ASA as statements (Unit 2 summary notes, Lesson 2.3). Today they use them: look at two triangles, decide if the given or marked parts are enough, and write the statement in matching order. Activity 2 adds parts the diagram gives for free (a shared side, vertical angles), which Lessons 2.6-2.9 need for proofs.
+
+  **Objectives.** (1) Decide from given or marked parts whether two triangles are congruent by SSS, SAS, or ASA, and write a congruence statement in matching order. (2) Use a congruence statement to solve for unknown lengths. **Standards.** G-CO.B.8, G-SRT.B.5. SMP 3, 6, 7.
+
+  **Quick look (40 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up (3 angle pairs) | Students, 1 min share |
+  | 4-10 | Together: Problems 1-2 | Teacher + class |
+  | 10-25 | With a partner: Problems 3-6 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-32 | CYU 1 | Students (individual) |
+  | 32-36 | Exit ticket 2 | Students (individual) |
+  | 36-40 | Collect exit ticket, assign practice | Teacher |
+
+  **Warm-up (4 min).** 3 min to write, 1 min share. Spend the share on panel 3: "They look like corresponding angles. Why can't we say $a = b$?" (no parallel marks). That is today's habit: use only what is marked. Panel 2 (vertical angles) comes back in Problem 6.
+
+  **Together (6 min, doc camera).** Read the framing box and the theorem box. Problem 1 (3 min): trace the 22 cm and 18 cm sides with a finger and ask "is the $65^\circ$ angle between them in both triangles?" Then build the statement one vertex at a time: "$L$ is the angle, so it matches $I$." Problem 2 (3 min): match each vertex by its two side lengths ($S$ is between 6 and 8, so is $J$). Students fill the boxes as you go.
+
+  **Partner work (15 min).** 1 min to pair up. Problems 3-4 (about 6 min), then Problems 5-6 (about 8 min).
+  - Problem 3: marks instead of numbers. Ask "which side is between the two angles?"
+  - Problem 4 is SSA. Expect some "SAS". Ask "is the marked angle between the two marked sides?" Point out the two triangles are not even the same shape.
+  - Problems 5-6: students mark the new part with a colored pencil, then decide. Stem for talk: "I know ___ because ___." Any language for partner talk.
+  - Assessing: "What did the diagram give you that nobody marked?" Advancing: "Would the triangles still be congruent if $\overline{CV}$ were not shared?"
+  - Extension for early finishers (say it, don't print it): "Draw two triangles with all three angles congruent that are not congruent." (AAA is not a test either.)
+  - Watch for: statements in alphabetical order instead of matching order; calling SSA "SAS"; writing $\overline{CV} \cong \overline{CA}$ for the shared side.
+  - MLL supports: theorem box with "included" defined in words, the same three boxes (congruent, theorem, statement) on every problem, the Activity 2 routine (given, another part and why, decide), labeled diagrams.
+
+  **QuickNotes (4 min).** Read the bullets together. Tie "included" to Problem 4, "parts for free" to Problems 5-6, and matching order to Problem 2.
+
+  **CYU and exit (7 min).** CYU 1 (3 min) is SSS from tick marks with no numbers: check the order of the statement. The exit ticket (4 min) checks LT2: look for $2y = 16$ and $x + 4 = y$ from the matching parts.
+
+guide_notes: |
+  **Nov 16: trimmed to 40 minutes** (source notes run about 60). Cut warm-up 3, 4, 5 (corresponding angles, linear pair, and a same-side pair); kept 1, 2, 6. Activity 1 #4 ($\triangle TAN$, $\triangle ELF$, SSS from tick marks) is now CYU 1 (same idea as Problem 2, so it works as the individual check). The cool down is the exit ticket. The fill-in sentence "Triangle ___ and ___ are congruent by the ___-___-___ Theorem" is now three boxes (congruent, theorem, statement) on every problem.
+
+  **Source fixes.** The cool-down diagram had $DB = 18$, but $2y = 16$ and $x + 4 = y$ give $y = 8$, $x = 4$, and $DB = 16$. The brace now says 16. (If you meant $AB = 18$ instead, the answers are $y = 9$, $x = 5$.) Practice: source problems 4 (matching) and 5 (reflection) swapped places so two half-width problems share a row and the set fits 2 pages. Practice 2: the source gave $\overline{BA} \cong \overline{ED}$; the circle is centered at $C$ through $D$, so it now reads $\overline{BA} \cong \overline{DC}$. The old learning target ("write a proof that segments of the same length are congruent") is from IM 2.5 and only fits practice 1-3; the handout uses LT1-LT2 instead.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "equal", or a home-language word for congruent. Accept any congruence statement with matching order ($\triangle ACY \cong \triangle MBW$ is also right for Problem 3).

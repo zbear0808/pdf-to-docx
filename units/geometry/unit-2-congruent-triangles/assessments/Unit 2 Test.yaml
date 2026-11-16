@@ -1,0 +1,249 @@
+id: 'Unit 2 Test'
+doc_type: assessment
+title: 'Unit 2 Test'
+directions: Show your work.
+numbering: auto
+total_points: 21
+max_pages: 4
+source: 'UNIT 2 TEST 2025-26.docx (first copy, pages 1-4)'
+targets:
+  - id: LT1
+    understand: 'Students will understand that a congruence statement lists matching vertices in the same order, so it tells which sides and angles are congruent.'
+    able_to: 'Students will be able to use a congruence statement to name a corresponding side, and sketch the triangles to check.'
+    standard: G-CO.B.7
+  - id: LT2
+    understand: 'Students will understand that SSS, SAS, and ASA each fix a whole triangle, so those three matching parts are enough to know two triangles are congruent.'
+    able_to: 'Students will be able to decide from marked parts (including a shared side) which theorem proves two triangles congruent, with the vertices in matching order.'
+    standard: G-CO.B.8
+  - id: LT3
+    understand: 'Students will understand that two figures are congruent when rigid motions take one exactly onto the other, and that a reflection across the perpendicular bisector lines up a vertex that is on the wrong side.'
+    able_to: 'Students will be able to describe and justify a sequence of translations, rotations, and reflections that takes one figure onto another.'
+    standard: G-CO.B.6, G-CO.B.8
+  - id: LT4
+    understand: 'Students will understand that a proof gives a reason for every statement, and that a diagonal splits a parallelogram into two triangles that are congruent by ASA.'
+    able_to: 'Students will be able to complete a two-column proof with ASA, alternate interior angles, vertical angles, and CPCTC, and use parallelogram facts to find an angle.'
+    standard: G-CO.C.10, G-CO.C.11, G-SRT.B.5
+
+sections:
+  - kind: plain
+    title: 'Corresponding parts (LT1)'
+    target: LT1
+    items:
+      - id: side
+        points: 1
+        target: LT1
+        type: sr
+        demand: mem
+        prompt:
+          - '$\triangle ABC \cong \triangle DEF$ and $BA = 10$ inches. Which side of $\triangle DEF$ has the same length?'
+          - 'You lose 1/4 point for each wrong choice.'
+        choices: ['$\overline{EF}$', '$\overline{DE}$', '$\overline{DF}$', 'cannot be determined']
+        choice_cols: 4
+        key: B
+        answer: '$B \to E$ and $A \to D$, so $\overline{BA}$ matches $\overline{ED}$.'
+        distractors:
+          A: 'matches $B$ with $E$, then takes the side after $E$'
+          C: 'matches $A$ with $D$, then takes the wrong second letter'
+          D: 'does not use the vertex order in the congruence statement'
+      - id: sketch
+        points: 1
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt:
+          - 'True or false? If $\triangle GRT \cong \triangle MPN$, then $\overline{TG} \cong \overline{MN}$.'
+          - 'Sketch and label the two triangles in the large box to support your answer. No sketch, no credit.'
+        draw:
+          height: 1.5
+          steps_w: 3.6
+          key_figure: 'Unit 2 Test_q2'
+        fill: [['Write true or false:', 'true']]
+        box_w: 1.0
+        answer: '$G \to M$ and $T \to N$, so $\overline{TG}$ matches $\overline{NM}$, the same segment as $\overline{MN}$.'
+
+  - kind: plain
+    title: 'Congruence theorems (LT2)'
+    target: LT2
+    items:
+      - id: jklm
+        points: 2
+        target: LT2
+        type: sr
+        demand: pwc
+        prompt:
+          - 'In the diagram, $\overline{JL} \cong \overline{MK}$, $\overline{JK} \cong \overline{ML}$, and $\angle J \cong \angle M$. Select **all** the true statements.'
+          - 'You lose 1/2 point for each wrong choice.'
+        figure: 'Unit 2 Test_q3'
+        choices:
+          - '$\triangle JKL \cong \triangle MLK$ by the Angle-Angle Triangle Congruence Theorem.'
+          - '$\triangle JKL \cong \triangle LKM$ by the Angle-Side-Angle Triangle Congruence Theorem.'
+          - '$\triangle JKL \cong \triangle LKM$ by the Side-Side-Side Triangle Congruence Theorem.'
+          - '$\triangle JKL \cong \triangle MLK$ by the Side-Angle-Side Triangle Congruence Theorem.'
+          - '$\triangle JKL \cong \triangle MLK$ by the Side-Side-Side Triangle Congruence Theorem.'
+          - 'There is not enough information to decide if the triangles are congruent.'
+        key: 'D, E'
+        select_all: true
+        answer: 'SSS uses the shared side $\overline{KL}$. SAS uses $\angle J$ and $\angle M$, each between its two marked sides.'
+        distractors:
+          A: 'thinks two angles prove congruence (AA is a similarity idea, and only one pair of angles is marked)'
+          B: 'only one pair of angles is marked, and $\triangle LKM$ matches $J$ with $L$'
+          C: 'right theorem, but $\triangle LKM$ matches $J$ with $L$'
+          F: 'misses that $\overline{KL}$ is a side of both triangles'
+
+  - kind: plain
+    title: 'Rigid motions (LT3)'
+    target: LT3
+    items:
+      - id: sequence
+        points: 1
+        target: LT3
+        type: sr
+        demand: pwc
+        prompt: 'In the diagram, $\overline{FD} \cong \overline{AC}$, $\overline{FE} \cong \overline{AB}$, and $\overline{ED} \cong \overline{BC}$. Which sequence of rigid motions will definitely take $\triangle DEF$ onto $\triangle CBA$?'
+        figure: 'Unit 2 Test_q4'
+        choices:
+          - 'Rotate $\triangle DEF$ around $D$ until $\overline{DE}$ lines up with $\overline{CB}$. Then reflect across a line halfway between $\triangle D''E''F''$ and $\triangle CBA$.'
+          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $C$. Rotate $\triangle D''E''F''$ around $C$ by $\angle E''CB$. Reflect $\triangle D''''E''''F''''$ across $\overleftrightarrow{CB}$.'
+          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $B$. Rotate $\triangle D''E''F''$ around $B$ by $\angle E''BC$. Reflect $\triangle D''''E''''F''''$ across $\overleftrightarrow{CB}$.'
+          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $C$. Translate $\triangle D''E''F''$ from $E''$ to $B$. Translate $\triangle D''''E''''F''''$ from $F''''$ to $B$.'
+        key: B
+        answer: 'The triangles face opposite ways, so a reflection is needed after $D \to C$ and $E \to B$.'
+        distractors:
+          A: '"until it lines up" and "a line halfway between" do not name an angle or a line, so the moves are not definite'
+          C: 'sends $D$ to $B$ and $E$ to $C$: the wrong vertices'
+          D: 'translations never flip a figure, and $\triangle CBA$ faces the other way'
+      - id: kite
+        points: 1
+        target: LT3
+        type: sr
+        demand: pwc
+        prompt:
+          - 'In the diagram, $\overline{CA} \cong \overline{DA}$ and $\overline{CB} \cong \overline{DB}$.'
+          - 'Reflect $\triangle ABC$ across $\overleftrightarrow{AB}$. Which reason, by itself, shows that the image of $C$ lands on $D$?'
+        figure: 'Unit 2 Test_q5'
+        choices:
+          - 'The image of $C$ and point $D$ are on the same side of $\overline{AB}$ and make the same angle with it at $A$.'
+          - 'The image of $C$ and point $D$ are the same distance along the same ray from $A$.'
+          - 'The image of $C$ will not land on $D$ after the reflection across $\overleftrightarrow{AB}$.'
+          - '$\overleftrightarrow{AB}$ is the perpendicular bisector of the segment from $C$ to $D$.'
+        key: D
+        answer: '$A$ and $B$ are each the same distance from $C$ and $D$.'
+        distractors:
+          A: 'true, but the equal angles at $A$ still need a reason'
+          B: 'true, but "the same ray" needs the angle fact first'
+          C: 'thinks the reflection misses $D$'
+
+  - kind: plain
+    title: 'Proofs and parallelograms (LT4)'
+    target: LT4
+    items:
+      - id: jamal
+        points: 5
+        target: LT4
+        type: sr
+        demand: pwoc
+        prompt:
+          - '$RSTU$ is a parallelogram. Its diagonals meet at point $A$. Jamal is proving $\overline{UA} \cong \overline{SA}$. Write the letter of the reason for each statement in its box. Each box is worth 1 point.'
+          - 'A. Alternate interior angles: transversal $\overline{SU}$ crosses parallel lines'
+          - 'B. Corresponding parts of congruent triangles are congruent (CPCTC)'
+          - 'C. Opposite sides of a parallelogram are congruent'
+          - 'D. Alternate interior angles: transversal $\overline{RT}$ crosses parallel lines'
+          - 'E. Angle-Side-Angle Triangle Congruence Theorem'
+        figure: 'Unit 2 Test_q6'
+        frame:
+          - ['1. $\overline{TU} \cong \overline{RS}$', 'C', '', 0.9]
+          - ['2. $\angle RTU \cong \angle TRS$', 'D', '', 0.9]
+          - ['3. $\angle RSU \cong \angle TUS$', 'A', '', 0.9]
+          - ['4. $\triangle TAU \cong \triangle RAS$', 'E', '', 0.9]
+          - ['5. $\overline{UA} \cong \overline{SA}$', 'B', '', 0.9]
+      - id: angle
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt:
+          - 'In parallelogram $ABCD$, $m\angle A = 30^\circ$, $\overline{AB} \cong \overline{CD}$, and $\overline{BC} \cong \overline{DA}$. Find $m\angle D$.'
+        figure: 'Unit 2 Test_q7'
+        parts:
+          - label: a.
+            points: 2
+            prompt: 'Explain how you know. Use math, words, or both. *Optional start:* I know the measure of $\angle D$ because ...'
+            work: 1.6
+            answer:
+              - 'Credit any valid method. For example:'
+              - 'Diagonal $\overline{BD}$: $\angle ABD \cong \angle CDB$ (alternate interior angles). In $\triangle ABD$, $m\angle ABD + m\angle ADB = 180^\circ - 30^\circ = 150^\circ$, so $m\angle D = m\angle CDB + m\angle ADB = 150^\circ$.'
+              - 'Extend $\overline{CD}$ past $D$: the outside angle at $D$ and $\angle A$ are alternate interior angles ($30^\circ$). A linear pair gives $180^\circ - 30^\circ = 150^\circ$.'
+              - 'Same-side interior angles add to $180^\circ$; or opposite angles are congruent and the four angles add to $360^\circ$.'
+            rubric:
+              - {level: 2, desc: 'States a correct angle fact for parallelograms or parallel lines and uses it with $30^\circ$ to get $\angle D$ (for example, a diagonal with alternate interior angles and the triangle sum, an extended side with a linear pair, same-side interior angles, or opposite angles with the $360^\circ$ sum).'}
+              - {level: 1, desc: 'A correct fact that is not connected to $\angle D$, or correct arithmetic with no reason.'}
+              - {level: 0, desc: 'No correct fact, or says $\angle D \cong \angle A$.'}
+          - label: b.
+            points: 2
+            prompt: 'Answer:'
+            fill: [['$m\angle D =$', '$150^\circ$']]
+            box_w: 1.0
+            answer: '$180^\circ - 30^\circ = 150^\circ$'
+
+  - kind: plain
+    title: 'Rigid motions (LT3)'
+    target: LT3
+    items:
+      - id: bent
+        points: 3
+        target: LT3
+        type: cr
+        demand: pwc
+        prompt:
+          - 'Use rigid motions to prove that figure $ABC$ is congruent to figure $DEF$.'
+          - 'Be sure to include: each motion (with its center, line, or direction), and why each point lands on its match.'
+          - '*Moves:* translate  |  rotate around a point  |  reflect across a line'
+        figure: 'Unit 2 Test_q8'
+        box: 2.6
+        answer:
+          - 'Translate figure $ABC$ by the directed line segment from $B$ to $E$. $B$ lands on $E$.'
+          - 'Rotate around $E$ until ray $BA$ is on ray $ED$. $A$ lands on $D$ because $BA = ED$.'
+          - 'The figures face opposite ways, so reflect across $\overleftrightarrow{ED}$. $\angle ABC \cong \angle DEF$, so ray $BC$ lands on ray $EF$, and $C$ lands on $F$ because $BC = EF$.'
+          - 'Credit any valid sequence.'
+        rubric:
+          - {level: 3, desc: 'Three correct motions with their center, line, or direction, and a reason each point lands (equal sides, equal angle).'}
+          - {level: 2, desc: 'A correct sequence, but one landing reason is missing or one motion has no center or line.'}
+          - {level: 1, desc: 'Names motions with no details or reasons, or a sequence with no reflection.'}
+          - {level: 0, desc: 'No sequence of rigid motions.'}
+
+  - kind: plain
+    title: 'Proofs and parallelograms (LT4)'
+    target: LT4
+    page_break_before: true
+    items:
+      - id: proof
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwoc
+        prompt: 'Fill in the 6 empty spaces in the proof. Each space is worth 1/2 point.'
+        figure: 'Unit 2 Test_q9'
+        proof:
+          given: '$\angle C \cong \angle N$ and $\overline{CY} \cong \overline{NY}$'
+          prove: '$\overline{OY} \cong \overline{KY}$'
+          rows:
+            - [{ans: '$\overline{CY} \cong \overline{NY}$'}, 'Given']
+            - ['$\angle C \cong \angle N$', 'Given']
+            - [{ans: '$\angle 1 \cong \angle 2$'}, {ans: 'Vertical angles are congruent'}]
+            - [{before: '$\triangle YKN \cong \triangle$', ans: '$YOC$'}, {ans: 'ASA'}]
+            - ['$\overline{OY} \cong \overline{KY}$', {ans: 'CPCTC'}]
+          height: 0.55
+
+guide_notes: |
+  **Scoring (21 pts).** The source items add to 21, not 20, so RAW x5 tops out at 105. Percent = raw / 21 x 100.
+  - Problem 1 (1 pt): [B]. Take 1/4 pt off for each wrong choice circled.
+  - Problem 2 (1 pt): "true" with a labeled sketch that matches $T$ with $N$ and $G$ with $M$. No sketch, no credit.
+  - Problem 3 (2 pts): 1 pt each for [D] and [E]; 1/2 pt off for each wrong choice (lowest score 0).
+  - Problems 4 and 5 (1 pt each): [B] and [D].
+  - Problem 6 (5 pts): 1 pt per box: C, D, A, E, B. $\overline{RS} \parallel \overline{UT}$; statement 2 uses transversal $\overline{RT}$, statement 3 uses transversal $\overline{SU}$. In statement 4, side $\overline{TU} \cong \overline{RS}$ is between the two pairs of angles (ASA).
+  - Problem 7 (4 pts): part a is the explanation (rubric), part b is the answer. Part a: credit any valid method (a diagonal with alternate interior angles and the triangle sum; an extended side with a linear pair; same-side interior angles; opposite angles with the $360^\circ$ sum). If part a is right and part b has an arithmetic slip, give part a full credit and part b 1 of 2.
+  - Problem 8 (3 pts): rubric. Accept any order of motions that works. "Slide", "turn", and "flip" are fine if the center, line, or direction is named.
+  - Problem 9 (3 pts): 1/2 pt per box (6 boxes: statement 1, statement 3, reason 3, the triangle in statement 4, reason 4, reason 5). Statement 3: also accept $\angle OYC \cong \angle KYN$, in either order. Accept "vertical angles" for reason 3 and "corresponding parts" for CPCTC. Statement 4 must list the vertices in matching order ($YOC$); give the 1/2 pt for ASA either way. In $\triangle YCO$ and $\triangle YNK$, side $\overline{CY} \cong \overline{NY}$ is between $\angle C$ and $\angle 1$, and between $\angle N$ and $\angle 2$.
+
+  **Scoring notes (MLL).** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent; "alt. int. angles"; "flip", "slide", "turn" for the motions; a reason written as a short phrase. Accept an answer that builds up to the claim at the end. Reading the directions aloud is fine; don't read or explain the choices. Problem 4 is the heaviest reading: read its stem aloud and point to the figure, then let students read the choices.
+
+  **Changes from the source.** Problem 4: the source's choice [B] had no reflection, so no choice was correct (the triangles face opposite ways); [B] now ends with "Reflect across $\overleftrightarrow{CB}$", as in the older Version B. Problem 6: reason C said "opposite angles"; statement 1 needs "opposite sides". Problem 9 said "flowchart proof"; it is a two-column proof. The seat-preference survey is not part of this file.
