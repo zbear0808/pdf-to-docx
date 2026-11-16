@@ -650,12 +650,25 @@ def _frames(doc) -> list[list[tuple]]:
     return out
 
 
-def frame_drift(s, k, tag: str, tol: float = ANCHOR_TOL_PT) -> list[str]:
+def _stop_y(pg, stop_at: str) -> float | None:
+    """Top (pt) of the first line containing `stop_at` on the page, or None."""
+    for b in pg.get_text("dict")["blocks"]:
+        for ln in b.get("lines", []):
+            if stop_at in "".join(s["text"] for s in ln["spans"]):
+                return ln["bbox"][1]
+    return None
+
+
+def frame_drift(s, k, tag: str, tol: float = ANCHOR_TOL_PT, stop_at: str = "Answers to selected problems") -> list[str]:
     """Answer boxes and rules must sit at the same spot on both copies (catches a shift inside an item, which
     the label check can't see). Each student box is matched to the key box of the same size and x position
-    nearest in y; the key's extra drawings are ignored. One ERROR per page, at the first box that moved."""
+    nearest in y; the key's extra drawings are ignored. Student-only content from the `stop_at` heading down
+    (the selected-answers section, its rule included) is skipped. One ERROR per page, at the first box that moved."""
     out = []
     for pi, (a, b) in enumerate(zip(_frames(s), _frames(k))):
+        cut = _stop_y(s[pi], stop_at)
+        if cut is not None:
+            a = [x for x in a if x[1] < cut - 6]
         for x in a:
             w, h = x[2] - x[0], x[3] - x[1]
             same = [y for y in b if abs(y[0] - x[0]) <= tol and abs((y[2] - y[0]) - w) <= tol

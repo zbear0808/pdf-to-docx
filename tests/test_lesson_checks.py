@@ -201,3 +201,16 @@ def test_box_positions_inside_an_item():
     key[0].draw_rect(pymupdf.Rect(300, 50, 320, 60), color=(0, 0, 0))   # extra key-only drawing is ignored
     issues = frame_drift(student, key, "T")
     assert len(issues) == 1 and "117.0 pt lower on the key" in issues[0]
+
+
+def test_box_drift_skips_student_only_selected_answers():
+    student = pymupdf.open()
+    pg = student.new_page()
+    pg.draw_rect(pymupdf.Rect(100, 100, 200, 130), color=(0, 0, 0))
+    pg.insert_text((72, 600), "Answers to selected problems", fontsize=12)
+    pg.draw_line((72, 606), (540, 606), color=(0, 0, 0))   # section rule, student copy only
+    key = pymupdf.open()
+    kp = key.new_page()
+    kp.draw_rect(pymupdf.Rect(100, 100, 200, 130), color=(0, 0, 0))
+    kp.draw_line((72, 446), (540, 446), color=(0, 0, 0))   # a different section's rule on the key
+    assert frame_drift(student, key, "T") == []
