@@ -83,7 +83,7 @@ From `lesson_builder.figures` (`geometry.py`; signatures in the cheat sheet):
 - Marks: `mark_congruent(f, groups)` (ticks for segment groups, arcs for angle groups), `mark_parallel(f, segs, n)`.
 - Templates (each asserts its own math, returns `(Figure, info)`): `congruent_pair`, `reflection_build`, `dilation_task` (grid, rays, primed image on the answer layer), `side_splitter`, `rect_pair`; `rotation_build` returns a Figure.
 
-`Figure` drawing methods: `poly`, `seg`, `dots`, `grid`, `label`, `label_poly`, `side_label`, `angle_label`, `text`, `ticks`, `parallel_marks`, `arc`, `right_angle`, `arrow` (defaults to `layer="answer"`, dashed), `custom`.
+`Figure` drawing methods: `poly`, `seg`, `dots`, `grid`, `label`, `label_poly`, `side_label`, `angle_label`, `text`, `ticks`, `parallel_marks`, `arc` (`n` arcs; `ticks=1|2` strokes across the arc for congruent angles that share a ray), `right_angle`, `arrow` (defaults to `layer="answer"`, dashed), `custom`.
 
 If a figure needs a reusable helper that doesn't exist, don't build a private version for one unit. Only the orchestrator edits `src/`. Log one line in `_temp/specs/<stem>/changes.md`:
 

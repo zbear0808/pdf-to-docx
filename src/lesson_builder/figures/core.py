@@ -228,7 +228,9 @@ class Figure:
                         clip_on=False)
         self._add(layer, draw, np.vstack(heads))
 
-    def arc(self, vertex, p1, p2, n=1, r=0.35, layer="given", gap=0.07):
+    def arc(self, vertex, p1, p2, n=1, r=0.35, layer="given", gap=0.07, ticks=0, tick_len=0.07):
+        """Angle mark: n concentric arcs. `ticks` short radial strokes across the middle of the arc mark
+        congruent angles that share a ray, where plain arcs would run together into one."""
         v, p1, p2 = (np.asarray(x, float) for x in (vertex, p1, p2))
         a1 = np.degrees(np.arctan2(*(p1 - v)[::-1]))
         a2 = np.degrees(np.arctan2(*(p2 - v)[::-1]))
@@ -237,6 +239,12 @@ class Figure:
             a1, d = a2, 360 - d
         t = np.radians(np.linspace(a1, a1 + d, 40))
         curves = [np.c_[v[0] + (r + k * gap) * np.cos(t), v[1] + (r + k * gap) * np.sin(t)] for k in range(n)]
+        mid, step = np.radians(a1 + d / 2), 0.06 / r
+        r0, r1 = r - tick_len, r + (n - 1) * gap + tick_len
+        for j in range(ticks):
+            a = mid + (j - (ticks - 1) / 2) * step
+            u = np.array([np.cos(a), np.sin(a)])
+            curves.append(np.array([v + r0 * u, v + r1 * u]))
 
         def draw(ax):
             for c in curves:

@@ -211,3 +211,15 @@ def test_actual_size_prints_one_unit_per_cm(tmp_path):
         Figure(3, 2, actual_size="cm")
     with pytest.raises(ValueError):
         Figure()
+
+
+def test_arc_ticks_cross_the_arc_at_its_middle():
+    f = Figure(2.0, 2.0)
+    f.arc((0, 0), (1, 0), (0, 1), n=1, r=0.5, ticks=2)
+    pts = f._ops[0].pts
+    assert len(pts) == 40 + 2 * 2          # the arc, then two strokes of two points each
+    ticks = pts[40:].reshape(2, 2, 2)
+    for a, b in ticks:
+        mid = np.degrees(np.arctan2(*((a + b) / 2)[::-1]))
+        assert abs(mid - 45) < 8            # near the bisector
+        assert np.linalg.norm(a) < 0.5 < np.linalg.norm(b)   # crosses the arc
