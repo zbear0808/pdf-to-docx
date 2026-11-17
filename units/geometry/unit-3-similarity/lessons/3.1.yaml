@@ -174,15 +174,15 @@ plan: |
 
   **Together (4 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Ask: "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" Take answers out loud. This is the only reduction before the exit ticket, so make sure the class hears "closer to $C$".
 
-  **Partner work (9 min).** Problem 2 (7 min): common error is counting from a vertex instead of from $P$. Ask: "Where did you start counting?" Problem 3 (2 min) sets up the QuickNotes. Before reading the QuickNotes, ask: "What would a scale factor less than 1 do?" (the reduction bullet answers it). MLL support: Problem 3 is a frame with labeled boxes; the steps in Problem 2 are short and numbered. Early finishers: (1) dilate quadrilateral $DEFG$ with center $P$ and $k = \frac{1}{2}$ (old Problem 3, figure 3.1_p4); (2) $FG = 12$ and its image $F'G' = 18$. What is the scale factor?
+  **Partner work (9 min).** Problem 2 (7 min): common error is counting from a vertex instead of from $P$. Ask: "Where did you start counting?" Problem 3 (2 min) sets up the QuickNotes. Before reading the QuickNotes, ask: "What would a scale factor less than 1 do?" (the reduction bullet answers it). MLL support: Problem 3 is a frame with labeled boxes; the steps in Problem 2 are short and numbered. Early finishers: start the practice problems.
 
   **QuickNotes (3 min).** Printed. Connect enlargement to Problem 2 and reduction to the Together question.
 
   **Exit (5 min).** The exit ticket is a reduction ($k = \frac{1}{3}$) and shows whether students count from the center. If time is left, ask the old CYU orally: $OQ = 5$ cm, $k = 3$, find $OQ'$ (15 cm; watch for 8, $\frac{5}{3}$, or 10).
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: Together 2 (dilate $K$, $k = \frac{3}{4}$; same move as Problem 1 with new numbers) and the old CYU 1 scale-factor table (practice #2a and Lesson 3.3 cover finding $k$ from lengths; now an early-finisher question). Title is now the lesson topic.
+  Nov 16: trimmed to 40 minutes. Cut: Together 2 (dilate $K$, $k = \frac{3}{4}$; same move as Problem 1 with new numbers) and the old CYU 1 scale-factor table (practice #2a and Lesson 3.3 cover finding $k$ from lengths). Title is now the lesson topic.
 
-  Nov 16 (round 2): cut to 30 minutes. Cut: the quadrilateral reduction (now an early-finisher extension; the exit ticket checks reductions), the frame row that referred to it, and the CYU multiple-choice item (the exit ticket checks the same "k times as far from the center" idea; now an oral question). Now: warm-up, Problem 1, partner 2-3, exit 1.
+  Nov 16 (round 2): cut to 30 minutes. Cut: the quadrilateral reduction (the exit ticket checks reductions), the frame row that referred to it, and the CYU multiple-choice item (the exit ticket checks the same "k times as far from the center" idea; now an oral question). Now: warm-up, Problem 1, partner 2-3, exit 1.
 
   Practice cut: 9 to 6 problems. Cut: old #5 rotational-symmetry MC (old #6, now #5, is also quadrilateral symmetry and is harder), old #7 parallel-lines angles (spiral, not needed tonight), old #8 SBA recipe (proportion skill is in #2b and #4), and parts b and d of #4 (repeat a and c with new numbers).

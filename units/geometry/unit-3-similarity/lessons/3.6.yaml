@@ -169,7 +169,7 @@ plan: |
   **Together (5 min).** Read the framing box, then ask out loud (1 min, quick vote): "Can rigid motions alone move $\triangle ABC$ onto $\triangle DEF$?" (No: every side of $\triangle DEF$ is half as long, and rigid motions keep lengths.) Ask "what would we need to add to the move bank?" Problem 1 (4 min): do it on patty paper under the doc camera; trace, translate, rotate, then show that halving lands $B$ on $E$.
 
   **Partner work (10 min).** 1 min to get into pairs, then Problem 2 (about 9 min, including a 2 min share of 2c). 2a: pairs check all three ratios before writing $\frac{2}{5}$. 2c is the key talk: ask "which vertex does $E$ match? How do you know?"
-  - Extensions for early finishers (say them, don't print them): "What sequence takes $\triangle TQR$ back onto $\triangle EAB$?" (translate $Q$ to $A$, then dilate with center $A$ and scale factor $\frac{5}{2}$). "$\triangle MNP \sim \triangle STU$. Which angle matches $\angle P$?" ($\angle U$, third in both names.)
+  - Early finishers: start the practice problems.
   - MLL supports: move bank with the four transformation words, fill-in boxes for every step, Problem 2b uses a sentence frame. Any language is fine for partner talk.
   - Watch for: students who write the statement in alphabetical order, or who name the scale factor upside down ($\frac{5}{2}$ instead of $\frac{2}{5}$).
 
@@ -180,7 +180,7 @@ plan: |
 guide_notes: |
   **Nov 16: trimmed to 40 minutes.** Cut: the nested-triangles problem ($\triangle QOR$ and $\triangle PON$; same "find $k$, write the statement" as Alphabet Soup) and the squares problem (squares $F$ and $G$; same rotate-then-dilate as the Together sequence, and practice covers the squares sequence and $\frac{1}{k}$).
 
-  **Nov 16 (round 2): cut to 30 minutes.** Cut: the "rigid motions alone?" question (now asked out loud before the Together sequence), the warm-up's third box (rays), CYU ($\triangle MNP \sim \triangle STU$ letter order; Problem 2c checks the same thing, now an extension), and exit part a ("congruent figures are similar"; asked out loud at collect).
+  **Nov 16 (round 2): cut to 30 minutes.** Cut: the "rigid motions alone?" question (now asked out loud before the Together sequence), the warm-up's third box (rays), CYU ($\triangle MNP \sim \triangle STU$ letter order; Problem 2c checks the same thing), and exit part a ("congruent figures are similar"; asked out loud at collect).
 
   **Nov 16 (round 2, follow-up).** QuickNotes print inline (2-page handout). The exit ticket was "Similar figures are congruent" (must/could/can't), which the QuickNotes answered word for word; it is now a given pair ($\triangle JKL \sim \triangle XYZ$, $YZ = 6$) where students find $k$ from matching sides and decide if the triangles are congruent.
 

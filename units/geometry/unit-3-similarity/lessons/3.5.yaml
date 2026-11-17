@@ -148,7 +148,7 @@ plan: |
   **Partner work (9 min).**
   - Problem 2 first (4 min). Students mark the Problem 2 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
   - {ref:two_thirds} (3 min, then a 1 min share): ask "Which dilation takes $B$ to $M$? Is $\triangle AMN$ bigger or smaller than $\triangle ABC$?" Common error: $MN = \frac{3}{2} \cdot 9$. {ref:two_thirds} is the example for the QuickNotes theorem. 1 min slack.
-  - Early finishers (extensions, not on the handout): (1) $MN = x + 2$ and $BC = 3x - 4$ for a midsegment; find $x$ ($x = 8$; common errors: doubling $BC$, setting $MN = BC$). (2) On the warm-up figure, explain why $\triangle MBL$ is a dilation of $\triangle ABC$ (center $B$, scale factor $\frac{1}{2}$), then decide if the 4 small triangles are congruent (yes, each has sides $\frac{1}{2}$ of $\triangle ABC$'s sides).
+  - Early finishers: start the practice problems.
   - MLL supports: Problems 1 and 2 are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
 
   **QuickNotes (3 min).** Read the bullets; point to Problem 1 for "$BC = 2MN$" and {ref:two_thirds} for the theorem.
@@ -156,8 +156,8 @@ plan: |
   **Exit (6 min: 5 to work, 1 to turn to the page).** The exit ticket checks the theorem: students must show both fractions equal $\frac{1}{3}$ before claiming parallel, then find $MN$.
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: the fraction table (same idea as {ref:two_thirds} with new numbers) and the corner-triangles item (the midsegment dilation again with center $B$ or $C$; practice 2 covers the midpoint triangle). The corner-triangles item is now the early-finisher extension in the plan. Minutes re-timed honestly (the old plan said 39, the period ran about an hour).
+  Nov 16: trimmed to 40 minutes. Cut: the fraction table (same idea as {ref:two_thirds} with new numbers) and the corner-triangles item (the midsegment dilation again with center $B$ or $C$; practice 2 covers the midpoint triangle). Minutes re-timed honestly (the old plan said 39, the period ran about an hour).
 
-  Nov 16 (round 2): cut to 30 minutes. Cut: the separate "find the center and scale factor" item (folded into the first box of the Problem 1 proof frame), the scale-factor part of {ref:two_thirds} (the third "find the scale factor" in a row), and the CYU midsegment algebra item (the exit ticket checks the same length fact; now an early-finisher extension). Removed the page break before the partner section.
+  Nov 16 (round 2): cut to 30 minutes. Cut: the separate "find the center and scale factor" item (folded into the first box of the Problem 1 proof frame), the scale-factor part of {ref:two_thirds} (the third "find the scale factor" in a row), and the CYU midsegment algebra item (the exit ticket checks the same length fact). Removed the page break before the partner section.
 
   Practice cut: old 3 (angle under a dilation, the same skill as practice 1) and old 8 (SBA one-step equation); 8 problems down to 6, renumbered.

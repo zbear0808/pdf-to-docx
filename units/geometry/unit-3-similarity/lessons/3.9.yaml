@@ -164,7 +164,7 @@ plan: |
   **Partner work (13 min).**
   - Problem 2 (8 min) is the one protractor drawing students do. Model step 1 if pairs stall. Pairs compare with the next pair (2 min): every Triangle 2 looks like Triangle 1, only bigger.
   - Problem 3 (3 min) links back to the warm-up. Ask: "Which triangle in the warm-up is the dilated one?" ($\triangle P'Q'R'$).
-  - Early finishers (project them, not on the handout): (1) measure the other two sides of each Problem 2 triangle and divide Triangle 2 by Triangle 1 (about 3; accept 2.8 to 3.2). (2) The Math Medic 6.4 "add exactly one angle" question (figure `3.9_p6`: which one angle measure added to $\triangle XYZ$ proves $\triangle JKL\sim\triangle XYZ$? Answer: $m\angle Y=70^\circ$ or $m\angle Z=60^\circ$). Push for "only one". Some say "a side"; ask whether one side can prove similarity.
+  - Early finishers: start the practice problems.
   - MLL supports: frames on the warm-up, Problem 3, and exit 1a; labeled figures; any language for talk.
 
   **QuickNotes (3 min).** Printed right after Problem 3. Connect bullet 2 to Problem 3, bullet 3 to Problem 1, and bullet 4 to practice 3 (vertical angles).
@@ -172,9 +172,9 @@ plan: |
   **Exit (5 min).** Exit 1: $\triangle DFE$ sits on its 8.1 side, so watch for students who match 8.1 with 4.6 because both are "the bottom side". The angles decide the match: 8.1 is across from the $60^\circ$ angle F, so it matches $x$.
 
 guide_notes: |
-  **Nov 16: trimmed to 40 minutes.** Cut: the "add exactly one angle" partner problem (repeats the third-angle step and exit 1a; practice 2 covers it; now an early-finisher extension in the plan) and the CYU parallel-lines bowtie proof (the exit ticket already checks an AA frame; practice 3 covers vertical angles). The exit ticket is now item 1.
+  **Nov 16: trimmed to 40 minutes.** Cut: the "add exactly one angle" partner problem (repeats the third-angle step and exit 1a; practice 2 covers it) and the CYU parallel-lines bowtie proof (the exit ticket already checks an AA frame; practice 3 covers vertical angles). The exit ticket is now item 1.
 
-  **Nov 16 (round 2): cut to 30 minutes.** Cut: warm-up part b (the dilate-then-congruent argument; Problem 3 makes the same argument in general), the "always similar?" fill-in after Problem 1 (now a question asked aloud), and the third-angle / measured-scale-factor problem (the exit ticket asks for both moves; measuring is now an early-finisher extension). Old Problems 3 and 5 are now Problems 2 and 3.
+  **Nov 16 (round 2): cut to 30 minutes.** Cut: warm-up part b (the dilate-then-congruent argument; Problem 3 makes the same argument in general), the "always similar?" fill-in after Problem 1 (now a question asked aloud), and the third-angle / measured-scale-factor problem (the exit ticket asks for both moves). Old Problems 3 and 5 are now Problems 2 and 3.
 
   **Nov 16 (round 2, follow-up):** Problem 1 is now a teacher demo (students fill two angle boxes; one student protractor drawing, Problem 2). QuickNotes print inline after Problem 3.
 
@@ -182,4 +182,4 @@ guide_notes: |
 
   **Changes from the source.** Exit ticket numbers changed so the triangles really exist (the source's 3, 6, 8, 5 can't all go with $40^\circ$, $60^\circ$, $80^\circ$ triangles).
 
-  **Scoring notes.** Accept "same angles" or "two angles match" for AA. Accept measured scale factors from 2.8 to 3.2 in the early-finisher measuring extension.
+  **Scoring notes.** Accept "same angles" or "two angles match" for AA.

@@ -176,7 +176,7 @@ plan: |
 
   **Partners (10 min).**
   - Problem 3 (10 min, 2 min share included): the key move is seeing $\overleftrightarrow{PB}$ as a transversal. Assessing: "Which line cuts both $\overline{BC}$ and $\overline{B'C'}$?" Advancing: "Does this work for $\overline{AC}$ too?" (Yes: the same steps with a point on $\overline{PC}$ or $\overline{PA}$ prove $\overline{AC} \parallel \overline{A'C'}$ and $\overline{AB} \parallel \overline{A'B'}$.)
-  - Extension for early finishers (ask out loud or post on the board): "Would your proof change if the scale factor was less than 1?" Answer: no; $\angle E'B'C'$ is still the image of $\angle EBC$, so the corresponding angles are still congruent and the sides still parallel.
+  - Early finishers: start the practice problems.
   - MLL supports: labeled figures, fill boxes on 2 and 3c; any language in talk. On the exit ticket, students can point to the QuickNotes bullet they used and name it in a few words.
 
   **QuickNotes (3 min).** Read together. Connect bullet 3 of LT 2 to a student's Problem 3.
@@ -184,7 +184,7 @@ plan: |
   **Exit (5 min + 1 to turn the page).** Students apply the QuickNotes to the figure: part a (LT 1) needs the angle stays $42^\circ$; parts b and c (LT 2) need them to check whether each line passes through $D$. Credit an answer plus a short reason (the "why"). Common errors: $84^\circ$ in part a (doubled the angle); "parallel" in part c (didn't notice $D$, $C$, $B$ are on one line).
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: the old partner Problem 5 (scale factor less than 1; now an early-finisher extension in the plan), the old CYU 1 (angle measure after a dilation; practice 1 is the same item and exit 2a checks it), and the $\overline{AC}$ slope pair in the old grid problem.
+  Nov 16: trimmed to 40 minutes. Cut: the old partner Problem 5 (scale factor less than 1), the old CYU 1 (angle measure after a dilation; practice 1 is the same item and exit 2a checks it), and the $\overline{AC}$ slope pair in the old grid problem.
 
   Nov 16 (round 2): cut to 30 minutes. Cut: Problem 1 parts a-b (two more points on line $AB$, same move as part c), the grid slope problem (shows the same "sides are parallel" fact the proof shows), the CYU (exit part b checks the same thing), and exit parts c-d (lengths scale by 2, Lesson 3.3 content). The proof is now Problem 3 and the exit ticket is 1.
 

@@ -184,7 +184,7 @@ plan: |
   - Problem 2: find the scale factor from the two roads first ($LQ \div LP$). Watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
   - Problem 3 sets up the theorem: both roads split in the same ratio (1.5). Ask pairs to say it in a sentence before the QuickNotes, which print right under it.
   - MLL supports: frame on Problem 1; street names stay on the map; any language in pair talk.
-  - Early finishers (on the board, not the handout): $\overline{BD} \parallel \overline{FG}$, $BD = 5$, $FG = 15$, $EG = 12$, $EB = 2.5$. Find $ED$ and $EF$ (4, 7.5). Or: right triangle with legs $DA = 3$ and $DB = 4$, $\overline{AB} \parallel \overline{EF}$, $DE = 7.5$. Find $AB$, $DF$, $EF$ (5, 10, 12.5).
+  - Early finishers: start the practice problems.
 
   **QuickNotes (4 min).** Read the two theorems. For the converse, ask out loud: "A bike path crosses Lincoln Rd. 300 ft from the library and Oak Ave. 450 ft from the library. Is it parallel to Maple St.?" ($300 \div 900 = \frac{1}{3}$, $450 \div 1200 = \frac{3}{8}$, not equal, so no.) Practice 2 is the written converse item. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
 
@@ -193,6 +193,6 @@ plan: |
 guide_notes: |
   Nov 16: trimmed to 40 minutes and retitled "The side splitter theorem" (was "The road back home"). Cut: old Together 1 (AA frame on the warm-up figure) and old CYU 1 (the exit ticket checks the same scale-factor move).
 
-  Nov 16 (round 2): cut to 30 minutes. Cut: Together "find $ED$ and $EF$" ($\overline{BD} \parallel \overline{FG}$; same scale-factor move as the map distance and the exit ticket; now an early-finisher extension) and the bike-path converse problem (asked out loud in the QuickNotes; practice 2 is the written converse). The map AA problem moved from partner work to Together. Handout numbers: Together 1, partner 2-3, exit 1.
+  Nov 16 (round 2): cut to 30 minutes. Cut: Together "find $ED$ and $EF$" ($\overline{BD} \parallel \overline{FG}$; same scale-factor move as the map distance and the exit ticket) and the bike-path converse problem (asked out loud in the QuickNotes; practice 2 is the written converse). The map AA problem moved from partner work to Together. Handout numbers: Together 1, partner 2-3, exit 1.
 
   Practice cut: old 3 ($\overline{MN} \parallel \overline{XZ}$, repeats 1 and the exit ticket), old 6 (find $DF$, repeats 5's AA + scale factor), old 7 (AA multiple choice, 5a covers it), old 8 (scale factors under 1, earlier-lesson review). 10 problems to 6: side splitter 1, converse 2, midsegment area 3, AA + length 4, SBA 5-6.

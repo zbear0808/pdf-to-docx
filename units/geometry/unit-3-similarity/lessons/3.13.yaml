@@ -162,7 +162,7 @@ plan: |
   **Work time (10 min, pairs).**
   - {ref:untangle} is the core (7 min). Students trace each small triangle and turn or flip it until the right angle is at the bottom. Assessing: "Which angle in $\triangle HEG$ is $53^\circ$? How do you know?" Advancing: "Which side of $\triangle HEG$ matches $\overline{HF}$?" Before they move on, have each pair say the statement $\triangle HFE \sim \triangle HEG \sim \triangle EFG$ out loud. Common error: copying letters in figure order ($\triangle HGE$); send them back to the angles in their drawing.
   - {ref:lengths} (3 min): if a pair is stuck, point to the hypotenuse of each triangle: 20, 12, 16 gives scale factors 0.6 and 0.8.
-  - Early finishers: find $GF$ two ways ($20 - 7.2$, and $\frac{GF}{16} = \frac{16}{20}$), or practice 3 (find $h$).
+  - Early finishers: start the practice problems.
   - MLL supports: labeled figures, frame boxes on {ref:minimum}, fill boxes on {ref:lengths}, any language in pair talk. Keep the words *altitude*, *hypotenuse*, *leg*.
 
   **QuickNotes (3 min).** Printed on page 2, right after {ref:lengths}. Connect the AA bullet to {ref:minimum}, the vertex-matching bullet to {ref:untangle}, and the proportion bullet to {ref:lengths}.
@@ -172,7 +172,7 @@ plan: |
 guide_notes: |
   **Nov 16: trimmed to 40 minutes.** Cut: warm-up b (converse check 10, 25, 26; nothing later uses it), the old Together angle-chase problem (the same $53^\circ$/$37^\circ$ angle chase students do on the patty paper; the new {ref:minimum} walks through it), and CYU 1 (similarity statement MC; practice 1 covers it). The converse bullet came out of the QuickNotes with warm-up b. Title changed from "Tangled triangles" to "Altitude to the hypotenuse."
 
-  **Nov 16 (round 2): cut to 30 minutes.** Cut: "name the three right triangles" (the untangle steps name them; the $\triangle HFE$ figure now prints as an unnumbered setup), the similarity statement frame (repeats the vertex matching in {ref:untangle} and the AA reason in {ref:minimum}; pairs say it out loud instead), $HF$ by the Pythagorean theorem (third Pythagorean question after the warm-up and the exit ticket; $HF = 20$ is now given), and $GF$ in {ref:lengths} (same proportion move again; early-finisher extension). Added a two-box frame to {ref:minimum}.
+  **Nov 16 (round 2): cut to 30 minutes.** Cut: "name the three right triangles" (the untangle steps name them; the $\triangle HFE$ figure now prints as an unnumbered setup), the similarity statement frame (repeats the vertex matching in {ref:untangle} and the AA reason in {ref:minimum}; pairs say it out loud instead), $HF$ by the Pythagorean theorem (third Pythagorean question after the warm-up and the exit ticket; $HF = 20$ is now given), and $GF$ in {ref:lengths} (same proportion move again). Added a two-box frame to {ref:minimum}.
 
   **Practice cut (round 2):** 7 to 6 problems. Cut the midsegment select-all (3.5 review, not this lesson; the Unit 3 Review covers it) and part b of the side splitter problem (same scale factor and subtraction as part a).
 
