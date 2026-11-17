@@ -111,6 +111,7 @@ sections:
         page_break_after: true
 
   - kind: notes
+    new_page: true                # false keeps QuickNotes on the same page
 
   - kind: cyu
     items:

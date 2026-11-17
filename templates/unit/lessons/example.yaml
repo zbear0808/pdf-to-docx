@@ -69,6 +69,7 @@ sections:
         page_break_after: true
 
   - kind: notes                   # new page: notes_title header + printed QuickNotes
+    # new_page: false             # short lessons: QuickNotes follow on the same page (no second header)
 
   - kind: cyu
     items:

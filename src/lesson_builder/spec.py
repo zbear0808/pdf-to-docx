@@ -209,6 +209,7 @@ class Section(_M):
     columns: Literal[1, 2] = 1       # 2: items flow in two columns (assessments)
     items: list[Item] = Field(default_factory=list)
     page_break_before: bool = False
+    new_page: bool = True            # notes: start a new page with its own header; false keeps QuickNotes inline
 
 
 class PracticeRow(_M):

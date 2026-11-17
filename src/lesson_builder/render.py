@@ -252,6 +252,8 @@ def _item(h: Handout, it: Item, figs: Figures, scale: float):
     if it.table:
         _table(h, it)
     if it.proof:
+        if img and not (it.proof.given or it.proof.prove):
+            h.space(2 / 72)   # Word paints the figure's white background over a table border that touches it
         _proof(h, it)
     h.space(it.after)
 
@@ -291,10 +293,13 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
     broke = False
     for s in lesson.sections:
         if s.kind == "notes":
-            if not broke:
-                h.page_break()
+            if s.new_page:
+                if not broke:
+                    h.page_break()
+                h.header(lesson.notes_title or lesson.title, label, right=right)
+            else:
+                h.space(0.06)
             broke = False
-            h.header(lesson.notes_title or lesson.title, label, right=right)
             h.notes_box("QuickNotes", lesson.notes_height, lines=quicknote_lines(lesson),
                         image=figs.get(lesson.notes_figure, key), img_w=lesson.notes_fig_w)
             continue

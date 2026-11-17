@@ -54,7 +54,7 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 
 **Document:** `id` | `doc_type` lesson*/assessment/reference | `title` | `notes_title`, `framing` (required for lessons) | `materials` | `directions` | `total_points` (= item + part points) | `max_pages` | `numbering: manual*|auto` | `targets: [{id, understand, able_to, standard}]` (adds to unit `targets`) | `set`, `form`, `parallel_to`, `do_not_reuse: [globs]` | `source` | `sections` | `quicknotes` | `notes_height` 2.2 | `notes_figure`, `notes_fig_w` 1.8 (figure inside the QuickNotes box, right of the notes) | `practice` | `plan` | `guide_notes`. `header_right` is deprecated (WARN; the builder prints Name / Per / Score).
 
-**Section:** `kind` warmup/together/partner/notes/cyu/exit/plain | `title` | `sub` | `intro` | `box` | `bank: [...]` (boxed, ` | ` separated) | `target` | `columns: 1|2` (2: items two per row; draw/table/columns items full width) | `items` | `page_break_before`. `notes` starts the QuickNotes page; numbering restarts after it.
+**Section:** `kind` warmup/together/partner/notes/cyu/exit/plain | `title` | `sub` | `intro` | `box` | `bank: [...]` (boxed, ` | ` separated) | `target` | `columns: 1|2` (2: items two per row; draw/table/columns items full width) | `items` | `page_break_before`. `notes` starts the QuickNotes page (`new_page: false` keeps QuickNotes on the same page, no second header: use it when a short lesson would otherwise leave a mostly empty page); numbering restarts after it.
 
 **Item** (Part shares the starred fields):
 

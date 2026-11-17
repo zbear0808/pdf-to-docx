@@ -442,3 +442,55 @@ def test_proof_table_blanks_and_key(tmp_path):
     assert "EF" in _red(pr)   # a proof inside a part, answered on the key
     with pytest.raises(Exception):
         Proof(rows=[["only one cell"]])
+
+
+def test_proof_under_side_figure_has_gap(tmp_path):
+    """Word paints a side figure's white background over the proof table's top border if the tables touch."""
+    l = _load(tmp_path, """\
+        id: '9.3'
+        title: Figure proof
+        sections:
+          - kind: partner
+            items:
+              - n: 1
+                prompt: 'Prove it.'
+                figure: fig.png
+                fig_w: 1.0
+                proof:
+                  rows:
+                    - [{ans: '$AB = CD$'}, 'Given']
+        """)
+    body = Document(str(_render(tmp_path, l, False))).element.body
+    kids = [e for e in body if e.tag in (qn("w:tbl"), qn("w:p"))]
+    i = next(k for k, e in enumerate(kids) if e.tag == qn("w:tbl") and "Statement" in "".join(
+        t.text or "" for t in e.iter(qn("w:t"))))
+    gap = kids[i - 1]
+    assert gap.tag == qn("w:p") and kids[i - 2].tag == qn("w:tbl")
+    assert any(s.get(qn("w:line")) == "40" for s in gap.iter(qn("w:spacing")))   # 2 pt exact
+
+
+def test_inline_quicknotes_skip_the_new_page(tmp_path):
+    text = """\
+    id: '9.3'
+    title: Short lesson
+    notes_title: Notes page
+    sections:
+      - kind: partner
+        items:
+          - prompt: 'One item.'
+            answer: 'Done.'
+      - kind: notes
+        new_page: NEW
+      - kind: exit
+        items:
+          - prompt: 'Exit.'
+            answer: 'Done.'
+    quicknotes: ['A fact.']
+    """
+    def breaks(path):
+        return sum(1 for b in Document(str(path)).element.body.iter(qn("w:br")) if b.get(qn("w:type")) == "page")
+    (tmp_path / "a").mkdir(); (tmp_path / "b").mkdir()
+    on = _render(tmp_path / "a", _load(tmp_path, text.replace("NEW", "true"), "on.yaml"), False)
+    off = _render(tmp_path / "b", _load(tmp_path, text.replace("NEW", "false"), "off.yaml"), False)
+    assert breaks(on) == breaks(off) + 1
+    assert "Notes page" in _text(on) and "Notes page" not in _text(off) and "A fact." in _text(off)
