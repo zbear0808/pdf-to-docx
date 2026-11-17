@@ -5,7 +5,7 @@ description: Fits a lesson handout to a 40-minute period. Budgets minutes per it
 
 # Lesson scope
 
-A lesson is **40 minutes**, including the warm-up and exit ticket. Write less. Students who finish early get one extension question, not more pages.
+A lesson is **40 minutes**, including the warm-up and exit ticket. Write less. Students who finish early start the practice problems (homework). Don't write extension questions, and don't move cut items into the plan as extensions; a cut item is just cut.
 
 Serves the **Plan** step (budget and cuts) and is reloaded by **Write+build** when a lesson runs long. See `.agents/skills/lesson-builder/references/orchestration.md`.
 
