@@ -2,8 +2,7 @@ id: 3.9
 title: Angle-Angle similarity
 notes_title: Angle-Angle similarity
 framing: >-
-  Two triangles have six parts: three sides and three angles. Today's question: what is the least information
-  you need to know that two triangles are similar?
+  What is the least information you need to know that two triangles are similar?
 materials: protractor, ruler (cm)
 
 sections:
@@ -12,7 +11,7 @@ sections:
       - minutes: 3
         prompt:
           - '$\triangle P''Q''R''$ is the image of $\triangle PQR$ after a dilation with scale factor $\frac{1}{2}$. Matching arcs show congruent angles.'
-          - 'Why is $\triangle P''Q''R''\cong\triangle STU$? Given: $\angle Q''\cong\angle T$, $Q''R''=TU=1$, $\angle R''\cong\angle U$. Fill in the box.'
+          - 'Why is $\triangle P''Q''R''\cong\triangle STU$? Given: $\angle Q''\cong\angle T$, $Q''R''=TU=1$, $\angle R''\cong\angle U$.'
         figure: 3.9_warmup
         fig_w: 2.0
         frame:
@@ -24,7 +23,6 @@ sections:
         minutes: 3
         prompt:
           - 'Your teacher draws 2 triangles with a protractor. Each triangle has a $45^\circ$ angle.'
-          - 'The triangles are as different as possible: different shape and different size.'
           - 'Write the other two angles of each triangle.'
         fill: [['Triangle 1:', '$100^\circ$, $35^\circ$'], ['Triangle 2:', '$90^\circ$, $45^\circ$']]
         fill_cols: 2
@@ -36,7 +34,7 @@ sections:
       - n: 2
         minutes: 8
         prompt:
-          - 'Draw 2 triangles in the box. Each triangle has a $45^\circ$ angle and a $30^\circ$ angle.'
+          - 'Draw 2 triangles. Each triangle has a $45^\circ$ angle and a $30^\circ$ angle.'
           - 'Triangle 1: the side between the $45^\circ$ and $30^\circ$ angles is 2 cm.'
           - 'Triangle 2: the side between the $45^\circ$ and $30^\circ$ angles is 6 cm.'
         steps: ['Draw the side.', 'Draw each angle at one end.', 'Extend the sides until they meet.']
@@ -48,7 +46,7 @@ sections:
           key_note: 'Drawn to scale. Both triangles have angles $45^\circ$, $30^\circ$, $105^\circ$. Triangle 2 is 3 times as big.'
       - n: 3
         minutes: 3
-        prompt: 'Two triangles have two pairs of congruent angles. Explain why they must be similar. Use the warm-up as a model. Start by dilating the first triangle so the side between the two angles matches the second triangle. Fill in each box.'
+        prompt: 'Two triangles have two pairs of congruent angles. Explain why they must be similar. Start by dilating the first triangle so the side between the two angles matches the second triangle.'
         frame:
           - ['A dilation does not change', 'angle measures', '.', 1.6]
           - ['So the dilated triangle and the second triangle are congruent by', 'ASA', '.']
@@ -164,7 +162,6 @@ plan: |
   **Partner work (13 min).**
   - Problem 2 (8 min) is the one protractor drawing students do. Model step 1 if pairs stall. Pairs compare with the next pair (2 min): every Triangle 2 looks like Triangle 1, only bigger.
   - Problem 3 (3 min) links back to the warm-up. Ask: "Which triangle in the warm-up is the dilated one?" ($\triangle P'Q'R'$).
-  - Early finishers: start the practice problems.
   - MLL supports: frames on the warm-up, Problem 3, and exit 1a; labeled figures; any language for talk.
 
   **QuickNotes (3 min).** Printed right after Problem 3. Connect bullet 2 to Problem 3, bullet 3 to Problem 1, and bullet 4 to practice 3 (vertical angles).
@@ -179,6 +176,8 @@ guide_notes: |
   **Nov 16 (round 2, follow-up):** Problem 1 is now a teacher demo (students fill two angle boxes; one student protractor drawing, Problem 2). QuickNotes print inline after Problem 3.
 
   **Practice cut (round 2):** 10 to 6 problems. Cut the all-circles-similar item and the circles scale-factor item (circles aren't part of this lesson; the second repeats practice 1's scale-factor-then-side move), the quadrilateral scale-factor MC (same move again), and SBA item 9 (one SBA item kept).
+
+  **Nov 16 (round 3):** cut extra instructions and flair.
 
   **Changes from the source.** Exit ticket numbers changed so the triangles really exist (the source's 3, 6, 8, 5 can't all go with $40^\circ$, $60^\circ$, $80^\circ$ triangles).
 

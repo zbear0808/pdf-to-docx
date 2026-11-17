@@ -2,8 +2,7 @@ id: 3.7
 title: Corresponding parts of similar triangles
 notes_title: Corresponding parts of similar triangles
 framing: >-
-  In Lesson 3.6 you wrote similarity statements. Today's question: if rigid motions and a dilation take one
-  triangle onto another, what must be true about the angles and the sides?
+  If rigid motions and a dilation take one triangle onto another, what must be true about the angles and the sides?
 
 sections:
   - kind: warmup
@@ -51,13 +50,13 @@ sections:
         fig_w: 2.3
         parts:
           - label: a.
-            prompt: 'Use the arcs. Write the matching angle.'
+            prompt: 'Write the matching angle.'
             fill: [['$\angle A \cong$', '$\angle C$'], ['$\angle B \cong$', '$\angle D$'], ['$\angle DEA \cong$', '$\angle BEC$']]
             fill_cols: 2
             box_w: 0.9
             work: 0
           - label: b.
-            prompt: 'Write the side of $\triangle BEC$ that matches each side. Each ratio equals $k$.'
+            prompt: 'Write the side of $\triangle BEC$ that matches each side.'
             fill: [['$AD = ke$ matches', '$\overline{BC}$'], ['$DE = kc$ matches', '$\overline{EB}$'], ['$AE = kb$ matches', '$\overline{EC}$']]
             box_w: 0.9
             work: 0
@@ -160,11 +159,11 @@ plan: |
 
   **Together (5 min, doc camera).** Problem 1: match vertices by arcs first ($A \to D$, $B \to E$, $C \to F$), then write $k$ as image side over original side. Ask "Do the arcs go around the same way?" so students see why no reflection is needed here.
 
-  **Partner work (8 min + 2 min share).** Problem 2 is the setup for QuickNotes. Push for part c: no translation is needed, just rotate $180^\circ$ around $E$, then dilate. If a pair is stuck on 2b, point to the letters: $kc$ goes with $c$. In the share, have a pair say it out loud: "The triangles are similar, so corresponding angles are congruent and corresponding sides are proportional." MLL support: 2a and 2b are fill-ins tied to the bowtie figure; any language for discussion. Early finishers: start the practice problems.
+  **Partner work (8 min + 2 min share).** Problem 2 is the setup for QuickNotes. Push for part c: no translation is needed, just rotate $180^\circ$ around $E$, then dilate. If a pair is stuck on 2b, point to the letters: $kc$ goes with $c$. In the share, have a pair say it out loud: "The triangles are similar, so corresponding angles are congruent and corresponding sides are proportional." MLL support: 2a and 2b are fill-ins tied to the bowtie figure; any language for discussion.
 
   **QuickNotes (3 min).** Read the printed notes. Connect "angles congruent" to 2a and "sides proportional" to 2b.
 
-  **Exit (4 min + 2 min buffer).** The exit ticket checks whether students compute all three ratios ($2$, about $1.86$, $1.9$) instead of trusting the look. The ratios are the evidence: not all equal, so no rigid motions and dilations take $\triangle ABC$ onto $\triangle DEF$. (Nov 16: the "not similar because" sentence box was cut; the last QuickNotes bullet on the same page answered it.)
+  **Exit (4 min + 2 min buffer).** The exit ticket checks whether students compute all three ratios ($2$, about $1.86$, $1.9$) instead of trusting the look. Not all equal, so no rigid motions and dilations take $\triangle ABC$ onto $\triangle DEF$.
 
 guide_notes: |
   Nov 16: trimmed to 40 minutes. Cut: old partner Problem 2 ($\triangle ABC \to \triangle WFK$, same three parts as Problem 1 with new letters; the two-sequence practice problem covers a sequence with a reflection). Cut the bowtie's "complete the similarity statement" part (the statement was already in the prompt and in the sum-up frame). The bowtie and the sum-up frame moved up one number.
@@ -172,3 +171,5 @@ guide_notes: |
   Nov 16 (round 2): cut to 30 minutes. Cut: 1c similarity statement (the 3.6 skill again), the sum-up frame (old Problem 3; QuickNotes say the same thing, now said out loud in the share), and CYU 1 find $x$ (ratios again, the exit ticket checks them). Exit ticket is now 1.
 
   Practice cut: 9 to 6. Cut the definition (copies the first QuickNotes bullet), the square MC sequence (repeats the two-sequence problem), and the translations / alternate interior angles item (earlier unit, not this lesson). Old 2, 3, 4, 6, 8, 9 are now 1-6.
+
+  Nov 16 (round 3): cut extra instructions and flair.

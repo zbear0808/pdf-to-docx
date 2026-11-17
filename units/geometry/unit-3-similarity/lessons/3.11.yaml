@@ -2,8 +2,7 @@ id: 3.11
 title: The side splitter theorem
 notes_title: The side splitter theorem
 framing: >-
-  Two streets leave the library, and two parallel streets cut across both of them. Today's question: when a line
-  is parallel to one side of a triangle, how does it split the other two sides?
+  When a line is parallel to one side of a triangle, how does it split the other two sides?
 materials: calculator
 notes_figure: 3.11_notes
 notes_fig_w: 1.2
@@ -31,7 +30,7 @@ sections:
       - n: 1
         id: map_aa
         minutes: 4
-        prompt: 'On the map, mark the congruent angles. Then fill in each box.'
+        prompt: 'Mark the congruent angles on the map.'
         figure: 3.11_map
         fig_w: 2.4
         work: 0
@@ -45,7 +44,7 @@ sections:
     items:
       - n: 2
         minutes: 4
-        prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use the similar triangles from {ref:map_aa}. Show your work.'
+        prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use the similar triangles from {ref:map_aa}.'
         work: 0.7
         fill: [['$LB =$', '2000 ft']]
         box_w: 1.1
@@ -136,7 +135,6 @@ practice:
               answer: 'No. $2.5 \div 10 = \frac{1}{4}$. The area scales by $\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$.'
               work: 1.0
         - n: 4
-          prompt: 'Use the two triangles.'
           figure: 3.11_p5
           fig_w: 2.4
           work: 0
@@ -184,7 +182,6 @@ plan: |
   - Problem 2: find the scale factor from the two roads first ($LQ \div LP$). Watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
   - Problem 3 sets up the theorem: both roads split in the same ratio (1.5). Ask pairs to say it in a sentence before the QuickNotes, which print right under it.
   - MLL supports: frame on Problem 1; street names stay on the map; any language in pair talk.
-  - Early finishers: start the practice problems.
 
   **QuickNotes (4 min).** Read the two theorems. For the converse, ask out loud: "A bike path crosses Lincoln Rd. 300 ft from the library and Oak Ave. 450 ft from the library. Is it parallel to Maple St.?" ($300 \div 900 = \frac{1}{3}$, $450 \div 1200 = \frac{3}{8}$, not equal, so no.) Practice 2 is the written converse item. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
 
@@ -196,3 +193,5 @@ guide_notes: |
   Nov 16 (round 2): cut to 30 minutes. Cut: Together "find $ED$ and $EF$" ($\overline{BD} \parallel \overline{FG}$; same scale-factor move as the map distance and the exit ticket) and the bike-path converse problem (asked out loud in the QuickNotes; practice 2 is the written converse). The map AA problem moved from partner work to Together. Handout numbers: Together 1, partner 2-3, exit 1.
 
   Practice cut: old 3 ($\overline{MN} \parallel \overline{XZ}$, repeats 1 and the exit ticket), old 6 (find $DF$, repeats 5's AA + scale factor), old 7 (AA multiple choice, 5a covers it), old 8 (scale factors under 1, earlier-lesson review). 10 problems to 6: side splitter 1, converse 2, midsegment area 3, AA + length 4, SBA 5-6.
+
+  Nov 16 (round 3): cut extra instructions and flair.

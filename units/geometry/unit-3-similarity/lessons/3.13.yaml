@@ -2,15 +2,14 @@ id: 3.13
 title: Altitude to the hypotenuse
 notes_title: Altitude to the hypotenuse
 framing: >-
-  Draw the altitude from the right angle of a right triangle and you get two smaller triangles. Today's question:
-  how are the three triangles related, and how can we use that to find missing lengths?
+  When you draw the altitude from the right angle of a right triangle, how are the three triangles related?
 materials: patty paper
 
 sections:
   - kind: warmup
     items:
       - minutes: 3
-        prompt: 'Review: the Pythagorean theorem says $a^2 + b^2 = c^2$, where $c$ is the hypotenuse. Find $x$.'
+        prompt: 'The Pythagorean theorem says $a^2 + b^2 = c^2$, where $c$ is the hypotenuse. Find $x$.'
         figure: 3.13_warmup
         fig_w: 1.5
         after: 0.04
@@ -24,7 +23,7 @@ sections:
       - n: 1
         id: minimum
         minutes: 5
-        prompt: 'Pretend all the measurements in the figure are erased. You only know that $\angle ACB$ and $\angle ADC$ are right angles. Can you prove $\triangle ADC \sim \triangle CDB$ by adding just one measurement? Which one? Explain.'
+        prompt: 'Ignore the measurements in the figure. You only know that $\angle ACB$ and $\angle ADC$ are right angles. Can you prove $\triangle ADC \sim \triangle CDB$ by adding just one measurement? Which one? Explain.'
         figure: 3.13_together
         fig_w: 2.7
         after: 0.04
@@ -49,7 +48,7 @@ sections:
           - 'Untangle the two small triangles.'
           - 'Step 1: Trace $\triangle HEG$ and $\triangle EFG$ on separate pieces of patty paper.'
           - 'Step 2: Turn or flip each one so the hypotenuse is on top and the right angle is at the bottom, like $\triangle HFE$.'
-          - 'Step 3: Draw both triangles in the box. Label the vertices, the lengths you know, and the angle measures.'
+          - 'Step 3: Draw both triangles. Label the vertices, the lengths you know, and the angle measures.'
         draw:
           height: 2.2
           key_figure: 3.13_redraw
@@ -123,7 +122,7 @@ practice:
           answer: ['$\triangle ADC \sim \triangle CDB$, so $\frac{AD}{CD} = \frac{CD}{DB}$: $\frac{12}{h} = \frac{h}{3}$.', '$h^2 = 36$, so $h = 6$.']
           work: 1.2
         - n: 4
-          prompt: 'In the diagram, $\overline{A''B''} \parallel \overline{AB}$. Find $A''A$.'
+          prompt: '$\overline{A''B''} \parallel \overline{AB}$. Find $A''A$.'
           figure: 3.13_p4
           fig_w: 1.9
           answer: ['$\triangle CA''B'' \sim \triangle CAB$ with scale factor $\frac{20}{8} = 2.5$.', '$CA = 12 \cdot 2.5 = 30$, so $A''A = 30 - 12 = 18$.']
@@ -162,7 +161,6 @@ plan: |
   **Work time (10 min, pairs).**
   - {ref:untangle} is the core (7 min). Students trace each small triangle and turn or flip it until the right angle is at the bottom. Assessing: "Which angle in $\triangle HEG$ is $53^\circ$? How do you know?" Advancing: "Which side of $\triangle HEG$ matches $\overline{HF}$?" Before they move on, have each pair say the statement $\triangle HFE \sim \triangle HEG \sim \triangle EFG$ out loud. Common error: copying letters in figure order ($\triangle HGE$); send them back to the angles in their drawing.
   - {ref:lengths} (3 min): if a pair is stuck, point to the hypotenuse of each triangle: 20, 12, 16 gives scale factors 0.6 and 0.8.
-  - Early finishers: start the practice problems.
   - MLL supports: labeled figures, frame boxes on {ref:minimum}, fill boxes on {ref:lengths}, any language in pair talk. Keep the words *altitude*, *hypotenuse*, *leg*.
 
   **QuickNotes (3 min).** Printed on page 2, right after {ref:lengths}. Connect the AA bullet to {ref:minimum}, the vertex-matching bullet to {ref:untangle}, and the proportion bullet to {ref:lengths}.
@@ -176,6 +174,6 @@ guide_notes: |
 
   **Practice cut (round 2):** 7 to 6 problems. Cut the midsegment select-all (3.5 review, not this lesson; the Unit 3 Review covers it) and part b of the side splitter problem (same scale factor and subtraction as part a).
 
-  **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (2,4) and home-language words.
+  **Nov 16 (round 3):** cut extra instructions and flair.
 
   **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (2,4) and home-language words.
