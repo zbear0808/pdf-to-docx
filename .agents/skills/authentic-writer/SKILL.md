@@ -11,7 +11,9 @@ Write like a teacher making a handout the night before: plain, direct, specific.
 
 - Start with the task. "Find $x$." "Which table shows a linear relationship?" "Trace the code and give the final value of `count`."
 - One context sentence at most before the question, and only if the math needs it. If the story does no mathematical work, cut it.
-- Say what a complete answer includes: "Show your work.", "Explain using the diagram.", "Give the value and the units."
+- Say what a complete answer includes only when it isn't obvious: "Explain using the diagram.", "Give the value and the units." Don't add "Show your work." to every item.
+- No instructions the layout already gives (teacher, Nov 16: "get rid of anything that's extra instructions or flair"). Cut "Fill in each box.", "Write your answer in the box.", "Use the figure.", "Look back at Problem 2." (unless the item really needs that work), "Hint: ...", "Sum it up.", "Compare with your partner." (talk moves go in the plan), and framing like "Today's question: ...". Keep sentence frames and labeled boxes themselves: they are MLL supports, not extra text.
+- Don't tell students what to do when they finish. Teacher plans don't need an "early finishers" line either.
 - Plain verbs: find, show, explain, compare, trace, sketch, label, write. Not "determine the measure of", "carefully analyze", "utilize".
 - Same word for the same thing every time. If it's an "array" in question 3, it's an "array" in question 7.
 - Contexts are ordinary: a school store, a bus route, a phone plan, a basketball box score, a part-time job. No whimsical names or quirky stories ("Zara the zookeeper is planning a llama parade").
