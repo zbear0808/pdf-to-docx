@@ -2,8 +2,7 @@ id: '2.5'
 title: Using triangle congruence theorems
 notes_title: Using triangle congruence theorems
 framing: >-
-  SSS, SAS, and ASA tell us when three pairs of parts are enough to know two triangles are congruent.
-  Today's question: when does a diagram give us enough information to use one of them?
+  When does a diagram give enough information to use SSS, SAS, or ASA?
 materials: colored pencils (optional) for marking diagrams
 numbering: auto
 source: 2.5 Student Notes.docx, 2.5 Practice Problems.docx
@@ -47,7 +46,6 @@ sections:
         minutes: 3
         target: LT1
         source: 2.5 Student Notes, Activity 1 #1
-        prompt: 'Use the side lengths and the angle in each triangle.'
         figure: 2.5_sas
         fig_w: 2.3
         fill: [['Congruent?', 'yes'], ['Theorem:', 'SAS']]
@@ -59,7 +57,6 @@ sections:
         minutes: 3
         target: LT1
         source: 2.5 Student Notes, Activity 1 #2
-        prompt: 'Use the side lengths in each triangle.'
         figure: 2.5_sss
         fig_w: 2.2
         fill: [['Congruent?', 'yes'], ['Theorem:', 'SSS']]
@@ -69,13 +66,12 @@ sections:
           - ['$\triangle SDI \cong \triangle$', '$JNA$', '']
 
   - kind: partner
-    intro: 'Decide if the triangles are congruent. If yes, name the theorem and write your own congruence statement.'
+    intro: 'Are the triangles congruent? If yes, name the theorem and write a congruence statement.'
     items:
       - id: p_asa
         minutes: 3
         target: LT1
         source: 2.5 Student Notes, Activity 1 #3
-        prompt: 'Use the marks on the diagram.'
         figure: 2.5_asa
         fig_w: 2.0
         fill: [['Congruent?', 'yes'], ['Theorem:', 'ASA']]
@@ -87,7 +83,6 @@ sections:
         minutes: 3
         target: LT1
         source: 2.5 Student Notes, Activity 1 #5
-        prompt: 'Use the marks on the diagram.'
         figure: 2.5_ssa
         fig_w: 1.9
         fill: [['Congruent?', 'no'], ['Theorem:', 'none']]
@@ -99,7 +94,6 @@ sections:
 
   - kind: partner
     title: 'With a partner: what else do I know?'
-    intro: 'First, find another pair of congruent parts and mark it on the diagram. Then decide if there is enough information to say the triangles are congruent.'
     items:
       - id: p_kite
         minutes: 4
@@ -255,7 +249,7 @@ practice:
           answer: 'Yes. $O$ is the center of regular hexagon $GHIJKL$. Rotating $120^\circ$ and $240^\circ$ around $O$ takes $JKLO$ to $HIJO$ and to $LGHO$. Rotations are rigid motions.'
         - n: 7
           source: 2.5 Practice Problems #7
-          prompt: '$\triangle ABC \cong \triangle EDF$. So Lin knows that there is a sequence of rigid motions that takes $\triangle ABC$ to $\triangle EDF$. Select **all** true statements after the transformation.'
+          prompt: '$\triangle ABC \cong \triangle EDF$. So there is a sequence of rigid motions that takes $\triangle ABC$ to $\triangle EDF$. Select **all** true statements after the transformation.'
           figure: assets/2.5/prac7_lin.png
           fig_w: 2.0
           layout: stacked
@@ -283,7 +277,7 @@ practice:
   selected: [[2, 'A rigid motion takes $\overline{AB}$ to $\overline{CD}$; the circles then match.'], [3, D], [4, $HFE$], [5, 'A: 3, B: 1, C: 2'], [7, 'B, D'], [8, '$(-2, -6)$'], [9, '$y = -2x + 2$']]
 
 plan: |
-  **Overview.** Students already have SSS, SAS, and ASA as statements (Unit 2 summary notes, Lesson 2.3). Today they use them: look at two triangles, decide if the given or marked parts are enough, and write the statement in matching order. Activity 2 adds parts the diagram gives for free (a shared side, vertical angles), which Lessons 2.6-2.9 need for proofs.
+  **Overview.** Students have SSS, SAS, and ASA from Lesson 2.3. Today they use them: decide if the given or marked parts are enough, then write the statement in matching order. Activity 2 adds parts the diagram gives for free (a shared side, vertical angles), which Lessons 2.6-2.9 need for proofs.
 
   **Objectives.** (1) Decide from given or marked parts whether two triangles are congruent by SSS, SAS, or ASA, and write a congruence statement in matching order. (2) Use a congruence statement to solve for unknown lengths. **Standards.** G-CO.B.8, G-SRT.B.5. SMP 3, 6, 7.
 
@@ -300,14 +294,13 @@ plan: |
 
   **Warm-up (4 min).** 3 min to write, 1 min share. Spend the share on panel 3: "They look like corresponding angles. Why can't we say $a = b$?" (no parallel marks). That is today's habit: use only what is marked. Panel 2 (vertical angles) comes back in Problem 6.
 
-  **Together (6 min, doc camera).** Read the framing box and the theorem box. Problem 1 (3 min): trace the 22 cm and 18 cm sides with a finger and ask "is the $65^\circ$ angle between them in both triangles?" Then build the statement one vertex at a time: "$L$ is the angle, so it matches $I$." Problem 2 (3 min): match each vertex by its two side lengths ($S$ is between 6 and 8, so is $J$). Students fill the boxes as you go.
+  **Together (6 min, doc camera).** Read the framing question and the theorem box. Problem 1 (3 min): trace the 22 cm and 18 cm sides with a finger and ask "is the $65^\circ$ angle between them in both triangles?" Then build the statement one vertex at a time: "$L$ is the angle, so it matches $I$." Problem 2 (3 min): match each vertex by its two side lengths ($S$ is between 6 and 8, so is $J$). Students fill the boxes as you go.
 
   **Partner work (15 min).** 1 min to pair up. Problems 3-4 (about 6 min), then Problems 5-6 (about 8 min).
   - Problem 3: marks instead of numbers. Ask "which side is between the two angles?"
   - Problem 4 is SSA. Expect some "SAS". Ask "is the marked angle between the two marked sides?" Point out the two triangles are not even the same shape.
   - Problems 5-6: students mark the new part with a colored pencil, then decide. Stem for talk: "I know ___ because ___." Any language for partner talk.
   - Assessing: "What did the diagram give you that nobody marked?" Advancing: "Would the triangles still be congruent if $\overline{CV}$ were not shared?"
-  - Early finishers: start the practice problems.
   - Watch for: statements in alphabetical order instead of matching order; calling SSA "SAS"; writing $\overline{CV} \cong \overline{CA}$ for the shared side.
   - MLL supports: theorem box with "included" defined in words, the same three boxes (congruent, theorem, statement) on every problem, the Activity 2 routine (given, another part and why, decide), labeled diagrams.
 
@@ -321,3 +314,5 @@ guide_notes: |
   **Source fixes.** The cool-down diagram had $DB = 18$, but $2y = 16$ and $x + 4 = y$ give $y = 8$, $x = 4$, and $DB = 16$. The brace now says 16. (If you meant $AB = 18$ instead, the answers are $y = 9$, $x = 5$.) Practice: source problems 4 (matching) and 5 (reflection) swapped places so two half-width problems share a row and the set fits 2 pages. Practice 2: the source gave $\overline{BA} \cong \overline{ED}$; the circle is centered at $C$ through $D$, so it now reads $\overline{BA} \cong \overline{DC}$. The old learning target ("write a proof that segments of the same length are congruent") is from IM 2.5 and only fits practice 1-3; the handout uses LT1-LT2 instead.
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "equal", or a home-language word for congruent. Accept any congruence statement with matching order ($\triangle ACY \cong \triangle MBW$ is also right for Problem 3).
+
+  **Nov 16 (round 3):** cut extra instructions and flair.

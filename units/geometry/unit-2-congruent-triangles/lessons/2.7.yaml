@@ -2,8 +2,7 @@ id: '2.7'
 title: Angle-Side-Angle triangle congruence
 notes_title: ASA and parallelograms
 framing: >-
-  In Lesson 2.6, two sides and the angle between them were enough to prove two triangles congruent.
-  Today's question: are two angles and the side between them enough too?
+  Are two angles and the side between them enough to prove two triangles congruent?
 materials: ruler, protractor, patty paper
 numbering: auto
 source: 2.7 & 2.9 Student Notes (2.7 parts), 2.7 Practice Problems
@@ -19,15 +18,13 @@ targets:
 
 sections:
   - kind: warmup
-    title: 'Warm-up: what else?'
     items:
       - minutes: 6
         target: LT1
-        prompt: 'Draw each triangle in the box. Use a ruler and a protractor.'
         steps:
           - 'Draw triangle $DOG$ with $\angle D = 75^\circ$ and $\angle G = 45^\circ$.'
           - 'Draw triangle $CAT$ with $\angle C = 75^\circ$, $CA = 5$ cm, and $\angle A = 45^\circ$.'
-          - 'Compare with a partner. Is your $DOG$ the same size as your partner''s? Is your $CAT$?'
+          - 'Is your $DOG$ the same size as your partner''s? Is your $CAT$?'
         draw:
           height: 2.1
           key_figure: 2.7_warmup_key
@@ -43,7 +40,7 @@ sections:
         demand: dm
         prompt:
           - 'The two triangles are congruent. Label them $WXY$ and $DEF$ so that $\angle W \cong \angle D$, $\angle X \cong \angle E$, and $\overline{WX} \cong \overline{DE}$. Mark the congruent parts.'
-          - 'Then finish the sequence of rigid motions that takes $\triangle WXY$ onto $\triangle DEF$. Fill in each box.'
+          - 'Then finish the sequence of rigid motions that takes $\triangle WXY$ onto $\triangle DEF$.'
         figure: 2.7_asa_pair
         fig_w: 2.3
         layout: stacked
@@ -62,7 +59,6 @@ sections:
         demand: pwc
         prompt:
           - '**Angle-Side-Angle (ASA) Triangle Congruence Theorem:** In two triangles, if two pairs of corresponding angles and the pair of corresponding sides between the angles are congruent, then the triangles must be congruent.'
-          - 'Use the marks in the figure. Fill in each box.'
         figure: 2.7_bowtie
         fig_w: 1.6
         fill: [['$\angle A \cong$', '$\angle C$'], ['$\overline{AE} \cong$', '$\overline{CE}$'], ['$\angle DEA \cong$', '$\angle BEC$'], ['$\triangle DEA \cong$', '$\triangle BEC$']]
@@ -118,7 +114,7 @@ sections:
         target: LT2
         type: cr
         demand: pwoc
-        prompt: '$MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$. Use the Parallelogram Theorem. Fill in each box.'
+        prompt: '$MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$. Use the Parallelogram Theorem.'
         figure: 2.7_mnkl
         fig_w: 1.5
         fill: [['$\overline{NM} \cong$', '$\overline{KL}$'], ['$\overline{NK} \cong$', '$\overline{ML}$'], ['$\angle M \cong$', '$\angle K$'], ['$\angle N \cong$', '$\angle L$']]
@@ -155,7 +151,7 @@ practice:
     - cells:
         - n: 1
           target: LT1
-          prompt: ['Here is a figure with two triangles.', '$\overline{AE} \cong \overline{CE}$ and $\angle A \cong \angle C$', 'Which triangle congruence theorem could you use to prove $\triangle ADE \cong \triangle CBE$?']
+          prompt: ['$\overline{AE} \cong \overline{CE}$ and $\angle A \cong \angle C$', 'Which triangle congruence theorem could you use to prove $\triangle ADE \cong \triangle CBE$?']
           figure: 2.7_pr_bowtie
           fig_w: 1.6
           layout: stacked
@@ -259,7 +255,6 @@ plan: |
   **Partner work (13 min).** Problem 3 (about 4 min), Problem 4 (about 8 min), then 1 min to compare with the next pair.
   - Assessing: "Which lines are parallel, and which line cuts across them?" "Which side is between your two angles?"
   - Advancing: "What if you used diagonal $\overline{AC}$ instead? What changes?" (then $\angle BAC \cong \angle DCA$, $\overline{AC} \cong \overline{CA}$, $\angle BCA \cong \angle DAC$, so $\triangle ABC \cong \triangle CDA$).
-  - Early finishers: start the practice problems.
   - MLL supports: every statement and reason has its own labeled box; Reasons 1-3 are printed as models. "Auxiliary" means extra (a segment we add); "between" in ASA means the side shared by both angles, so point to it on the figure. Any language is fine for partner talk.
   - Watch for: pairing $\angle ABD$ with $\angle ADB$ (same triangle), or writing the congruence statement in alphabetical order instead of matching order.
 
@@ -273,3 +268,5 @@ guide_notes: |
   **Practice.** Source problems 1-8 kept in order. The source answer key listed "4. 125°" and "5. D" from another version; here 4 is D and 5 is a proof. Practice 6 is SAS review from Lesson 2.6, and it is the same proof as Lesson 2.9 practice 5 (same figure, givens, and table). Row 5 is $\triangle KBQ \cong \triangle ABQ$ ($K \to A$, $B \to B$, $Q \to Q$); the 2.9 source key's $\triangle AQB$ has the wrong order.
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "equal", or a home-language word for congruent; "alt. int. angles"; "CPCTC" or "matching parts" for corresponding parts; a reason written as a short phrase.
+
+  **Nov 16 (round 3):** cut extra instructions and flair.

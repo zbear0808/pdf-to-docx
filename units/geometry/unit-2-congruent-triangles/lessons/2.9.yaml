@@ -3,8 +3,7 @@ title: Side-Side-Side triangle congruence
 notes_title: Side-Side-Side triangle congruence
 source: '2.7 & 2.9 Student Notes (Activity 2.9.2, Cool-down 2); 2.9 Practice Problems'
 framing: >-
-  SAS and ASA each use a pair of angles. Today's question: if all we know is that all three pairs of
-  sides are congruent, do the triangles have to be congruent?
+  If all three pairs of sides are congruent, do the triangles have to be congruent?
 materials: patty paper
 numbering: auto
 targets:
@@ -23,7 +22,7 @@ sections:
       - minutes: 4
         target: LT2
         source: '2.9 Practice Problems #1'
-        prompt: 'Draw one diagonal of kite $WXYZ$ that cuts the kite into 2 congruent triangles. Then fill in each box.'
+        prompt: 'Draw one diagonal of kite $WXYZ$ that cuts the kite into 2 congruent triangles.'
         figure: 2.9_warmup
         fill:
           - ['Diagonal I drew:', '$\overline{WY}$']
@@ -48,7 +47,7 @@ sections:
         minutes: 5
         target: LT1
         source: '2.7 & 2.9 Student Notes, Activity 2.9.2'
-        prompt: 'Describe a sequence of rigid motions that takes $\triangle STU$ onto $\triangle GHJ$ in {ref:label}. Write one move in each box.'
+        prompt: 'Describe a sequence of rigid motions that takes $\triangle STU$ onto $\triangle GHJ$ in {ref:label}.'
         fill:
           - ['Step 1:', 'Translate $S$ to $G$.']
           - ['Step 2:', 'Rotate around $G$ until $T''$ is on $H$.']
@@ -69,7 +68,7 @@ sections:
         figure: 2.9_proof
         parts:
           - label: a.
-            prompt: 'Rigid motions keep lengths. Fill in each box.'
+            prompt: 'Rigid motions keep lengths.'
             frame:
               - ['$GU'''' = SU =$', '$GJ$', '']
               - ['$HU'''' = TU =$', '$HJ$', '']
@@ -77,7 +76,7 @@ sections:
             answer: 'Givens from {ref:label}: $SU = GJ$, $TU = HJ$.'
             work: 0
           - label: b.
-            prompt: 'Explain why the reflection works. By part a, $G$ and $H$ are each the same distance from $U''''$ and $J$. Fill in each box.'
+            prompt: 'By part a, $G$ and $H$ are each the same distance from $U''''$ and $J$.'
             frame:
               - ['So $\overleftrightarrow{GH}$ is the', 'perpendicular bisector', 'of segment $U''''J$.', 1.8]
               - ['Reflecting across $\overleftrightarrow{GH}$ takes $U''''$ onto', '$J$', '.']
@@ -94,7 +93,7 @@ sections:
         target: LT2
         source: '2.7 & 2.9 Student Notes, Cool-down 2'
         prompt:
-          - 'Label each example by whether you could prove the triangles congruent using SSS, SAS, ASA, or none of these. $A$ and $K$ are the centers of the circles. Write your answer in each box.'
+          - 'Which proves the triangles congruent: SSS, SAS, ASA, or none? $A$ and $K$ are the centers of the circles.'
         figure: 2.9_sort
         fig_w: 5.6
         layout: stacked
@@ -119,7 +118,7 @@ sections:
         target: LT2
         source: '2.9 Practice Problems #2'
         prompt:
-          - 'Mai proved that $\triangle WYZ \cong \triangle WYX$ using SSS. Why can she now say that diagonal $\overline{WY}$ bisects $\angle ZWX$ and $\angle ZYX$?'
+          - '$\triangle WYZ \cong \triangle WYX$ by SSS. Explain why diagonal $\overline{WY}$ bisects $\angle ZWX$ and $\angle ZYX$.'
           - '*Optional start:* Since $\triangle WYZ \cong \triangle WYX$, ...'
         figure: 2.9_mai
         box: 1.8
@@ -154,7 +153,7 @@ practice:
           answer: ['$\triangle WYZ \cong \triangle WYX$ (SSS), so $\overline{WY}$ bisects $\angle ZWX$: $m\angle XWY = 30^\circ$.', '$m\angle XYW = 180 - 133 - 30 = 17^\circ$, and $\angle ZYW \cong \angle XYW$.']
         - id: pr_rect
           source: '2.9 Practice Problems #4'
-          prompt: 'In the diagram, $\overline{DC} \parallel \overline{AB}$. Prove that $\triangle ABD \cong \triangle CDB$.'
+          prompt: '$\overline{DC} \parallel \overline{AB}$. Prove that $\triangle ABD \cong \triangle CDB$.'
           figure: assets/2.9/prac_rect_abd.png
           fig_w: 2.1
           layout: stacked
@@ -253,7 +252,6 @@ plan: |
   **Partner work (9 min).** {ref:why} (8 min plus 1 to pair up).
   - Part a is quick (2 min). Part b is the main idea (4 min): if pairs stall, ask "Which points are the same distance from $U^{\prime\prime}$ and $J$? Where have we seen a set of points like that?" (Unit 1: the perpendicular bisector).
   - Part c (2 min): students may answer "yes, sometimes". Press: "Look at the order of the letters around each triangle."
-  - Early finishers: start the practice problems.
   - MLL supports: move bank, labeled boxes in every part, Turn and Talk in any language before writing part c. Keep the term *perpendicular bisector*; point to the dashed segment and $\overleftrightarrow{GH}$ as you say it.
   - Watch for: students who say "same distance" without naming which two points.
 
@@ -271,3 +269,5 @@ guide_notes: |
   **Practice 5, row 5.** The source key says $\triangle AQB$; the matching order is $\triangle KBQ \cong \triangle ABQ$ ($K \to A$, $B \to B$, $Q \to Q$). The key here uses $ABQ$. A student who writes $\triangle AQB$ (likely if they copied the old key) has made a matching-order error: $K$ is paired with $Q$ instead of $A$. Mark it as an order error; you decide partial or full credit.
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", "equal", or a home-language word for congruent, and "middle line" or a drawn right angle mark for perpendicular bisector if the idea is clear. Accept CPCTC or "matching parts are the same" on the exit ticket.
+
+  **Nov 16 (round 3):** cut extra instructions and flair.

@@ -2,8 +2,7 @@ id: '2.6'
 title: Side-Angle-Side triangle congruence
 notes_title: SAS and two-column proofs
 framing: >-
-  In Lesson 2.5 you wrote proofs about segments. Today's question: which three parts of a triangle are enough to
-  know two triangles are congruent, and how do we prove it?
+  Which three parts of a triangle are enough to know two triangles are congruent, and how do we prove it?
 materials: ruler, protractor
 source: 2.6 Student Notes.docx, 2.6 Practice Problems.docx
 targets:
@@ -21,7 +20,7 @@ sections:
     items:
       - minutes: 6
         target: LT1
-        prompt: 'Use a ruler and a protractor. Draw $\triangle DEF$ with $m\angle E = 50^\circ$, $DE = 4$ cm, and $EF = 5$ cm.'
+        prompt: 'Draw $\triangle DEF$ with $m\angle E = 50^\circ$, $DE = 4$ cm, and $EF = 5$ cm.'
         steps:
           - 'Draw $\overline{EF}$ 5 cm long.'
           - 'Draw a $50^\circ$ angle at $E$.'
@@ -46,7 +45,6 @@ sections:
         target: LT1
         prompt:
           - '**Side-Angle-Side (SAS) Triangle Congruence Theorem:** If two sides and the angle between them in one triangle are congruent to two sides and the angle between them in another triangle, then the triangles are congruent.'
-          - 'Use the marks in the figure. Fill in each box.'
         figure: '2.6_sas'
         fill:
           - ['$\overline{AB} \cong$', '$\overline{GB}$']
@@ -97,7 +95,7 @@ sections:
       - n: 4
         minutes: 1
         target: LT2
-        prompt: 'Your proof in {ref:iso} works for every isosceles triangle. Fill in the box.'
+        prompt: 'Your proof in {ref:iso} works for every isosceles triangle.'
         frame:
           - ['**Isosceles Triangle Theorem:** The base angles of an isosceles triangle are', 'congruent', '.']
 
@@ -111,7 +109,6 @@ sections:
         target: LT2
         prompt:
           - 'Draw an auxiliary line in square $FEHG$ that would help you prove that a diagonal of a square makes $45^\circ$ angles with the sides. Start the line at $F$.'
-          - 'Fill in each box.'
         figure: '2.6_square'
         frame:
           - ['By SAS, $\triangle FEH \cong \triangle$', '$HGF$', '.']
@@ -254,7 +251,6 @@ plan: |
   **Together (8 min).** Read the box first. Problem 1 (3 min): read the theorem once aloud; students fill the boxes from the marks. $\overline{BC} \cong \overline{BC}$ is the new idea; name it the reflexive property and point to the bank. Problem 2 (5 min): model the first two-column proof under the doc camera. Say each line as "I know ___ because ___." Ask "Where do the vertical angles come from? Nobody marked them."
 
   **Partner work (11 min).** Problem 3: Step 1 (auxiliary line) 2 min, the proof 7 min. Problem 4 and a 1 min share. The auxiliary line is the hard part; if pairs are stuck after 2 min, ask "What would split the triangle into two triangles you could compare?" Then "Which side do the two triangles share?"
-  - Early finishers: start the practice problems.
   - MLL supports: reason bank, a numbered statement/reason table with reason 1 printed, frames on the warm-up and Problem 4, the definition of auxiliary line printed in the problem. Partner talk in any language.
   - Watch for: SAS with the angle not between the sides; "Given" for $\overline{PM} \cong \overline{PM}$; writing $\angle A \cong \angle B$ before the triangles are congruent (that needs CPCTC after SAS).
 
@@ -270,3 +266,5 @@ guide_notes: |
   **Practice solutions.** 4: $m\angle I = 58^\circ$, so $m\angle T = 180^\circ - 116^\circ = 64^\circ$. 5: $\angle A \cong \angle G$ and they add to $90^\circ$, so $45^\circ$. 6: inside angle $180^\circ - 110^\circ = 70^\circ$, base angles $55^\circ$, $x = 180^\circ - 55^\circ = 125^\circ$ (linear pair). 7: in $\triangle QRS$ the base angles are $30^\circ$, so $m\angle QRP = 150^\circ$; in $\triangle PQR$, $(180^\circ - 150^\circ) \div 2 = 15^\circ$.
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept short reasons ("vert. angles", "bisector", "same side") and home-language words when the idea is right. In a proof, accept statements in a different valid order, and either letter order for a correct congruence ($\angle A \cong \angle B$ or $\angle B \cong \angle A$).
+
+  **Nov 16 (round 3):** cut extra instructions and flair.
