@@ -494,3 +494,8 @@ def test_inline_quicknotes_skip_the_new_page(tmp_path):
     off = _render(tmp_path / "b", _load(tmp_path, text.replace("NEW", "false"), "off.yaml"), False)
     assert breaks(on) == breaks(off) + 1
     assert "Notes page" in _text(on) and "Notes page" not in _text(off) and "A fact." in _text(off)
+
+
+def test_steps_only_item_has_no_blank_prompt_line():
+    it = R.Item(steps=["Draw it.", "Label it."])
+    assert R._prompt_lines(it) == ["Step 1: Draw it.", "Step 2: Label it."]

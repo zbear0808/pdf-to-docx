@@ -74,7 +74,7 @@ def _rubric_lines(it: Item | Part) -> list[str]:
 
 def _prompt_lines(it: Item, points: bool = True) -> list:
     """Prompt lines, "(2 pts)" after the first line, then numbered steps."""
-    lines = as_list(it.prompt)
+    lines = [l for l in as_list(it.prompt) if str(l).strip()]   # steps-only items print no blank first line
     if points and it.points is not None and lines:
         lines = [lines[0] + _pts(it.points)] + lines[1:]
     return lines + [f"Step {k}: {s}" for k, s in enumerate(it.steps, 1)]
