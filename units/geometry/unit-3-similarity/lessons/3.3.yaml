@@ -2,15 +2,14 @@ id: 3.3
 title: Measuring dilations
 notes_title: Measuring dilations
 framing: >-
-  In Lesson 3.1 you dilated points: each image point is $k$ times as far from the center. Today's question:
-  what happens to the lengths of the sides?
+  What happens to the side lengths when a figure is dilated?
 materials: ruler or a strip of paper
 
 sections:
   - kind: warmup
     items:
       - minutes: 2
-        prompt: 'Here is center $C$ and $\triangle EFG$. Count grid units to find the side lengths. $FG = 5$ is given.'
+        prompt: 'Count grid units to find $EF$ and $EG$. $FG = 5$.'
         figure: 3.3_efg
         fig_w: 3.0
         fill: [['$EF =$', '3'], ['$EG =$', '4']]
@@ -21,7 +20,7 @@ sections:
     items:
       - n: 1
         minutes: 3
-        prompt: 'You will dilate $\triangle EFG$ using center $C$ and scale factor 2. Predict the side lengths of the image.'
+        prompt: 'Predict the side lengths of the image when $\triangle EFG$ is dilated using center $C$ and scale factor 2.'
         fill: [['$E''F'' =$', '6'], ['$E''G'' =$', '8'], ['$F''G'' =$', '10']]
         fill_cols: 3
         box_w: 0.9
@@ -30,14 +29,12 @@ sections:
     items:
       - n: 2
         minutes: 6
-        prompt: 'Dilate $\triangle EFG$ on the warm-up grid. Use center $C$ and scale factor 2. Label the image $\triangle E''F''G''$.'
+        prompt: 'Dilate $\triangle EFG$ on the warm-up grid using center $C$ and scale factor 2. Label the image $\triangle E''F''G''$.'
         answer: 'Red triangle on the warm-up grid. $E$ is over 1 and up 1 from $C$, so $E''$ is over 2 and up 2. In the same way, $F''$ is over 2 and up 8, and $G''$ is over 10 and up 2.'
         work: 0.5
       - n: 3
         minutes: 4
-        prompt:
-          - 'Measure $\triangle E''F''G''$. Count units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along $\overline{F''G''}$.'
-          - 'Then fill in the table.'
+        prompt: 'Measure $\triangle E''F''G''$. Count units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along $\overline{F''G''}$.'
         table:
           header: ['Ratio', '$\frac{E''F''}{EF}$', '$\frac{E''G''}{EG}$', '$\frac{F''G''}{FG}$']
           row_label: 'Value'
@@ -46,7 +43,7 @@ sections:
           height: 0.5
       - n: 4
         minutes: 3
-        prompt: 'Sum it up. Use Problem 3. Fill in each box.'
+        prompt: 'Use Problem 3.'
         frame:
           - ['When a figure is dilated with scale factor $k$, every side length is multiplied by', '$k$', '.']
           - ['Image length divided by original length equals', '$k$', '.']
@@ -64,7 +61,7 @@ sections:
         fig_w: 1.8
         parts:
           - label: a.
-            prompt: 'Is $\triangle P''Q''R''$ larger or smaller than $\triangle PQR$? Fill in each box.'
+            prompt: 'Is $\triangle P''Q''R''$ larger or smaller than $\triangle PQR$?'
             frame:
               - ['$\triangle P''Q''R''$ is', 'larger', '.']
               - ['I know because the scale factor 1.5 is', 'greater', ' than 1.']
@@ -138,7 +135,7 @@ practice:
   selected: [[1, 'A'], [2, 'D'], ['4a', '$\frac{3}{4}$'], ['4b', '4.5'], [5, 'roots $-1$, $-5$; vertex $(-3, -4)$']]
 
 plan: |
-  **Overview.** Second lesson of Unit 3. In 3.1 students dilated points (distance from the center times $k$). Today they measure an image and find that every side length, and the perimeter, is multiplied by $k$. Lesson 3.4 adds lines and angles.
+  **Overview.** Second lesson of Unit 3. 3.1: dilated points (distance from the center times $k$). Today: measure an image; every side length, and the perimeter, is multiplied by $k$. 3.4 adds lines and angles.
 
   **Objectives.** Students will be able to: (1) find image lengths from a scale factor; (2) find a scale factor from an image length and an original length; (3) tell from $k$ whether the image is larger or smaller. **Standards.** G-SRT.A.1b, G-SRT.A.2. SMP 5, 6, 8.
 
@@ -161,7 +158,6 @@ plan: |
   - Problem 3 (4 min): show the paper-strip move once. Students write the measured length on top of each ratio. Compare with the predictions from Problem 1.
   - Problem 4 (3 min) is the summary that leads into QuickNotes. For the perimeter box, students add the sides: 12 and 24.
   - MLL supports: labeled grid, short sentences, fill-in boxes on the warm-up, Problem 1, and Problem 4. Any language is fine for partner talk.
-  - Early finishers: start the practice problems.
 
   **QuickNotes (3 min).** Read each bullet against Problem 3. For the $0 < k < 1$ bullet, ask: "If $\overline{AB}$ is 8 cm and its image is 2 cm, what is $k$?" ($\frac{1}{4}$; watch for 4 or 6.)
 
@@ -171,3 +167,4 @@ guide_notes: |
   - Nov 16: trimmed to 40 minutes. Cut: the $k = 3$ warm-up ($FGH$; the $EFG$ drawing is the same move) and the $k = \frac{1}{2}$ partner item (the exit ticket and practice cover it).
   - Nov 16 (round 2): cut to 30 minutes. Cut: Kai's wrong-point warm-up (same "count from $C$" move as the $EFG$ drawing; the $EFG$ side count moved up to be the warm-up), CYU 1 (find $k$ from 8 cm and 2 cm; the Problem 3 ratio table does the same move, now a spoken QuickNotes question), the three length boxes in Problem 3 (same boxes as the Problem 1 prediction; the lengths go in the ratio table).
   - Nov 16 (round 2) practice cut: pentagon scale factor (Practice 4a finds $k$ the same way), dilate $ABCD$ from $D$ (repeats the handout drawing; Practice 3 is a harder drawing), SBA roots of $3x^2 + 5x + 2 = 0$ (Practice 5 also finds roots). 8 problems to 5.
+  - Nov 16 (round 3): cut extra instructions and flair.

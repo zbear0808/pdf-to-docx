@@ -2,8 +2,7 @@ id: 3.4
 title: Dilating lines and angles
 notes_title: Dilating lines and angles
 framing: >-
-  A dilation makes every length longer or shorter by the scale factor. Today's question: what does a dilation do
-  to the angles of a figure, and what does it do to lines?
+  Does a dilation change angle measures? Where does a line go after a dilation?
 materials: ruler
 
 sections:
@@ -15,11 +14,11 @@ sections:
         fig_w: 2.0
         parts:
           - label: a.
-            prompt: 'What do you think is true about the angles of $\triangle A''B''C''$ compared to the angles of $\triangle ABC$?'
+            prompt: 'How do the angles of $\triangle A''B''C''$ compare to the angles of $\triangle ABC$?'
             work: 0.5
             answer: 'Sample: they look the same. $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, $\angle C \cong \angle C''$. The image is bigger but has the same shape.'
           - label: b.
-            prompt: 'Do you think this is true for every dilation?'
+            prompt: 'Is this true for every dilation?'
             work: 0.4
             answer: 'Sample: yes, a dilation changes size, not shape.'
 
@@ -27,7 +26,7 @@ sections:
     items:
       - n: 1
         minutes: 3
-        prompt: 'Estimate each dilation. Use center $C$ for both. Label each image.'
+        prompt: 'Estimate each dilation using center $C$.'
         figure: 3.4_lines
         fig_w: 3.0
         parts:
@@ -41,7 +40,7 @@ sections:
             answer: '$C'' = C$ and $CE'' = 2CE$, so line $C''E''$ is line $CE$.'
       - n: 2
         minutes: 2
-        prompt: 'Look at your work in Problem 1. What happens when you dilate a line using a center that is ON the line? Fill in the box.'
+        prompt: 'What happens when you dilate a line using a center that is ON the line?'
         frame:
           - ['A line through the center of a dilation lands on', 'itself', '.']
 
@@ -50,7 +49,7 @@ sections:
       - n: 3
         id: jada_proof
         minutes: 10
-        prompt: 'Jada says each side of $\triangle ABC$ is parallel to its image in $\triangle A''B''C''$ (same dilation: center $P$, scale factor 2). Prove it for $\overline{BC}$.'
+        prompt: 'Each side of $\triangle ABC$ is parallel to its image in $\triangle A''B''C''$ (same dilation: center $P$, scale factor 2). Prove it for $\overline{BC}$.'
         figure: 3.4_proof
         fig_w: 1.8
         layout: stacked
@@ -64,7 +63,7 @@ sections:
             work: 0
             answer: '$E''$ is on ray $PB$, twice as far from $P$ as $E$.'
           - label: c.
-            prompt: 'Compare $\angle EBC$ and $\angle E''B''C''$. Then finish the proof. Fill in each box.'
+            prompt: 'Compare $\angle EBC$ and $\angle E''B''C''$. Then finish the proof.'
             frame:
               - ['$\angle E''B''C''$ is the image of $\angle EBC$, so the two angles are', 'congruent', '.']
               - ['In the {ref:jada_proof} figure, they are', 'corresponding', 'angles for the transversal $\overleftrightarrow{PB}$.', 1.4]
@@ -77,7 +76,7 @@ sections:
     items:
       - n: 1
         minutes: 5
-        prompt: '$\triangle ABC$ is dilated with center $D$ and scale factor 2. $m\angle ABC = 42^\circ$. Answer each question and give a reason.'
+        prompt: '$\triangle ABC$ is dilated with center $D$ and scale factor 2. $m\angle ABC = 42^\circ$. Give a reason for each answer.'
         figure: 3.4_cyu
         fig_w: 1.9
         parts:
@@ -113,7 +112,7 @@ practice:
           work: 0.8
           answer: '$21^\circ$. A dilation does not change angle measures.'
         - n: 2
-          prompt: 'Here is a diagram with 5 lines. Select **all** the lines that could be the image of line $m$ by a dilation.'
+          prompt: 'Select **all** the lines that could be the image of line $m$ by a dilation.'
           figure: 3.4_five_lines
           fig_w: 1.9
           layout: stacked
@@ -141,8 +140,8 @@ practice:
     - cells:
         - n: 5
           prompt:
-            - 'Here are some measurements for $\triangle ABC$ and $\triangle XYZ$: $\angle CAB$ and $\angle ZXY$ are both $30^\circ$, $AC$ and $XZ$ are both 3 units, and $CB$ and $ZY$ are both 2 units.'
-            - 'Clare says the triangles might not be congruent. Start from the $30^\circ$ angle and side $AC$ below. Sketch 2 triangles with these measurements that are NOT congruent. (Unit 2)'
+            - 'In $\triangle ABC$ and $\triangle XYZ$, $\angle CAB$ and $\angle ZXY$ are both $30^\circ$, $AC$ and $XZ$ are both 3 units, and $CB$ and $ZY$ are both 2 units.'
+            - 'Start from the $30^\circ$ angle and side $AC$ below. Sketch 2 triangles with these measurements that are NOT congruent. (Unit 2)'
           figure: 3.4_ssa
           fig_w: 2.3
           work: 0.3
@@ -156,7 +155,7 @@ practice:
   selected: [[1, '$21^\circ$'], [2, 'B, C, E'], [3, D], [4, '$\frac{1}{2}$'], [6, '$k = 7$']]
 
 plan: |
-  **Overview.** Lessons 3.1 and 3.3 set up dilations and showed lengths scale by $k$. Today: angles stay the same, and lines either stay put (through the center) or go to parallel lines. Lesson 3.5 uses the parallel result for the midsegment.
+  **Overview.** 3.1 and 3.3: dilations, lengths scale by $k$. Today: angles stay the same, and lines either stay put (through the center) or go to parallel lines. Lesson 3.5 uses the parallel result for the midsegment.
 
   **Objectives.** (1) Explain why corresponding angles in a dilation are congruent. (2) Explain what a dilation does to a line through the center and to a line not through the center. **Standards.** G-SRT.A.1a, G-SRT.A.2. SMP 3, 7.
 
@@ -176,7 +175,6 @@ plan: |
 
   **Partners (10 min).**
   - Problem 3 (10 min, 2 min share included): the key move is seeing $\overleftrightarrow{PB}$ as a transversal. Assessing: "Which line cuts both $\overline{BC}$ and $\overline{B'C'}$?" Advancing: "Does this work for $\overline{AC}$ too?" (Yes: the same steps with a point on $\overline{PC}$ or $\overline{PA}$ prove $\overline{AC} \parallel \overline{A'C'}$ and $\overline{AB} \parallel \overline{A'B'}$.)
-  - Early finishers: start the practice problems.
   - MLL supports: labeled figures, fill boxes on 2 and 3c; any language in talk. On the exit ticket, students can point to the QuickNotes bullet they used and name it in a few words.
 
   **QuickNotes (3 min).** Read together. Connect bullet 3 of LT 2 to a student's Problem 3.
@@ -189,3 +187,5 @@ guide_notes: |
   Nov 16 (round 2): cut to 30 minutes. Cut: Problem 1 parts a-b (two more points on line $AB$, same move as part c), the grid slope problem (shows the same "sides are parallel" fact the proof shows), the CYU (exit part b checks the same thing), and exit parts c-d (lengths scale by 2, Lesson 3.3 content). The proof is now Problem 3 and the exit ticket is 1.
 
   Practice cut: 9 to 6 problems. Cut the perimeter item (same 3.3 scale-factor review as the quadrilateral item), the proportion item (same ratio move), and the system SBA item. Kept angle measure, the five lines, find the center, scale factor of the quadrilateral, the SSA sketch, and the slope SBA item.
+
+  Nov 16 (round 3): cut extra instructions and flair.

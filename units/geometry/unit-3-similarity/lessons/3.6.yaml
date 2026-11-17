@@ -2,14 +2,13 @@ id: 3.6
 title: Similarity and transformations
 notes_title: Similarity and transformations
 framing: >-
-  Rigid motions make copies that are the same shape and the same size. Dilations make copies that are the same
-  shape but a new size. Today's question: when can we call two figures similar, and how do we write it?
+  When are two figures similar, and how do we write it?
 
 sections:
   - kind: warmup
     items:
       - minutes: 4
-        prompt: 'Lee says $GHFE$ is a dilation of $ADCB$ with center $P$. What is wrong? Fill in each box.'
+        prompt: 'Why is $GHFE$ not a dilation of $ADCB$ with center $P$?'
         figure: 3.6_warmup
         key_figure: 3.6_warmup_key
         fig_w: 2.6
@@ -17,7 +16,7 @@ sections:
           - ['$GH = 2 \cdot AD$, and $GE =$', '$1 \cdot AB$', '']
           - ['Every length should be multiplied by the', 'same', '']
         answer: '$GH$ was doubled but $GE$ was not, so $GHFE$ is not a square. Red dashed: the real image.'
-        work: 0
+        work: 0.6
         after: 0.06
 
   - kind: together
@@ -25,7 +24,7 @@ sections:
     items:
       - n: 1
         minutes: 5
-        prompt: 'Finish a sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$. Write each answer in its box.'
+        prompt: 'Finish a sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$.'
         figure: 3.6_together
         fig_w: 2.5
         fill:
@@ -58,7 +57,7 @@ sections:
             frame:
               - ['$\triangle EAB \sim \triangle$', '$TQR$', '']
           - label: c.
-            prompt: 'Your partner wrote two more statements. Is each one right or wrong?'
+            prompt: 'Is each statement right or wrong?'
             fill: [['$\triangle ABE \sim \triangle QRT$', 'right'], ['$\triangle EAB \sim \triangle RQT$', 'wrong']]
             fill_cols: 2
             box_w: 0.9
@@ -129,7 +128,7 @@ practice:
           answer: '[D] [A] and [B] are not our definition (and fail for some polygons). [C] describes congruent figures.'
           work: 0.1
         - n: 4
-          prompt: '$\triangle DEF$ is made by connecting the midpoints of the sides of $\triangle ABC$. The side lengths of $\triangle DEF$ are shown. What is $BC$?'
+          prompt: '$\triangle DEF$ is made by connecting the midpoints of the sides of $\triangle ABC$. What is $BC$?'
           figure: assets/3.6/prac4_midsegment.png
           fig_w: 1.6
           choices: ['3 units', '4 units', '6 units', '8 units']
@@ -149,7 +148,7 @@ practice:
   selected: [[1, 'translate, rotate, dilate by $\frac{2}{5}$'], [2, 'a. $\frac{5}{4}$  b. $\frac{4}{5}$'], [3, D], [5, '$k = 1$'], [6, '$m = 2$']]
 
 plan: |
-  **Overview.** Lessons 3.1-3.5 built dilations and showed they scale lengths and keep angles. Today we define similar with transformations (rigid motions and/or dilations) and write similarity statements. Lesson 3.7 uses this definition to reason about angles and sides; 3.9 shortens it to AA.
+  **Overview.** 3.1-3.5: dilations scale lengths and keep angles. Today: define similar with transformations (rigid motions and/or dilations) and write similarity statements. Lesson 3.7 uses this definition to reason about angles and sides; 3.9 shortens it to AA.
 
   **Objectives.** (1) Write a sequence of rigid motions and dilations that takes one figure onto another. (2) Write a similarity statement with the vertices in matching order. **Standards.** G-SRT.A.2, G-SRT.A.1b. SMP 3, 6.
 
@@ -169,7 +168,6 @@ plan: |
   **Together (5 min).** Read the framing box, then ask out loud (1 min, quick vote): "Can rigid motions alone move $\triangle ABC$ onto $\triangle DEF$?" (No: every side of $\triangle DEF$ is half as long, and rigid motions keep lengths.) Ask "what would we need to add to the move bank?" Problem 1 (4 min): do it on patty paper under the doc camera; trace, translate, rotate, then show that halving lands $B$ on $E$.
 
   **Partner work (10 min).** 1 min to get into pairs, then Problem 2 (about 9 min, including a 2 min share of 2c). 2a: pairs check all three ratios before writing $\frac{2}{5}$. 2c is the key talk: ask "which vertex does $E$ match? How do you know?"
-  - Early finishers: start the practice problems.
   - MLL supports: move bank with the four transformation words, fill-in boxes for every step, Problem 2b uses a sentence frame. Any language is fine for partner talk.
   - Watch for: students who write the statement in alphabetical order, or who name the scale factor upside down ($\frac{5}{2}$ instead of $\frac{2}{5}$).
 
@@ -185,5 +183,7 @@ guide_notes: |
   **Nov 16 (round 2, follow-up).** QuickNotes print inline (2-page handout). The exit ticket was "Similar figures are congruent" (must/could/can't), which the QuickNotes answered word for word; it is now a given pair ($\triangle JKL \sim \triangle XYZ$, $YZ = 6$) where students find $k$ from matching sides and decide if the triangles are congruent.
 
   **Practice cut:** 11 to 6 problems. Cut the right-angle, perimeter, center-$C$ dilation, and draw-a-dilation items (repeat "find or use $k$" from earlier lessons and practice 2) and the parallelogram review. Kept the squares sequence, $P$ and $Q$ scale factors both ways, the definition MC, the midsegment review, and both SBA items.
+
+  **Nov 16 (round 3):** cut extra instructions and flair.
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", or a home-language word for congruent. Accept answers that list the moves in a different valid order.

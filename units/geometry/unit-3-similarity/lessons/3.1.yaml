@@ -2,15 +2,14 @@ id: 3.1
 title: Dilations
 notes_title: Dilations
 framing: >-
-  A photo can be made bigger or smaller and still look right, or it can look stretched. Today's question: what
-  exactly happens to every point when we make a scaled copy?
+  What happens to every point when we make a scaled copy?
 materials: ruler
 
 sections:
   - kind: warmup
     items:
       - minutes: 4
-        prompt: 'Diego took a photo of a game controller (left). Then he made two edited copies, A (middle) and B (right). One copy is a scaled copy. The other copy is stretched.'
+        prompt: 'The photo on the left is the original. One edited copy, A (middle) or B (right), is a scaled copy. The other is stretched.'
         figure: assets/3.1/controllers.png
         fig_w: 4.6
         layout: stacked
@@ -22,7 +21,7 @@ sections:
             fill_cols: 2
             work: 0
           - label: b.
-            prompt: 'What could you measure to check? Name two lengths.'
+            prompt: 'Name two lengths you could measure to check.'
             fill: [['Length 1:', 'width'], ['Length 2:', 'height']]
             fill_cols: 2
             answer: 'Sample: the width and the height of the controller, or the size of a button. In B, the width and height both shrink to about 0.8 of the original. In A, the width stays the same but the height gets smaller.'
@@ -57,7 +56,7 @@ sections:
         answer: '$A$ is 1 right, 2 up from $P$, so $A''$ is 2 right, 4 up. Same for $B$ (3 right, 1 up, so $B''$ is 6 right, 2 up) and $C$ (2 right, 3 up, so $C''$ is 4 right, 6 up).'
       - n: 3
         minutes: 2
-        prompt: 'Use Problem 2. Fill in each box.'
+        prompt: 'Use Problem 2.'
         frame:
           - ['In Problem 2, the scale factor is 2, so $\triangle A''B''C''$ is', 'larger', 'than $\triangle ABC$.']
           - ['In Problem 2, each image point is on the ray from', '$P$', 'through the original point.']
@@ -69,7 +68,7 @@ sections:
     items:
       - n: 1
         minutes: 5
-        prompt: 'Dilate $\overline{ST}$ using center $P$ and scale factor $\frac{1}{3}$. Label the image $\overline{S''T''}$. Then fill in the boxes.'
+        prompt: 'Dilate $\overline{ST}$ using center $P$ and scale factor $\frac{1}{3}$. Label the image $\overline{S''T''}$.'
         figure: 3.1_exit
         fig_w: 2.2
         fill: [['$S''$ is this many units right of $P$:', '2'], ['$S''$ is this many units up from $P$:', '1']]
@@ -156,7 +155,7 @@ practice:
   selected: [[2, 'a. $\frac{3}{4}$  b. 4.5'], [4, 'a. 6  b. 20'], [5, 'rhombus, square, or kite'], [6, '$y = 5x + 17$']]
 
 plan: |
-  **Overview.** First lesson of Unit 3. Students already know rigid motions keep lengths the same. Today they meet a transformation that changes size: a dilation with a center and a scale factor. Lesson 3.3 measures what happens to lengths; Lesson 3.4 looks at lines and angles.
+  **Overview.** First lesson of Unit 3. Students know rigid motions keep lengths. Today: a dilation (center, scale factor) changes size. 3.3 measures lengths; 3.4 does lines and angles.
 
   **Objective.** I can dilate a figure given a scale factor and center. **Standards.** G-SRT.A.1, G-CO.A.2. SMP 5, 6.
 
@@ -172,9 +171,9 @@ plan: |
 
   **Warm-up (4 min).** B is the scaled copy. Push for "what would you measure": width, height, button size. Don't define scale factor yet; let "every length shrinks by the same amount" come from students.
 
-  **Together (4 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Ask: "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" Take answers out loud. This is the only reduction before the exit ticket, so make sure the class hears "closer to $C$".
+  **Together (4 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Ask: "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" Take answers out loud. Only reduction before the exit ticket: make sure the class hears "closer to $C$".
 
-  **Partner work (9 min).** Problem 2 (7 min): common error is counting from a vertex instead of from $P$. Ask: "Where did you start counting?" Problem 3 (2 min) sets up the QuickNotes. Before reading the QuickNotes, ask: "What would a scale factor less than 1 do?" (the reduction bullet answers it). MLL support: Problem 3 is a frame with labeled boxes; the steps in Problem 2 are short and numbered. Early finishers: start the practice problems.
+  **Partner work (9 min).** Problem 2 (7 min): common error is counting from a vertex instead of from $P$. Ask: "Where did you start counting?" Problem 3 (2 min) sets up the QuickNotes. Before reading the QuickNotes, ask: "What would a scale factor less than 1 do?" (the reduction bullet answers it). MLL support: Problem 3 is a frame with labeled boxes; the steps in Problem 2 are short and numbered.
 
   **QuickNotes (3 min).** Printed. Connect enlargement to Problem 2 and reduction to the Together question.
 
@@ -186,3 +185,5 @@ guide_notes: |
   Nov 16 (round 2): cut to 30 minutes. Cut: the quadrilateral reduction (the exit ticket checks reductions), the frame row that referred to it, and the CYU multiple-choice item (the exit ticket checks the same "k times as far from the center" idea; now an oral question). Now: warm-up, Problem 1, partner 2-3, exit 1.
 
   Practice cut: 9 to 6 problems. Cut: old #5 rotational-symmetry MC (old #6, now #5, is also quadrilateral symmetry and is harder), old #7 parallel-lines angles (spiral, not needed tonight), old #8 SBA recipe (proportion skill is in #2b and #4), and parts b and d of #4 (repeat a and c with new numbers).
+
+  Nov 16 (round 3): cut extra instructions and flair.

@@ -2,15 +2,14 @@ id: 3.5
 title: The midsegment of a triangle
 notes_title: The midsegment of a triangle
 framing: >-
-  Connect the midpoints of two sides of a triangle. Today's question: how is that segment related to the third
-  side, and how can a dilation prove it?
+  How is the segment joining the midpoints of two sides of a triangle related to the third side?
 materials: ruler
 
 sections:
   - kind: warmup
     items:
       - minutes: 3
-        prompt: 'Here is $\triangle ABC$ with midpoints $L$, $M$, and $N$. What do you notice? What do you wonder?'
+        prompt: '$\triangle ABC$ has midpoints $L$, $M$, and $N$. What do you notice? What do you wonder?'
         figure: 3.5_midpoints
         fig_w: 2.0
         work: 0
@@ -28,7 +27,7 @@ sections:
       - n: 1
         id: proof
         minutes: 4
-        prompt: '$M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$. Prove that $BC = 2MN$. Fill in each box.'
+        prompt: '$M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$. Prove that $BC = 2MN$.'
         figure: 3.5_amn_plain
         fig_w: 2.0
         frame:
@@ -40,7 +39,7 @@ sections:
     items:
       - n: 2
         minutes: 4
-        prompt: 'What else must be true, now that $\triangle ABC$ is a dilation of $\triangle AMN$? Fill in each box. Then mark the parallel segments and the congruent angles on the figure.'
+        prompt: '$\triangle ABC$ is a dilation of $\triangle AMN$. What else must be true? Mark the parallel segments and the congruent angles on the figure.'
         frame:
           - ['A dilation takes a line to a', 'parallel', 'line, so $\overline{MN} \parallel \overline{BC}$.']
           - ['A dilation keeps angle measures, so $\angle AMN \cong$', '$\angle ABC$', '.']
@@ -82,14 +81,14 @@ practice:
   rows:
     - cells:
         - n: 1
-          prompt: 'Here are $\triangle ABC$ and $\triangle A''B''C$. What is the measure of $\angle A''B''C$?'
+          prompt: 'What is the measure of $\angle A''B''C$?'
           figure: assets/3.5/prac1_angle.png
           fig_w: 2.4
           choices: ['$20^\circ$', '$40^\circ$', '$60^\circ$', '$80^\circ$']
           answer: ['[B] $\frac{CB''}{CB} = \frac{6}{9} = \frac{2}{3}$ and $\frac{CA''}{CA} = \frac{4}{6} = \frac{2}{3}$.', 'A dilation from $C$ keeps angles: $\angle A''B''C = \angle ABC$.']
           work: 0.1
         - n: 2
-          prompt: '$\triangle DEF$ is made by connecting the midpoints of the sides of $\triangle ABC$. The side lengths of $\triangle DEF$ are shown. What is the length of $AB$?'
+          prompt: '$\triangle DEF$ is made by connecting the midpoints of the sides of $\triangle ABC$. What is the length of $AB$?'
           figure: assets/3.5/prac2_midpoints.png
           fig_w: 2.4
           fill: [['$AB =$', '6']]
@@ -97,7 +96,7 @@ practice:
           work: 0.3
     - cells:
         - n: 3
-          prompt: 'Here are lines $\ell$ and $m$. Draw 2 lines that could be the image of line $m$ after a dilation. Label them $n$ and $p$. (From Lesson 3.4)'
+          prompt: 'Draw 2 lines that could be the image of line $m$ after a dilation. Label them $n$ and $p$. (From Lesson 3.4)'
           figure: 3.5_lines
           fig_w: 1.8
           answer: 'Any 2 lines parallel to $m$ (line $m$ itself also works if the center is on $m$).'
@@ -112,7 +111,7 @@ practice:
     - page_break_before: true
       cells:
         - n: 5
-          prompt: 'Here are polygons $VWXYZ$ and $ABCDE$. Is $ABCDE$ a dilation of $VWXYZ$? Explain your reasoning.'
+          prompt: 'Is polygon $ABCDE$ a dilation of polygon $VWXYZ$? Explain how you know.'
           figure: assets/3.5/prac5_polygons.png
           fig_w: 3.2
           answer: 'No. A dilation multiplies every side by the same scale factor. $AB = \frac{1}{2} VW$, $BC = \frac{1}{2} WX$, $CD = \frac{1}{2} XY$, $DE = \frac{1}{2} YZ$, but $AE = 10$ is not $\frac{1}{2} \cdot 12 = 6$.'
@@ -127,7 +126,7 @@ practice:
   selected: [[1, B], [5, 'No: $VZ \neq 2AE$'], [6, '8 cans of white paint']]
 
 plan: |
-  **Overview.** Students used dilations of lines and angles in Lesson 3.4. Today they use one dilation (center $A$, scale factor 2) to prove the midsegment is parallel to the third side and half as long, then see the same idea for any fraction ($\frac{2}{3}$). Lesson 3.6 moves to similarity. Lesson 3.11 picks up the side splitter with parallel lines (Math Medic 6.5 street map).
+  **Overview.** 3.4: dilations of lines and angles. Today: one dilation (center $A$, scale factor 2) to prove the midsegment is parallel to the third side and half as long, then see the same idea for any fraction ($\frac{2}{3}$). Lesson 3.6 moves to similarity. Lesson 3.11 picks up the side splitter with parallel lines (Math Medic 6.5 street map).
 
   **Objective.** Students will be able to explain why the segment joining the midpoints of two sides of a triangle is parallel to the third side and half as long. **Standards.** G-SRT.A.1, G-SRT.B.4 (midsegment case). SMP 3, 7.
 
@@ -148,7 +147,6 @@ plan: |
   **Partner work (9 min).**
   - Problem 2 first (4 min). Students mark the Problem 2 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
   - {ref:two_thirds} (3 min, then a 1 min share): ask "Which dilation takes $B$ to $M$? Is $\triangle AMN$ bigger or smaller than $\triangle ABC$?" Common error: $MN = \frac{3}{2} \cdot 9$. {ref:two_thirds} is the example for the QuickNotes theorem. 1 min slack.
-  - Early finishers: start the practice problems.
   - MLL supports: Problems 1 and 2 are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
 
   **QuickNotes (3 min).** Read the bullets; point to Problem 1 for "$BC = 2MN$" and {ref:two_thirds} for the theorem.
@@ -161,3 +159,5 @@ guide_notes: |
   Nov 16 (round 2): cut to 30 minutes. Cut: the separate "find the center and scale factor" item (folded into the first box of the Problem 1 proof frame), the scale-factor part of {ref:two_thirds} (the third "find the scale factor" in a row), and the CYU midsegment algebra item (the exit ticket checks the same length fact). Removed the page break before the partner section.
 
   Practice cut: old 3 (angle under a dilation, the same skill as practice 1) and old 8 (SBA one-step equation); 8 problems down to 6, renumbered.
+
+  Nov 16 (round 3): cut extra instructions and flair.
