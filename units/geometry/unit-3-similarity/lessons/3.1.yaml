@@ -9,7 +9,7 @@ materials: ruler
 sections:
   - kind: warmup
     items:
-      - minutes: 5
+      - minutes: 4
         prompt: 'Diego took a photo of a game controller (left). Then he made two edited copies, A (middle) and B (right). One copy is a scaled copy. The other copy is stretched.'
         figure: assets/3.1/controllers.png
         fig_w: 4.6
@@ -56,38 +56,18 @@ sections:
         work: 0
         answer: '$A$ is 1 right, 2 up from $P$, so $A''$ is 2 right, 4 up. Same for $B$ (3 right, 1 up, so $B''$ is 6 right, 2 up) and $C$ (2 right, 3 up, so $C''$ is 4 right, 6 up).'
       - n: 3
-        minutes: 6
-        prompt:
-          - 'Dilate quadrilateral $DEFG$ using center $P$ and scale factor $\frac{1}{2}$.'
-          - 'Use the same steps as Problem 2, but go half as far from $P$. Label the image $D''E''F''G''$.'
-        figure: 3.1_p4
-        fig_w: 2.8
-        work: 0
-        answer: '$D$ is 6 right, 4 up from $P$, so $D''$ is 3 right, 2 up. $E''$: 4 right, 2 up. $F''$: 4 right, 4 up. $G''$: 2 right, 4 up.'
-      - n: 4
-        minutes: 4
-        prompt: 'Compare Problems 2 and 3. Fill in each box.'
+        minutes: 2
+        prompt: 'Use Problem 2. Fill in each box.'
         frame:
           - ['In Problem 2, the scale factor is 2, so $\triangle A''B''C''$ is', 'larger', 'than $\triangle ABC$.']
-          - ['In Problem 3, the scale factor is $\frac{1}{2}$, so $D''E''F''G''$ is', 'smaller', 'than $DEFG$.']
-          - ['In both problems, each image point is on the ray from', '$P$', 'through the original point.']
-          - ['A scale factor less than 1 moves each point', 'closer to', 'the center.', 1.4]
-        page_break_after: true
+          - ['In Problem 2, each image point is on the ray from', '$P$', 'through the original point.']
 
   - kind: notes
+    new_page: false
 
-  - kind: cyu
-    items:
-      - n: 1
-        minutes: 2
-        prompt: '$Q''$ is the image of $Q$ after a dilation with center $O$ and scale factor 3. $OQ = 5$ cm. Find $OQ''$.'
-        choices: ['8 cm', '$\frac{5}{3}$ cm', '15 cm', '10 cm']
-        choice_cols: 4
-        answer: '[C] $3 \times 5 = 15$. (8: added 3. $\frac{5}{3}$: divided by 3. 10: that is $QQ''$, the distance from $Q$ to $Q''$.)'
-        work: 0.1
   - kind: exit
     items:
-      - n: 2
+      - n: 1
         minutes: 5
         prompt: 'Dilate $\overline{ST}$ using center $P$ and scale factor $\frac{1}{3}$. Label the image $\overline{S''T''}$. Then fill in the boxes.'
         figure: 3.1_exit
@@ -155,79 +135,54 @@ practice:
               answer: '$x = 15 \cdot \frac{2}{5} = 6$'
               work: 0.45
             - label: b.
-              prompt: '$\frac{4}{3} = \frac{x}{7}$'
-              fill: [['$x =$', '$\frac{28}{3}$']]
-              answer: '$x = 7 \cdot \frac{4}{3} = \frac{28}{3}$'
-              work: 0.45
-            - label: c.
               prompt: '$\frac{7}{5} = \frac{28}{x}$'
               fill: [['$x =$', '20']]
               answer: '$7x = 140$, so $x = 20$'
               work: 0.45
-            - label: d.
-              prompt: '$\frac{11}{4} = \frac{5}{x}$'
-              fill: [['$x =$', '$\frac{20}{11}$']]
-              answer: '$11x = 20$, so $x = \frac{20}{11}$'
-              work: 0.45
     - page_break_before: true
       cells:
         - n: 5
-          prompt: 'Which shape always has $180^\circ$ rotational symmetry?'
-          choices: ['rhombus', 'right trapezoid', 'isosceles trapezoid', 'kite']
-          choice_cols: 2
-          answer: '[A] rhombus. A $180^\circ$ rotation around the point where its diagonals meet takes it onto itself.'
-          work: 0.1
-        - n: 6
           prompt: 'Name a type of quadrilateral where a diagonal is also a line of symmetry. Explain how you know.'
           fill: [['Quadrilateral:', 'rhombus']]
           box_w: 1.4
           answer: 'Sample: rhombus $ABCD$ with diagonal $AC$. $AB = AD$, $CB = CD$, and $AC = AC$, so $\triangle ABC \cong \triangle ADC$ by SSS. $A$ and $C$ are each the same distance from $B$ and $D$, so $\overleftrightarrow{AC}$ is the perpendicular bisector of $\overline{BD}$. Reflecting across $\overleftrightarrow{AC}$ swaps $B$ and $D$ and keeps $A$ and $C$, so it takes the rhombus onto itself. Also accept square or kite.'
           work: 1.3
-    - cells:
-        - n: 7
-          prompt: 'Lines $f$ and $g$ are parallel. List **all** the other angles that are congruent to $\angle 1$.'
-          figure: assets/3.1/prac_parallel_fg.jpeg
-          fig_w: 1.8
-          fill: [['Angles:', '4, 5, 8']]
-          box_w: 1.4
-          answer: '$\angle 4$ (vertical angles), $\angle 5$ (corresponding angles), and $\angle 8$ (vertical to $\angle 5$).'
-          work: 0.1
     - heading: SBA review
       cells:
-        - n: 8
-          prompt: 'A recipe uses 3 eggs and 4 cups of flour to make 12 cupcakes. How many eggs do you need to make 36 cupcakes?'
-          work: 1.3
-          answer: ['36 cupcakes is $36 \div 12 = 3$ batches.', '$3 \times 3 = 9$ eggs']
-        - n: 9
+        - n: 6
           prompt: 'Write an equation of the line through $(-4, -3)$ and $(-1, 12)$.'
           work: 1.3
           answer: ['slope $= \frac{12 - (-3)}{-1 - (-4)} = \frac{15}{3} = 5$', '$-3 = 5(-4) + b$, so $b = 17$', '$y = 5x + 17$']
-  selected: [[2, 'a. $\frac{3}{4}$  b. 4.5'], [4, 'a. 6  b. $\frac{28}{3}$  c. 20  d. $\frac{20}{11}$'], [6, 'rhombus, square, or kite'], [7, '4, 5, 8'], [8, 9 eggs], [9, '$y = 5x + 17$']]
+  selected: [[2, 'a. $\frac{3}{4}$  b. 4.5'], [4, 'a. 6  b. 20'], [5, 'rhombus, square, or kite'], [6, '$y = 5x + 17$']]
 
 plan: |
   **Overview.** First lesson of Unit 3. Students already know rigid motions keep lengths the same. Today they meet a transformation that changes size: a dilation with a center and a scale factor. Lesson 3.3 measures what happens to lengths; Lesson 3.4 looks at lines and angles.
 
   **Objective.** I can dilate a figure given a scale factor and center. **Standards.** G-SRT.A.1, G-CO.A.2. SMP 5, 6.
 
-  **Quick look (40 min).**
+  **Quick look (30 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-5 | Warm-up: controllers | Students, 1 min share |
-  | 5-9 | Together: Problem 1 | Teacher + class |
-  | 9-26 | With a partner: Problems 2-4 | Students (pairs) |
-  | 26-30 | QuickNotes | Teacher + class |
-  | 30-37 | CYU 1 and exit ticket 2 | Students (individual) |
-  | 37-40 | Collect exit ticket, assign practice | Teacher |
+  | 0-4 | Warm-up: controllers | Students, 1 min share |
+  | 4-8 | Together: Problem 1 | Teacher + class |
+  | 8-17 | With a partner: Problems 2-3 | Students (pairs) |
+  | 17-20 | QuickNotes | Teacher + class |
+  | 20-27 | Exit ticket 1 (5 min + hand out, 1 min spare) | Students (individual) |
+  | 27-30 | Collect exit ticket, assign practice | Teacher |
 
-  **Warm-up.** B is the scaled copy. Push for "what would you measure": width, height, button size. Don't define scale factor yet; let "every length shrinks by the same amount" come from students.
+  **Warm-up (4 min).** B is the scaled copy. Push for "what would you measure": width, height, button size. Don't define scale factor yet; let "every length shrinks by the same amount" come from students.
 
-  **Together (4 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Ask: "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" (oral only; Problem 3 does a reduction on paper).
+  **Together (4 min, doc camera).** Read the definition above Problem 1. Problem 1: draw the ray from $C$ through $H$, count 2 right 1 up three times. Ask: "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" Take answers out loud. This is the only reduction before the exit ticket, so make sure the class hears "closer to $C$".
 
-  **Partner work (17 min).** Problems 2-3 use the same steps. Common error: counting from $D$ instead of from $P$. Ask: "Where did you start counting?" Problem 4 sets up the QuickNotes. MLL support: Problem 4 is a frame with labeled boxes; the steps in Problem 2 are short and numbered. Early finishers: $FG = 12$ and its image $F'G' = 18$. What is the scale factor? (Lesson 3.3 picks this up.)
+  **Partner work (9 min).** Problem 2 (7 min): common error is counting from a vertex instead of from $P$. Ask: "Where did you start counting?" Problem 3 (2 min) sets up the QuickNotes. Before reading the QuickNotes, ask: "What would a scale factor less than 1 do?" (the reduction bullet answers it). MLL support: Problem 3 is a frame with labeled boxes; the steps in Problem 2 are short and numbered. Early finishers: (1) dilate quadrilateral $DEFG$ with center $P$ and $k = \frac{1}{2}$ (old Problem 3, figure 3.1_p4); (2) $FG = 12$ and its image $F'G' = 18$. What is the scale factor?
 
-  **QuickNotes (4 min).** Printed. Connect enlargement to Problem 2 and reduction to Problem 3.
+  **QuickNotes (3 min).** Printed. Connect enlargement to Problem 2 and reduction to the Together question.
 
-  **CYU and exit (7 min).** CYU 1 distractors show adding, dividing, or finding $QQ'$. The exit ticket shows whether students count from the center.
+  **Exit (5 min).** The exit ticket is a reduction ($k = \frac{1}{3}$) and shows whether students count from the center. If time is left, ask the old CYU orally: $OQ = 5$ cm, $k = 3$, find $OQ'$ (15 cm; watch for 8, $\frac{5}{3}$, or 10).
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: Together 2 (dilate $K$, $k = \frac{3}{4}$; same move as Problem 1 with new numbers, and Problem 3 and the exit ticket do reductions) and the old CYU 1 scale-factor table (practice #2a and Lesson 3.3 cover finding $k$ from lengths; now an early-finisher question). Renumbered: partner 2-4, CYU 1, exit 2. Title is now the lesson topic.
+  Nov 16: trimmed to 40 minutes. Cut: Together 2 (dilate $K$, $k = \frac{3}{4}$; same move as Problem 1 with new numbers) and the old CYU 1 scale-factor table (practice #2a and Lesson 3.3 cover finding $k$ from lengths; now an early-finisher question). Title is now the lesson topic.
+
+  Nov 16 (round 2): cut to 30 minutes. Cut: the quadrilateral reduction (now an early-finisher extension; the exit ticket checks reductions), the frame row that referred to it, and the CYU multiple-choice item (the exit ticket checks the same "k times as far from the center" idea; now an oral question). Now: warm-up, Problem 1, partner 2-3, exit 1.
+
+  Practice cut: 9 to 6 problems. Cut: old #5 rotational-symmetry MC (old #6, now #5, is also quadrilateral symmetry and is harder), old #7 parallel-lines angles (spiral, not needed tonight), old #8 SBA recipe (proportion skill is in #2b and #4), and parts b and d of #4 (repeat a and c with new numbers).

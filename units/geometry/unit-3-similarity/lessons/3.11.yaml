@@ -11,54 +11,46 @@ notes_fig_w: 1.2
 sections:
   - kind: warmup
     items:
-      - minutes: 4
+      - minutes: 3
         prompt: '$\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$. What do you notice? What do you wonder?'
         figure: 3.11_warmup
-        fig_w: 2.0
+        fig_w: 1.5
         work: 0
         after: 0.04
         columns:
           headers: [I notice..., I wonder...]
           italic: true
+          height: 0.7
           answers:
             - ['$M$ is on $\overline{AB}$ and $N$ is on $\overline{BC}$.', 'There is a small triangle $MBN$ inside $\triangle ABC$.']
             - ['Are $\triangle MBN$ and $\triangle ABC$ similar?', 'Is $\overline{MN}$ a dilation of $\overline{AC}$ from $B$?']
 
   - kind: together
-    items:
-      - n: 1
-        minutes: 6
-        prompt: '$\overline{BD} \parallel \overline{FG}$, $EG = 12$, and $EB = 2.5$. Find $ED$ and $EF$. Show your work.'
-        figure: 3.11_t2
-        fig_w: 2.4
-        work: 1.8
-        fill: [['$ED =$', '4'], ['$EF =$', '7.5']]
-        box_w: 0.9
-        answer: '$\triangle EBD \sim \triangle EFG$ (AA). Scale factor: $15 \div 5 = 3$. $ED = 12 \div 3 = 4$ and $EF = 2.5 \times 3 = 7.5$.'
-
-  - kind: partner
     intro: 'Two roads leave the library ($L$): Oak Ave. and Lincoln Rd. Maple St. and Chestnut St. are parallel.'
     items:
-      - n: 2
+      - n: 1
         id: map_aa
         minutes: 4
         prompt: 'On the map, mark the congruent angles. Then fill in each box.'
         figure: 3.11_map
-        fig_w: 2.8
+        fig_w: 2.4
         work: 0
         after: 0.06
         frame:
           - ['The small and large triangles share', '$\angle L$', '.']
           - ['$\angle LPA$ and $\angle LQB$ are', 'corresponding', 'angles.']
           - ['So $\triangle LPA \sim$', '$\triangle LQB$', 'by AA.']
-      - n: 3
+
+  - kind: partner
+    items:
+      - n: 2
         minutes: 4
         prompt: 'How far do you walk on Oak Ave. from the library to Chestnut St.? Use the similar triangles from {ref:map_aa}. Show your work.'
-        work: 0.9
+        work: 0.7
         fill: [['$LB =$', '2000 ft']]
         box_w: 1.1
         answer: 'Scale factor: $LQ \div LP = 1500 \div 900 = \frac{5}{3}$. $LB = 1200 \cdot \frac{5}{3} = 2000$ ft.'
-      - n: 4
+      - n: 3
         minutes: 4
         prompt: 'Compare the parts of each road between the streets.'
         parts:
@@ -67,29 +59,16 @@ sections:
             fill: [['$AB =$', '800 ft']]
             box_w: 1.1
             answer: '$2000 - 1200 = 800$ ft'
-            work: 0.3
+            work: 0.2
           - label: b.
             prompt: 'Write each ratio as a decimal.'
             fill: [['Lincoln Rd.: $LP \div PQ =$', '1.5'], ['Oak Ave.: $LA \div AB =$', '1.5']]
             fill_cols: 2
             box_w: 0.9
             work: 0
-          - label: c.
-            prompt: 'Fill in the box.'
-            frame:
-              - ['Maple St. splits Lincoln Rd. and Oak Ave. into parts with', 'the same', 'ratio.']
-            work: 0
-      - n: 5
-        minutes: 4
-        prompt: 'A bike path crosses Lincoln Rd. 300 ft from the library. It crosses Oak Ave. 450 ft from the library. Is the bike path parallel to Maple St.? Fill in each box.'
-        after: 0.04
-        frame:
-          - ['On Lincoln Rd.: $300 \div 900 =$', '$\frac{1}{3}$', '.']
-          - ['On Oak Ave.: $450 \div 1200 =$', '$\frac{3}{8}$', '.']
-          - ['The two ratios are', 'not equal', '.']
-          - ['So the bike path', 'is not', 'parallel to Maple St.']
 
   - kind: notes
+    new_page: false
 
   - kind: exit
     items:
@@ -139,14 +118,6 @@ practice:
           answer: '$AD \div DB = 4 \div 2 = 2$, but $AE \div EC = 9 \div 5 = 1.8$. The sides are not split proportionally, so $\overline{DE}$ is not parallel to $\overline{BC}$ (converse of the side splitter theorem).'
     - cells:
         - n: 3
-          prompt: '$\overline{MN} \parallel \overline{XZ}$. Find $NZ$ and $XZ$.'
-          figure: 3.11_p3
-          fig_w: 1.9
-          work: 1.1
-          fill: [['$NZ =$', '3'], ['$XZ =$', '12']]
-          box_w: 0.9
-          answer: '$YX = 10$, so the scale factor is $10 \div 5 = 2$. $YZ = 3 \times 2 = 6$, so $NZ = 3$. $XZ = 6 \times 2 = 12$.'
-        - n: 4
           prompt: 'In right $\triangle ABC$, $AC = 4$ and $BC = 5$. $D$ and $E$ are the midpoints of $\overline{AC}$ and $\overline{BC}$. Area of a triangle $= \frac{bh}{2}$.'
           figure: 3.11_p4
           fig_w: 1.5
@@ -164,9 +135,7 @@ practice:
               prompt: 'The sides of $\triangle DEC$ are $\frac{1}{2}$ as long as the sides of $\triangle ABC$. Is its area also $\frac{1}{2}$ as large? Explain.'
               answer: 'No. $2.5 \div 10 = \frac{1}{4}$. The area scales by $\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$.'
               work: 1.0
-    - page_break_before: true
-      cells:
-        - n: 5
+        - n: 4
           prompt: 'Use the two triangles.'
           figure: 3.11_p5
           fig_w: 2.4
@@ -180,64 +149,50 @@ practice:
               prompt: 'If possible, find $EF$. If not, explain why not.'
               answer: '$DE$ matches $AB$: scale factor $12 \div 9 = \frac{4}{3}$. $EF$ matches $BC$: $EF = 12 \cdot \frac{4}{3} = 16$.'
               work: 1.0
-        - n: 6
-          prompt: 'Find $DF$. The triangles are not drawn to scale.'
-          figure: 3.11_p6
-          fig_w: 2.7
-          layout: stacked
-          work: 1.3
-          answer: ['$\angle A \cong \angle D$ and $\angle B \cong \angle F$, so $\triangle ABC \sim \triangle DFE$ (AA).', '$DE$ matches $AC$: scale factor $8 \div 2 = 4$. $DF$ matches $AB$: $DF = 4 \times 4 = 16$.']
-    - cells:
-        - n: 7
-          prompt: 'Which statement is true?'
-          choices: ['If 1 pair of angles is congruent, the triangles are similar.', 'If 1 pair of sides is congruent, the triangles are similar.', 'If 2 pairs of angles are congruent, the triangles are similar.', 'If 2 pairs of sides are congruent, the triangles are similar.']
-          work: 0.1
-          answer: '[C] Angle-Angle (AA) similarity.'
-        - n: 8
-          prompt: '$\triangle ABC$ is dilated onto $\triangle A''B''C''$. Select **all** the scale factors that make the image smaller than $\triangle ABC$.'
-          choices: ['$\frac{1}{2}$', '$\frac{8}{9}$', '$1$', '$\frac{3}{2}$', '$2$']
-          choice_cols: 3
-          work: 0.1
-          answer: '[A], [B]. A scale factor between 0 and 1 shrinks the figure.'
     - heading: SBA review
       cells:
-        - n: 9
+        - n: 5
           prompt: 'The slope of the line through $(k, 12)$ and $(6, 4)$ is $-2$. Find $k$.'
           work: 1.2
           answer: ['$\frac{4 - 12}{6 - k} = -2$', '$-8 = -2(6 - k)$, so $6 - k = 4$', '$k = 2$']
-        - n: 10
+        - n: 6
           prompt: 'A lemonade recipe uses 4 cups of water and 2 cups of lemon juice to make 6 cups of lemonade. How many cups of lemon juice do you need for 30 cups of lemonade?'
           work: 1.2
           answer: ['$30 \div 6 = 5$ batches', '$5 \times 2 = 10$ cups of lemon juice']
-  selected: [[1, 'a. 7.5, b. 3.5'], [3, 'NZ = 3, XZ = 12'], [4, 'a. 10, b. 2.5, c. No, 1/4'], [5, 'b. 16'], [6, '16'], [8, 'A, B'], [9, 'k = 2'], [10, '10 cups']]
+  selected: [[1, 'a. 7.5, b. 3.5'], [3, 'a. 10, b. 2.5, c. No, 1/4'], [4, 'b. 16'], [5, 'k = 2'], [6, '10 cups']]
 
 plan: |
   **Overview.** Second lesson on splitting triangle sides. Lesson 3.5 did the midsegment (k = 1/2). Today any segment parallel to one side makes a similar triangle (AA), and the sides split proportionally. The converse tests for parallel lines. Lesson 3.13 uses similar triangles inside a right triangle.
 
   **Objectives.** Students will be able to: (1) explain with AA why a segment parallel to one side of a triangle makes a similar triangle; (2) use the side splitter theorem and its converse to find lengths and test for parallel lines. **Standards.** G-SRT.B.4, G-SRT.B.5. SMP 3, 7.
 
-  **Quick look (40 min).**
+  **Quick look (30 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up (notice and wonder) | Students, 1 min share |
-  | 4-10 | Together: Problem 1 | Teacher + class |
-  | 10-26 | With a partner: Problems 2-5 (street map) | Students (pairs) |
-  | 26-30 | QuickNotes | Teacher + class |
-  | 30-35 | Exit ticket 1 | Students (individual) |
-  | 35-40 | Collect exit ticket, assign practice, transitions | Teacher |
+  | 0-3 | Warm-up (notice and wonder) | Students, 1 min share |
+  | 3-7 | Together: Problem 1 (street map, AA) | Teacher + class |
+  | 7-15 | With a partner: Problems 2-3 | Students (pairs) |
+  | 15-19 | QuickNotes (+ converse question out loud) | Teacher + class |
+  | 19-24 | Exit ticket 1 | Students (individual) |
+  | 24-30 | Collect exit ticket, assign practice, transitions, buffer | Teacher |
 
-  **Together (6 min, doc camera).** Start from the warm-up wonder "Are the triangles similar?" On the warm-up figure, ask "Which angle is in both triangles?" then "Which lines are parallel? What does that give us?" (AA). Then Problem 1: name $\triangle EBD \sim \triangle EFG$ the same way, find the scale factor from the two parallel sides first ($15 \div 5$), then use it both ways (divide for $ED$, multiply for $EF$).
+  **Warm-up (3 min).** Two minutes to write, then take one notice and the wonder "Are the triangles similar?"
 
-  **Partner work (16 min).** The street map is from Math Medic 6.5 with new streets and numbers.
-  - Problem 2: students mark arcs on the map before they fill in the boxes.
-  - Problem 3: watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
-  - Problem 4 sets up the theorem; Problem 5 is the converse. If time is short, do Problem 5 in the QuickNotes.
-  - MLL supports: frames on Problems 2 and 5; street names stay on the map; any language in pair talk.
-  - Early finishers (on the board, not the handout): right triangle with legs $DA = 3$ and $DB = 4$, $\overline{AB} \parallel \overline{EF}$, $E$ on ray $DA$ with $DE = 7.5$, $F$ on ray $DB$. Find $AB$, $DF$, $EF$ (5, 10, 12.5).
+  **Together (4 min, doc camera).** The street map is from Math Medic 6.5 with new streets and numbers. Problem 1: answer the warm-up wonder on the map. Ask "Which angle is in both triangles?" then "Which lines are parallel? What does that give us?" Mark the arcs together, then fill the boxes.
 
-  **QuickNotes (4 min).** Read the two theorems. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
+  **Partner work (8 min).**
+  - Problem 2: find the scale factor from the two roads first ($LQ \div LP$). Watch for $1200 \cdot \frac{600}{900}$ (using a piece instead of the whole road $LQ = 1500$). Ask: "Which triangle has Chestnut St. as a side?"
+  - Problem 3 sets up the theorem: both roads split in the same ratio (1.5). Ask pairs to say it in a sentence before the QuickNotes, which print right under it.
+  - MLL supports: frame on Problem 1; street names stay on the map; any language in pair talk.
+  - Early finishers (on the board, not the handout): $\overline{BD} \parallel \overline{FG}$, $BD = 5$, $FG = 15$, $EG = 12$, $EB = 2.5$. Find $ED$ and $EF$ (4, 7.5). Or: right triangle with legs $DA = 3$ and $DB = 4$, $\overline{AB} \parallel \overline{EF}$, $DE = 7.5$. Find $AB$, $DF$, $EF$ (5, 10, 12.5).
+
+  **QuickNotes (4 min).** Read the two theorems. For the converse, ask out loud: "A bike path crosses Lincoln Rd. 300 ft from the library and Oak Ave. 450 ft from the library. Is it parallel to Maple St.?" ($300 \div 900 = \frac{1}{3}$, $450 \div 1200 = \frac{3}{8}$, not equal, so no.) Practice 2 is the written converse item. Point at the last bullet: the parallel segment matches the whole side, not a piece. This is the exit ticket error.
 
   **Exit ticket (5 min).** Checks whether students add the pieces ($BC = 4 + 6$) before scaling.
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes and retitled "The side splitter theorem" (was "The road back home"). Cut: old Together 1 (AA frame on the warm-up figure; Problem 2 does the same frame on the map, and its questions are now asked out loud before Problem 1) and old CYU 1 (the exit ticket checks the same scale-factor move; practice 1 and 3 cover it; now an early-finisher extension in the plan). Old Problems 2-6 are now 1-5; the exit ticket is 1.
+  Nov 16: trimmed to 40 minutes and retitled "The side splitter theorem" (was "The road back home"). Cut: old Together 1 (AA frame on the warm-up figure) and old CYU 1 (the exit ticket checks the same scale-factor move).
+
+  Nov 16 (round 2): cut to 30 minutes. Cut: Together "find $ED$ and $EF$" ($\overline{BD} \parallel \overline{FG}$; same scale-factor move as the map distance and the exit ticket; now an early-finisher extension) and the bike-path converse problem (asked out loud in the QuickNotes; practice 2 is the written converse). The map AA problem moved from partner work to Together. Handout numbers: Together 1, partner 2-3, exit 1.
+
+  Practice cut: old 3 ($\overline{MN} \parallel \overline{XZ}$, repeats 1 and the exit ticket), old 6 (find $DF$, repeats 5's AA + scale factor), old 7 (AA multiple choice, 5a covers it), old 8 (scale factors under 1, earlier-lesson review). 10 problems to 6: side splitter 1, converse 2, midsegment area 3, AA + length 4, SBA 5-6.

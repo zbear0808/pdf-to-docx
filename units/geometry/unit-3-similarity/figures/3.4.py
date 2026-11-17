@@ -90,9 +90,7 @@ def lines() -> Figure:
     f.label(TD, "D", direction=nrm)
     f.label(TC, "C", direction=(0.6, -1))
     f.label(TE, "E", direction=(0, -1))
-    f.dots([TA2, TB2, TD2, TE2], layer="answer")
-    f.label(TA2, "A'", layer="answer", direction=-nrm)
-    f.label(TB2, "B'", layer="answer", direction=-nrm)
+    f.dots([TD2, TE2], layer="answer")
     f.label(TD2, "D'", layer="answer", direction=-nrm)
     f.label(TE2, "E'", layer="answer", direction=(0, -1))
     return f

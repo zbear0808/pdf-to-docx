@@ -9,15 +9,16 @@ materials: ruler
 sections:
   - kind: warmup
     items:
-      - minutes: 4
+      - minutes: 3
         prompt: 'Here is $\triangle ABC$ with midpoints $L$, $M$, and $N$. What do you notice? What do you wonder?'
         figure: 3.5_midpoints
-        fig_w: 2.2
+        fig_w: 2.0
         work: 0
         after: 0.04
         columns:
           headers: [I notice..., I wonder...]
           italic: true
+          height: 0.7
           answers:
             - ['$\overline{NL}$ looks parallel to $\overline{AB}$, and about half as long', 'The 4 small triangles look the same size']
             - ['Are the 4 small triangles congruent', 'Is each small triangle a dilation of $\triangle ABC$']
@@ -25,28 +26,20 @@ sections:
   - kind: together
     items:
       - n: 1
-        minutes: 3
-        prompt: '$M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$. $\triangle ABC$ is a dilation of $\triangle AMN$. Find the center and the scale factor.'
-        figure: 3.5_amn_plain
-        fig_w: 2.2
-        fill: [['Center:', '$A$'], ['Scale factor:', '2']]
-        box_w: 0.9
-        answer: '$AB = 2 \cdot AM$ and $AC = 2 \cdot AN$, so a dilation from $A$ with scale factor 2 takes $M$ to $B$ and $N$ to $C$.'
-        work: 0
-      - n: 2
+        id: proof
         minutes: 4
-        prompt: 'Prove that $BC = 2MN$. Fill in each box.'
+        prompt: '$M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$. Prove that $BC = 2MN$. Fill in each box.'
+        figure: 3.5_amn_plain
+        fig_w: 2.0
         frame:
-          - ['In Problem 1, the dilation takes $M$ to $B$ and $N$ to', '$C$', '.']
+          - ['$AB = 2 \cdot AM$, so a dilation with center $A$ and scale factor', '2', 'takes $M$ to $B$ and $N$ to $C$.', 0.9]
           - ['So the dilation takes $\overline{MN}$ to', '$\overline{BC}$', '.']
-          - ['A dilation multiplies every length by the', 'scale factor', '.', 1.4]
-          - ['So $BC =$', '$2MN$', '.']
+          - ['A dilation multiplies every length by the scale factor, so $BC =$', '$2MN$', '.']
 
   - kind: partner
-    page_break_before: true
     items:
-      - n: 3
-        minutes: 5
+      - n: 2
+        minutes: 4
         prompt: 'What else must be true, now that $\triangle ABC$ is a dilation of $\triangle AMN$? Fill in each box. Then mark the parallel segments and the congruent angles on the figure.'
         frame:
           - ['A dilation takes a line to a', 'parallel', 'line, so $\overline{MN} \parallel \overline{BC}$.']
@@ -54,41 +47,19 @@ sections:
           - ['In the same way, $\angle ANM \cong$', '$\angle ACB$', '.']
         figure: 3.5_amn
         fig_w: 1.8
-        answer: 'Marks: see the red figure.'
-      - n: 4
-        minutes: 6
-        prompt: '$M$ is $\frac{2}{3}$ of the way from $A$ to $B$. $N$ is $\frac{2}{3}$ of the way from $A$ to $C$.'
+      - n: 3
+        id: two_thirds
+        minutes: 3
+        prompt: '$M$ is $\frac{2}{3}$ of the way from $A$ to $B$. $N$ is $\frac{2}{3}$ of the way from $A$ to $C$. How does $MN$ compare to $BC$? If $BC = 9$, find $MN$.'
         figure: 3.5_two_thirds
-        fig_w: 1.9
-        answer: 'The same idea as Problem 1, with scale factor $\frac{3}{2}$ instead of 2.'
-        parts:
-          - label: a.
-            prompt: 'A dilation with center $A$ takes $\triangle AMN$ onto $\triangle ABC$. What is the scale factor?'
-            fill: [['Scale factor:', '$\frac{3}{2}$']]
-            answer: '$AM = \frac{2}{3} AB$, so $AB = \frac{3}{2} AM$.'
-            work: 0
-          - label: b.
-            prompt: 'How does $MN$ compare to $BC$? If $BC = 9$, find $MN$.'
-            fill: [['$MN$ is this fraction of $BC$:', '$\frac{2}{3}$'], ['$MN =$', '6']]
-            answer: '$MN = \frac{2}{3} \cdot 9 = 6$, and $\overline{MN} \parallel \overline{BC}$.'
-            work: 0
+        fig_w: 1.7
+        fill: [['$MN$ is this fraction of $BC$:', '$\frac{2}{3}$'], ['$MN =$', '6']]
 
   - kind: notes
 
-  - kind: cyu
-    items:
-      - n: 1
-        minutes: 3
-        prompt: '$M$ and $N$ are the midpoints of $\overline{AB}$ and $\overline{AC}$. $MN = x + 2$ and $BC = 3x - 4$. What is the value of $x$?'
-        figure: 3.5_cyu
-        fig_w: 2.0
-        choices: ['$2$', '$3$', '$8$', '$10$']
-        choice_cols: 4
-        answer: ['[C] $BC = 2MN$, so $3x - 4 = 2(x + 2)$ and $x = 8$. ($MN = 10$, $BC = 20$.)', 'Errors: [A] doubles $BC$ instead of $MN$; [B] sets $MN = BC$; [D] is $MN$, not $x$.']
-        work: 0.5
   - kind: exit
     items:
-      - n: 2
+      - n: 1
         minutes: 5
         prompt: 'What must be true about $\overline{MN}$? Find $MN$ and explain how you know.'
         figure: 3.5_exit
@@ -104,7 +75,7 @@ quicknotes:
   - '- A dilation multiplies lengths by the scale factor, so $BC = 2MN$, or $MN = \frac{1}{2} BC$.'
   - '**Theorem.** $M$ is on $\overline{AB}$ and $N$ is on $\overline{AC}$. If $\frac{AM}{AB} = \frac{AN}{AC}$, then $\overline{MN} \parallel \overline{BC}$.'
   - '- Also, $MN = \frac{AM}{AB} \cdot BC$.'
-  - '- Problem 4: $\frac{2}{3}$ of the way along each side, so $MN = \frac{2}{3} BC$.'
+  - '- {ref:two_thirds}: $\frac{2}{3}$ of the way along each side, so $MN = \frac{2}{3} BC$.'
 
 practice:
   title: 'The midsegment of a triangle: practice'
@@ -126,16 +97,18 @@ practice:
           work: 0.3
     - cells:
         - n: 3
-          prompt: '$\angle A''B''C''$ is the image of $\angle ABC$ after a dilation with center $P$ and scale factor $\frac{1}{3}$. The measure of $\angle ABC$ is $21^\circ$. What is the measure of $\angle A''B''C''$? (From Lesson 3.4)'
-          fill: [['$m\angle A''B''C'' =$', '$21^\circ$']]
-          answer: 'Dilations keep angle measures, so the scale factor does not matter.'
-          work: 0.6
-        - n: 4
           prompt: 'Here are lines $\ell$ and $m$. Draw 2 lines that could be the image of line $m$ after a dilation. Label them $n$ and $p$. (From Lesson 3.4)'
           figure: 3.5_lines
           fig_w: 1.8
           answer: 'Any 2 lines parallel to $m$ (line $m$ itself also works if the center is on $m$).'
           work: 0
+        - n: 4
+          prompt: '$\triangle XYZ$ is dilated and the image is $\triangle X''Y''Z''$. Write 2 equations that could be used to find $a$. Then solve for $a$.'
+          figure: assets/3.5/prac6_xyz.png
+          fig_w: 2.2
+          fill: [['$a =$', '$\frac{15}{8}$']]
+          answer: ['Scale factor $k = \frac{3}{8}$.', 'Equations: $\frac{a}{5} = \frac{3}{8}$ and $\frac{a}{3} = \frac{5}{8}$ (or $8k = 3$ and $5k = a$).', '$a = \frac{15}{8} = 1.875$']
+          work: 1.0
     - page_break_before: true
       cells:
         - n: 5
@@ -144,55 +117,47 @@ practice:
           fig_w: 3.2
           answer: 'No. A dilation multiplies every side by the same scale factor. $AB = \frac{1}{2} VW$, $BC = \frac{1}{2} WX$, $CD = \frac{1}{2} XY$, $DE = \frac{1}{2} YZ$, but $AE = 10$ is not $\frac{1}{2} \cdot 12 = 6$.'
           work: 1.2
-        - n: 6
-          prompt: '$\triangle XYZ$ is dilated and the image is $\triangle X''Y''Z''$. Write 2 equations that could be used to find $a$. Then solve for $a$.'
-          figure: assets/3.5/prac6_xyz.png
-          fig_w: 2.2
-          fill: [['$a =$', '$\frac{15}{8}$']]
-          answer: ['Scale factor $k = \frac{3}{8}$.', 'Equations: $\frac{a}{5} = \frac{3}{8}$ and $\frac{a}{3} = \frac{5}{8}$ (or $8k = 3$ and $5k = a$).', '$a = \frac{15}{8} = 1.875$']
-          work: 1.0
     - heading: SBA review
       cells:
-        - n: 7
+        - n: 6
           prompt: 'It takes 1 can of red paint and 2 cans of white paint to make 1 can of pink paint. How many cans of white paint do you need to make 4 cans of pink paint?'
           fill: [['Cans of white paint:', '8']]
           answer: '2 cans of white per can of pink, so $4 \cdot 2 = 8$.'
           work: 1.0
-        - n: 8
-          prompt: 'Solve for $x$:  $\frac{(5 \times 2) + 2}{x} = 6$'
-          fill: [['$x =$', '2']]
-          answer: '$\frac{12}{x} = 6$, so $x = 2$.'
-          work: 1.0
-  selected: [[1, B], [3, '$21^\circ$'], [5, 'No: $VZ \neq 2AE$'], [7, '8 cans of white paint']]
+  selected: [[1, B], [5, 'No: $VZ \neq 2AE$'], [6, '8 cans of white paint']]
 
 plan: |
   **Overview.** Students used dilations of lines and angles in Lesson 3.4. Today they use one dilation (center $A$, scale factor 2) to prove the midsegment is parallel to the third side and half as long, then see the same idea for any fraction ($\frac{2}{3}$). Lesson 3.6 moves to similarity. Lesson 3.11 picks up the side splitter with parallel lines (Math Medic 6.5 street map).
 
   **Objective.** Students will be able to explain why the segment joining the midpoints of two sides of a triangle is parallel to the third side and half as long. **Standards.** G-SRT.A.1, G-SRT.B.4 (midsegment case). SMP 3, 7.
 
-  **Quick look (40 min).**
+  **Quick look (30 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up: notice and wonder | Students, 1 min share |
-  | 4-11 | Together: Problems 1-2 | Teacher + class |
-  | 11-24 | With a partner: Problems 3-4 | Students (pairs) |
-  | 24-28 | QuickNotes | Teacher + class |
-  | 28-37 | CYU 1 and exit ticket 2 | Students (individual) |
-  | 37-40 | Collect exit ticket, assign practice | Teacher |
+  | 0-3 | Warm-up: notice and wonder | Students, 1 min share |
+  | 3-8 | Together: Problem 1 | Teacher + class |
+  | 8-17 | With a partner: Problems 2-3 | Students (pairs) |
+  | 17-20 | QuickNotes | Teacher + class |
+  | 20-26 | Exit ticket 1 | Students (individual) |
+  | 26-29 | Collect exit ticket, assign practice | Teacher |
 
-  **Warm-up (4 min).** 3 min to write, 1 min share. Take one notice about $\overline{NL}$ (parallel, half as long) and one wonder; that notice leads into Problem 1. If "Are the 4 small triangles congruent?" comes up, say yes and that we'll see why with dilations.
+  **Warm-up (3 min).** 2 min to write, 1 min share. Take one notice about $\overline{NL}$ (parallel, half as long) and one wonder; that notice leads into Problem 1. If "Are the 4 small triangles congruent?" comes up, say yes and that we'll see why with dilations.
 
-  **Together (7 min, doc camera).** Problem 1 (3 min): measure $AM$ and $AB$ with a ruler under the camera; ask "Where does $M$ land if we dilate from $A$ by 2?" Problem 2 (4 min): fill the frame together; stress that the dilation moves the whole segment $\overline{MN}$ onto $\overline{BC}$.
+  **Together (5 min, doc camera).** Problem 1 (4 min): measure $AM$ and $AB$ with a ruler under the camera; ask "Where does $M$ land if we dilate from $A$ by 2?" Fill the frame together; stress that the dilation moves the whole segment $\overline{MN}$ onto $\overline{BC}$. 1 min to get into pairs.
 
-  **Partner work (13 min).**
-  - Problem 3 first (5 min, after 1 min to get into pairs). Students mark the Problem 3 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
-  - Problem 4 (6 min, then a 1 min share): common error is scale factor $\frac{2}{3}$ (the image is bigger, so $k = \frac{3}{2}$). Ask: "Is $\triangle ABC$ bigger or smaller than $\triangle AMN$?" Problem 4 is the example for the QuickNotes theorem.
-  - Early finishers (extension, not on the handout): on the warm-up figure, explain why $\triangle MBL$ is a dilation of $\triangle ABC$ (center $B$, scale factor $\frac{1}{2}$). Then: are the 4 small triangles congruent? (Yes, each has sides $\frac{1}{2}$ of $\triangle ABC$'s sides.)
-  - MLL supports: Problems 2 and 3 are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
+  **Partner work (9 min).**
+  - Problem 2 first (4 min). Students mark the Problem 2 figure; check for arrows on $\overline{MN}$ and $\overline{BC}$.
+  - {ref:two_thirds} (3 min, then a 1 min share): ask "Which dilation takes $B$ to $M$? Is $\triangle AMN$ bigger or smaller than $\triangle ABC$?" Common error: $MN = \frac{3}{2} \cdot 9$. {ref:two_thirds} is the example for the QuickNotes theorem. 1 min slack.
+  - Early finishers (extensions, not on the handout): (1) $MN = x + 2$ and $BC = 3x - 4$ for a midsegment; find $x$ ($x = 8$; common errors: doubling $BC$, setting $MN = BC$). (2) On the warm-up figure, explain why $\triangle MBL$ is a dilation of $\triangle ABC$ (center $B$, scale factor $\frac{1}{2}$), then decide if the 4 small triangles are congruent (yes, each has sides $\frac{1}{2}$ of $\triangle ABC$'s sides).
+  - MLL supports: Problems 1 and 2 are frames tied to the figures; "midpoint" and "scale factor" stay as math terms. Any language for partner talk.
 
-  **QuickNotes (4 min).** Read the bullets; point to Problem 2 for "$BC = 2MN$" and Problem 4 for the theorem.
+  **QuickNotes (3 min).** Read the bullets; point to Problem 1 for "$BC = 2MN$" and {ref:two_thirds} for the theorem.
 
-  **CYU and exit (9 min: CYU 3, exit 5, 1 to hand out).** CYU 1 shows whether students double the right side. The exit ticket checks the theorem: students must show both fractions equal $\frac{1}{3}$ before claiming parallel.
+  **Exit (6 min: 5 to work, 1 to turn to the page).** The exit ticket checks the theorem: students must show both fractions equal $\frac{1}{3}$ before claiming parallel, then find $MN$.
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: the fraction table (same idea as Problem 4 with new numbers) and the corner-triangles item (the midsegment dilation again with center $B$ or $C$; practice 2 covers the midpoint triangle). The corner-triangles item is now the early-finisher extension in the plan. Minutes re-timed honestly (the old plan said 39, the period ran about an hour).
+  Nov 16: trimmed to 40 minutes. Cut: the fraction table (same idea as {ref:two_thirds} with new numbers) and the corner-triangles item (the midsegment dilation again with center $B$ or $C$; practice 2 covers the midpoint triangle). The corner-triangles item is now the early-finisher extension in the plan. Minutes re-timed honestly (the old plan said 39, the period ran about an hour).
+
+  Nov 16 (round 2): cut to 30 minutes. Cut: the separate "find the center and scale factor" item (folded into the first box of the Problem 1 proof frame), the scale-factor part of {ref:two_thirds} (the third "find the scale factor" in a row), and the CYU midsegment algebra item (the exit ticket checks the same length fact; now an early-finisher extension). Removed the page break before the partner section.
+
+  Practice cut: old 3 (angle under a dilation, the same skill as practice 1) and old 8 (SBA one-step equation); 8 problems down to 6, renumbered.
