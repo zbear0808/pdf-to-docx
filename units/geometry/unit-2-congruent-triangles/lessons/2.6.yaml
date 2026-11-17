@@ -216,24 +216,22 @@ practice:
           figure: '2.6_pr_x'
           fill: [['$x =$', '$125^\circ$']]
           box_w: 0.9
-          work: 0.3
         - n: 7
           prompt: '$\overline{PR} \cong \overline{QR}$ and $\overline{QS} \cong \overline{RS}$. $m\angle RSQ = 120^\circ$. Find $m\angle QPR$.'
           figure: '2.6_pr_qpr'
           layout: stacked
           fill: [['$m\angle QPR =$', '$15^\circ$']]
           box_w: 0.9
-          work: 0.3
     - heading: SBA review
       cells:
         - n: 8
           prompt: 'Solve for $x$: $\frac{1}{4}(4 + 2x) = 3$'
-          answer: ['$4 + 2x = 12$', '$2x = 8$', '$x = 4$']
-          work: 0.8
+          answer: ['$4 + 2x = 12$, so $2x = 8$', '$x = 4$']
+          work: 0.4
         - n: 9
           prompt: 'A student does 5 math problems every 10 minutes. How many problems can the student do in 16 minutes?'
-          answer: ['$\frac{5}{10} = \frac{1}{2}$ problem per minute', '$\frac{1}{2} \cdot 16 = 8$ problems']
-          work: 0.8
+          answer: ['$5 \div 10 = 0.5$ problem per minute', '$0.5 \cdot 16 = 8$ problems']
+          work: 0.4
   selected: [['1', '3, 1, 2, 4, 5'], ['8', '$x = 4$'], ['9', '8 problems']]
 
 plan: |
