@@ -144,25 +144,26 @@ def split_fig() -> Figure:
     return f
 
 
-# Item 5: image of line c. b and e are parallel to c; a and d are not
+# Item 5: image of line c. a and d are parallel to c; b and e are not.
+# With the choices in order the key is A, C, D (Lesson 3.4 practice 2's key is B, C, E).
 LINES = {
-    "a": ((1.4, 4.6), (2.6, 0)),
+    "b": ((1.4, 4.6), (2.6, 0)),
     "c": ((0, 1.0), (5.0, 4.0)),
-    "d": ((0, 4.2), (5.4, 1.5)),
-    "b": ((0, 2.8), (3.0, 4.6)),
-    "e": ((1.0, 0), (5.4, 2.64)),
+    "e": ((0, 4.2), (5.4, 1.5)),
+    "a": ((0, 2.8), (3.0, 4.6)),
+    "d": ((1.0, 0), (5.4, 2.64)),
 }
-for _nm in ("b", "e"):
-    assert _parallel(*np.array(LINES["c"], float), *np.array(LINES[_nm], float))
 for _nm in ("a", "d"):
+    assert _parallel(*np.array(LINES["c"], float), *np.array(LINES[_nm], float))
+for _nm in ("b", "e"):
     assert not _parallel(*np.array(LINES["c"], float), *np.array(LINES[_nm], float), tol=1e-2)
 
 
 @figure(f"{S}_lines")
 def lines_fig() -> Figure:
     f = Figure(width_in=2.2, height_in=1.8)
-    _lines(f, LINES, {"a": 0.03, "c": 0.97, "d": 0.97, "b": 0.97, "e": 0.97},
-           {"a": (-1, 0), "c": (0.3, 1), "d": (1, 0), "b": (0.3, 1), "e": (1, 0)})
+    _lines(f, LINES, {"b": 0.03, "c": 0.97, "e": 0.97, "a": 0.97, "d": 0.97},
+           {"b": (-1, 0), "c": (0.3, 1), "e": (1, 0), "a": (0.3, 1), "d": (1, 0)})
     return f
 
 

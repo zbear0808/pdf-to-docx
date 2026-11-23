@@ -4,6 +4,7 @@ notes_title: Measuring dilations
 framing: >-
   What happens to the side lengths when a figure is dilated?
 materials: ruler or a strip of paper
+headings: warmup
 
 sections:
   - kind: warmup
@@ -14,11 +15,12 @@ sections:
         fig_w: 3.0
         fill: [['$EF =$', '3'], ['$EG =$', '4']]
         box_w: 0.9
-        answer: 'The key grid also shows $\triangle E''F''G''$ from Problem 2.'
+        answer: 'The key grid also shows $\triangle E''F''G''$ from {ref:dilate}.'
 
   - kind: together
     items:
       - n: 1
+        id: predict
         minutes: 3
         prompt: 'Predict the side lengths of the image when $\triangle EFG$ is dilated using center $C$ and scale factor 2.'
         fill: [['$E''F'' =$', '6'], ['$E''G'' =$', '8'], ['$F''G'' =$', '10']]
@@ -28,13 +30,17 @@ sections:
   - kind: partner
     items:
       - n: 2
-        minutes: 6
-        prompt: 'Dilate $\triangle EFG$ on the warm-up grid using center $C$ and scale factor 2. Label the image $\triangle E''F''G''$.'
-        answer: 'Red triangle on the warm-up grid. $E$ is over 1 and up 1 from $C$, so $E''$ is over 2 and up 2. In the same way, $F''$ is over 2 and up 8, and $G''$ is over 10 and up 2.'
-        work: 0.5
+        id: dilate
+        minutes: 2
+        prompt:
+          - 'Dilate $\triangle EFG$ on the warm-up grid using center $C$ and scale factor 2. Label the image $\triangle E''F''G''$.'
+          - 'From $C$: $E''$ is 2 right and 2 up, $F''$ is 2 right and 8 up, and $G''$ is 10 right and 2 up.'
+        answer: 'Red triangle on the warm-up grid. Each image vertex is on the dashed ray from $C$.'
+        work: 0.3
       - n: 3
-        minutes: 4
-        prompt: 'Measure $\triangle E''F''G''$. Count units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along $\overline{F''G''}$.'
+        id: ratios
+        minutes: 3
+        prompt: 'Measure $\triangle E''F''G''$. Count grid units for $E''F''$ and $E''G''$. For $F''G''$, mark the length of $\overline{FG}$ (5 units) on a strip of paper and lay it along side $F''G''$.'
         table:
           header: ['Ratio', '$\frac{E''F''}{EF}$', '$\frac{E''G''}{EG}$', '$\frac{F''G''}{FG}$']
           row_label: 'Value'
@@ -42,35 +48,15 @@ sections:
           first_w: 1.0
           height: 0.5
       - n: 4
-        minutes: 3
-        prompt: 'Use Problem 3.'
-        frame:
-          - ['When a figure is dilated with scale factor $k$, every side length is multiplied by', '$k$', '.']
-          - ['Image length divided by original length equals', '$k$', '.']
-          - ['If $k > 1$, the image is', 'larger', '. If $0 < k < 1$, the image is smaller.']
-          - ['The perimeter is also multiplied by', '$k$', '.']
+        id: rule
+        minutes: 4
+        prompt:
+          - 'What does a dilation with scale factor $k$ do to the side lengths of a figure? Explain using your table in {ref:ratios}.'
+          - '*Optional start:* Each side of $\triangle E''F''G''$ is ...'
+        box: 1.2
+        answer: 'Each side of $\triangle E''F''G''$ is 2 times the matching side of $\triangle EFG$, and 2 is the scale factor. This works for $\overline{FG}$ too, which does not touch $C$. So a dilation with scale factor $k$ multiplies every side length by $k$: image length $\div$ original length $= k$.'
 
   - kind: notes
-
-  - kind: exit
-    items:
-      - n: 1
-        minutes: 5
-        prompt: '$\triangle P''Q''R''$ is a dilation of $\triangle PQR$ using center $C$ and scale factor 1.5.'
-        figure: 3.3_exit
-        fig_w: 1.8
-        parts:
-          - label: a.
-            prompt: 'Is $\triangle P''Q''R''$ larger or smaller than $\triangle PQR$?'
-            frame:
-              - ['$\triangle P''Q''R''$ is', 'larger', '.']
-              - ['I know because the scale factor 1.5 is', 'greater', ' than 1.']
-          - label: b.
-            prompt: 'Find $P''Q''$. Explain how you know.'
-            fill: [['$P''Q'' =$', '7.5']]
-            box_w: 0.9
-            answer: 'Multiply by the scale factor: $1.5 \cdot 5 = 7.5$. A dilation multiplies every length by the scale factor.'
-            work: 0.7
 
 quicknotes:
   - '**LT: I know that when a figure is dilated by scale factor $k$, all lengths in the figure are multiplied by $k$.**'
@@ -85,7 +71,7 @@ practice:
   rows:
     - cells:
         - n: 1
-          prompt: 'A polygon has perimeter 12 units. It is dilated with scale factor $\frac{3}{4}$. What is the perimeter of its image?'
+          prompt: 'A polygon has perimeter 12 units (the sum of its side lengths). It is dilated with scale factor $\frac{3}{4}$. What is the perimeter of its image?'
           choices: ['9 units', '12 units', '16 units', 'It cannot be determined.']
           answer: '[A] Every side is multiplied by $\frac{3}{4}$, so the perimeter is $12 \cdot \frac{3}{4} = 9$.'
           work: 0.4
@@ -97,11 +83,13 @@ practice:
           work: 0.4
     - cells:
         - n: 3
-          prompt: 'Dilate Figure $G$ using center $B$ and scale factor 3. Label the image $G''$.'
+          prompt:
+            - 'Dilate Figure $G$ using center $B$ and scale factor 3. Label the image $G''$.'
+            - 'From $B$, the three dots on Figure $G$ are 1 right and 1 up, 3 right and 1 up, and 2 right and 1 down.'
           figure: 3.3_prac_cone
           fig_w: 2.6
           layout: stacked
-          answer: 'Each marked point moves 3 times as far from $B$. The half circle becomes a half circle 3 times as wide.'
+          answer: 'The dots move to 3 right and 3 up, 9 right and 3 up, and 6 right and 3 down from $B$ (3 times as far). The half circle becomes a half circle 3 times as wide.'
           work: 0
         - n: 4
           prompt: 'Polygon $Q$ is a dilation of polygon $P$. The side marked 4 matches the side marked 3, and $x$ matches $y$.'
@@ -135,36 +123,43 @@ practice:
   selected: [[1, 'A'], [2, 'D'], ['4a', '$\frac{3}{4}$'], ['4b', '4.5'], [5, 'roots $-1$, $-5$; vertex $(-3, -4)$']]
 
 plan: |
-  **Overview.** Second lesson of Unit 3. 3.1: dilated points (distance from the center times $k$). Today: measure an image; every side length, and the perimeter, is multiplied by $k$. 3.4 adds lines and angles.
+  **Overview.** Second lesson of Unit 3. In 3.1, students dilated points: the distance from the center is multiplied by $k$. Today they measure an image and find that every side length is multiplied by $k$ too. Lesson 3.4 does lines and angles.
 
-  **Objectives.** Students will be able to: (1) find image lengths from a scale factor; (2) find a scale factor from an image length and an original length; (3) tell from $k$ whether the image is larger or smaller. **Standards.** G-SRT.A.1b, G-SRT.A.2. SMP 5, 6, 8.
+  **Core idea.** Students see that a dilation multiplies every side length by $k$, not just the distances from the center: all three ratios in {ref:ratios} are 2, even for $\overline{FG}$, which does not touch $C$. Spend whole-class time on the {ref:predict} predictions and on the rules pairs write in {ref:rule}. Known steps are printed; only the new steps are blank: the predictions ({ref:predict}), the ratio values ({ref:ratios}), and the rule ({ref:rule}). Printed so you can move past them: $FG = 5$ (off the grid lines), the 3.1 move as image counts from $C$ in {ref:dilate} (students only plot), and the way to measure $F'G'$ with a paper strip. Three known steps stay blank on purpose: the warm-up's counts (the one skill it reviews), the measured lengths in {ref:ratios} (6, 8, and 10 are the {ref:predict} answers and the warm-up's 3 and 4 sit on the same page), and the plot in {ref:dilate} (its only blank, and it makes the image students measure).
 
-  **Quick look (30 min).**
+  **Objectives.** (1) Explain, from measurements, that a dilation multiplies every side length by $k$. (2) Find an image length from $k$, and $k$ from a side and its image. **Standards.** G-SRT.A.1b, G-SRT.A.2. SMP 5, 6, 8.
+
+  **Quick look (22 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-2 | Warm-up | Students (individual) |
-  | 2-6 | Together: Problem 1 | Teacher + class |
-  | 6-19 | With a partner: Problems 2-4 | Students (pairs) |
-  | 19-22 | QuickNotes | Teacher + class |
-  | 22-27 | Exit ticket | Students (individual) |
-  | 27-30 | Collect, assign practice | Teacher |
+  | 0-3 | Warm-up | Students, 1 min check |
+  | 3-6 | Together: Problem 1 | Teacher + class |
+  | 6-16 | With a partner: Problems 2-4 | Students (pairs) |
+  | 16-19 | QuickNotes | Teacher + class |
+  | 19-22 | Collect, assign practice | Teacher |
 
-  **Warm-up (2 min).** Students count $EF$ and $EG$ on their own as they sit down. $FG = 5$ is printed because it is not on grid lines.
+  **Warm-up (3 min).** Students count $EF$ and $EG$ as they sit down. $FG = 5$ is printed because it is not on grid lines. Check 3 and 4 out loud.
 
-  **Together (4 min, doc camera).** Check $EF = 3$ and $EG = 4$ (30 seconds). Problem 1 (3 min): take three predictions and write them on the board. Don't confirm; Problem 3 checks them. About 30 seconds to start pairs.
+  **Together (3 min, doc camera).** {ref:predict}: write a few predictions for each length on the board. Expect 6, 8, 10, and also "add 2" (5, 6, 7). Don't confirm; partners check them in {ref:ratios}.
 
-  **With a partner (13 min).**
-  - Problem 2 (6 min): count from $C$ to each vertex ("over, up"), then double. This is the 3.1 move. Watch for students who double the side lengths from $E$ instead of from $C$; ask where $E'$ is.
-  - Problem 3 (4 min): show the paper-strip move once. Students write the measured length on top of each ratio. Compare with the predictions from Problem 1.
-  - Problem 4 (3 min) is the summary that leads into QuickNotes. For the perimeter box, students add the sides: 12 and 24.
-  - MLL supports: labeled grid, short sentences, fill-in boxes on the warm-up, Problem 1, and Problem 4. Any language is fine for partner talk.
+  **With a partner (10 min).**
+  - {ref:dilate} (2 min): the counts from $C$ are printed, so pairs only plot and label. If an image looks off, ask "Where did you start counting?"
+  - {ref:ratios} (3 min): show the paper strip once at the doc camera. Mark $FG$ on the strip and lay it along $F'G'$: it fits twice. Students write each length in its ratio.
+  - {ref:rule} (4 min) is the core. Assessing: "Which sides did you check? Does $\overline{FG}$ go through $C$?" Advancing: "Would the ratios still match with scale factor 3? With $\frac{1}{2}$?" Watch for "each side gets longer by the same amount": the differences are 3, 4, and 5, but every ratio is 2.
+  - Last minute: pairs read their rule to the next pair and compare it with the board predictions.
+  - MLL supports: labeled grid, printed counts, short sentences, the optional start on {ref:rule}. Partner talk in any language before writing. Say "ratio" and "scale factor" while pointing to the table header.
 
-  **QuickNotes (3 min).** Read each bullet against Problem 3. For the $0 < k < 1$ bullet, ask: "If $\overline{AB}$ is 8 cm and its image is 2 cm, what is $k$?" ($\frac{1}{4}$; watch for 4 or 6.)
-
-  **Exit ticket (5 min).** Checks "larger or smaller" and one image length.
+  **QuickNotes (3 min).** Page 2 states the {ref:rule} rule, so students stay on page 1 until now. Read each bullet against {ref:ratios} (the perimeter goes from 12 to 24). For the $0 < k < 1$ bullet, ask: "If $\overline{AB}$ is 8 cm and its image is 2 cm, what is $k$?" ($\frac{1}{4}$; watch for 4 or 6.)
 
 guide_notes: |
-  - Nov 16: trimmed to 40 minutes. Cut: the $k = 3$ warm-up ($FGH$; the $EFG$ drawing is the same move) and the $k = \frac{1}{2}$ partner item (the exit ticket and practice cover it).
-  - Nov 16 (round 2): cut to 30 minutes. Cut: Kai's wrong-point warm-up (same "count from $C$" move as the $EFG$ drawing; the $EFG$ side count moved up to be the warm-up), CYU 1 (find $k$ from 8 cm and 2 cm; the Problem 3 ratio table does the same move, now a spoken QuickNotes question), the three length boxes in Problem 3 (same boxes as the Problem 1 prediction; the lengths go in the ratio table).
-  - Nov 16 (round 2) practice cut: pentagon scale factor (Practice 4a finds $k$ the same way), dilate $ABCD$ from $D$ (repeats the handout drawing; Practice 3 is a harder drawing), SBA roots of $3x^2 + 5x + 2 = 0$ (Practice 5 also finds roots). 8 problems to 5.
-  - Nov 16 (round 3): cut extra instructions and flair.
+  **Nov 23: known content printed.** The handout already printed every known step that can print without answering another box on page 1 ($FG = 5$, the image counts from $C$, the strip method), so its items are unchanged. Practice now prints the meaning of perimeter (practice 1) and the counts from $B$ to the three dots (practice 3). Still blank: the warm-up counts, the predictions, the plot, the ratio table, the rule, every practice choice, the dilated Figure $G'$, $k$ and $y$ in practice 4, and the SBA item. Item minutes 14 (no change).
+
+  **Nov 19 (round 2): no exit ticket.** The exit item (find $P'Q'$ for $k = 1.5$ and explain) was cut ({ref:rule} already asks for the rule and why, with $\overline{FG}$ as the side that misses $C$, and practice 1 and 4b apply the rule with a new $k$ and no grid). The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** {ref:dilate}: the 3.1 move is printed as counts from $C$ for $E'$, $F'$, and $G'$, so students only plot (6 min to 2). {ref:rule}: the four-box summary frame is now one open question with an optional start, the core of the lesson. Its "larger" box (a Lesson 3.1 fact) and perimeter box are cut; the perimeter is read in the QuickNotes and practiced in practice 1. Exit ticket part a (larger or smaller, Lesson 3.1) was cut. Practice unchanged: no item repeats another item or the handout.
+
+  **Source.** 3.3 Student Notes (Activity 1 "All the Scale Factors", the side-length ratio table, the cool down) and 3.3 Practice Problems. The cool down was the exit ticket, cut Nov 19 (round 2). Cut Nov 16 for time: both source warm-ups (dilate $FGH$ with $k = 3$; find the wrong image point), the center-distance ratio table (the 3.1 definition, now a QuickNotes bullet), the tracing-paper comparison, a $k = \frac{1}{2}$ partner item, and a find-$k$ item (8 cm to 2 cm, now a spoken QuickNotes question). $\triangle EFG$ is a 3-4-5 triangle on a grid so the lengths are exact after printing.
+
+  **Practice.** Source practice kept except the pentagon scale factor (practice 4a finds $k$ the same way), dilate $ABCD$ from $D$ (practice 3 is the harder drawing), and the roots of $3x^2 + 5x + 2 = 0$ (practice 5 also finds roots). Source key letters were shifted; fixed. Practice 4 (polygons $P$ and $Q$) used to repeat Lesson 3.1 practice 2; 3.1 cut its copy on Nov 19.
+
+  **Scoring notes (MLL).** Score the math, not grammar. On {ref:rule}, accept "times 2", "double", "$k$ times as long", or a home-language word, as long as every side is multiplied, not added to.

@@ -4,7 +4,7 @@ schema_version: 1
 numbering: auto
 title: 'Progress check: lessons 2.1-2.5'
 directions: 'Use the marks on each diagram.'
-total_points: 10
+total_points: 9
 max_pages: 2
 source: '2.1- 2.5 Progress Check.docx (Version A, page 1 top and page 2)'
 targets:
@@ -13,13 +13,12 @@ targets:
     able_to: 'Students will be able to name corresponding parts from a rigid motion, a congruence statement, or the marks on a diagram, and write a congruence statement with the vertices in matching order.'
     standard: 'G-CO.B.6, G-CO.B.7'
   - id: LT2
-    understand: 'Students will understand that SSS, SAS, ASA, and SAA each give enough matching parts to know two triangles are congruent.'
+    understand: 'Students will understand that SSS, SAS, and ASA each give enough matching parts to know two triangles are congruent, and two sides with an angle that is not between them (SSA) is not enough.'
     able_to: 'Students will be able to decide from marked parts whether two triangles are congruent and write a congruence statement in matching order.'
     standard: G-CO.B.8
 
 sections:
   - kind: plain
-    title: 'LT1: corresponding parts and congruence statements (lessons 2.1-2.2)'
     target: LT1
     columns: 2
     items:
@@ -58,24 +57,13 @@ sections:
         distractors:
           B: 'matches $I$ with $K$ instead of by position ($I$ matches $L$)'
           C: 'thinks congruent means a translation; any sequence of rigid motions works'
-      - id: q3
-        points: 1
-        target: LT1
-        type: cr
-        demand: pwoc
-        source: 'Version A #3'
-        prompt: 'Use $\triangle QRS \cong \triangle FHG$. Complete each congruence statement.'
-        fill: [['$\angle RSQ \cong$', '$\angle HGF$'], ['$\overline{GH} \cong$', '$\overline{SR}$']]
-        fill_cols: 1
-        box_w: 1.1
-        answer: ['$Q \leftrightarrow F$, $R \leftrightarrow H$, $S \leftrightarrow G$.', 'Accept $\angle FGH$ or $\angle G$, and $\overline{RS}$.']
       - id: q4
         points: 1
         target: LT1
         type: cr
         demand: pwoc
         source: 'Version A #4'
-        prompt: 'Use the marks on the diagram. Complete the congruence statement.'
+        prompt: 'Complete the congruence statement.'
         figure: '2.1-2.5 Progress Check_q4'
         layout: stacked
         frame:
@@ -83,7 +71,6 @@ sections:
         answer: 'Same marks: $C \leftrightarrow L$ (2 arcs), $N \leftrightarrow N$ (vertical angles), $D \leftrightarrow M$ (3 arcs).'
 
   - kind: plain
-    title: 'LT2: decide if triangles are congruent (lessons 2.3-2.5)'
     target: LT2
     columns: 2
     page_break_before: true
@@ -93,15 +80,15 @@ sections:
         target: LT2
         type: cr
         demand: pwc
-        source: 'Version A, back #1'
+        source: 'new (Nov 20): SSA case like lesson 2.5 Problem 4, new letters and drawing; replaces Version A, back #1 (SAA)'
         prompt: ['Are the triangles congruent? Write yes or no.', 'If yes, complete the congruence statement.']
         figure: '2.1-2.5 Progress Check_q5'
         layout: stacked
-        fill: [['Congruent?', 'yes']]
+        fill: [['Congruent?', 'no']]
         box_w: 1.0
         frame:
-          - ['$\triangle JAR \cong \triangle$', '$DIL$', '']
-        answer: ['SAA: $\angle R \cong \angle L$, $\angle A \cong \angle I$, $\overline{JR} \cong \overline{DL}$.', 'Or (full credit): $\angle J \cong \angle D$ by the triangle sum, then ASA with $\overline{JR}$ between $\angle J$ and $\angle R$.', '$J \leftrightarrow D$, $A \leftrightarrow I$, $R \leftrightarrow L$.']
+          - ['$\triangle ABV \cong \triangle$', 'none', '']
+        answer: ['SSA: $\angle A \cong \angle S$, $\overline{AB} \cong \overline{SP}$, $\overline{BV} \cong \overline{PW}$, but the marked angle is not between the two marked sides.', 'Two different triangles fit these parts ($\overline{AV}$ is longer than $\overline{SW}$).']
       - id: q6
         points: 2
         target: LT2
@@ -118,16 +105,20 @@ sections:
         answer: ['SAS: $\overline{DM} \cong \overline{TM}$, $\angle DMX \cong \angle TMY$, $\overline{XM} \cong \overline{YM}$.', '$M \leftrightarrow M$, $D \leftrightarrow T$, $X \leftrightarrow Y$.']
 
 guide_notes: |
-  **Targets.** Items 1-4 (6 pts): LT1, corresponding parts from a rotation, a congruence statement, or marks (lessons 2.1-2.2). Items 5-6 (4 pts): LT2, decide congruence from marks (lessons 2.3-2.5). The front page is LT1 and the back page is LT2, as in the source.
+  **Nov 19: less is more, no headings.** Cut old item 3 ($\triangle QRS \cong \triangle FHG$, two boxes, 1 pt): it names corresponding parts from the vertex order of a congruence statement, the same move as item {num:q2} [A], [B], and [D], and item {num:q2} also checks [C] and [E]. Removed the two section headings (the targets are in the blueprint) and "Use the marks on the diagram." from item {num:q4} (the directions say it). Nothing else needed a scaffold: the marks, the labels, and the center $K$ are already on the figures. Total 10 -> 9.
+
+  **Nov 20: audit fix.** Item {num:q5} is now an SSA case that answers "no" (marks only, new letters and drawing). It replaces the source's SAA item ($\triangle JAR$, $\triangle DIL$): no Unit 2 lesson teaches SAA, and every decide item answered "yes", so a student who always wrote "yes" got all 4 LT2 points. SSA is taught in lesson 2.5 (Problem 4 and the QuickNotes). Same points.
+
+  **Targets.** Items {num:q1}-{num:q4} (5 pts): LT1, corresponding parts from a rotation, a congruence statement, or marks (lessons 2.1-2.2). Items {num:q5}-{num:q6} (4 pts): LT2, decide congruence from marks (lessons 2.3-2.5). The front page is LT1 and the back page is LT2, as in the source.
 
   **Scoring.**
-  - Items 1 and 2 (2 pts each): start at 2 and take off $\frac{1}{2}$ for each wrong or missing choice. Minimum 0. Selecting every choice scores 1 pt.
-  - Item 3 (1 pt): $\frac{1}{2}$ pt per box.
-  - Item 4 (1 pt): all three letters in matching order.
-  - Items 5 and 6 (2 pts each): 1 pt for "yes", 1 pt for the statement in matching order. The theorem is not asked; give no extra credit and take nothing off if a student adds one.
+  - Items {num:q1} and {num:q2} (2 pts each): start at 2 and take off $\frac{1}{2}$ for each wrong or missing choice. Minimum 0. Selecting every choice scores 1 pt.
+  - Item {num:q4} (1 pt): all three letters in matching order.
+  - Item {num:q5} (2 pts): 1 pt for "no", 1 pt for leaving the congruence statement empty or writing "none" (the lesson 2.5 routine). "Yes" with $\triangle SPW$ scores 0: that is SSA read as SAS. A reason is not asked; give no extra credit and take nothing off if a student adds one ("SSA", "the angle is not between the sides").
+  - Item {num:q6} (2 pts): 1 pt for "yes", 1 pt for the statement in matching order. The theorem is not asked; give no extra credit and take nothing off if a student adds one.
 
-  **Watch for.** Statements in alphabetical order instead of matching order. Item 1F: students who see two triangles sharing $\overline{FH}$ and match $E$ with $G$ but keep $F$ and $H$ in place. Item 2C: "congruent" read as "a translation". Item 5: lesson 2.5 teaches SSS, SAS, and ASA, and SAA is only on the Unit 2 Summary Notes. Give full credit for SAA or for the triangle-sum route ($\angle J \cong \angle D$, then ASA). A "no" usually means the student didn't use the triangle sum to find the third angle; go over it in the review.
+  **Watch for.** Statements in alphabetical order instead of matching order. Item {num:q1}F: students who see two triangles sharing $\overline{FH}$ and match $E$ with $G$ but keep $F$ and $H$ in place. It is also the answer to lesson 2.5 practice 4 ($\triangle HEF$ is the image of $\triangle HGF$ after a reflection across $\overleftrightarrow{FH}$, so $F$ and $H$ stay put); here the $180^\circ$ rotation swaps $F$ and $H$, so a student who reuses that answer picks [F]. Item {num:q2}C: "congruent" read as "a translation". Item {num:q5}: students who call SSA "SAS" write "yes". Ask: "Is the marked angle between the two marked sides?" ($\angle A$ is between $\overline{AB}$ and $\overline{AV}$, and $\overline{AV}$ is not marked.)
 
-  **For the retake.** Items 4-6 all answer "yes". The retake should include an SSA case where the answer is "no", so LT2 checks both outcomes.
+  **For the retake.** Item {num:q5} answers "no" (SSA) and item {num:q6} answers "yes" (SAS), so LT2 checks both outcomes. Keep one of each on a retake.
 
-  **Scoring notes (MLL).** Score the math, not English. Accept "sí", "same", or a home-language word for yes, lowercase letters, and $\angle G$ for $\angle HGF$ in item 3. No word problems here, so no 3-Reads launch is needed if you go over it in class.
+  **Scoring notes (MLL).** Score the math, not English. Accept "sí", "same", or a home-language word for yes or no, and lowercase letters. No word problems here, so no 3-Reads launch is needed if you go over it in class.

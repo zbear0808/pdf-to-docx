@@ -3,7 +3,7 @@ doc_type: assessment
 title: 'Unit 2 Test'
 directions: Show your work.
 numbering: auto
-total_points: 21
+total_points: 19
 max_pages: 4
 source: 'UNIT 2 TEST 2025-26.docx (first copy, pages 1-4)'
 targets:
@@ -26,25 +26,8 @@ targets:
 
 sections:
   - kind: plain
-    title: 'Corresponding parts (LT1)'
     target: LT1
     items:
-      - id: side
-        points: 1
-        target: LT1
-        type: sr
-        demand: mem
-        prompt:
-          - '$\triangle ABC \cong \triangle DEF$ and $BA = 10$ inches. Which side of $\triangle DEF$ has the same length?'
-          - 'You lose 1/4 point for each wrong choice.'
-        choices: ['$\overline{EF}$', '$\overline{DE}$', '$\overline{DF}$', 'cannot be determined']
-        choice_cols: 4
-        key: B
-        answer: '$B \to E$ and $A \to D$, so $\overline{BA}$ matches $\overline{ED}$.'
-        distractors:
-          A: 'matches $B$ with $E$, then takes the side after $E$'
-          C: 'matches $A$ with $D$, then takes the wrong second letter'
-          D: 'does not use the vertex order in the congruence statement'
       - id: sketch
         points: 1
         target: LT1
@@ -52,17 +35,16 @@ sections:
         demand: pwc
         prompt:
           - 'True or false? If $\triangle GRT \cong \triangle MPN$, then $\overline{TG} \cong \overline{MN}$.'
-          - 'Sketch and label the two triangles in the large box to support your answer. No sketch, no credit.'
+          - 'Sketch and label the two triangles in the large box to support your answer.'
         draw:
           height: 1.5
-          steps_w: 3.6
+          steps_w: 3.8
           key_figure: 'Unit 2 Test_q2'
-        fill: [['Write true or false:', 'true']]
+        fill: [['Answer:', 'true']]
         box_w: 1.0
         answer: '$G \to M$ and $T \to N$, so $\overline{TG}$ matches $\overline{NM}$, the same segment as $\overline{MN}$.'
 
   - kind: plain
-    title: 'Congruence theorems (LT2)'
     target: LT2
     items:
       - id: jklm
@@ -75,43 +57,24 @@ sections:
           - 'You lose 1/2 point for each wrong choice.'
         figure: 'Unit 2 Test_q3'
         choices:
-          - '$\triangle JKL \cong \triangle MLK$ by the Angle-Angle Triangle Congruence Theorem.'
-          - '$\triangle JKL \cong \triangle LKM$ by the Angle-Side-Angle Triangle Congruence Theorem.'
-          - '$\triangle JKL \cong \triangle LKM$ by the Side-Side-Side Triangle Congruence Theorem.'
-          - '$\triangle JKL \cong \triangle MLK$ by the Side-Angle-Side Triangle Congruence Theorem.'
-          - '$\triangle JKL \cong \triangle MLK$ by the Side-Side-Side Triangle Congruence Theorem.'
-          - 'There is not enough information to decide if the triangles are congruent.'
+          - '$\triangle JKL \cong \triangle MLK$ by AA.'
+          - '$\triangle JKL \cong \triangle LKM$ by ASA.'
+          - '$\triangle JKL \cong \triangle LKM$ by SSS.'
+          - '$\triangle JKL \cong \triangle MLK$ by SAS.'
+          - '$\triangle JKL \cong \triangle MLK$ by SSS.'
+          - 'Not enough information to decide.'
         key: 'D, E'
         select_all: true
         answer: 'SSS uses the shared side $\overline{KL}$. SAS uses $\angle J$ and $\angle M$, each between its two marked sides.'
         distractors:
-          A: 'thinks two angles prove congruence (AA is a similarity idea, and only one pair of angles is marked)'
+          A: 'thinks two angles prove congruence; only one pair of angles is marked, and the 2.7 warm-up shows that two angles alone do not fix a triangle'
           B: 'only one pair of angles is marked, and $\triangle LKM$ matches $J$ with $L$'
           C: 'right theorem, but $\triangle LKM$ matches $J$ with $L$'
-          F: 'misses that $\overline{KL}$ is a side of both triangles'
+          F: 'misses the shared side $\overline{KL}$ (SSS) and that $\angle J$ and $\angle M$ are between their marked sides (SAS)'
 
   - kind: plain
-    title: 'Rigid motions (LT3)'
     target: LT3
     items:
-      - id: sequence
-        points: 1
-        target: LT3
-        type: sr
-        demand: pwc
-        prompt: 'In the diagram, $\overline{FD} \cong \overline{AC}$, $\overline{FE} \cong \overline{AB}$, and $\overline{ED} \cong \overline{BC}$. Which sequence of rigid motions will definitely take $\triangle DEF$ onto $\triangle CBA$?'
-        figure: 'Unit 2 Test_q4'
-        choices:
-          - 'Rotate $\triangle DEF$ around $D$ until $\overline{DE}$ lines up with $\overline{CB}$. Then reflect across a line halfway between $\triangle D''E''F''$ and $\triangle CBA$.'
-          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $C$. Rotate $\triangle D''E''F''$ around $C$ by $\angle E''CB$. Reflect $\triangle D''''E''''F''''$ across $\overleftrightarrow{CB}$.'
-          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $B$. Rotate $\triangle D''E''F''$ around $B$ by $\angle E''BC$. Reflect $\triangle D''''E''''F''''$ across $\overleftrightarrow{CB}$.'
-          - 'Translate $\triangle DEF$ by the directed line segment from $D$ to $C$. Translate $\triangle D''E''F''$ from $E''$ to $B$. Translate $\triangle D''''E''''F''''$ from $F''''$ to $B$.'
-        key: B
-        answer: 'The triangles face opposite ways, so a reflection is needed after $D \to C$ and $E \to B$.'
-        distractors:
-          A: '"until it lines up" and "a line halfway between" do not name an angle or a line, so the moves are not definite'
-          C: 'sends $D$ to $B$ and $E$ to $C$: the wrong vertices'
-          D: 'translations never flip a figure, and $\triangle CBA$ faces the other way'
       - id: kite
         points: 1
         target: LT3
@@ -119,7 +82,7 @@ sections:
         demand: pwc
         prompt:
           - 'In the diagram, $\overline{CA} \cong \overline{DA}$ and $\overline{CB} \cong \overline{DB}$.'
-          - 'Reflect $\triangle ABC$ across $\overleftrightarrow{AB}$. Which reason, by itself, shows that the image of $C$ lands on $D$?'
+          - 'Reflect $\triangle ABC$ across $\overleftrightarrow{AB}$. Which reason shows that the image of $C$ lands on $D$? Choose the reason you can use without proving anything else first.'
         figure: 'Unit 2 Test_q5'
         choices:
           - 'The image of $C$ and point $D$ are on the same side of $\overline{AB}$ and make the same angle with it at $A$.'
@@ -127,15 +90,15 @@ sections:
           - 'The image of $C$ will not land on $D$ after the reflection across $\overleftrightarrow{AB}$.'
           - '$\overleftrightarrow{AB}$ is the perpendicular bisector of the segment from $C$ to $D$.'
         key: D
-        answer: '$A$ and $B$ are each the same distance from $C$ and $D$.'
+        answer: '$A$ and $B$ are each the same distance from $C$ and $D$, so they are on the perpendicular bisector of $\overline{CD}$. [A] and [B] describe the image of $C$, so each needs its own proof first.'
         distractors:
           A: 'true, but the equal angles at $A$ still need a reason'
           B: 'true, but "the same ray" needs the angle fact first'
           C: 'thinks the reflection misses $D$'
 
   - kind: plain
-    title: 'Proofs and parallelograms (LT4)'
     target: LT4
+    page_break_before: true
     items:
       - id: jamal
         points: 5
@@ -143,25 +106,30 @@ sections:
         type: sr
         demand: pwoc
         prompt:
-          - '$RSTU$ is a parallelogram. Its diagonals meet at point $A$. Jamal is proving $\overline{UA} \cong \overline{SA}$. Write the letter of the reason for each statement in its box. Each box is worth 1 point.'
+          - 'Write the letter of the reason for each statement.'
           - 'A. Alternate interior angles: transversal $\overline{SU}$ crosses parallel lines'
           - 'B. Corresponding parts of congruent triangles are congruent (CPCTC)'
           - 'C. Opposite sides of a parallelogram are congruent'
           - 'D. Alternate interior angles: transversal $\overline{RT}$ crosses parallel lines'
           - 'E. Angle-Side-Angle Triangle Congruence Theorem'
         figure: 'Unit 2 Test_q6'
-        frame:
-          - ['1. $\overline{TU} \cong \overline{RS}$', 'C', '', 0.9]
-          - ['2. $\angle RTU \cong \angle TRS$', 'D', '', 0.9]
-          - ['3. $\angle RSU \cong \angle TUS$', 'A', '', 0.9]
-          - ['4. $\triangle TAU \cong \triangle RAS$', 'E', '', 0.9]
-          - ['5. $\overline{UA} \cong \overline{SA}$', 'B', '', 0.9]
+        proof:
+          given: '$RSTU$ is a parallelogram. Its diagonals meet at point $A$.'
+          prove: '$\overline{UA} \cong \overline{SA}$'
+          rows:
+            - ['$\overline{TU} \cong \overline{RS}$', {ans: 'C'}]
+            - ['$\angle RTU \cong \angle TRS$', {ans: 'D'}]
+            - ['$\angle RSU \cong \angle TUS$', {ans: 'A'}]
+            - ['$\triangle TAU \cong \triangle RAS$', {ans: 'E'}]
+            - ['$\overline{UA} \cong \overline{SA}$', {ans: 'B'}]
+          statement_w: 0.62
       - id: angle
         target: LT4
         type: cr
         demand: pwc
         prompt:
-          - 'In parallelogram $ABCD$, $m\angle A = 30^\circ$, $\overline{AB} \cong \overline{CD}$, and $\overline{BC} \cong \overline{DA}$. Find $m\angle D$.'
+          - 'In parallelogram $ABCD$, $m\angle A = 30^\circ$. Find $m\angle D$.'
+          - '**Fact:** The angles of a quadrilateral add to $360^\circ$.'
         figure: 'Unit 2 Test_q7'
         parts:
           - label: a.
@@ -169,12 +137,11 @@ sections:
             prompt: 'Explain how you know. Use math, words, or both. *Optional start:* I know the measure of $\angle D$ because ...'
             work: 1.6
             answer:
-              - 'Credit any valid method. For example:'
-              - 'Diagonal $\overline{BD}$: $\angle ABD \cong \angle CDB$ (alternate interior angles). In $\triangle ABD$, $m\angle ABD + m\angle ADB = 180^\circ - 30^\circ = 150^\circ$, so $m\angle D = m\angle CDB + m\angle ADB = 150^\circ$.'
-              - 'Extend $\overline{CD}$ past $D$: the outside angle at $D$ and $\angle A$ are alternate interior angles ($30^\circ$). A linear pair gives $180^\circ - 30^\circ = 150^\circ$.'
-              - 'Same-side interior angles add to $180^\circ$; or opposite angles are congruent and the four angles add to $360^\circ$.'
+              - 'Credit any valid method. Example: opposite angles of a parallelogram are congruent, so $m\angle C = 30^\circ$ and $m\angle B = m\angle D$.'
+              - '$360^\circ - 2 \cdot 30^\circ = 300^\circ$, and $300^\circ \div 2 = 150^\circ$.'
+              - 'Also full credit: a diagonal with alternate interior angles and the triangle sum; an extended side with a linear pair; same-side interior angles.'
             rubric:
-              - {level: 2, desc: 'States a correct angle fact for parallelograms or parallel lines and uses it with $30^\circ$ to get $\angle D$ (for example, a diagonal with alternate interior angles and the triangle sum, an extended side with a linear pair, same-side interior angles, or opposite angles with the $360^\circ$ sum).'}
+              - {level: 2, desc: 'States a correct parallelogram or parallel-line angle fact and uses it with $30^\circ$ to get $\angle D$ (any route in the answer).'}
               - {level: 1, desc: 'A correct fact that is not connected to $\angle D$, or correct arithmetic with no reason.'}
               - {level: 0, desc: 'No correct fact, or says $\angle D \cong \angle A$.'}
           - label: b.
@@ -182,10 +149,8 @@ sections:
             prompt: 'Answer:'
             fill: [['$m\angle D =$', '$150^\circ$']]
             box_w: 1.0
-            answer: '$180^\circ - 30^\circ = 150^\circ$'
 
   - kind: plain
-    title: 'Rigid motions (LT3)'
     target: LT3
     items:
       - id: bent
@@ -194,15 +159,15 @@ sections:
         type: cr
         demand: pwc
         prompt:
-          - 'Use rigid motions to prove that figure $ABC$ is congruent to figure $DEF$.'
+          - 'Use rigid motions to prove that figure $PQR$ is congruent to figure $KLM$.'
           - 'Be sure to include: each motion (with its center, line, or direction), and why each point lands on its match.'
           - '*Moves:* translate  |  rotate around a point  |  reflect across a line'
         figure: 'Unit 2 Test_q8'
         box: 2.6
         answer:
-          - 'Translate figure $ABC$ by the directed line segment from $B$ to $E$. $B$ lands on $E$.'
-          - 'Rotate around $E$ until ray $BA$ is on ray $ED$. $A$ lands on $D$ because $BA = ED$.'
-          - 'The figures face opposite ways, so reflect across $\overleftrightarrow{ED}$. $\angle ABC \cong \angle DEF$, so ray $BC$ lands on ray $EF$, and $C$ lands on $F$ because $BC = EF$.'
+          - 'Translate figure $PQR$ by the directed line segment from $Q$ to $L$. $Q$ lands on $L$.'
+          - 'Rotate around $L$ until ray $QP$ is on ray $LK$. $P$ lands on $K$ because $QP = LK$.'
+          - 'The figures face opposite ways, so reflect across $\overleftrightarrow{LK}$. $\angle PQR \cong \angle KLM$, so ray $QR$ lands on ray $LM$, and $R$ lands on $M$ because $QR = LM$.'
           - 'Credit any valid sequence.'
         rubric:
           - {level: 3, desc: 'Three correct motions with their center, line, or direction, and a reason each point lands (equal sides, equal angle).'}
@@ -211,16 +176,14 @@ sections:
           - {level: 0, desc: 'No sequence of rigid motions.'}
 
   - kind: plain
-    title: 'Proofs and parallelograms (LT4)'
     target: LT4
-    page_break_before: true
     items:
       - id: proof
         points: 3
         target: LT4
         type: cr
         demand: pwoc
-        prompt: 'Fill in the 6 empty spaces in the proof. Each space is worth 1/2 point.'
+        prompt: 'Complete the proof.'
         figure: 'Unit 2 Test_q9'
         proof:
           given: '$\angle C \cong \angle N$ and $\overline{CY} \cong \overline{NY}$'
@@ -234,16 +197,19 @@ sections:
           height: 0.55
 
 guide_notes: |
-  **Scoring (21 pts).** The source items add to 21, not 20, so RAW x5 tops out at 105. Percent = raw / 21 x 100.
-  - Problem 1 (1 pt): [B]. Take 1/4 pt off for each wrong choice circled.
-  - Problem 2 (1 pt): "true" with a labeled sketch that matches $T$ with $N$ and $G$ with $M$. No sketch, no credit.
-  - Problem 3 (2 pts): 1 pt each for [D] and [E]; 1/2 pt off for each wrong choice (lowest score 0).
-  - Problems 4 and 5 (1 pt each): [B] and [D].
-  - Problem 6 (5 pts): 1 pt per box: C, D, A, E, B. $\overline{RS} \parallel \overline{UT}$; statement 2 uses transversal $\overline{RT}$, statement 3 uses transversal $\overline{SU}$. In statement 4, side $\overline{TU} \cong \overline{RS}$ is between the two pairs of angles (ASA).
-  - Problem 7 (4 pts): part a is the explanation (rubric), part b is the answer. Part a: credit any valid method (a diagonal with alternate interior angles and the triangle sum; an extended side with a linear pair; same-side interior angles; opposite angles with the $360^\circ$ sum). If part a is right and part b has an arithmetic slip, give part a full credit and part b 1 of 2.
-  - Problem 8 (3 pts): rubric. Accept any order of motions that works. "Slide", "turn", and "flip" are fine if the center, line, or direction is named.
-  - Problem 9 (3 pts): 1/2 pt per box (6 boxes: statement 1, statement 3, reason 3, the triangle in statement 4, reason 4, reason 5). Statement 3: also accept $\angle OYC \cong \angle KYN$, in either order. Accept "vertical angles" for reason 3 and "corresponding parts" for CPCTC. Statement 4 must list the vertices in matching order ($YOC$); give the 1/2 pt for ASA either way. In $\triangle YCO$ and $\triangle YNK$, side $\overline{CY} \cong \overline{NY}$ is between $\angle C$ and $\angle 1$, and between $\angle N$ and $\angle 2$.
+  **Nov 19: less is more, no headings.** Cut old item 1 ($\triangle ABC \cong \triangle DEF$, which side matches $\overline{BA}$; 1 pt): it makes the same move as {ref:sketch} (match a reversed side by the vertex order), and Lesson 2.1's QuickNotes print its answer with the same letters. Cut old item 4 (pick the sequence that takes $\triangle DEF$ onto $\triangle CBA$; 1 pt): the same move as {ref:bent} (translate, rotate, then reflect because the figures face opposite ways), which also asks why each point lands; it was also the heaviest reading on the test. Scaffolded: {ref:angle} prints the angle sum of a quadrilateral ($360^\circ$, an earlier-grade fact no Unit 2 lesson teaches), so the Parallelogram Theorem from Lesson 2.7 (opposite angles) is enough to find $m\angle D$, and its figure labels $30^\circ$. {ref:bent} has new letters and a new drawing: the old figures $ABC$ and $DEF$ had the same names, marks, and task as Lesson 2.5 practice 1. Also cut: the section headings, "No sketch, no credit." on the student copy, the Jamal sentence, and the per-box point notes. {ref:jamal} is now a two-column proof table, and {ref:jklm} names SSS, SAS, and ASA, as the lessons do; AA stays as a wrong choice (Lesson 2.7: two angles alone do not fix a triangle). Total 21 -> 19.
 
-  **Scoring notes (MLL).** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent; "alt. int. angles"; "flip", "slide", "turn" for the motions; a reason written as a short phrase. Accept an answer that builds up to the claim at the end. Reading the directions aloud is fine; don't read or explain the choices. Problem 4 is the heaviest reading: read its stem aloud and point to the figure, then let students read the choices.
+  **Nov 20: audit fix.** {ref:kite} gets back the source's condition ("Without any additional justification"): "Choose the reason you can use without proving anything else first." Without it, [B] also works (the same ray and the same distance from $A$ give the same point, Statement 4 of the SAS proof in Lesson 2.6 practice 1). [A] and [B] describe the image of $C$, so each needs its own proof first; [D] follows from the marks.
 
-  **Changes from the source.** Problem 4: the source's choice [B] had no reflection, so no choice was correct (the triangles face opposite ways); [B] now ends with "Reflect across $\overleftrightarrow{CB}$", as in the older Version B. Problem 6: reason C said "opposite angles"; statement 1 needs "opposite sides". Problem 9 said "flowchart proof"; it is a two-column proof. The seat-preference survey is not part of this file.
+  **Scoring (19 pts).** Percent = raw / 19 x 100. (The source header's RAW x5 assumes 20 points.)
+  - {ref:sketch} (1 pt): "true" with a labeled sketch that matches $T$ with $N$ and $G$ with $M$. No sketch, no credit.
+  - {ref:jklm} (2 pts): 1 pt each for [D] and [E]; 1/2 pt off for each wrong choice (lowest score 0).
+  - {ref:kite} (1 pt): [D]. [A] and [B] are true statements, but each needs its own proof first, so they don't answer the question.
+  - {ref:jamal} (5 pts): 1 pt per letter: C, D, A, E, B. $\overline{RS} \parallel \overline{UT}$; statement 2 uses transversal $\overline{RT}$, statement 3 uses transversal $\overline{SU}$. In statement 4, side $\overline{TU} \cong \overline{RS}$ is between the two pairs of angles (ASA).
+  - {ref:angle} (4 pts): part a is the explanation (rubric), part b is the answer. Part a: credit any valid method (opposite angles with the $360^\circ$ sum; a diagonal with alternate interior angles and the triangle sum; an extended side with a linear pair; same-side interior angles). Arithmetic alone ($360 - 60 = 300$, $300 \div 2$) with no parallelogram fact is level 1. If part a is right and part b has an arithmetic slip, give part a full credit and part b 1 of 2.
+  - {ref:bent} (3 pts): rubric. Accept any order of motions that works. "Slide", "turn", and "flip" are fine if the center, line, or direction is named.
+  - {ref:proof} (3 pts): 1/2 pt per blank cell (6 cells: statement 1, statement 3, reason 3, the triangle in statement 4, reason 4, reason 5). Statement 3: also accept $\angle OYC \cong \angle KYN$, in either order. Accept "vertical angles" for reason 3 and "corresponding parts" for CPCTC. Statement 4 must list the vertices in matching order ($YOC$); give the 1/2 pt for ASA either way. In $\triangle YCO$ and $\triangle YNK$, side $\overline{CY} \cong \overline{NY}$ is between $\angle C$ and $\angle 1$, and between $\angle N$ and $\angle 2$.
+
+  **Scoring notes (MLL).** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent; "alt. int. angles"; "flip", "slide", "turn" for the motions; a reason written as a short phrase. Accept an answer that builds up to the claim at the end. Reading the directions and stems aloud is fine; don't read or explain the choices.
+
+  **Changes from the source.** Old item 4 (cut Nov 19): the source's choice [B] had no reflection, so no choice was correct; the Nov 16 fix added "Reflect across $\overleftrightarrow{CB}$", as in the older Version B. {ref:jamal}: reason C said "opposite angles"; statement 1 needs "opposite sides". {ref:proof} said "flowchart proof"; it is a two-column proof. The seat-preference survey is not part of this file.

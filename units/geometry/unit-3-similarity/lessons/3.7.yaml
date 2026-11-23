@@ -3,91 +3,74 @@ title: Corresponding parts of similar triangles
 notes_title: Corresponding parts of similar triangles
 framing: >-
   If rigid motions and a dilation take one triangle onto another, what must be true about the angles and the sides?
+headings: warmup
 
 sections:
   - kind: warmup
     items:
-      - minutes: 3
-        prompt: 'What do you notice? What do you wonder?'
+      - minutes: 2
+        prompt: 'A dilation with center $A$ takes $\triangle ADE$ onto $\triangle ABC$. $AB = 3 + 9 = 12$.'
         figure: 3.7_warmup
         fig_w: 1.9
-        work: 0
-        after: 0.04
-        columns:
-          headers: [I notice..., I wonder...]
-          italic: true
-          answers:
-            - ['$AB = 12$ and $AC = 20$.', 'Each side of $\triangle ABC$ is 4 times a side of $\triangle ADE$: $12 = 4 \cdot 3$, $20 = 4 \cdot 5$, $16 = 4 \cdot 4$.']
-            - ['Is $\triangle ADE \sim \triangle ABC$?', 'Is $\overline{DE} \parallel \overline{BC}$?']
+        fill: [['Scale factor:', '4']]
+        box_w: 0.9
+        answer: '$\frac{12}{3} = 4$. Every length is 4 times as long: $\frac{20}{5} = \frac{16}{4} = 4$.'
 
   - kind: together
-    intro: 'The two triangles are similar. Matching angles have the same number of arcs.'
+    intro: 'Matching angles have the same number of arcs.'
     items:
       - n: 1
+        id: abc_def
         minutes: 5
-        prompt: '$\triangle ABC$ moves onto $\triangle DEF$.'
+        prompt:
+          - 'These moves take $\triangle ABC$ onto $\triangle DEF$.'
+          - 'Step 1: Translate $A$ to $D$.'
+          - 'Step 2: Rotate around $D$ until the image of $B$ is on ray $DE$.'
+          - 'Step 3: Dilate with center $D$ and scale factor $k$.'
+          - 'Steps 1 and 2 keep every length the same. Step 3 multiplies every length by $k$.'
         figure: 3.7_p1
         fig_w: 2.6
-        parts:
-          - label: a.
-            prompt: 'Write the scale factor as a ratio of side names.'
-            fill: [['Scale factor $k =$', '$\frac{DE}{AB}$']]
-            box_w: 1.0
-            answer: 'Or $\frac{EF}{BC}$ or $\frac{DF}{AC}$.'
-            work: 0
-          - label: b.
-            prompt: 'Write a sequence of transformations that moves $\triangle ABC$ onto $\triangle DEF$.'
-            answer: 'Sample: translate $A$ to $D$. Rotate around $D$ until $B''$ is on ray $DE$. Dilate from $D$ with scale factor $\frac{DE}{AB}$. No reflection is needed.'
-            work: 1.4
+        fill: [['So $k = \dfrac{DE}{AB} = \dfrac{EF}{BC} =$', '$\dfrac{DF}{AC}$']]
+        box_w: 1.0
+        answer: 'No move changes an angle, so matching angles are congruent.'
 
   - kind: partner
     items:
       - n: 2
         id: bowtie
-        minutes: 8
-        prompt: '$\triangle BEC$ is small. $\triangle DEA$ is large. Each side of $\triangle DEA$ is $k$ times a side of $\triangle BEC$.'
+        minutes: 5
+        prompt:
+          - 'Rotate $\triangle BEC$ $180^\circ$ around $E$. Then dilate with center $E$ and scale factor $k$. These moves take $\triangle BEC$ onto $\triangle DEA$.'
+          - '$\overline{EA}$ is the image of $\overline{EC}$, so $AE = kb$. $\overline{ED}$ is the image of $\overline{EB}$, so $DE = kc$.'
+          - 'Write $AD$ using $k$. Then explain your answer.'
+          - '*Optional start:* $\overline{DA}$ is the image of $\overline{BC}$, so ...'
         figure: 3.7_bowtie
         fig_w: 2.3
-        parts:
-          - label: a.
-            prompt: 'Write the matching angle.'
-            fill: [['$\angle A \cong$', '$\angle C$'], ['$\angle B \cong$', '$\angle D$'], ['$\angle DEA \cong$', '$\angle BEC$']]
-            fill_cols: 2
-            box_w: 0.9
-            work: 0
-          - label: b.
-            prompt: 'Write the side of $\triangle BEC$ that matches each side.'
-            fill: [['$AD = ke$ matches', '$\overline{BC}$'], ['$DE = kc$ matches', '$\overline{EB}$'], ['$AE = kb$ matches', '$\overline{EC}$']]
-            box_w: 0.9
-            work: 0
-          - label: c.
-            prompt: 'Describe a sequence of transformations that moves $\triangle BEC$ onto $\triangle DEA$.'
-            answer: 'Rotate $180^\circ$ around $E$, so $B''$ is on ray $ED$ and $C''$ is on ray $EA$. Then dilate from $E$ with scale factor $k$.'
-            work: 0.8
-
-  - kind: notes
-    new_page: false
-
-  - kind: exit
-    items:
-      - n: 1
+        fill: [['$AD =$', '$ke$']]
+        box_w: 0.9
+        box: 1.3
+        answer: 'The rotation keeps the length of $\overline{BC}$, so its image is still $e$ long. The dilation multiplies that length by $k$. So $AD = ke$.'
+      - n: 3
+        id: lin
         minutes: 4
-        prompt: 'Lin thinks $\triangle ABC \sim \triangle DEF$. Find each ratio to show Lin the triangles are **NOT** similar.'
+        prompt:
+          - 'Lin thinks $\triangle ABC \sim \triangle DEF$.'
+          - '$\dfrac{DE}{AB} = \dfrac{8}{4} = 2$, $\dfrac{EF}{BC} = \dfrac{13}{7} \approx 1.86$, and $\dfrac{DF}{AC} = \dfrac{19}{10} = 1.9$.'
+          - 'Explain to Lin why the triangles are **NOT** similar.'
         figure: 3.7_exit
         fig_w: 2.7
-        layout: stacked
-        fill: [['$\frac{DE}{AB} =$', '2'], ['$\frac{EF}{BC} =$', '$\frac{13}{7} \approx 1.86$'], ['$\frac{DF}{AC} =$', '1.9']]
-        fill_cols: 3
-        box_w: 1.1
+        box: 1.2
+        answer: 'If the triangles were similar, the moves would multiply every side of $\triangle ABC$ by the same $k$, so all three ratios would be equal. The ratios are 2, about 1.86, and 1.9, so no scale factor works. No sequence of rigid motions and dilations takes $\triangle ABC$ onto $\triangle DEF$.'
+
+  - kind: notes
 
 quicknotes:
   - '**LT: I know the relationship between corresponding sides and angles in similar triangles.**'
   - '- Two figures are similar if a sequence of rigid motions and dilations takes one figure onto the other.'
   - '- Rigid motions keep lengths and angles. A dilation keeps angles and multiplies every length by the scale factor $k$.'
-  - '- So in similar triangles, corresponding angles are congruent and corresponding sides are proportional.'
+  - '- So in similar triangles, corresponding angles are congruent and corresponding sides are **proportional**: every pair of corresponding sides has the same ratio, $k$.'
   - '- If $\triangle ABC \sim \triangle DEF$: $\angle A \cong \angle D$, $\angle B \cong \angle E$, $\angle C \cong \angle F$, and $\frac{DE}{AB} = \frac{EF}{BC} = \frac{DF}{AC} = k$.'
-  - '- The letter order in the statement shows the matches. Write the scale factor as image side over original side.'
-  - '- To show two triangles are NOT similar, match shortest side to shortest side (and longest to longest). Then find two pairs of corresponding sides with different ratios.'
+  - '- Write the scale factor as image side over original side.'
 notes_height: 1.6
 
 practice:
@@ -99,21 +82,23 @@ practice:
           figure: 3.7_prac_rhombus
           fig_w: 3.0
           layout: stacked
-          answer: 'Sample: a rhombus with sides 9 and angles $30^\circ$ and $150^\circ$ ($k = \frac{3}{4}$). Any rhombus with $30^\circ$ and $150^\circ$ angles works.'
+          answer: 'Sample: sides 9 and angles $30^\circ$ and $150^\circ$, so $k = \frac{3}{4}$. Any rhombus with $30^\circ$ and $150^\circ$ angles works.'
           work: 0.2
         - n: 2
-          prompt: '$AC = 6$. Write two different sequences of transformations that show $\triangle ABC \sim \triangle AED$.'
+          prompt:
+            - '$AC = 6$. The scale factor is $k = \dfrac{AE}{AB} = \dfrac{4}{8} = \dfrac{1}{2}$.'
+            - 'Write two different sequences of transformations that show $\triangle ABC \sim \triangle AED$.'
           figure: 3.7_prac_aed
           fig_w: 1.4
-          answer: '$\frac{AE}{AB} = \frac{4}{8}$, $\frac{ED}{BC} = \frac{2}{4}$, $\frac{AD}{AC} = \frac{3}{6}$, so $k = \frac{1}{2}$.'
+          answer: '$\frac{ED}{BC} = \frac{2}{4}$ and $\frac{AD}{AC} = \frac{3}{6}$ are $\frac{1}{2}$ too.'
           parts:
             - label: a.
               prompt: 'Sequence 1:'
-              answer: 'Dilate from $A$ with scale factor $\frac{1}{2}$, then reflect across line $AC$.'
+              answer: 'Dilate from $A$ with $k = \frac{1}{2}$. Then reflect across line $AC$.'
               work: 0.7
             - label: b.
               prompt: 'Sequence 2:'
-              answer: 'Reflect across line $AC$, then dilate from $A$ with scale factor $\frac{1}{2}$.'
+              answer: 'Reflect across line $AC$. Then dilate from $A$ with $k = \frac{1}{2}$.'
               work: 0.7
     - cells:
         - n: 3
@@ -125,7 +110,9 @@ practice:
           box_w: 1.3
           answer: 'A is congruent to $P$ ($k = 1$). B has $k = \frac{4}{5}$ with the same angles. C has different angles. D has sides 4 and 6, so the ratios are $\frac{4}{5}$ and $\frac{6}{5}$.'
         - n: 4
-          prompt: '$D$, $E$, and $F$ are the midpoints of the sides of $\triangle ABC$. What is the perimeter of $\triangle ABC$?'
+          prompt:
+            - '$D$, $E$, and $F$ are the midpoints of the sides of $\triangle ABC$. What is the perimeter of $\triangle ABC$?'
+            - 'Perimeter $= AB + BC + AC$'
           figure: 3.7_prac_midseg
           fig_w: 2.1
           answer: ['Each midsegment is half the side it is parallel to: $AC = 2 \cdot 2 = 4$, $AB = 2 \cdot 3 = 6$, $BC = 2 \cdot 4 = 8$.', 'Perimeter $= 4 + 6 + 8 = 18$']
@@ -143,33 +130,42 @@ practice:
   selected: [[1, 'Any rhombus with 30 and 150 degree angles'], [3, 'A, B'], [4, '18'], [5, 20 teachers], [6, '$x = -8$']]
 
 plan: |
-  **Overview.** Follows 3.6 (similarity statements). Students use the transformations that move one triangle onto another to say what is true of the angles (congruent) and the sides (proportional, ratio $k$). Lesson 3.9 shows that two pairs of angles are enough (AA).
+  **Overview.** Follows 3.6 (the definition of similar, similarity statements). Students follow one side through the moves that take one triangle onto another: the rigid motions keep its length and the dilation multiplies it by $k$. So corresponding angles are congruent and corresponding sides are proportional, all with ratio $k$. {ref:lin} uses it the other way: unequal ratios mean not similar. Lesson 3.9 shows that two pairs of angles are enough (AA).
+
+  **Core idea.** Students see that the moves keep every angle and multiply every side by the same $k$, so all three ratios of corresponding sides are equal; if the ratios are not all equal, the triangles are not similar. Only the new steps are blank: the third ratio in {ref:abc_def}, $AD$ and why in {ref:bowtie}, and the reason in {ref:lin}. Known steps are printed so you can move past them: $AB = 12$ (warm-up), the sequences (3.6), the arcs, $b$, $c$, $e$, $AE = kb$ and $DE = kc$ (distances from $E$, the 3.1 rule), and Lin's three ratios. Spend whole-class time on why $\frac{EF}{BC}$ is the same $k$ in {ref:abc_def} and on the $AD$ explanations in {ref:bowtie}: $\overline{BC}$ doesn't touch $E$, so students follow it through both moves.
 
   **Objective.** I know the relationship between corresponding sides and angles in similar triangles. **Standards.** G-SRT.A.2, G-SRT.B.5. SMP 3, 7.
 
-  **Quick look (30 min).**
+  **Quick look (24 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-3 | Warm-up: nested triangles | Students, 1 min share |
-  | 3-8 | Together: Problem 1 | Teacher + class |
-  | 8-18 | With a partner: Problem 2 (bowtie) | Students (pairs), 2 min share |
+  | 0-2 | Warm-up | Students, 1 min share |
+  | 2-7 | Together: Problem 1 | Teacher + class |
+  | 7-18 | With a partner: Problems 2-3 | Students (pairs), 1 min share |
   | 18-21 | QuickNotes | Teacher + class |
-  | 21-27 | Exit ticket 1 | Students (individual) |
-  | 27-30 | Collect, assign practice | Teacher |
+  | 21-24 | Collect, assign practice | Teacher |
 
-  **Together (5 min, doc camera).** Problem 1: match vertices by arcs first ($A \to D$, $B \to E$, $C \to F$), then write $k$ as image side over original side. Ask "Do the arcs go around the same way?" so students see why no reflection is needed here.
+  **Warm-up (2 min).** 1 min to fill, 1 min share. Review only (3.3): $AB = 12$ is printed, so the one box is the scale factor, $\frac{12}{3} = 4$. Ask "Is it 4 for every side?" ($\frac{20}{5}$ and $\frac{16}{4}$) and "Did the dilation change any angles?" (no, 3.4).
 
-  **Partner work (8 min + 2 min share).** Problem 2 is the setup for QuickNotes. Push for part c: no translation is needed, just rotate $180^\circ$ around $E$, then dilate. If a pair is stuck on 2b, point to the letters: $kc$ goes with $c$. In the share, have a pair say it out loud: "The triangles are similar, so corresponding angles are congruent and corresponding sides are proportional." MLL support: 2a and 2b are fill-ins tied to the bowtie figure; any language for discussion.
+  **Together (5 min, doc camera).** {ref:abc_def}. The steps are the 3.6 skill, so read them quickly. Slow down on $\overline{BC}$: "Where does $\overline{BC}$ land? Which steps change its length?" Steps 1 and 2 keep it, and Step 3 multiplies it by $k$, so $EF = k \cdot BC$ and $\frac{EF}{BC} = k$. Take the third ratio from a student. Then ask "Why do matching angles have the same arcs?" (no move changes an angle).
 
-  **QuickNotes (3 min).** Read the printed notes. Connect "angles congruent" to 2a and "sides proportional" to 2b.
+  **Partner work (11 min).** 1 min to get into pairs, 5 min on {ref:bowtie}, 1 min share, then 4 min on {ref:lin}.
+  - Assessing: "Where do $B$ and $C$ land? Which move keeps the length of $\overline{BC}$? Which move changes it?"
+  - Advancing: "Why is no translation needed here?" (Both moves keep $E$ in place.)
+  - Watch for: $AD = ke$ copied from the pattern ($kb$, $kc$) with no reason, and $AD = e$ (the rotation only). Ask "What does the dilation do to the image of $\overline{BC}$?"
+  - Share one explanation that names both moves: the rotation keeps the length, and the dilation multiplies it by $k$.
+  - {ref:lin}: the ratios are printed, so the work is the reason. Look for "the ratios are not all the same, so no one scale factor works" or "the sides are not proportional." Watch for "the sides are different lengths" (similar triangles can have different lengths). If a student asks about a different matching: only shortest to shortest and longest to longest could work, and that is Lin's matching.
+  - MLL supports: the moves are printed, the arcs show the matches, $AE$ and $DE$ are printed with the segments they come from, and the optional start names the image of $\overline{BC}$. Lowercase $e$ is the side across from $E$; trace $\overline{BC}$ as you say "side $e$." Keep *corresponding*, *proportional*, *scale factor*. Turn and Talk in any language before writing.
 
-  **Exit (4 min + 2 min buffer).** The exit ticket checks whether students compute all three ratios ($2$, about $1.86$, $1.9$) instead of trusting the look. Not all equal, so no rigid motions and dilations take $\triangle ABC$ onto $\triangle DEF$.
+  **QuickNotes (3 min).** Students turn to page 3 only now: the notes give the reasons for {ref:bowtie} and {ref:lin}. Connect "angles congruent" to the arcs and "sides proportional" to the ratios in {ref:abc_def} and the bowtie's $kb$, $kc$, $ke$.
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: old partner Problem 2 ($\triangle ABC \to \triangle WFK$, same three parts as Problem 1 with new letters; the two-sequence practice problem covers a sequence with a reflection). Cut the bowtie's "complete the similarity statement" part (the statement was already in the prompt and in the sum-up frame). The bowtie and the sum-up frame moved up one number.
+  **Nov 23: known content printed.** Printed now: $AB = 12$ in the warm-up (the scale factor box stays), $AE = kb$ and $DE = kc$ in {ref:bowtie} (also black on the figure), the scale factor $\frac{1}{2}$ in practice 2, and the perimeter setup in practice 4. Still blank: the third ratio in {ref:abc_def}, $AD$ and why in {ref:bowtie}, the reason in {ref:lin}, the practice 2 sequences (3.6 review), and the practice 4 sides (3.5 review). Item minutes 19 to 16.
 
-  Nov 16 (round 2): cut to 30 minutes. Cut: 1c similarity statement (the 3.6 skill again), the sum-up frame (old Problem 3; QuickNotes say the same thing, now said out loud in the share), and CYU 1 find $x$ (ratios again, the exit ticket checks them). Exit ticket is now 1.
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:lin} (the core idea used the other way: unequal ratios mean not similar, a counterexample no other problem has, with the reason said on its own; practice 3 has a non-proportional parallelogram but asks for no reason). The handout prints only the Warm-up heading.
 
-  Practice cut: 9 to 6. Cut the definition (copies the first QuickNotes bullet), the square MC sequence (repeats the two-sequence problem), and the translations / alternate interior angles item (earlier unit, not this lesson). Old 2, 3, 4, 6, 8, 9 are now 1-6.
+  **Nov 19: cut for the core idea.** Warm-up: the notice and wonder is now two fills ($AB$ and the scale factor), a 3.3 review. {ref:abc_def}: the sequence (the 3.6 skill) is printed as Steps 1-3 with what each step does to lengths, so the one box is the third ratio; the write-a-sequence part is cut. {ref:bowtie}: its sequence is printed too, and the matching-angle and matching-side fill-ins are cut (they only read the arcs and the $k$ labels). The $kb$, $kc$, $ke$ labels moved to the key, so students write each length using $k$ and explain $AD = ke$. The QuickNotes moved to their own page, since they give the reasons for {ref:bowtie}. Lin's item (now {ref:lin}): the three ratios are printed and the reason is open (it was three division boxes). The QuickNotes bullet on showing triangles are NOT similar is cut; it answered Lin's item. Practice unchanged.
 
-  Nov 16 (round 3): cut extra instructions and flair.
+  **Earlier cuts (Nov 16).** From about 54 minutes to 30: cut the $\triangle ABC \to \triangle WFK$ problem (the same parts as {ref:abc_def} with new letters), the similarity statement parts (the 3.6 skill), a sum-up frame that repeated the QuickNotes, and a find-$x$ check (ratios again). Practice went from 9 to 6 problems: cut the definition (it copied the QuickNotes), the square sequence MC (it repeated practice 2), and a translations item from an earlier unit. Extra instructions and flair cut.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same ratio," "every side grows by the same number," "not the same $k$," or a home-language word for proportional if the idea is clear. On {ref:bowtie}, accept $k \cdot e$ or $ek$ for $ke$.

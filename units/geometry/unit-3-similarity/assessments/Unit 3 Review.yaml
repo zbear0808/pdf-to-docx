@@ -1,116 +1,149 @@
 id: Unit 3 Review
 doc_type: assessment
 title: 'Unit 3 review: similarity'
-directions: Show your work. Write each answer in its box.
+directions: Show your work.
+numbering: auto
 max_pages: 3
+do_not_reuse: ['Unit 3 Test*', '3.1-3.5 Progress Check*', '3.3-3.5 Progress Check*', '3.6 Progress Check*']
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along its ray from the center to k times as far, and keeps angle measures'
+    able_to: 'dilate a figure from a center by a scale factor and say what happens to its angles'
+    standard: G.SRT.1
+  - id: LT2
+    understand: 'figures are similar when rigid motions and a dilation take one onto the other, and the letter order of a similarity statement shows which vertices match'
+    able_to: 'write a sequence of transformations between similar triangles, and write a similarity statement with the vertices in matching order'
+    standard: G.SRT.2
+  - id: LT3
+    understand: 'similar figures have congruent corresponding angles and proportional corresponding sides, all with the same ratio k'
+    able_to: 'pick true proportions, find the scale factor and missing sides and angles, and test a similarity statement with side ratios'
+    standard: 'G.SRT.2, G.SRT.5'
+  - id: LT4
+    understand: 'a line parallel to one side of a triangle makes a similar triangle, so the parallel side matches the whole side'
+    able_to: 'find lengths in nested triangles with whole sides, and decide whether two lines are parallel'
+    standard: 'G.SRT.4, G.SRT.5'
+  - id: LT5
+    understand: 'the altitude to the hypotenuse makes right triangles that are similar to each other'
+    able_to: 'match the vertices of those triangles by their angles, and find lengths with similar triangles or the Pythagorean theorem'
+    standard: 'G.SRT.5, 8.G.B.7'
 
 sections:
   - kind: plain
-    title: 'Scale factor and dilations (3.1-3.4)'
     items:
-      - n: 1
-        prompt:
-          - 'A map of Seattle uses this scale: 1 inch represents 2.5 miles.'
-          - 'a. On the map, Franklin High School is 2 inches from the Space Needle. How far apart are they in real life?'
-          - 'b. Two light rail stations are 7.5 miles apart. How far apart are they on the map?'
-        fill: [['a. Real distance:', '5 miles'], ['b. Map distance:', '3 inches']]
-        fill_cols: 2
-        box_w: 1.2
-        answer: 'a. $2 \times 2.5 = 5$ miles. b. $7.5 \div 2.5 = 3$ inches.'
-        work: 0.45
-      - n: 2
-        prompt: 'Use the grid.'
+      - id: dilate
         figure: Unit 3 Review_dilate
         fig_w: 2.6
         parts:
           - label: a.
+            target: LT1
+            type: cr
+            demand: pwoc
             prompt: 'Dilate $EFGH$ using center $C$ and scale factor 2. Label the image $E''F''G''H''$.'
             answer: 'See the red image. Count from $C$ to each point, then double: $E$ is 2 left and 1 up, so $E''$ is 4 left and 2 up.'
             work: 0.45
           - label: b.
+            target: LT1
+            type: cr
+            demand: mem
             prompt: 'How does $\angle E''$ compare to $\angle E$?'
             fill: [['$\angle E''$ is', 'congruent to $\angle E$']]
             box_w: 1.8
-            work: 0
           - label: c.
-            prompt: 'Compare $\overline{E''H''}$ to $\overline{EH}$. Fill in each box.'
+            target: LT1
+            type: cr
+            demand: pwc
+            prompt: 'Compare $\overline{E''H''}$ to $\overline{EH}$.'
             frame:
-              - ['$EH =$', '4', 'units.', 0.9]
-              - ['$E''H'' =$', '8', 'units.', 0.9]
               - ['$E''H''$ is', '2', 'times as long as $EH$.', 0.9]
               - ['$\overline{E''H''}$ and $\overline{EH}$ are', 'parallel', '.', 1.1]
-            work: 0
-      - n: 3
-        prompt: 'A rectangle is 6 cm long and 4 cm wide. It is dilated with scale factor 2.5. What is the perimeter of the image?'
+      - id: perimeter
+        target: LT1
+        type: sr
+        demand: pwoc
+        prompt: 'A rectangle is 7 cm long and 3 cm wide. It is dilated with scale factor 2.5. What is the perimeter of the image?'
         choices: ['20 cm', '30 cm', '50 cm', '125 cm']
         choice_cols: 4
-        answer: '[C] The perimeter is $2(6 + 4) = 20$ cm, and $20 \times 2.5 = 50$ cm. [A] does not use the scale factor. [B] adds 2.5 to each side. [D] multiplies by $(2.5)^2 = 6.25$.'
+        key: C
+        answer: 'The perimeter is $2(7 + 3) = 20$ cm, and $20 \times 2.5 = 50$ cm.'
+        distractors:
+          A: 'does not use the scale factor'
+          B: 'adds 2.5 to each side: $2(9.5 + 5.5) = 30$'
+          D: 'multiplies by $(2.5)^2 = 6.25$, as for area'
         work: 0.5
-
-  - kind: plain
-    title: 'Splitting triangle sides (3.5)'
-    items:
-      - n: 4
-        prompt: '$M$ is the midpoint of $\overline{AB}$. $N$ is the midpoint of $\overline{AC}$. Find $MN$ and $m\angle AMN$.'
+      - id: midseg
+        target: LT4
+        type: cr
+        demand: pwoc
+        prompt: '$M$ is the midpoint of $\overline{AB}$. $N$ is the midpoint of $\overline{AC}$. Find $MN$.'
         figure: Unit 3 Review_midseg
         fig_w: 2.0
-        fill: [['$MN =$', '9'], ['$m\angle AMN =$', '$64^\circ$']]
+        fill: [['$MN =$', '9']]
         box_w: 0.9
-        answer: '$MN = \frac{1}{2} \cdot 18 = 9$ (midsegment). $\overline{MN} \parallel \overline{BC}$, so $\angle AMN \cong \angle ABC$ (corresponding angles).'
+        answer: '$\overline{MN}$ is a midsegment, so $BC = 2MN$ and $MN = \frac{1}{2} \cdot 18 = 9$.'
         work: 0.5
-        page_break_after: true
-      - n: 5
-        prompt: '$\overline{ST} \parallel \overline{QR}$. Find $ST$ and $TR$. Show your work.'
+      - id: splitter
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: '$\overline{ST} \parallel \overline{QR}$. Find $ST$ and $TR$.'
         figure: Unit 3 Review_pqr
         fig_w: 2.5
         fill: [['$ST =$', '10'], ['$TR =$', '6']]
         box_w: 0.9
         answer:
           - '$PQ = 5 + 3 = 8$. $\triangle PST \sim \triangle PQR$, scale factor $\frac{5}{8}$ from $\triangle PQR$ to $\triangle PST$.'
-          - '$ST = \frac{5}{8} \cdot 16 = 10$. $PR = 10 \cdot \frac{8}{5} = 16$, so $TR = 16 - 10 = 6$.'
+          - '$ST = \frac{5}{8} \cdot 16 = 10$. $PR = 10 \cdot \frac{8}{5} = 16$, so $TR = 16 - 10 = 6$. (Or $\frac{5}{3} = \frac{10}{TR}$.)'
           - 'Common error: $\frac{5}{3} \cdot 16$ (uses a piece, not the whole side $\overline{PQ}$).'
         work: 1.0
-
-  - kind: plain
-    title: 'Similar triangles (3.6-3.9)'
-    items:
-      - n: 6
-        prompt: 'Use the two triangles.'
-        figure: Unit 3 Review_rst
+      - id: similar
+        prompt: 'The two triangles are similar.'
+        figure: Unit 3 Review_similar
         fig_w: 2.9
         parts:
           - label: a.
-            prompt: 'Are the triangles similar? Fill in each box.'
-            frame:
-              - ['In $\triangle RST$: $m\angle S =$', '$95^\circ$', '.', 0.9]
-              - ['$\angle R \cong \angle Z$ and $\angle S \cong$', '$\angle Y$', '.', 0.9]
-              - ['So the triangles are similar by', 'AA', '.', 0.9]
-            work: 0
-          - label: b.
+            target: LT2
+            type: cr
+            demand: pwc
             prompt: 'Complete the similarity statement.'
-            fill: [['$\triangle RST \sim$', '$\triangle ZYX$']]
+            fill: [['$\triangle HJK \sim$', '$\triangle NML$']]
             box_w: 1.1
-            answer: 'Match by angles: $R \to Z$ ($50^\circ$), $S \to Y$ ($95^\circ$), $T \to X$ ($35^\circ$).'
+            answer: 'Match by angles: $H \to N$ ($50^\circ$), $K \to L$ ($35^\circ$), $J \to M$ ($95^\circ$).'
             work: 0.3
-          - label: c.
-            prompt: 'Find the scale factor from $\triangle RST$ to $\triangle ZYX$, and find $XY$.'
-            fill: [['Scale factor:', '1.5'], ['$XY =$', '12']]
+          - label: b.
+            target: LT3
+            type: cr
+            demand: pwoc
+            prompt: 'What scale factor takes $\triangle HJK$ onto the large triangle? Find $LM$.'
+            fill: [['Scale factor:', '1.5'], ['$LM =$', '12']]
             fill_cols: 2
             box_w: 0.9
-            answer: '$k = \frac{ZY}{RS} = \frac{9}{6} = 1.5$. $\overline{XY}$ matches $\overline{TS}$, so $XY = 8 \cdot 1.5 = 12$.'
+            answer: '$k = \frac{NM}{HJ} = \frac{9}{6} = 1.5$. $\overline{LM}$ matches $\overline{KJ}$, so $LM = 8 \cdot 1.5 = 12$.'
             work: 0.4
-          - label: d.
-            prompt: 'Write a sequence of transformations that moves $\triangle RST$ onto $\triangle ZYX$.'
-            answer: 'Sample: dilate from $R$ with scale factor 1.5. Rotate $90^\circ$ clockwise around $R$. Translate $R$ to $Z$. Accept any sequence that works.'
+          - label: c.
+            target: LT2
+            type: cr
+            demand: pwc
+            prompt: 'Write a sequence of transformations that takes $\triangle HJK$ onto the large triangle. For a dilation, name the center and the scale factor.'
+            answer: 'Sample: dilate with center $H$ and scale factor 1.5. Rotate $90^\circ$ clockwise around $H$. Translate $H$ to $N$. Accept any sequence that works.'
             work: 0.9
-      - n: 7
+      - id: ratios
+        target: LT3
+        type: sr
+        demand: pwoc
         prompt: '$\triangle MNQ \sim \triangle UVW$. Select **all** the true statements.'
         choices: ['$\frac{MN}{UV} = \frac{NQ}{VW}$', '$\angle N \cong \angle V$', '$\frac{MQ}{UW} = \frac{UV}{MN}$', '$\frac{NQ}{VW} = \frac{MQ}{UV}$', '$\frac{MN}{NQ} = \frac{UV}{VW}$']
         choice_cols: 5
-        answer: '[A], [B], [E]. Matching letters: $M \to U$, $N \to V$, $Q \to W$. [C] flips one ratio. [D] pairs $\overline{MQ}$ with $\overline{UV}$, which do not match. [E] is true: $UV = k \cdot MN$ and $VW = k \cdot NQ$, so $\frac{UV}{VW} = \frac{MN}{NQ}$.'
+        key: 'A, B, E'
+        select_all: true
+        answer: 'Matching letters: $M \to U$, $N \to V$, $Q \to W$. [E] is true too: $UV = k \cdot MN$ and $VW = k \cdot NQ$, so $\frac{UV}{VW} = \frac{MN}{NQ}$.'
+        distractors:
+          C: 'flips one ratio'
+          D: 'pairs $\overline{MQ}$ with $\overline{UV}$, which do not match'
         work: 0.55
-        page_break_after: true
-      - n: 8
+      - id: findx
+        target: LT2
+        type: cr
+        demand: dm
         prompt: 'What value of $x$ makes the two triangles similar? There are two answers. Find both.'
         figure: Unit 3 Review_dogcat
         fig_w: 2.9
@@ -122,41 +155,54 @@ sections:
           - '$x = 40$: $\angle A \cong \angle D$, so $\triangle DOG \sim \triangle ATC$ (AA).'
           - 'Common error: $x = 65$ (then $\triangle CAT$ has two $65^\circ$ angles).'
         work: 0.9
-
-  - kind: plain
-    title: 'Side splitter and right triangles (3.11-3.13)'
-    items:
-      - n: 9
+      - id: converse
+        target: LT4
+        type: sr
+        demand: pwc
         prompt: '$P$ is on $\overline{KL}$ and $Q$ is on $\overline{KM}$. Which lengths make $\overline{PQ} \parallel \overline{LM}$?'
         figure: Unit 3 Review_splitter
         fig_w: 1.6
         choices: ['$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 8$', '$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 9$', '$KP = 4$, $PL = 6$, $KQ = 9$, $QM = 6$', '$KP = 4$, $PL = 6$, $KQ = 6$, $QM = 15$']
-        choice_cols: 1
-        answer: '[B] $\frac{4}{6} = \frac{6}{9}$: same ratio on both sides (converse of the side splitter theorem). [A] adds 2 instead of multiplying. [C] pairs $KP$ with $QM$. [D] uses a piece over a whole side: $\frac{4}{10} = \frac{6}{15}$.'
+        key: B
+        answer: '$\frac{4}{6} = \frac{6}{9}$: the same ratio on both sides (converse of the side splitter theorem).'
+        distractors:
+          A: 'adds 2 instead of multiplying'
+          C: 'pairs $KP$ with $QM$'
+          D: 'uses a piece over a whole side: $\frac{4}{10} = \frac{6}{15}$'
         work: 0.75
-      - n: 10
-        prompt: '$\triangle ACB$ has a right angle at $C$. $\overline{CD}$ is the altitude to the hypotenuse.'
+      - id: altitude
+        prompt: '$\triangle XZY$ has a right angle at $Z$. $\overline{ZW}$ is the altitude to the hypotenuse.'
         figure: Unit 3 Review_altitude
         fig_w: 2.5
         parts:
           - label: a.
-            prompt: 'Complete the similarity statement. Name all three similar triangles.'
-            fill: [['$\triangle ADC \sim$', '$\triangle CDB$'], ['$\sim$', '$\triangle ACB$']]
+            target: LT5
+            type: cr
+            demand: pwc
+            prompt: 'Complete the statement for all three similar triangles.'
+            fill: [['$\triangle XWZ \sim$', '$\triangle ZWY$'], ['$\sim$', '$\triangle XZY$']]
             fill_cols: 2
             box_w: 1.1
-            answer: 'Both small triangles have a right angle at $D$, and $\angle A \cong \angle DCB$ (each is $90^\circ - m\angle B$). AA. $\triangle ACB$ shares $\angle A$ with $\triangle ADC$ and has its right angle at $C$, so $A \to A$, $D \to C$, $C \to B$.'
+            answer: 'Both small triangles have a right angle at $W$, and $\angle X \cong \angle WZY$ (each is $90^\circ - m\angle Y$). AA. $\triangle XZY$ shares $\angle X$ with $\triangle XWZ$ and has its right angle at $Z$, so $X \to X$, $W \to Z$, $Z \to Y$. The two boxes can be in either order.'
             work: 0.3
           - label: b.
-            prompt: 'Find $h$ and $AC$. Show your work.'
-            fill: [['$h =$', '12'], ['$AC =$', '20']]
+            target: LT5
+            type: cr
+            demand: pwc
+            prompt: 'Find $h$ and $XZ$.'
+            fill: [['$h =$', '12'], ['$XZ =$', '20']]
             fill_cols: 2
             box_w: 0.9
             answer:
-              - '$\frac{AD}{CD} = \frac{CD}{DB}$: $\frac{16}{h} = \frac{h}{9}$, so $h^2 = 144$ and $h = 12$.'
-              - '$AC^2 = 16^2 + 12^2 = 400$, so $AC = 20$.'
+              - '$\frac{XW}{ZW} = \frac{ZW}{WY}$: $\frac{16}{h} = \frac{h}{9}$, so $h^2 = 144$ and $h = 12$.'
+              - '$XZ^2 = 16^2 + 12^2 = 400$, so $XZ = 20$.'
             work: 1.2
 
 guide_notes: |
-  **How to use.** Students work in pairs for one class period before the Unit 3 Test, then check answers with the key at the doc camera. Section titles name the lessons, so students can go back to that lesson's QuickNotes.
+  **Nov 19: less is more, no headings.** Cut old item 1 (map scale): no Unit 3 lesson teaches map scales, and its part a was {ref:perimeter}'s move (multiply a length by 2.5). Also cut the angle box from old item 4, now {ref:midseg} (a dilation keeps angles, the same move as {ref:dilate}b), old 6a (the third angle and AA; {ref:findx} asks for AA at a higher level, and 6a's matching box was {ref:similar}a's move), and the two count boxes in old 2c, now {ref:dilate}c (counting grid units). Scaffolded: {ref:similar} prints the third angle of the large triangle ($35^\circ$ at $L$), as Test 3 does, so part a scores the matching. {ref:similar} has new letters ($\triangle HJK$ and $\triangle NML$, which no test or progress check uses), and parts b and c say "the large triangle" (they used to print part a's answer). {ref:perimeter}'s rectangle is now 7 cm by 3 cm (was 6 by 4, the width and height of polygon $G$ in 3.1-3.5 Progress Check B item 3, whose scale factor is also 2.5); the perimeter, choices, and key are the same. Directions: "Show your work." No section headings; the targets are in the blueprint. 10 items to 9.
+
+  **Nov 20 (audit fixes).** {ref:altitude} now uses $\triangle XZY$ with altitude $\overline{ZW}$: its old letters $A$-$D$ matched 3.1-3.5 Progress Check A item 5 and the Summary Notes' 3.13 example. Its key says the two boxes in part a can be in either order.
+
+  **How to use.** Students work in pairs for one class period before the Unit 3 Test, then check answers with the key at the doc camera. Lesson for each item, to send students back to its QuickNotes: {num:dilate} (3.1, 3.3, 3.4), {num:perimeter} (3.3), {num:midseg} (3.5), {num:splitter} (3.11), {num:similar} (3.6, 3.7, 3.9), {num:ratios} (3.7), {num:findx} (3.9), {num:converse} (3.11), {num:altitude} (3.13).
 
   **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (1,5), home-language words, and everyday wording ("same angle," "they never cross").

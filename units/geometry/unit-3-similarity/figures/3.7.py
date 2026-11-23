@@ -1,8 +1,8 @@
-"""Lesson 3.7 figures: reasoning about similarity with transformations. Given layer = student, answer layer = key."""
+"""Lesson 3.7 figures: corresponding parts of similar triangles. Given layer = student, answer layer = key."""
 import numpy as np
 
 from lesson_builder.figures import (
-    Figure, P, angle_deg, assert_lengths, dilate, dist, figure, midpoint, needs_reflection, reflect, rotate,
+    Figure, P, angle_deg, assert_lengths, dilate, dist, figure, midpoint, needs_reflection, on_ray, reflect, rotate,
     similarity_ratio, translate, vertex_directions,
 )
 
@@ -43,9 +43,9 @@ def warmup() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- Problems 1-2: ABC onto DEF and onto WFK
+# ---------------------------------------------------------------- Problem 1: ABC onto DEF
 _ABC = P((0, 0), (1.1, 0.3), (-0.45, 1.6))
-_ARCS = (3, 2, 1)                     # A triple, B double, C single (same marks on the images)
+_ARCS = (3, 2, 1)                     # A triple, B double, C single (same marks on the image)
 
 
 def _pair(img, names, dirs_img=None):
@@ -56,28 +56,20 @@ def _pair(img, names, dirs_img=None):
 
 
 def p1_image():
-    # dilate from A by 1.5, rotate -25 deg around A, translate: no reflection
+    # dilate from A by 1.5, rotate -25 deg around A, translate (the same map as Problem 1's printed steps)
     return translate(rotate(dilate(_ABC, 1.5, _ABC[0]), -25, _ABC[0]), (2.1, 0.1))
-
-
-def p2_image():
-    # reflect across line AB, rotate 70 deg, dilate by 0.75, translate: needs a reflection
-    m = reflect(_ABC, _ABC[0], _ABC[1])
-    return translate(dilate(rotate(m, 70, _ABC[0]), 0.75, _ABC[0]), (2.4, 0.2))
 
 
 @figure("3.7_p1")
 def p1() -> Figure:
     img = p1_image()                  # D, E, F  (A->D, B->E, C->F)
     assert np.isclose(similarity_ratio(_ABC, img), 1.5) and not needs_reflection(_ABC, img)
+    D, E = img[0], img[1]
+    step1 = translate(_ABC, D - _ABC[0])                 # Step 1: translate A to D
+    step2 = rotate(step1, -25, D)                        # Step 2: rotate around D
+    assert on_ray(D, E, step2[1])                        # ... until the image of B is on ray DE
+    assert np.allclose(dilate(step2, 1.5, D), img)       # Step 3: dilate with center D, k = DE/AB = 1.5
     return _pair(img, "DEF")
-
-
-@figure("3.7_p2")
-def p2() -> Figure:
-    img = p2_image()                  # W, F, K  (A->W, B->F, C->K)
-    assert np.isclose(similarity_ratio(_ABC, img), 0.75) and needs_reflection(_ABC, img)
-    return _pair(img, "WFK")
 
 
 def _from_sides(c, a, b):
@@ -86,16 +78,21 @@ def _from_sides(c, a, b):
     return P((0, 0), (c, 0), (x, np.sqrt(b ** 2 - x ** 2)))
 
 
-# ---------------------------------------------------------------- Problem 3: bowtie, DEA ~ BEC
+# ---------------------------------------------------------------- Problem 2: bowtie, BEC onto DEA
 @figure("3.7_bowtie")
 def bowtie() -> Figure:
+    """Given: both triangles, the matching arcs, sides b, c, e of BEC, and kb, kc on DEA (printed in Problem 2 since
+    Nov 23). Key: ke on DEA (Problem 2's fill)."""
     E = P((0, 0))[0]
     C, B = P((0.7, 0.95), (0.95, -0.15))
     k = 2.0
-    D, A = rotate(dilate([B, C], k, E), 180, E)          # rotate 180 about E, dilate by k: B->D, C->A
+    D, A = dilate(rotate([B, C], 180, E), k, E)          # Step 1 rotate 180 about E, Step 2 dilate by k: B->D, C->A
     assert np.allclose(D, -k * B) and np.allclose(A, -k * C)
     assert np.isclose(similarity_ratio([B, E, C], [D, E, A]), k)
     assert np.isclose(angle_deg(A, D, E), angle_deg(C, B, E))
+    assert np.isclose(dist(E, A), k * dist(E, C))            # AE = kb
+    assert np.isclose(dist(D, E), k * dist(E, B))            # DE = kc
+    assert np.isclose(dist(A, D), k * dist(B, C))            # AD = ke
     f = Figure(width_in=2.5, height_in=1.95)
     f.poly([D, E, A])
     f.poly([B, E, C])
@@ -110,29 +107,13 @@ def bowtie() -> Figure:
     f.arc(E, D, A, 3, r=0.2, gap=0.05)
     f.arc(E, B, C, 3, r=0.2, gap=0.05)
     cl, cs = (A + D + E) / 3, (B + C + E) / 3
-    for a, b, t, c in ((D, E, "kc", cl), (E, A, "kb", cl), (A, D, "ke", cl),
-                       (E, C, "b", cs), (E, B, "c", cs), (C, B, "e", cs)):
-        f.side_label(a, b, t, center=c, italic=True, size=10, offset_pt=7)
+    for a, b, t, c, layer in ((D, E, "kc", cl, "given"), (E, A, "kb", cl, "given"), (A, D, "ke", cl, "answer"),
+                              (E, C, "b", cs, "given"), (E, B, "c", cs, "given"), (C, B, "e", cs, "given")):
+        f.side_label(a, b, t, center=c, italic=True, size=10, offset_pt=7, layer=layer)
     return f
 
 
-# ---------------------------------------------------------------- CYU 1: find x (k = 1.5)
-@figure("3.7_cyu_x")
-def cyu_x() -> Figure:
-    J, L, K = _from_sides(8, 6, 4)                       # JL = 8, LK = 6, JK = 4
-    M, Pp, N = translate(dilate([J, L, K], 1.5), (14, 0))
-    assert np.isclose(dist(M, N), 6) and np.isclose(dist(N, Pp), 9) and np.isclose(dist(M, Pp), 12)
-    assert_lengths([(J, K, 4), (K, L, 6), (J, L, 8), (M, N, 6), (N, Pp, 9)])
-    f = Figure(width_in=3.3, height_in=1.5)
-    for tri, nm in (([J, K, L], "JKL"), ([M, N, Pp], "MNP")):
-        _tri(f, tri, nm, (1, 2, 3), r=0.95, gap=0.22)
-    for a, b, t, c in ((J, K, "4", L), (K, L, "6", J), (J, L, "8", K), (M, N, "6", Pp), (N, Pp, "9", M),
-                       (M, Pp, "x", N)):
-        f.side_label(a, b, t, center=c, size=10, italic=(t == "x"))
-    return f
-
-
-# ---------------------------------------------------------------- exit ticket: Lin's triangles (not similar)
+# ---------------------------------------------------------------- Problem 3 (the exit ticket until Nov 19, round 2): Lin's triangles (not similar)
 @figure("3.7_exit")
 def exit_lin() -> Figure:
     B, C, A = _from_sides(7, 10, 4)                      # BC = 7, CA = 10, AB = 4
@@ -239,26 +220,6 @@ def prac_paras() -> Figure:
     return f
 
 
-@figure("3.7_prac_squares")
-def prac_squares() -> Figure:
-    A, B, C, D = P((0, 5), (0, 0), (5, 0), (5, 5))
-    E0 = P((8.5, 1.0))[0]
-    # translate by AE, rotate around E so B' is on ray EF (45 deg turn), dilate from E by 2/5
-    img = dilate(rotate(translate([A, B, C, D], E0 - A), 135, E0), 2 / 5, E0)
-    E, F, G, H = img
-    assert np.allclose(E, E0) and np.isclose(dist(E, F), 2) and np.isclose(similarity_ratio([A, B, C, D], img), 0.4)
-    assert F[0] > E[0] and F[1] > E[1]                   # F is up and to the right of E
-    f = Figure(width_in=2.6, height_in=1.5)
-    for q, nm in (([A, B, C, D], "ABCD"), (img, "EFGH")):
-        q = np.asarray(q)
-        f.poly(q)
-        f.dots(q, size=10)
-        f.label_poly(q, nm, offset_pt=8)
-    f.side_label(A, B, "5", center=C, size=10)
-    f.side_label(E, F, "2", center=G, size=10)
-    return f
-
-
 @figure("3.7_prac_midseg")
 def prac_midseg() -> Figure:
     A, C, B = rotate(_from_sides(4, 8, 6), 30)           # AC = 4, CB = 8, BA = 6
@@ -275,21 +236,4 @@ def prac_midseg() -> Figure:
     m = (D + E + F) / 3
     for a, b, t in ((D, E, "2"), (E, F, "3"), (D, F, "4")):
         f.side_label(a, b, t, center=m, size=9, offset_pt=7)
-    return f
-
-
-@figure("3.7_prac_transl")
-def prac_transl() -> Figure:
-    B, A, C = P((0, 0), (1.3, 1.0), (3.2, -0.3))
-    F, D = translate([A, C], A - B)                      # triangle FAD: B->A, A->F, C->D
-    D2, E = translate([A, C], C - B)                     # triangle DCE: B->C, A->D, C->E
-    assert np.allclose(D, D2)
-    assert np.isclose(angle_deg(A, C, D), angle_deg(C, A, B))   # angle CAD = angle ACB
-    f = Figure(width_in=2.8, height_in=1.2)
-    for t in ([A, B, C], [F, A, D], [D, C, E]):
-        f.poly(t)
-    f.dots([A, B, C, D, E, F], size=10)
-    for p, nm, d in ((A, "A", (-0.5, 1)), (B, "B", (-1, -0.3)), (C, "C", (0, -1)), (D, "D", (0.6, 1)),
-                     (E, "E", (1, -0.4)), (F, "F", (0, 1))):
-        f.label(p, nm, direction=d)
     return f

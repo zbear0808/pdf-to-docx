@@ -6,6 +6,7 @@ framing: >-
   If all three pairs of sides are congruent, do the triangles have to be congruent?
 materials: patty paper
 numbering: auto
+headings: warmup
 targets:
   - id: LT1
     understand: 'Students will understand that when all three pairs of corresponding sides are congruent, a translation, a rotation, and (if needed) a reflection always take one triangle onto the other.'
@@ -19,81 +20,63 @@ targets:
 sections:
   - kind: warmup
     items:
-      - minutes: 4
+      - minutes: 2
         target: LT2
         source: '2.9 Practice Problems #1'
         prompt: 'Draw one diagonal of kite $WXYZ$ that cuts the kite into 2 congruent triangles.'
         figure: 2.9_warmup
         fill:
           - ['Diagonal I drew:', '$\overline{WY}$']
-          - ['$\triangle WXY \cong \triangle$', '$WZY$']
         box_w: 1.0
-        answer: '$\overline{WX} \cong \overline{WZ}$ and $\overline{XY} \cong \overline{ZY}$ (marked), and $\overline{WY}$ is in both triangles. Diagonal $\overline{XZ}$ makes two isosceles triangles that are not congruent.'
+        answer: '$\triangle WXY \cong \triangle WZY$: $\overline{WX} \cong \overline{WZ}$ and $\overline{XY} \cong \overline{ZY}$ (marked), and $\overline{WY}$ is in both triangles. Diagonal $\overline{XZ}$ makes two isosceles triangles that are not congruent.'
         after: 0.06
 
   - kind: together
     bank: ['translate', 'rotate around a point', 'reflect across a line']
     items:
-      - id: label
-        minutes: 2
-        target: LT1
-        source: '2.7 & 2.9 Student Notes, Activity 2.9.2'
-        prompt: 'In the diagram, $\overline{ST} \cong \overline{GH}$, $\overline{TU} \cong \overline{HJ}$, and $\overline{SU} \cong \overline{GJ}$. Mark this information on the diagram with tick marks.'
-        figure: 2.9_label
-        work: 0
-        answer: 'One tick on $\overline{ST}$ and $\overline{GH}$, two on $\overline{TU}$ and $\overline{HJ}$, three on $\overline{SU}$ and $\overline{GJ}$.'
-        after: 0.06
       - id: moves
-        minutes: 5
+        minutes: 4
         target: LT1
         source: '2.7 & 2.9 Student Notes, Activity 2.9.2'
-        prompt: 'Describe a sequence of rigid motions that takes $\triangle STU$ onto $\triangle GHJ$ in {ref:label}.'
+        prompt:
+          - '$\overline{ST} \cong \overline{GH}$, $\overline{TU} \cong \overline{HJ}$, and $\overline{SU} \cong \overline{GJ}$. Finish the rigid motions that take $\triangle STU$ onto $\triangle GHJ$.'
+          - 'Step 1: Translate $\triangle STU$ so that $S$ lands on $G$.'
+          - 'Step 2: Rotate around $G$. $ST = GH$, so $T$ lands on $H$.'
+        figure: 2.9_label
         fill:
-          - ['Step 1:', 'Translate $S$ to $G$.']
-          - ['Step 2:', 'Rotate around $G$ until $T''$ is on $H$.']
           - ['Step 3:', 'Reflect across $\overleftrightarrow{GH}$.']
         box_w: 3.6
-        answer: '$ST = GH$, so after the rotation $T''$ lands exactly on $H$. Other correct orders are fine (for example, reflect first).'
+        answer: 'After Step 2, the image of $U$ is on the other side of $\overleftrightarrow{GH}$ from $J$ ($S \to T \to U$ goes counterclockwise, $G \to H \to J$ goes clockwise), so a reflection is needed.'
         after: 0.06
         page_break_after: true
 
   - kind: partner
     items:
       - id: why
-        minutes: 8
+        minutes: 5
         target: LT1
+        type: cr
+        demand: dm
         source: '2.7 & 2.9 Student Notes, SSS theorem box and diagram'
         prompt:
-          - 'After Steps 1 and 2 of {ref:moves}, $S$ is on $G$ and $T$ is on $H$. Point $U$ moved to $U''''$. Why does the reflection in Step 3 take $U''''$ onto $J$?'
+          - 'After Steps 1 and 2 of {ref:moves}, $S$ is on $G$ and $T$ is on $H$. Point $U$ moved to $U''''$.'
+          - 'Rigid motions keep lengths, so $GU'''' = SU = GJ$ and $HU'''' = TU = HJ$.'
+          - '**Perpendicular Bisector Theorem (Lesson 2.8):** If a point is the same distance from two points, it is on the perpendicular bisector of the segment between them.'
+          - 'So $G$ and $H$ are each on the perpendicular bisector of $\overline{U''''J}$.'
+          - '**Reflection (Unit 1):** A reflection across the perpendicular bisector of a segment takes each endpoint onto the other.'
+          - 'Explain why reflecting across $\overleftrightarrow{GH}$ takes $U''''$ exactly onto $J$.'
+          - '*Optional start:* I know $U''''$ lands on $J$ because ...'
         figure: 2.9_proof
-        parts:
-          - label: a.
-            prompt: 'Rigid motions keep lengths.'
-            frame:
-              - ['$GU'''' = SU =$', '$GJ$', '']
-              - ['$HU'''' = TU =$', '$HJ$', '']
-            frame_box_w: 0.9
-            answer: 'Givens from {ref:label}: $SU = GJ$, $TU = HJ$.'
-            work: 0
-          - label: b.
-            prompt: 'By part a, $G$ and $H$ are each the same distance from $U''''$ and $J$.'
-            frame:
-              - ['So $\overleftrightarrow{GH}$ is the', 'perpendicular bisector', 'of segment $U''''J$.', 1.8]
-              - ['Reflecting across $\overleftrightarrow{GH}$ takes $U''''$ onto', '$J$', '.']
-              - ['The reflection keeps $G$ and $H$ in place, so $\triangle HU''''G \cong \triangle$', '$HJG$', '.']
-          - label: c.
-            prompt: 'Why do we need Step 3? Could $U''''$ already be on $J$ after Step 2? Explain.'
-            work: 1.6
-            answer: 'Not for these triangles. $U''''$ and $J$ are on opposite sides of $\overleftrightarrow{GH}$, because $S \to T \to U$ goes counterclockwise and $G \to H \to J$ goes clockwise. In general, yes: if the letters go around both triangles in the same direction, $U''''$ is already on $J$ and Step 3 is not needed.'
-
-  - kind: cyu
-    items:
+        box: 1.2
+        answer: 'Only one line goes through $G$ and $H$, so $\overleftrightarrow{GH}$ is the perpendicular bisector of $\overline{U''''J}$. A reflection across it takes $U''''$ onto $J$.'
       - id: sort
-        minutes: 6
+        minutes: 4
         target: LT2
         source: '2.7 & 2.9 Student Notes, Cool-down 2'
         prompt:
-          - 'Which proves the triangles congruent: SSS, SAS, ASA, or none? $A$ and $K$ are the centers of the circles.'
+          - 'Which proves the triangles congruent: SSS, SAS, ASA, or none?'
+          - '$A$ and $K$ are the centers of the circles, so $AB = AC$ and $KM = KL$ (radii).'
+          - '$\overline{AD}$, $\overline{EH}$, and $\overline{KN}$ are each in both triangles of their panel (reflexive property).'
         figure: 2.9_sort
         fig_w: 5.6
         layout: stacked
@@ -104,25 +87,12 @@ sections:
         fill_cols: 3
         box_w: 0.9
         answer:
-          - 'a. $AB = AC$ (radii), $BD = CD$ (marked), and $\overline{AD}$ is in both triangles.'
-          - 'b. Two pairs of sides and a pair of right angles, but the angles are not between the sides. Extra credit: the Pythagorean theorem gives $EJ = EI$, and then SSS works.'
-          - 'c. $KM = KL$ (radii), $\angle MKN \cong \angle LKN$, and $\overline{KN}$ is in both. The angle is between the sides.'
+          - 'a. Three pairs of sides: $AB = AC$ (radii), $BD = CD$ (marked), and $\overline{AD}$ (in both triangles).'
+          - 'b. Two pairs of sides and a pair of right angles, but the right angles are not between the sides. Extra credit: the Pythagorean theorem gives $EJ = EI$, and then SSS works.'
+          - 'c. Two pairs of sides ($KM = KL$ and $\overline{KN}$) and the angle between them ($\angle MKN \cong \angle LKN$).'
         after: 0.06
 
   - kind: notes
-
-  - kind: exit
-    items:
-      - id: mai
-        minutes: 5
-        target: LT2
-        source: '2.9 Practice Problems #2'
-        prompt:
-          - '$\triangle WYZ \cong \triangle WYX$ by SSS. Explain why diagonal $\overline{WY}$ bisects $\angle ZWX$ and $\angle ZYX$.'
-          - '*Optional start:* Since $\triangle WYZ \cong \triangle WYX$, ...'
-        figure: 2.9_mai
-        box: 1.8
-        answer: 'Corresponding parts of congruent triangles are congruent, so $\angle ZWY \cong \angle XWY$ and $\angle ZYW \cong \angle XYW$. $\overline{WY}$ cuts each angle into two congruent angles, so it bisects both.'
 
 quicknotes:
   - target: LT1
@@ -144,28 +114,21 @@ practice:
     - cells:
         - id: pr_kite
           source: '2.9 Practice Problems #3'
-          prompt: '$WXYZ$ is a kite with $\overline{WZ} \cong \overline{WX}$ and $\overline{ZY} \cong \overline{XY}$. $m\angle WXY = 133^\circ$ and $m\angle ZWX = 60^\circ$. What is $m\angle ZYW$?'
+          prompt:
+            - '$WXYZ$ is a kite with $\overline{WZ} \cong \overline{WX}$ and $\overline{ZY} \cong \overline{XY}$. $m\angle WXY = 133^\circ$ and $m\angle ZWX = 60^\circ$. What is $m\angle ZYW$?'
+            - '$\overline{WY}$ is in both triangles. In $\triangle WXY$, $m\angle XYW = 180^\circ - 133^\circ - m\angle XWY$.'
           figure: 2.9_mai
           layout: stacked
           frame: [['$m\angle ZYW =$', '$17^\circ$', '']]
           frame_box_w: 0.9
           work: 0.9
-          answer: ['$\triangle WYZ \cong \triangle WYX$ (SSS), so $\overline{WY}$ bisects $\angle ZWX$: $m\angle XWY = 30^\circ$.', '$m\angle XYW = 180 - 133 - 30 = 17^\circ$, and $\angle ZYW \cong \angle XYW$.']
-        - id: pr_rect
-          source: '2.9 Practice Problems #4'
-          prompt: '$\overline{DC} \parallel \overline{AB}$. Prove that $\triangle ABD \cong \triangle CDB$.'
-          figure: assets/2.9/prac_rect_abd.png
-          fig_w: 2.1
-          layout: stacked
-          work: 1.5
-          answer:
-            - '$\angle ABD \cong \angle CDB$: alternate interior angles ($\overline{DC} \parallel \overline{AB}$).'
-            - '$\angle A \cong \angle C$: both right angles. So $\angle ADB \cong \angle CBD$ (the angles of a triangle add to $180^\circ$).'
-            - '$\overline{BD} \cong \overline{DB}$ (same segment). So $\triangle ABD \cong \triangle CDB$ by ASA.'
+          answer: ['$\triangle WYZ \cong \triangle WYX$ (SSS), so $\angle XWY \cong \angle ZWY$ and $\angle XYW \cong \angle ZYW$ (CPCTC).', '$m\angle XWY = 60^\circ \div 2 = 30^\circ$, so $m\angle ZYW = 180^\circ - 133^\circ - 30^\circ = 17^\circ$.']
     - cells:
         - id: pr_angles
           source: '2.9 Practice Problems #5'
-          prompt: 'Find the measure of each lettered angle.'
+          prompt:
+            - 'Find the measure of each lettered angle.'
+            - 'The marks show that the top angle of the big triangle is $2e$ and that $d = e$. So $66 + 2e + e = 180$, and $d = e = 38^\circ$.'
           figure: assets/2.9/prac_angles.png
           fig_w: 5.6
           layout: stacked
@@ -173,8 +136,6 @@ practice:
             - ['$a =$', '$124^\circ$']
             - ['$b =$', '$56^\circ$']
             - ['$c =$', '$56^\circ$']
-            - ['$d =$', '$38^\circ$']
-            - ['$e =$', '$38^\circ$']
             - ['$f =$', '$76^\circ$']
             - ['$g =$', '$66^\circ$']
             - ['$h =$', '$104^\circ$']
@@ -183,7 +144,7 @@ practice:
             - ['$p =$', '$38^\circ$']
           fill_cols: 6
           box_w: 0.9
-          answer: 'The big triangle has angles $66^\circ$, $2e$, and $d = e$, so $66 + 3e = 180$ and $e = 38$. The two segments with two ticks make an isosceles triangle with base angles $38^\circ$.'
+          answer: 'The two segments with two ticks make an isosceles triangle with base angles $38^\circ$, so $h = 104^\circ$. The arrows mark parallel lines: $c = 56^\circ$ (alternate interior angles) and $p = d$ (corresponding angles).'
     - page_break_before: true
       cells:
         - id: pr_proof_sas
@@ -194,25 +155,12 @@ practice:
             given: '$\overline{AB} \cong \overline{DE}$, $\angle A \cong \angle D$, $\overline{AC} \cong \overline{DF}$'
             prove: '$\angle C \cong \angle F$'
             rows:
-              - ['$\overline{AB} \cong \overline{DE}$', {ans: 'Given'}]
-              - [{ans: '$\angle A \cong \angle D$'}, 'Given']
-              - [{ans: '$\overline{AC} \cong \overline{DF}$'}, {ans: 'Given'}]
+              - ['$\overline{AB} \cong \overline{DE}$', 'Given']
+              - ['$\angle A \cong \angle D$', 'Given']
+              - ['$\overline{AC} \cong \overline{DF}$', 'Given']
               - ['$\triangle ABC \cong \triangle DEF$', {ans: 'SAS'}]
-              - ['$\angle C \cong \angle F$', {ans: 'CPCTC'}]
-        - id: pr_proof_bisect
-          source: '2.9 Practice Problems #7'
-          prompt: 'Complete the proof.'
-          figure: 2.9_pr_bisect
-          proof:
-            given: '$\overline{QK} \cong \overline{QA}$, $\overline{QB}$ bisects $\angle KQA$'
-            prove: '$\overline{KB} \cong \overline{AB}$'
-            rows:
-              - [{ans: '$\overline{QK} \cong \overline{QA}$'}, 'Given']
-              - ['$\overline{QB}$ bisects $\angle KQA$', {ans: 'Given'}]
-              - [{ans: '$\angle KQB \cong \angle AQB$'}, 'Definition of bisector']
-              - [{ans: '$\overline{QB} \cong \overline{QB}$'}, 'Reflexive Property']
-              - [{before: '$\triangle KBQ \cong \triangle$', ans: '$ABQ$'}, {ans: 'SAS'}]
-              - ['$\overline{KB} \cong \overline{AB}$', {ans: 'CPCTC'}]
+              - ['$\angle C \cong \angle F$', 'CPCTC']
+          answer: 'Row 4: $\angle A$ and $\angle D$ are between the marked sides, so SAS.'
     - heading: SBA review
       cells:
         - id: pr_graph
@@ -227,47 +175,47 @@ practice:
           prompt: 'Solve for $x$:  $\dfrac{3x + 6}{4} = 6$'
           work: 1.6
           answer: ['$3x + 6 = 24$', '$3x = 18$', '$x = 6$']
-  selected: [[1, '$17^\circ$'], [3, '$a = 124^\circ$, $b = c = 56^\circ$, $d = e = p = 38^\circ$, $f = k = 76^\circ$, $g = 66^\circ$, $h = 104^\circ$, $n = 86^\circ$'], [7, '$x = 6$']]
+  selected: [[1, '$17^\circ$'], [2, '$a = 124^\circ$, $b = c = 56^\circ$, $d = e = p = 38^\circ$, $f = k = 76^\circ$, $g = 66^\circ$, $h = 104^\circ$, $n = 86^\circ$'], [5, '$x = 6$']]
 
 plan: |
-  **Overview.** Lessons 2.5-2.7 proved SAS and ASA with rigid motions. Today students prove the last criterion, SSS, which needs a new reason: two points that are each the same distance from a point and its match lie on the perpendicular bisector, so a reflection lines them up. Then they sort SSS, SAS, ASA, or none, and use SSS plus corresponding parts.
+  **Overview.** Lessons 2.6-2.8 proved SAS, ASA, and the Perpendicular Bisector Theorem. Today students prove SSS with rigid motions. The reflection step uses the theorem from Lesson 2.8: $G$ and $H$ are each the same distance from $U^{\prime\prime}$ and $J$, so line $GH$ is the perpendicular bisector and a reflection lines them up. Then they sort SSS, SAS, ASA, or none.
+
+  **Core idea.** Students see that after translating and rotating so one pair of sides lines up, the two lined-up vertices are each the same distance from the third vertex and its match, so the line through them is the perpendicular bisector and the reflection has to land the third vertex on its match. Known steps are printed; only the new steps are blank: Step 3 in {ref:moves} (with only sides to go on, $U^{\prime\prime}$ can land on the wrong side of $\overleftrightarrow{GH}$, so the last move is a reflection) and, in {ref:why}, the step that makes $\overleftrightarrow{GH}$ the perpendicular bisector of $\overline{U^{\prime\prime}J}$ (only one line goes through $G$ and $H$), so the reflection lands $U^{\prime\prime}$ on $J$. Printed so you can move past them: the tick marks, Steps 1-2 (translate, rotate), the equal lengths, the Perpendicular Bisector Theorem (2.8) and what it gives here ($G$ and $H$ are each on the perpendicular bisector), the Unit 1 fact that a reflection across a segment's perpendicular bisector takes each endpoint onto the other, and in {ref:sort} the radii and the shared sides. The warm-up's one blank is the diagonal, and the {ref:sort} boxes are the decision itself (2.5 review: which three parts, and is the angle between the sides). Spend whole-class time on {ref:why}.
 
   **Objectives.** (1) Explain why SSS works using translate, rotate, reflect and the perpendicular bisector. (2) Decide which criterion (if any) proves two triangles congruent; use SSS with corresponding parts. **Standards.** G-CO.B.8, G-SRT.B.5. SMP 3, 7.
 
-  **Quick look (40 min).**
+  **Quick look (24 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-4 | Warm-up: kite diagonal | Students, 1 min share |
-  | 4-12 | Together: Problems 1-2 | Teacher + class |
-  | 12-21 | With a partner: Problem 3 | Students (pairs) |
-  | 21-27 | Check your understanding: SSS, SAS, ASA, or none | Students |
-  | 27-31 | QuickNotes | Teacher + class |
-  | 31-36 | Exit ticket | Students |
-  | 36-40 | Collect exit ticket, assign practice, buffer | Teacher |
+  | 0-3 | Warm-up | Students, 1 min share |
+  | 3-8 | Together: Problem 1 | Teacher + class |
+  | 8-18 | With a partner: Problems 2-3 | Students (pairs), 1 min share |
+  | 18-22 | QuickNotes | Teacher + class |
+  | 22-24 | Collect, assign practice | Teacher |
 
-  **Warm-up (4 min).** Students draw a diagonal and name the congruent triangles. Share: "Why not $\overline{XZ}$?" (it makes two isosceles triangles of different sizes). Ask "Is three pairs of sides enough to be sure?" and leave it open; that is today's question.
+  **Warm-up (3 min).** Review from 2.5: two marked pairs and a side in both triangles. The one blank is the diagonal. Share: "Why not $\overline{XZ}$?" (two isosceles triangles of different sizes). Ask "Is three pairs of sides enough to be sure?" and leave it open; that is today's question.
 
-  **Together (8 min, doc camera).** Read the framing box (1 min). {ref:label} (2 min): students mark ticks; check that each tick count matches one pair. {ref:moves} (5 min): trace $\triangle STU$ on patty paper and do the moves the class suggests. After Step 2, stop and point out that $U^{\prime\prime}$ is on the other side of $\overleftrightarrow{GH}$. Ask "How do we know the reflection lands $U^{\prime\prime}$ exactly on $J$?" and send that question to partners.
+  **Together (5 min, doc camera).** {ref:moves}: trace $\triangle STU$ on patty paper and do Steps 1-2 quickly; they are printed. Stop after Step 2: $U^{\prime\prime}$ is on the other side of $\overleftrightarrow{GH}$. With only sides to go on, nothing keeps it on the right side, so Step 3 is a reflection. Ask "How do we know the reflection lands $U^{\prime\prime}$ exactly on $J$?" and send that question to partners.
 
-  **Partner work (9 min).** {ref:why} (8 min plus 1 to pair up).
-  - Part a is quick (2 min). Part b is the main idea (4 min): if pairs stall, ask "Which points are the same distance from $U^{\prime\prime}$ and $J$? Where have we seen a set of points like that?" (Unit 1: the perpendicular bisector).
-  - Part c (2 min): students may answer "yes, sometimes". Press: "Look at the order of the letters around each triangle."
-  - MLL supports: move bank, labeled boxes in every part, Turn and Talk in any language before writing part c. Keep the term *perpendicular bisector*; point to the dashed segment and $\overleftrightarrow{GH}$ as you say it.
-  - Watch for: students who say "same distance" without naming which two points.
+  **Partner work (10 min).** {ref:why} (5 min), a 1 min share (one pair reads its explanation), then {ref:sort} (4 min).
+  - {ref:why}: the theorem and what it gives ($G$ and $H$ are each on the perpendicular bisector) are printed, and so is the reflection fact. The blank is the connection. If pairs stall, ask "How many lines go through $G$ and $H$? Which line is the perpendicular bisector, then?"
+  - Watch for: "because it is a reflection" with no reason why it lands exactly on $J$, or "$\overleftrightarrow{GH}$ is the perpendicular bisector" with no reason (ask "How do you know?").
+  - {ref:sort}: the radii and the shared sides are printed; students decide. Panel b is the one to discuss. Some students will say SAS. Ask "Is the angle between the two sides?"
+  - MLL supports: move bank, the printed theorem and reflection fact, an optional start, Turn and Talk in any language before writing. Keep the term *perpendicular bisector*; point to the dashed segment and $\overleftrightarrow{GH}$ as you say it. *Radii* is the plural of *radius*.
 
-  **Check your understanding (6 min).** Students work alone, then compare with a partner. Panel b is the one to discuss: two sides and a right angle that is not between them. Some students will say SAS. Ask "Is the angle between the two sides?"
-
-  **QuickNotes (4 min).** Hand out page 3 (QuickNotes and exit ticket) only now: its "Why" bullet gives the Problem 3b answer. Read the theorem. For the "Why" bullet, point back to Problem 3b. For LT2, point back to {ref:sort}: ask "where is the angle?" for SAS and ASA.
-
-  **Exit ticket (5 min).** Look for "corresponding parts" (or CPCTC) and both angle pairs.
+  **QuickNotes (4 min).** Hand out page 3 (QuickNotes) only now: its "Why" bullet gives the {ref:why} answer. For LT2, point back to {ref:sort}: ask "where is the angle?" for SAS and ASA.
 
 guide_notes: |
-  **Nov 16: built for 40 minutes from the shared 2.7 & 2.9 notes.** The notes file has one 2.9 activity (2.9.2) and the Cool-down 2 sort; everything else in it belongs to Lesson 2.7. Added a warm-up and an exit ticket from the 2.9 practice set (#1 kite diagonal, #2 Mai) instead of writing new items; both were removed from the practice so students don't see them twice. The open "Describe a sequence" box became three move boxes, and the SSS theorem box (GU, HU, GH fill-ins) became Problem 3 with a perpendicular-bisector frame (the reason IM uses for this proof).
+  **Nov 23: known content printed.** Printed now: in {ref:why}, what the Perpendicular Bisector Theorem gives ($G$ and $H$ are each on the perpendicular bisector) and the Unit 1 reflection fact; in {ref:sort}, the radii and the shared sides; in practice 1-3, the shared side and angle-sum setup, $d = e = 38^\circ$, and the Given and CPCTC rows. Still blank: the warm-up diagonal, {ref:moves} Step 3, the {ref:why} connection ($\overleftrightarrow{GH}$ is that perpendicular bisector, so $U^{\prime\prime}$ lands on $J$), the {ref:sort} decisions, practice 1's SSS step and $m\angle ZYW$, 9 of the 11 angles, and the SAS reason. The warm-up's congruence box is now in the key ("$\triangle WXY$" on the page named the diagonal). Item minutes 20 to 15.
+
+  **Nov 22:** Lesson 2.8 (Perpendicular Bisector Theorem) now comes first; {ref:why} cites its theorem instead of a Unit 1 fact.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item ($\overline{WY}$ bisects both angles because $\triangle WYZ \cong \triangle WYX$) was cut (practice 1 uses the same kite and the same corresponding-parts step, and it does not touch the perpendicular bisector argument in {ref:why}). The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** Cut the tick-mark item: the marks are printed on the figure. Problem 1: Steps 1-2 (translate, rotate: review from 2.6 and 2.7) are printed; students give Step 3. Problem 2: part a (lengths stay the same) is printed as a sentence, the Unit 1 perpendicular bisector fact is printed, and parts b-c are now one open explanation, the core of the lesson. Part c (could $U^{\prime\prime}$ already be on $J$?) is cut; the reflection question is asked in Problem 1. The Check your understanding sort is now partner Problem 3. Practice: cut #4 (same rectangle proof as Lesson 2.7 practice 3) and #7 (same $KQAB$ proof as Lesson 2.7 practice 6).
+
+  **Source.** 2.7 & 2.9 Student Notes (Activity 2.9.2, Cool-down 2) and 2.9 Practice Problems. The warm-up is 2.9 practice #1, removed from the practice so students don't see it twice. Practice #2 (Mai) was the exit ticket and is cut.
 
   **{ref:sort}, panel b.** The key says none: SSS, SAS, and ASA don't apply to two sides and a non-included right angle. A student who uses the Pythagorean theorem to show $EJ = EI$ and then cites SSS is also right; give credit and share it.
 
-  **Practice 5, row 5.** The source key says $\triangle AQB$; the matching order is $\triangle KBQ \cong \triangle ABQ$ ($K \to A$, $B \to B$, $Q \to Q$). The key here uses $ABQ$. A student who writes $\triangle AQB$ (likely if they copied the old key) has made a matching-order error: $K$ is paired with $Q$ instead of $A$. Mark it as an order error; you decide partial or full credit.
-
-  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", "equal", or a home-language word for congruent, and "middle line" or a drawn right angle mark for perpendicular bisector if the idea is clear. Accept CPCTC or "matching parts are the same" on the exit ticket.
-
-  **Nov 16 (round 3):** cut extra instructions and flair.
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", "equal", or a home-language word for congruent, and "middle line" or a drawn right angle mark for perpendicular bisector if the idea is clear. Accept CPCTC or "matching parts are the same" for corresponding parts.

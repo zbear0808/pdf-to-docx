@@ -1,10 +1,9 @@
 id: 'Unit 2 Summary Notes'
 doc_type: reference
 title: 'Unit 2: Congruent triangles summary notes'
-directions: 'One section per lesson. Use these notes with your lesson handouts when you study.'
 max_pages: 5
 source: 'Unit 2 Summary Notes.docx'
-do_not_reuse: ['Unit 2 Test', '2.1-2.5 Progress Check']
+do_not_reuse: ['Unit 2 Test*', '2.1-2.5 Progress Check*']
 
 sections:
   - kind: plain
@@ -34,8 +33,7 @@ sections:
     title: 'Lesson 2.3: Congruent triangles, part 1'
     items:
       - prompt:
-          - '**Summary:** If all corresponding parts of two triangles are congruent, then a sequence of translations, rotations, and reflections takes one triangle exactly onto the other. The congruent parts are the reason the vertices line up exactly.'
-          - '**If all pairs of corresponding sides and angles are congruent between two figures, then the figures are congruent.**'
+          - '**Summary:** If all pairs of corresponding sides and angles of two figures are congruent, then the figures are congruent. The congruent parts are the reason a sequence of translations, rotations, and reflections lines up every vertex exactly.'
         work: 0
       - prompt:
           - '**Example.** Write a sequence of rigid transformations to show that the vertices line up and $\triangle UVW \cong \triangle XYZ$.'
@@ -82,7 +80,7 @@ sections:
     title: 'Lesson 2.5: Using triangle congruence theorems'
     items:
       - prompt:
-          - '**Summary:** In Lessons 2.3 and 2.4, we began to show why points line up in figures with congruent parts. In this lesson, we look at two triangles and decide if they are congruent. This builds toward proofs in the next lessons.'
+          - '**Summary:** Decide if two triangles are congruent from the parts that are given or marked.'
           - '• Use only what is given or marked. Lines are parallel only when they are marked parallel.'
           - '• Look for parts the diagram gives for free: a side in both triangles is congruent to itself, and vertical angles are congruent.'
           - '• Two sides and an angle that is not between them (SSA) is not enough.'
@@ -116,7 +114,7 @@ sections:
     title: 'Lesson 2.6: Side-Angle-Side triangle congruence'
     items:
       - prompt:
-          - '**Summary:** Prove the SAS Triangle Congruence Theorem: two pairs of corresponding sides and the angle between them are congruent. Use it to prove that the base angles of an isosceles triangle are congruent.'
+          - '**Summary:** Prove the SAS Triangle Congruence Theorem. Use it to prove that the base angles of an isosceles triangle are congruent.'
           - 'When you write a proof: (1) start with what is GIVEN, (2) end with what you want to PROVE, and (3) use geometric properties to connect the start to the end, with no gaps.'
           - '**Common geometric properties**'
           - '• Vertical angles are congruent.'
@@ -152,7 +150,7 @@ sections:
     page_break_before: true
     items:
       - prompt:
-          - '**Summary:** Prove the ASA Triangle Congruence Theorem: two pairs of corresponding angles and the side between them are congruent. Use it to prove that the opposite sides of a parallelogram are congruent.'
+          - '**Summary:** Prove the ASA Triangle Congruence Theorem. Use it to prove that the opposite sides of a parallelogram are congruent.'
           - '**Angle-Side-Angle (ASA) Triangle Congruence Theorem:** In two triangles, if two pairs of corresponding angles and the pair of corresponding sides between the angles are congruent, then the triangles must be congruent.'
         figure: 'Unit 2 Summary Notes_asa_ex'
         proof:
@@ -166,17 +164,17 @@ sections:
           height: 0.3
       - prompt:
           - 'A **parallelogram** is a quadrilateral in which pairs of opposite sides are parallel.'
-          - '**Parallelogram Theorem:** In a parallelogram, pairs of opposite sides are congruent.'
-          - '• $MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$, so $\overline{NM} \cong \overline{KL}$ and $\overline{NK} \cong \overline{ML}$.'
-          - '• Why: a diagonal splits the parallelogram into two triangles that are congruent by ASA (alternate interior angles and the shared diagonal).'
-        figure: 'Unit 2 Summary Notes_para_sides'
+          - '**Parallelogram Theorem:** In a parallelogram, pairs of opposite sides and opposite angles are congruent.'
+          - '• $MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$, so $\overline{NM} \cong \overline{KL}$, $\overline{NK} \cong \overline{ML}$, $\angle M \cong \angle K$, and $\angle N \cong \angle L$.'
+          - '• Why: each diagonal splits the parallelogram into two triangles that are congruent by ASA (alternate interior angles and the shared diagonal). Corresponding parts of congruent triangles are congruent (CPCTC).'
+        figure: 'Unit 2 Summary Notes_para'
         work: 0
 
   - kind: plain
     title: 'Lesson 2.9: Side-Side-Side triangle congruence'
     items:
       - prompt:
-          - '**Summary:** Prove the SSS Triangle Congruence Theorem: all three pairs of corresponding sides are congruent. Use it to prove that the opposite angles of a parallelogram are congruent.'
+          - '**Summary:** Prove the SSS Triangle Congruence Theorem. Then decide which theorem proves two triangles congruent: SSS, SAS, ASA, or none.'
           - '**Side-Side-Side (SSS) Triangle Congruence Theorem:** In two triangles, if all three pairs of corresponding sides are congruent, then the triangles must be congruent.'
         figure: 'Unit 2 Summary Notes_sss_ex'
         proof:
@@ -188,9 +186,3 @@ sections:
             - ['$\overline{GH} \cong \overline{GH}$', 'Reflexive property']
             - ['$\triangle HUG \cong \triangle HJG$', 'SSS']
           height: 0.3
-      - prompt:
-          - '**Parallelogram Theorem:** In a parallelogram, opposite angles are congruent.'
-          - '• $MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$, so $\angle M \cong \angle K$ and $\angle N \cong \angle L$.'
-          - '• Why: a diagonal makes two congruent triangles. Corresponding parts of congruent triangles are congruent (CPCTC).'
-        figure: 'Unit 2 Summary Notes_para_angles'
-        work: 0

@@ -1,0 +1,22 @@
+# Geometry Unit 3: Similarity (Franklin HS room 105, Period 4) (v2, Nov 23: 30 minutes, in-class practice after the QuickNotes, default scaffolding)
+course: Geometry
+unit: 3
+unit_title: Similarity
+period: Period 4
+budget:
+  minutes: 30          # lesson-style: every lesson fits a 30-minute class
+  handout_pages: 3
+  practice_pages: 2
+lessons:               # one YAML per lesson (handout + practice), teaching order
+  - 3.1.yaml
+  - 3.3.yaml
+  - 3.4.yaml
+  - 3.5.yaml
+  - 3.6.yaml
+  - 3.7.yaml
+  - 3.9.yaml
+  - 3.11.yaml
+  - 3.13.yaml
+assessments:           # progress checks, review, test, summary notes (doc_type: assessment | reference)
+  - assessments/*.yaml
+figures: figures.py    # shared figures (optional); per-document figures go in figures/<doc stem>.py

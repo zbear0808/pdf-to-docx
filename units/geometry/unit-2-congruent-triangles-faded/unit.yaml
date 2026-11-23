@@ -1,0 +1,14 @@
+# Geometry Unit 2: Congruent triangles (Franklin HS room 105, Period 4) (faded-scaffolding version)
+course: Geometry
+unit: 2
+unit_title: Congruent triangles
+period: Period 4
+budget:
+  minutes: 40        # lesson-scope: every lesson fits a 40-minute period (2.1 was built at 45 before the rule)
+  handout_pages: 3
+  practice_pages: 2
+lessons:             # faded-scaffolding copies (Nov 23); the standard versions are in the sibling unit folder
+  - 2.8.yaml
+  - 2.9.yaml
+assessments: []     # assessments live in the standard unit folder
+figures: figures.py  # shared figures (2.1); per-document figures go in figures/<doc stem>.py

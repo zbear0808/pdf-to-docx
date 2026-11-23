@@ -1,0 +1,279 @@
+schema_version: 1
+id: '4.5'
+title: 'Working with ratios in right triangles'
+notes_title: 'Side ratios in right triangles'
+framing: >-
+  What is the least I need to know to solve a right triangle?
+materials: 'Scientific calculator (degree mode), pencil'
+numbering: auto
+headings: warmup
+source: 'This unit: 4.5 Student Notes.md, 4.5 Practice Problems.md, 4.5 Notes Filled In.md (teacher key); requirements.md.'
+targets:
+  - id: LT1
+    understand: 'Each acute angle has fixed side ratios: adjacent/hypotenuse (cos), opposite/hypotenuse (sin), opposite/adjacent (tan).'
+    able_to: 'Name the sides from an angle, write the three ratios, and use an inverse ratio on a calculator to find an acute angle.'
+    standard: 'G-SRT.C.6, G-SRT.C.8'
+  - id: LT2
+    understand: 'One acute angle and one side are enough to find every side of a right triangle.'
+    able_to: 'Pick the ratio that links the side you have and the side you need, then solve for the missing side.'
+    standard: G-SRT.C.8
+
+sections:
+  - kind: warmup
+    target: LT1
+    bank:
+      - '**opposite**: across from the angle'
+      - '**adjacent**: next to the angle, not the hypotenuse'
+      - '**hypotenuse**: across from the right angle'
+    items:
+      - id: warmup
+        minutes: 4
+        target: LT1
+        type: cr
+        demand: mem
+        prompt: 'A rocket climbs 50 feet for every 13 feet it moves sideways.'
+        figure: '4.5_warmup'
+        fill:
+          - ['Side opposite the launch angle:', '50 ft']
+          - ['Side adjacent to the launch angle:', '13 ft']
+          - ['Estimate (guess) the launch angle: $15^\circ$, $45^\circ$, or $75^\circ$?', '$75^\circ$']
+        fill_cols: 1
+        box_w: 0.9
+        answer: 'The hypotenuse is the path. Actual angle: $\tan^{-1}(50/13) \approx 75.43^\circ$.'
+
+  - kind: together
+    target: LT1
+    items:
+      - id: ratios
+        minutes: 4
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: '$7^2 + 24^2 = 625 = 25^2$, so by the converse of the Pythagorean Theorem, $\triangle ABC$ is a right triangle.'
+        figure: '4.5_together'
+        parts:
+          - label: a.
+            prompt: 'Write opp, adj, and hyp on the sides, as seen from $\angle A$. Then write the three ratios for $\angle A$.'
+            fill:
+              - ['$\cos A = \frac{\text{adj}}{\text{hyp}} =$', '$\frac{24}{25}$']
+              - ['$\sin A = \frac{\text{opp}}{\text{hyp}} =$', '$\frac{7}{25}$']
+              - ['$\tan A = \frac{\text{opp}}{\text{adj}} =$', '$\frac{7}{24}$']
+            fill_cols: 3
+            box_w: 0.9
+          - label: b.
+            prompt: 'Use one ratio and a calculator to find both acute angles.'
+            fill:
+              - ['$\angle A =$', '$\cos^{-1}(\frac{24}{25}) \approx 16.26^\circ$']
+              - ['$\angle C =$', '$90^\circ - 16.26^\circ = 73.74^\circ$']
+            fill_cols: 2
+            box_w: 2.3
+      - id: p1
+        minutes: 3
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'Find the length of $\overline{AB}$. Round to the nearest hundredth.'
+        figure: '4.5_partner_1'
+        fill: [['$AB \approx$', '7.99']]
+        work: 0.8
+        answer: '$\cos 20^\circ = AB/8.5$, so $AB = 8.5 \cos 20^\circ \approx 7.99$.'
+
+  - kind: partner
+    target: LT2
+    page_break_before: true
+    bank:
+      - '$\cos = \frac{\text{adj}}{\text{hyp}}$'
+      - '$\sin = \frac{\text{opp}}{\text{hyp}}$'
+      - '$\tan = \frac{\text{opp}}{\text{adj}}$'
+    items:
+      - id: p2
+        minutes: 3
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'Find the length of $\overline{AC}$. Round to the nearest hundredth.'
+        figure: '4.5_partner_2'
+        fill: [['$AC \approx$', '7.78 cm']]
+        work: 0.8
+        answer: '$\sin 40^\circ = 5/AC$, so $AC = 5/\sin 40^\circ \approx 7.78$ cm.'
+      - id: p3
+        minutes: 3
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'Find the length of $\overline{DE}$. Round to the nearest hundredth.'
+        figure: '4.5_partner_3'
+        fill: [['$DE \approx$', '7.15']]
+        work: 0.8
+        answer: '$\tan 50^\circ = DE/6$, so $DE = 6 \tan 50^\circ \approx 7.15$.'
+      - id: need
+        minutes: 3
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt:
+          - 'What do you need to know to find the missing sides of a right triangle? Explain how you would use it.'
+          - '*Optional start:* I need to know ...'
+        box: 1.2
+        answer: 'One acute angle and one side. Name the sides from the angle, pick the ratio that uses the side I have and the side I need, then solve. (Two sides also work: use the Pythagorean Theorem.)'
+      - id: solve
+        minutes: 5
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'Find all the missing sides and angles of right triangle $ABC$. Round to the nearest hundredth.'
+        figure: '4.5_exit'
+        layout: stacked
+        fill:
+          - ['$\angle A =$', '$20^\circ$']
+          - ['$BC \approx$', '2.39']
+          - ['$AC \approx$', '6.58']
+        fill_cols: 3
+        work: 1.0
+        answer: '$\angle A = 90^\circ - 70^\circ = 20^\circ$. $BC = 7 \cos 70^\circ \approx 2.39$. $AC = 7 \sin 70^\circ \approx 6.58$.'
+
+  - kind: notes
+
+quicknotes:
+  - target: LT1
+    title: 'Name the sides, write the ratio'
+    bullets:
+      - 'Stand at the angle. **opp** is across from it, **adj** is next to it, **hyp** is across from the right angle.'
+      - 'Ratio table: $\cos\theta = \dfrac{\text{adj}}{\text{hyp}}$, $\sin\theta = \dfrac{\text{opp}}{\text{hyp}}$, $\tan\theta = \dfrac{\text{opp}}{\text{adj}}$. ($\theta$ means "the angle.")'
+      - 'Missing angle: use the inverse key, for example $\angle A = \cos^{-1}(0.8)$.'
+  - target: LT2
+    title: 'Find a missing side'
+    bullets:
+      - 'You need one acute angle and one side (or two sides, then use the Pythagorean Theorem).'
+      - 'Name the sides from the angle. Pick the ratio that uses the side you have and the side you need.'
+      - 'Unknown on top: multiply. Unknown on the bottom: divide.'
+
+practice:
+  title: 'Working with ratios in right triangles: practice'
+  rows:
+    - cells:
+        - id: pr1
+          target: LT1
+          prompt: 'A triangle has side lengths 8, 15, and 17.'
+          parts:
+            - label: a.
+              prompt: 'Show that this is a right triangle.'
+              work: 0.8
+              answer: '$8^2 + 15^2 = 64 + 225 = 289 = 17^2$, so it is a right triangle.'
+            - label: b.
+              prompt: 'Find the measures of the acute angles.'
+              work: 1.0
+              answer: 'The angle across from 8: $\tan^{-1}(8/15) \approx 28.07^\circ$. The other: $90^\circ - 28.07^\circ = 61.93^\circ$ (about $28^\circ$ and $62^\circ$).'
+        - id: pr2
+          target: LT2
+          prompt: 'Kiran stakes his kite string into the ground. The string is 18 feet long and makes a $30^\circ$ angle with the ground. How high is the kite?'
+          figure: '4.5_pr2'
+          layout: stacked
+          fill: [['Height:', '9 ft']]
+          work: 0.8
+          answer: '$\sin 30^\circ = h/18$, so $h = 18 \sin 30^\circ = 9$ ft.'
+    - cells:
+        - id: pr3
+          target: LT2
+          prompt: '$\triangle ABC$ has a right angle at $C$. Select **all** the measurements that give the triangle a hypotenuse of 10 units.'
+          figure: '4.5_pr3'
+          layout: stacked
+          select_all: true
+          choices:
+            - 'Angle $A$ is $20^\circ$ and $BC$ is 2 units.'
+            - '$AC$ is 7 units and $BC$ is 3 units.'
+            - 'Angle $B$ is $50^\circ$ and $BC$ is 4 units.'
+            - 'Angle $A$ is $30^\circ$ and $BC$ is 5 units.'
+            - '$AC$ is 8 units and $BC$ is 6 units.'
+          key: 'D, E'
+          work: 0.3
+          distractors:
+            A: '$2/\sin 20^\circ \approx 5.85$, not 10'
+            B: '$\sqrt{49 + 9} = \sqrt{58} \approx 7.62$; picking it means adding the legs, $7 + 3 = 10$'
+            C: '$4/\cos 50^\circ \approx 6.22$, not 10'
+          answer: 'D: $5/\sin 30^\circ = 10$. E: $\sqrt{64 + 36} = 10$.'
+        - id: pr4
+          target: LT1
+          prompt: '$\angle B$ is an acute angle in a right triangle. The ratio of the adjacent leg to the hypotenuse is 0.45. How many degrees is $\angle B$?'
+          choices: ['$27^\circ$', '$30^\circ$', '$60^\circ$', '$63^\circ$']
+          choice_cols: 2
+          key: D
+          work: 0.3
+          distractors:
+            A: 'used $\sin^{-1}(0.45)$; that is the other acute angle'
+            B: 'guessed from $\sin 30^\circ = 0.5$'
+            C: 'guessed from $\cos 60^\circ = 0.5$'
+          answer: '$\cos B = 0.45$, so $\angle B = \cos^{-1}(0.45) \approx 63.26^\circ$.'
+    - page_break_before: true
+      cells:
+        - id: pr5
+          target: LT2
+          prompt: 'Here is $\triangle ABC$. Find the length of side $AB$.'
+          figure: '4.5_pr5'
+          layout: stacked
+          fill: [['$AB =$', '$2\sqrt{3} \approx 3.46$']]
+          box_w: 1.3
+          work: 0.8
+          answer: '$\tan 30^\circ = AB/6$, so $AB = 6 \tan 30^\circ = 6/\sqrt{3} = 2\sqrt{3} \approx 3.46$ units.'
+        - id: pr6
+          target: LT2
+          prompt: 'Find the lengths of $AD$ and $BD$.'
+          figure: '4.5_pr6'
+          layout: stacked
+          fill:
+            - ['$BD =$', '5']
+            - ['$AD \approx$', '2.08']
+          work: 0.8
+          answer: '$BD = \sqrt{13^2 - 12^2} = 5$. $\angle ABD = \angle C$ and $\tan C = 5/12$, so $AD = 5 \cdot (5/12) = 25/12 \approx 2.08$ (about 2.1).'
+    - heading: 'SBA review'
+      cells:
+        - id: pr7
+          prompt: 'Here is a line on a graph. Write its equation in the form $y = mx + b$, where $m$ is the slope and $b$ is the $y$-intercept.'
+          figure: '4.5_pr7'
+          layout: stacked
+          fill: [['$y =$', '$\frac{1}{2}x$']]
+          work: 0.5
+          answer: 'The line passes through (0, 0) and (40, 20), so $m = 20/40 = 1/2$ and $b = 0$: $y = \frac{1}{2}x$.'
+        - id: pr8
+          prompt: 'Find the value of $n$: $5^n = 5^{11} \cdot 5^3$'
+          fill: [['$n =$', '14']]
+          work: 0.6
+          answer: 'Add the exponents: $11 + 3 = 14$, so $n = 14$.'
+  selected: []
+
+plan: |
+  **Overview.** In 4.1 students saw that one acute angle fixes the side ratios of a right triangle, and in 4.4 they labeled opp, adj, and hyp. Today the ratios get their calculator names (cos, sin, tan). The inverse key turns a ratio into an angle, and one acute angle plus one side gives any other side. Essential question: What is the least I need to know to solve a right triangle? Calculators in degree mode.
+
+  **Core idea.** Students see that one acute angle and one side are enough to find any side of a right triangle: name the sides from the angle, and the side you have and the side you need pick the ratio. Spend whole-class time on that choice. Say it out loud in {ref:p1}, have pairs say it for {ref:p2} and {ref:p3}, and open QuickNotes with a pair's answer to {ref:need}. Printed so you can move past them: the rocket triangle, the 7-24-25 triangle and its Pythagorean check, the triangle in {ref:p2} (the source asked for a sketch from words), and the three ratios above the partner problems. Calculators do the arithmetic.
+
+  **Quick look (33 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-11 | Together: Problems 1-2 | Teacher + class |
+  | 11-26 | With a partner: Problems 3-6 | Students (pairs), 1 min share |
+  | 26-30 | QuickNotes | Teacher + class |
+  | 30-33 | Collect, assign practice | Teacher |
+
+  **Warm-up (4 min).** Naming sides is review from 4.4; point at the word bank. Act out "launch" with a hand if needed: up 50, over 13. At the share, take the estimate, then show $\tan^{-1}(50/13) \approx 75^\circ$ on the calculator: "Today we learn that key."
+
+  **Together (7 min, doc camera).** {ref:ratios}: stand at $A$ and write opp, adj, and hyp on the sides before any ratio. Part b: show the inverse key, $\cos^{-1}(24/25)$, then the angle sum for $\angle C$. {ref:p1}: think out loud. "I have the hyp, 8.5. I need $AB$, the adj. The ratio with adj and hyp is cos." Write $\cos 20^\circ = AB/8.5$, then multiply both sides by 8.5. Send pairs to {ref:p2}.
+
+  **With a partner (15 min, 1 min share).**
+  - Assessing: "Which side do you have? Which side do you need? Which ratio uses both?"
+  - Advancing: "Could you find $AB$ in {ref:p2} too?" ($\tan 40^\circ = 5/AB$, so $AB \approx 5.96$.) "Why isn't one side enough without an angle?"
+  - Watch for: $\sin 40^\circ = AC/5$ in {ref:p2} (unknown on the wrong side). Ask "Is your hypotenuse the longest side?" Strange answers usually mean radian mode; check DEG.
+  - {ref:need} is the core idea in words. Look for one acute angle, one side, and the side you have and the side you need. Accept everyday words.
+  - {ref:solve} puts {ref:need} to work on a whole triangle. Look for the right ratio for each side: from the $70^\circ$ angle, $BC$ is adj (cos) and $AC$ is opp (sin), both with the hyp. If many students pick the wrong ratio, start 4.6 with a quick label-the-sides sort.
+  - MLL supports: word bank, a labeled figure on every problem, the optional start in {ref:need}, Turn and Talk in any language before writing, share-out in English. "Leg" means a side next to the right angle, not a body part.
+
+  **QuickNotes (4 min).** Hand out page 3 now: its LT2 bullets answer {ref:need}. Start with one pair's answer, then read the notes. $\theta$ means "the angle."
+
+guide_notes: |
+  **Nov 19: cut for the core idea.** Printed the rocket triangle (the warm-up now names two sides and picks an estimate instead of drawing), the 7-24-25 triangle with its Pythagorean check (the sketch problem and the right-triangle part are cut, so {ref:ratios} is one problem), the {ref:p2} triangle (was a sketch from words), and the three ratios above the partner problems. {ref:p1} moved to Together so the ratio choice is modeled once. Cut the extension and its "If you finish early" line, the partner intro (talk move and hints), and the section subtitles. The Check your understanding item is partner {ref:need} again (source Activity 2 #5) with one open box; its 3-box frame gave the answer. Practice unchanged.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:solve} (the only problem that finds every missing part from one angle and one side, so it tests the claim in {ref:need}; from the same $70^\circ$ angle, $BC$ needs cos and $AC$ needs sin). The handout prints only the Warm-up heading.
+
+  **Source changes.** Activity 1 #1-4 are {ref:ratios}. Activity 2 #1-3 are {ref:p1}, {ref:p2}, and {ref:p3}, and #5 is {ref:need}. The cool-down is {ref:solve}. Practice key renumbered to match problems 1-8 (the source key was numbered 1-9). Practice 5 key simplified: $6/\sqrt{3} = 2\sqrt{3} \approx 3.46$. Practice 6: $AD = 25/12 \approx 2.08$ (source key 2.1) uses $\angle ABD = \angle C$.
+
+  **Scoring notes.** Formative, no points. Score the math, not grammar or spelling. Accept home-language words, decimal commas, and answers rounded to the tenth when the method is right.

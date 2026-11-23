@@ -6,15 +6,31 @@ set: 3.1-3.5 Progress Check
 form: Retake B
 parallel_to: 3.1-3.5 Progress Check Retake A
 title: 'Progress check retake: lessons 3.1-3.5'
-directions: 'Show your work. Use the grid or a ruler.'
-total_points: 10
+directions: 'Show your work.'
+total_points: 9
 max_pages: 2
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along the ray from the center to $k$ times as far, so $k > 1$ enlarges and $0 < k < 1$ shrinks'
+    able_to: 'dilate a figure given a center and a scale factor'
+    standard: G-SRT.A.1
+  - id: LT2
+    understand: 'a dilation multiplies every length by the scale factor $k$'
+    able_to: 'find $k$ from a side and its image, and use $k$ to find a missing length'
+    standard: G-SRT.A.1b
+  - id: LT3
+    understand: 'a dilation keeps angle measures and takes a line that misses the center to a parallel line (a line through the center to itself)'
+    able_to: 'tell what a dilation does to angles, lines, and segments'
+    standard: G-SRT.A.1a
 
 sections:
   - kind: plain
-    title: 'Lesson 3.1: dilate a figure'
+    target: LT1
     items:
       - id: q1
+        target: LT1
+        type: cr
+        demand: pwoc
         points: 2
         prompt: 'Dilate $\triangle JKL$ using center $O$ and scale factor $\frac{1}{3}$. Label the image $\triangle J''K''L''$.'
         figure: 3.1-3.5 Progress Check Retake B_q1
@@ -22,14 +38,26 @@ sections:
         work: 0
         answer: '$J$ is 3 right, 9 up from $O$, so $J''$ is 1 right, 3 up. $K$: 9 right, 6 up, so $K''$ is 3 right, 2 up. $L$: 6 right, 3 up, so $L''$ is 2 right, 1 up.'
       - id: q2
+        target: LT1
+        type: sr
+        demand: mem
         key: B
         points: 1
         prompt: 'Trapezoid $ABCD$ is dilated to make trapezoid $A''B''C''D''$. Which scale factor makes the image **larger** than $ABCD$?'
-        choices: ['$\frac{2}{3}$', '$\frac{7}{4}$', '1', '$\frac{1}{3}$']
+        choices: ['$\frac{2}{3}$', '$\frac{7}{4}$', '1', '$\frac{11}{12}$']
         choice_cols: 4
-        answer: '[B] $\frac{7}{4}$ is greater than 1, so every length grows. (1 keeps the same size. $\frac{2}{3}$ and $\frac{1}{3}$ make it smaller.)'
-        work: 0.2
+        answer: '[B] $\frac{7}{4}$ is greater than 1, so every length grows. (1 keeps the same size. $\frac{2}{3}$ and $\frac{11}{12}$ make it smaller.)'
+        distractors:
+          A: 'thinks $0 < k < 1$ enlarges'
+          C: 'thinks $k = 1$ enlarges it'
+          D: 'reads $\frac{11}{12}$ as large'
+
+  - kind: plain
+    target: LT2
+    items:
       - id: q3
+        target: LT2
+        type: cr
         model:
           kind: scaled_rectangles
           source_name: D
@@ -42,15 +70,16 @@ sections:
         prompt: 'Polygon ${value:q3.image_name}$ is a dilation of polygon ${value:q3.source_name}$.'
         figure: 3.1-3.5 Progress Check Retake B_q3
         fig_w: 3.0
-        work: 0
         parts:
           - label: a.
+            demand: pwoc
             points: 1
             prompt: 'What is the scale factor from ${value:q3.source_name}$ to ${value:q3.image_name}$?'
             fill: [['Scale factor:', '${value:q3.scale}$']]
             answer: '${value:q3.image_known} \div {value:q3.source_known} = {value:q3.scale}$'
             work: 0.5
           - label: b.
+            demand: pwoc
             points: 1
             prompt: '${value:q3.given_symbol} = {value:q3.given_other}$. What is ${value:q3.unknown_symbol}$?'
             fill: [['${value:q3.unknown_symbol} =$', '{value:q3.answer}']]
@@ -58,55 +87,53 @@ sections:
             work: 0.5
 
   - kind: plain
-    title: 'Lessons 3.3-3.5: lengths, angles, and lines'
+    target: LT3
     page_break_before: true
     items:
-      - id: q4
-        points: 1
-        prompt: 'Here are $\triangle PQR$ and $\triangle PQ''R''$. $\triangle PQ''R''$ is a dilation of $\triangle PQR$ with center $P$. What is the length of $\overline{Q''R''}$?'
-        figure: 3.1-3.5 Progress Check Retake B_q4
-        fig_w: 2.6
-        fill: [['$Q''R'' =$', '12']]
-        answer: 'Scale factor: $\frac{9}{12} = \frac{6}{8} = \frac{3}{4}$. So $Q''R'' = \frac{3}{4} \cdot 16 = 12$.'
-        work: 0.6
       - id: q5
+        target: LT3
+        type: sr
+        demand: pwc
         key: 'A, D, E'
         select_all: true
         points: 2
         prompt:
           - 'Select **all** the lines that could be the image of line $q$ after a dilation.'
-          - 'Each wrong or missing choice loses $\frac{1}{4}$ point.'
+          - 'Each wrong or missing choice loses 1 point.'
         figure: 3.1-3.5 Progress Check Retake B_q5
         fig_w: 2.6
         choices: ['$q$', '$r$', '$s$', '$t$', '$u$']
         choice_cols: 5
-        answer: '[A], [D], [E]. A dilation takes $q$ to a parallel line ($t$ or $u$), or to $q$ itself when the center is on $q$. Lines $r$ and $s$ cross $q$.'
-        work: 0.2
+        answer: '[A], [D], [E]. A dilation takes $q$ to a parallel line ($t$ or $u$), or to $q$ itself when the center is on $q$. Lines $r$ and $s$ cross $q$. A blank or all five scores 0.'
       - id: q6
+        target: LT3
+        type: sr
+        demand: mem
         key: 'A, C, E'
         select_all: true
         points: 2
         prompt:
           - '$\triangle RST$ is dilated by scale factor 2 to make $\triangle XYZ$.'
-          - 'Select **all** the true statements. Each wrong or missing choice loses $\frac{1}{4}$ point.'
+          - 'Select **all** the true statements. Each wrong or missing choice loses $\frac{2}{3}$ point.'
         figure: 3.1-3.5 Progress Check Retake B_q6
         fig_w: 2.0
         choices: ['$\frac{XY}{RS} = 2$', '$\overline{RS} \cong \overline{XY}$', '$\angle X \cong \angle R$', '$\frac{RS}{XY} = 2$', '$\overline{RS} \parallel \overline{XY}$', '$m\angle X = 2 \cdot m\angle R$']
         choice_cols: 3
-        answer: '[A], [C], [E]. Image lengths are 2 times the original, so $\frac{XY}{RS} = 2$. Angles do not change. A dilation takes $\overline{RS}$ to a parallel segment. ([B]: $XY = 2 \cdot RS$, not equal. [D] is upside down. [F] doubles the angle.)'
-        work: 0.2
+        answer: '[A], [C], [E]. Image lengths are 2 times the original, so $\frac{XY}{RS} = 2$. Angles do not change. A dilation takes $\overline{RS}$ to a parallel segment. ([B]: $XY = 2 \cdot RS$, not equal. [D] is upside down. [F] doubles the angle.) A blank or all six scores 0.'
 
 guide_notes: |
   **Retake B** mirrors Retake A with new letters, numbers, and orientation. Use it for a second retake or for students who sat next to each other on Retake A.
 
-  **Difficulty.** Two items are a step harder than on A and B, as in the source retake. In 3b, $y$ is on the smaller polygon, so students divide. In 4, students compute a length instead of reading off a kept angle. Retake A matches Retake B.
+  **Difficulty.** Item 3b is a step harder than on A and B, as in the source retake: ${value:q3.unknown_symbol}$ is on the smaller polygon, so students divide. Retake A matches Retake B.
 
-  **Targets.** Items 1-3: I can dilate a figure given a center and scale factor, and find a scale factor (3.1, 3.3). Item 4: lengths scale by $k$ (3.3, 3.5). Item 5: a dilation takes a line to a parallel line or to itself (3.4). Item 6: lengths scale by $k$, angles stay, segments stay parallel (3.3-3.5).
+  **Nov 19: less is more, no headings.** Cut old item 4 ($Q'R'$, 1 pt): finding $k$ and then multiplying the third side is the same move at the same level as item 3 (every form cut it). Old items 5-6 are now {num:q5}-{num:q6}; 10 to 9 points. No section headings; the directions say only "Show your work." Nov 20: a blank or every choice now scores 0 on the select-all items; item 2 uses $\frac{11}{12}$ (was $\frac{1}{3}$, item 1's scale factor), close to 1 like Retake A's $\frac{8}{9}$.
+
+  **Targets.** LT1 (3.1): dilate a figure from a center by $k$; $k > 1$ enlarges, $0 < k < 1$ shrinks. LT2 (3.3): lengths multiply by $k$. LT3 (3.4): angles stay the same; a line goes to a parallel line, or to itself when the center is on it.
 
   **Scoring.**
   - Item 1 (2 pts): $\frac{1}{2}$ pt each for $J'$, $K'$, $L'$ on segment $\overline{OJ}$, $\overline{OK}$, $\overline{OL}$ at one third of the distance; $\frac{1}{2}$ pt for connecting and labeling $\triangle J'K'L'$.
-  - Item 3b: ${value:q3.unknown_symbol}$ is on the smaller polygon, so students divide by ${value:q3.scale}$ (or multiply by ${value:q3.inverse_scale}$). The common error is ${value:q3.scale} \cdot {value:q3.given_other} \approx {value:q3.multiply_given|decimal1}$. Carry through a wrong part a.
-  - Item 4: common errors are $\frac{9}{3} \cdot 16 = 48$ (part to part) and $\frac{1}{4} \cdot 16 = 4$ (wrong piece).
-  - Items 5 and 6 (2 pts each): start at 2 and subtract $\frac{1}{4}$ for each wrong pick and each missed correct choice. Minimum 0.
+  - 3a: credit $\frac{{value:q3.image_known}}{{value:q3.source_known}}$, ${value:q3.scale|decimal2}$, or ${value:q3.scale}$.
+  - 3b: ${value:q3.unknown_symbol}$ is on the smaller polygon, so students divide; the common error is ${value:q3.scale} \cdot {value:q3.given_other} \approx {value:q3.multiply_given|decimal1}$. Credit any valid method (${value:q3.unknown_symbol} = {value:q3.given_other} \div {value:q3.scale}$, ${value:q3.unknown_symbol} = {value:q3.given_other} \cdot {value:q3.inverse_scale}$, or $\frac{{value:q3.source_known}}{{value:q3.image_known}} = \frac{{value:q3.unknown_symbol}}{{value:q3.given_other}}$); carry through a wrong 3a; a correct setup with an arithmetic slip earns the point.
+  - Items {num:q5}-{num:q6} (2 pts each): each wrong or missing choice takes off 1 on item {num:q5} and $\frac{2}{3}$ on item {num:q6} (2 divided by the number of wrong choices), lowest 0. Item {num:q6}'s angle pair ([C] keeps the angle, [F] doubles it) is the LT3 angle evidence; reteach with the Lesson 3.4 warm-up and QuickNotes LT 1.
 
   **Scoring notes (MLL).** Score the math, not English. Accept a decimal comma ({value:q3.scale|comma2} for ${value:q3.scale}$), home-language words or cognates, and labels such as J1 for $J'$.

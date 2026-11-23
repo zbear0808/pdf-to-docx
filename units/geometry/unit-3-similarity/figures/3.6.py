@@ -2,7 +2,7 @@
 import numpy as np
 
 from lesson_builder.figures import (
-    Figure, P, angle_deg, assert_lengths, dilate, dist, figure, is_rigid_image, needs_reflection, rotate,
+    Figure, P, angle_deg, assert_lengths, dilate, dist, figure, needs_reflection, rotate,
     similarity_ratio, translate,
 )
 
@@ -122,56 +122,12 @@ def _nested(lsize=10) -> Figure:
     return f
 
 
-@figure("3.6_nested")
-def nested() -> Figure:
-    return _nested()
-
-
-@figure("3.6_nested_key")
-def nested_key() -> Figure:
-    f = _nested(lsize=13)
-    # key: the two triangles pulled apart (hint in the prompt)
-    sh = np.array([8.5, 0.0])
-    small = translate([_Q, _O, _R], sh)
-    big = translate([_Pt, _O, _N], sh + np.array([8.0, 0]))
-    for tri, names in ((small, "QOR"), (big, "PON")):
-        f.poly(tri, layer="answer")
-        f.dots(tri, layer="answer")
-        f.right_angle(tri[2], tri[1], tri[0], size=0.4, layer="answer")
-        cc = tri.mean(0)
-        for p, nm in zip(tri, names):
-            f.label(p, nm, center=cc, layer="answer")
-    f.side_label(small[2], small[0], "5", small.mean(0), layer="answer", size=13)
-    f.side_label(big[2], big[0], "7.5", big.mean(0), layer="answer", size=13)
-    return f
-
-
 # Partner 4: square F (side 3) and square G (side 12) share vertex V
 _V = P((0, 0))[0]
 _u1 = np.array([np.cos(np.radians(-40)), np.sin(np.radians(-40))])
 _u2 = np.array([-_u1[1], _u1[0]]) * -1
 _G = np.array([_V, _V + 12 * _u1, _V + 12 * (_u1 + _u2), _V + 12 * _u2])
 _F = np.array([_V, _V - 3 * _u1, _V - 3 * (_u1 + _u2), _V - 3 * _u2])
-
-
-@figure("3.6_squares")
-def squares() -> Figure:
-    assert np.allclose(dilate(rotate(_F, 180, _V), 4, _V), _G)
-    assert np.allclose(rotate(dilate(_G, 0.25, _V), 180, _V), _F)
-    assert_lengths([(_F[3], _F[2], 3), (_G[0], _G[1], 12)])
-    f = Figure(width_in=2.4, height_in=2.4)
-    f.poly(_F)
-    f.poly(_G)
-    f.dots(_G)
-    f.dots(_F)
-    for i in range(4):
-        f.right_angle(_G[i], _G[i - 1], _G[(i + 1) % 4], size=0.9)
-    f.text(_G.mean(0), "$G$", size=12)
-    f.text(_F.mean(0), "$F$", size=11)
-    f.label(_V, "V", direction=(-1, 0), offset_pt=13)
-    f.side_label(_F[3], _F[2], "3", _F.mean(0), size=10)
-    f.side_label(_G[0], _G[1], "12", _G.mean(0), size=10)
-    return f
 
 
 # Partner 5: right triangles EAB and TQR; AB || QR, AE || QT
@@ -236,28 +192,6 @@ _Cd = P((-2.1, 2.8))[0]
 _Ad, _Bd = P((1.6, 1.3))[0], P((4.0, 3.25))[0]
 
 
-@figure("3.6_pr_dilate")
-def pr_dilate() -> Figure:
-    C2 = dilate([_Cd], 0.75, _Dd)[0]
-    A2, B2 = dilate([_Ad, _Bd], 0.5, _Dd)
-    assert np.isclose(dist(_Dd, C2), 0.75 * dist(_Dd, _Cd)) and np.isclose(dist(A2, B2), 0.5 * dist(_Ad, _Bd))
-    f = Figure(width_in=2.2, height_in=1.7)
-    for p in (_Cd, _Bd):
-        u = (p - _Dd) / dist(_Dd, p)
-        f.seg(_Dd - 0.5 * u, p + 0.6 * u)
-    f.dots([_Dd, _Cd, _Ad, _Bd])
-    f.label(_Dd, "D", direction=(0, -1))
-    f.label(_Cd, "C", direction=(-1, 0))
-    f.label(_Ad, "A", direction=(-0.6, 1))
-    f.label(_Bd, "B", direction=(-0.6, 1))
-    f.dots([C2, A2, B2], layer="answer")
-    f.seg(A2, B2, layer="answer", lw=2.4)
-    f.label(C2, "C'", direction=(-1, -0.2), layer="answer")
-    f.label(A2, "A'", direction=(-0.8, 0.8), layer="answer")
-    f.label(B2, "B'", direction=(1, -0.4), layer="answer")
-    return f
-
-
 # Practice 7: dilation with center C takes ABC onto A'B'C (CB = 9, CB' = 6, CA = 6, CA' = 4, angle B = 40)
 _Cp = np.array([0.0, 0.0])
 _uB = np.array([np.cos(np.radians(160)), np.sin(np.radians(160))])
@@ -265,25 +199,3 @@ _angC = 180 - 40 - (180 - np.degrees(np.arcsin(9 * np.sin(np.radians(40)) / 6)))
 _uA = rotate([_uB], _angC, (0, 0))[0]
 _Bp, _Ap = _Cp + 9 * _uB, _Cp + 6 * _uA
 _B2p, _A2p = _Cp + 6 * _uB, _Cp + 4 * _uA
-
-
-@figure("3.6_pr_dil7")
-def pr_dil7() -> Figure:
-    assert np.isclose(angle_deg(_Bp, _Ap, _Cp), 40)
-    assert_lengths([(_Bp, _B2p, 3), (_B2p, _Cp, 6), (_Cp, _A2p, 4), (_A2p, _Ap, 2)])
-    assert np.allclose(dilate([_Ap, _Bp], 2 / 3, _Cp), [_A2p, _B2p])
-    f = Figure(width_in=2.4, height_in=2.2)
-    f.poly([_Ap, _Bp, _Cp])
-    f.seg(_A2p, _B2p)
-    f.dots([_Ap, _Bp, _Cp, _A2p, _B2p])
-    c = np.array([_Ap, _Bp, _Cp]).mean(0)
-    for pt, nm in ((_Ap, "A"), (_Bp, "B"), (_Cp, "C")):
-        f.label(pt, nm, center=c)
-    f.label(_A2p, "A'", direction=(0.6, -1))
-    f.label(_B2p, "B'", direction=(0.4, 1))
-    f.side_label(_Bp, _B2p, "3", c, size=11)
-    f.side_label(_B2p, _Cp, "6", c, size=11)
-    f.side_label(_Cp, _A2p, "4", c, size=11)
-    f.side_label(_A2p, _Ap, "2", c, size=11)
-    f.angle_label(_Bp, _Ap, _Cp, "$40^\\circ$", size=10)
-    return f

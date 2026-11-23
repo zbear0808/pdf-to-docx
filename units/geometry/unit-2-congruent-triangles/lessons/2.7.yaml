@@ -3,8 +3,9 @@ title: Angle-Side-Angle triangle congruence
 notes_title: ASA and parallelograms
 framing: >-
   Are two angles and the side between them enough to prove two triangles congruent?
-materials: ruler, protractor, patty paper
+materials: patty paper
 numbering: auto
+headings: warmup
 source: 2.7 & 2.9 Student Notes (2.7 parts), 2.7 Practice Problems
 targets:
   - id: LT1
@@ -19,39 +20,37 @@ targets:
 sections:
   - kind: warmup
     items:
-      - minutes: 6
+      - minutes: 3
         target: LT1
-        steps:
-          - 'Draw triangle $DOG$ with $\angle D = 75^\circ$ and $\angle G = 45^\circ$.'
-          - 'Draw triangle $CAT$ with $\angle C = 75^\circ$, $CA = 5$ cm, and $\angle A = 45^\circ$.'
-          - 'Is your $DOG$ the same size as your partner''s? Is your $CAT$?'
-        draw:
-          height: 2.1
-          key_figure: 2.7_warmup_key
-          key_fig_w: 3.4
-          key_note: '$\angle O = \angle T = 60^\circ$. DOGs come in different sizes: two angles fix only the shape. Every CAT is the same size, because the 5 cm side between the angles fixes it.'
+        prompt: 'Both triangles have $\angle D = 75^\circ$ and $\angle G = 45^\circ$.'
+        figure: 2.7_warmup
+        fig_w: 3.6
+        layout: stacked
+        fill: [['$m\angle O$ in each triangle:', '$60^\circ$'], ['Are the triangles congruent? (yes or no)', 'no']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: 'Same three angles, different sizes. Two angles fix the shape, not the size.'
 
   - kind: together
     items:
       - id: asa_why
-        minutes: 7
+        minutes: 6
         target: LT1
         type: cr
         demand: dm
         prompt:
-          - 'The two triangles are congruent. Label them $WXY$ and $DEF$ so that $\angle W \cong \angle D$, $\angle X \cong \angle E$, and $\overline{WX} \cong \overline{DE}$. Mark the congruent parts.'
-          - 'Then finish the sequence of rigid motions that takes $\triangle WXY$ onto $\triangle DEF$.'
+          - '$\angle W \cong \angle D$, $\overline{WX} \cong \overline{DE}$, and $\angle X \cong \angle E$. Two rigid motions take $\triangle WXY$ onto $\triangle DEF$:'
+          - 'Step 1: Translate $\triangle WXY$ so that $W$ lands on $D$.'
+          - 'Step 2: Rotate around $D$. $WX = DE$, so $X$ lands on $E$.'
+          - 'Why does $Y$ have to land on $F$?'
         figure: 2.7_asa_pair
         fig_w: 2.3
         layout: stacked
         frame:
-          - ['Step 1: Translate $\triangle WXY$ so that $W$ lands on', '$D$', '.']
-          - ['Step 2: $WX = DE$. So rotating around $D$ takes $X$ to', '$E$', '.']
-          - ['Step 3: If $Y$ and $F$ are on opposite sides of line $DE$,', 'reflect', 'across that line.']
           - ['$\angle W \cong \angle D$, so ray $WY$ lands on ray', '$DF$', '.']
           - ['$\angle X \cong \angle E$, so ray $XY$ lands on ray', '$EF$', '.']
           - ['$Y$ is on both rays, and the rays cross at only one point. So $Y$ lands on', '$F$', '.']
-        answer: 'Sample labeling in red (any labeling with matching marks works). Here Step 3 is not needed.'
+        answer: 'No reflection is needed for this pair: $Y$ and $F$ end up on the same side of $\overline{DE}$.'
       - id: asa_example
         minutes: 3
         target: LT1
@@ -68,68 +67,28 @@ sections:
 
   - kind: partner
     items:
-      - id: para_mark
-        minutes: 4
+      - id: para_proof
+        minutes: 10
         target: LT2
         type: cr
-        demand: pwoc
-        prompt: '$ABCD$ is a parallelogram.'
+        demand: pwc
+        prompt: 'A **parallelogram** is a quadrilateral in which both pairs of opposite sides are parallel. Diagonal $\overline{BD}$ splits parallelogram $ABCD$ into 2 triangles. Complete the proof that opposite sides of a parallelogram are congruent.'
         figure: 2.7_para
         fig_w: 2.0
         layout: stacked
-        parts:
-          - label: a.
-            prompt: 'Finish the definition. A **parallelogram** is a quadrilateral in which ...'
-            fill: [['pairs of opposite', 'sides'], ['are', 'parallel']]
-            fill_cols: 2
-            box_w: 1.1
-          - label: b.
-            prompt: 'Mark the figure to show $\overline{AB} \parallel \overline{DC}$ and $\overline{AD} \parallel \overline{BC}$. Then draw diagonal $\overline{BD}$ to split $ABCD$ into 2 triangles.'
-            answer: 'See the red marks.'
-            work: 0
-      - id: para_proof
-        minutes: 9
-        target: LT2
-        type: cr
-        demand: pwc
-        prompt: 'Use your marked figure in {ref:para_mark}. Complete the two-column proof to show that the opposite sides of a parallelogram are congruent.'
         proof:
-          given: '$ABCD$ is a parallelogram with $\overline{AB} \parallel \overline{DC}$ and $\overline{AD} \parallel \overline{BC}$, and auxiliary segment $\overline{BD}$.'
-          prove: 'Opposite sides are congruent, $\overline{AB} \cong \overline{CD}$ and $\overline{BC} \cong \overline{AD}$.'
+          given: '$ABCD$ is a parallelogram: $\overline{AB} \parallel \overline{DC}$ and $\overline{AD} \parallel \overline{BC}$.'
+          prove: '$\overline{AB} \cong \overline{CD}$ and $\overline{BC} \cong \overline{AD}$'
           rows:
             - ['$\overline{AB} \parallel \overline{DC}$', 'Given']
             - [{ans: '$\angle ABD \cong \angle CDB$'}, 'Alternate interior angles']
-            - [{ans: '$\overline{BD} \cong \overline{DB}$'}, 'A segment is congruent to itself']
-            - ['$\overline{AD} \parallel \overline{BC}$', {ans: 'Given'}]
-            - [{ans: '$\angle ADB \cong \angle CBD$'}, {ans: 'Alternate interior angles'}]
-            - [{ans: '$\triangle ABD \cong \triangle CDB$'}, {ans: 'ASA Triangle Congruence Theorem'}]
-            - ['Opposite sides are congruent, $\overline{AB} \cong \overline{CD}$ and $\overline{BC} \cong \overline{AD}$.', {ans: 'Corresponding parts of congruent triangles are congruent'}]
+            - ['$\overline{BD} \cong \overline{DB}$', 'A segment is congruent to itself']
+            - ['$\overline{AD} \parallel \overline{BC}$', 'Given']
+            - [{ans: '$\angle ADB \cong \angle CBD$'}, 'Alternate interior angles']
+            - [{ans: '$\triangle ABD \cong \triangle CDB$'}, {ans: 'ASA'}]
+            - ['$\overline{AB} \cong \overline{CD}$ and $\overline{BC} \cong \overline{AD}$', {ans: 'Corresponding parts of congruent triangles are congruent'}]
 
   - kind: notes
-
-  - kind: cyu
-    items:
-      - id: mnkl
-        minutes: 2
-        target: LT2
-        type: cr
-        demand: pwoc
-        prompt: '$MNKL$ is a parallelogram with $\overline{MN} \parallel \overline{KL}$ and $\overline{NK} \parallel \overline{ML}$. Use the Parallelogram Theorem.'
-        figure: 2.7_mnkl
-        fig_w: 1.5
-        fill: [['$\overline{NM} \cong$', '$\overline{KL}$'], ['$\overline{NK} \cong$', '$\overline{ML}$'], ['$\angle M \cong$', '$\angle K$'], ['$\angle N \cong$', '$\angle L$']]
-        fill_cols: 2
-        box_w: 0.9
-        answer: '$M$ is across from $K$, and $N$ is across from $L$.'
-  - kind: exit
-    items:
-      - minutes: 3
-        target: LT2
-        type: cr
-        demand: pwc
-        prompt: 'Look at your parallelogram proof on page 2. Explain why one pair of opposite angles of $ABCD$ must be congruent.'
-        box: 1.3
-        answer: '$\triangle ABD \cong \triangle CDB$, and $\angle A$ matches $\angle C$. Corresponding parts of congruent triangles are congruent, so $\angle A \cong \angle C$.'
 
 quicknotes:
   - target: LT1
@@ -150,12 +109,14 @@ practice:
   rows:
     - cells:
         - n: 1
-          target: LT1
-          prompt: ['$\overline{AE} \cong \overline{CE}$ and $\angle A \cong \angle C$', 'Which triangle congruence theorem could you use to prove $\triangle ADE \cong \triangle CBE$?']
-          figure: 2.7_pr_bowtie
-          fig_w: 1.6
-          layout: stacked
-          answer: 'ASA. $\angle AED \cong \angle CEB$ (vertical angles), and $\overline{AE}$ and $\overline{CE}$ are the sides between the congruent angles.'
+          target: LT2
+          prompt: '$MNKL$ is a parallelogram. Use the Parallelogram Theorem.'
+          figure: 2.7_mnkl
+          fig_w: 1.5
+          fill: [['$\overline{NM} \cong$', '$\overline{KL}$'], ['$\overline{NK} \cong$', '$\overline{ML}$'], ['$\angle M \cong$', '$\angle K$'], ['$\angle N \cong$', '$\angle L$']]
+          fill_cols: 2
+          box_w: 0.9
+          answer: '$M$ is across from $K$, and $N$ is across from $L$.'
         - n: 2
           target: LT2
           prompt: ['$\overline{GE}$ is an angle bisector of $\angle HEF$ and of $\angle FGH$.', 'Prove $\triangle HGE \cong \triangle FGE$.']
@@ -228,45 +189,43 @@ practice:
           prompt: ['Solve the equation by factoring.', '$x^2 - 2x - 48 = 0$']
           answer: ['$(x - 8)(x + 6) = 0$', '$x = 8$ or $x = -6$']
           work: 1.4
-  selected: [[1, ASA], [2, 'ASA (bisected angles, shared side $\overline{GE}$)'], [3, 'add $\angle ADB \cong \angle CBD$ (Triangle Angle Sum Theorem)'], [4, D], [5, 'given; $\angle A \cong \angle C$; $\angle B \cong \angle D$; given; ASA'], [6, '$\triangle ABQ$ by SAS'], [7, '$y = -4x + 7$'], [8, '$x = 8$ or $x = -6$']]
+  selected: [[1, '$\overline{KL}$, $\overline{ML}$, $\angle K$, $\angle L$'], [2, 'ASA (bisected angles, shared side $\overline{GE}$)'], [3, 'add $\angle ADB \cong \angle CBD$ (Triangle Angle Sum Theorem)'], [4, D], [5, 'given; $\angle A \cong \angle C$; $\angle B \cong \angle D$; given; ASA'], [6, '$\triangle ABQ$ by SAS'], [7, '$y = -4x + 7$'], [8, '$x = 8$ or $x = -6$']]
 
 plan: |
-  **Overview.** Lesson 2.6 proved SAS with rigid motions. Today students prove ASA the same way, then use it right away: a diagonal splits a parallelogram into two triangles that are congruent by ASA, which gives the Parallelogram Theorem. Lesson 2.9 does SSS from the same notes file.
+  **Overview.** Lesson 2.6 proved SAS with rigid motions. Today students prove ASA the same way, then use it: a diagonal splits a parallelogram into two triangles that are congruent by ASA. Lesson 2.9 does SSS.
 
-  **Objectives.** (1) Explain why ASA works with a sequence of rigid motions. (2) Use ASA in a two-column proof and apply the Parallelogram Theorem. **Standards.** G-CO.B.8, G-CO.C.11. SMP 3, 5 (ruler, protractor, patty paper), 6.
+  **Core idea.** Students see that once the side between the angles lines up, the two angles send the other two sides along the same rays, and two rays cross at only one point, so the third vertex has to land on its match. Spend whole-class time on the three boxes in {ref:asa_why}. Translate and rotate are review from 2.6, so they are printed; move past them quickly.
 
-  **Quick look (40 min).**
+  **Objectives.** (1) Explain why ASA works with a sequence of rigid motions. (2) Use ASA in a two-column proof. **Standards.** G-CO.B.8, G-CO.C.11. SMP 3, 5, 6.
+
+  **Quick look (32 min).**
   | Time | Part | Who talks |
   |---|---|---|
-  | 0-6 | Warm-up (draw $DOG$ and $CAT$) | Students, 1 min share |
-  | 6-16 | Together: Problems 1-2 | Teacher + class |
-  | 16-29 | With a partner: Problems 3-4 | Students (pairs) |
-  | 29-33 | QuickNotes | Teacher + class |
-  | 33-35 | CYU 1 | Students |
-  | 35-38 | Exit ticket 2 | Students |
-  | 38-40 | Collect exit ticket, assign practice | Teacher |
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-14 | Together: Problems 1-2 | Teacher + class |
+  | 14-25 | With a partner: Problem 3 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-32 | Collect, assign practice | Teacher |
 
-  **Warm-up (6 min).** About 4 min to draw, then hold up drawings. Ask "Whose $DOG$ matches the person next to you? Whose $CAT$ does?" Everyone's $CAT$ should match (trace one on patty paper and lay it on another). The $DOG$s have the same shape but different sizes. Name it: the 5 cm side between the angles is what fixed the size.
-  - Watch for: students who put the 5 cm on $\overline{CT}$ or $\overline{AT}$ instead of $\overline{CA}$.
+  **Warm-up (4 min).** Angle sum is review. The point is the second box: same angles, different sizes, so two angles are not enough. Ask "What else would we need to know to pin down the size?" and leave it open.
 
-  **Together (10 min, doc camera).** Problem 1 (7 min): trace the left triangle on patty paper and do the moves. Students label first (1 min); show one labeling and use it for the frame. The key idea is the last two boxes: the angle at $D$ sends $Y$ somewhere on ray $DF$, the angle at $E$ sends it somewhere on ray $EF$, and two rays cross only once. Ask "Could $Y$ land anywhere else on ray $DF$?" Step 3 never fires for this pair (the right triangle is a turn of the left one, and the triangle is scalene, so every correct labeling is a rotation). Ask "When would we need it?" (a mirror-image pair).
-  - Problem 2 (3 min): read the theorem together. Point to the side between the two angles. Ask "Why do the angles at $E$ get the same mark?" (vertical angles).
+  **Together (10 min, doc camera).** {ref:asa_why} (6 min): trace $\triangle WXY$ on patty paper and do Steps 1-2 quickly. Then slow down for the boxes: the angle at $D$ sends $Y$ somewhere on ray $DF$, the angle at $E$ sends it somewhere on ray $EF$. Ask "Could $Y$ land anywhere else on ray $DF$?" and "When would we need a reflection?" (a mirror-image pair). {ref:asa_example} (3 min): read the theorem, point to the side between the two angles, and ask why the angles at $E$ match (vertical angles).
 
-  **Partner work (13 min).** Problem 3 (about 4 min), Problem 4 (about 8 min), then 1 min to compare with the next pair.
+  **Partner work (11 min).** {ref:para_proof}. The parallel marks, the diagonal, the shared side, and the Given rows are printed; students find the two pairs of alternate interior angles and name the congruence.
   - Assessing: "Which lines are parallel, and which line cuts across them?" "Which side is between your two angles?"
-  - Advancing: "What if you used diagonal $\overline{AC}$ instead? What changes?" (then $\angle BAC \cong \angle DCA$, $\overline{AC} \cong \overline{CA}$, $\angle BCA \cong \angle DAC$, so $\triangle ABC \cong \triangle CDA$).
-  - MLL supports: every statement and reason has its own labeled box; Reasons 1-3 are printed as models. "Auxiliary" means extra (a segment we add); "between" in ASA means the side shared by both angles, so point to it on the figure. Any language is fine for partner talk.
-  - Watch for: pairing $\angle ABD$ with $\angle ADB$ (same triangle), or writing the congruence statement in alphabetical order instead of matching order.
+  - Advancing: "What if you used diagonal $\overline{AC}$ instead?" ($\triangle ABC \cong \triangle CDA$ by ASA.)
+  - MLL supports: printed definition, labeled boxes, routine rows filled in. "Between" in ASA means the side shared by both angles; point to it. Any language for partner talk.
+  - Watch for: pairing $\angle ABD$ with $\angle ADB$ (same triangle), or a congruence statement in alphabetical order instead of matching order.
 
-  **QuickNotes (4 min).** Read the ASA bullets and point back to Problem 1. For the Parallelogram Theorem, say: "Problem 4 proved the sides part. The exit ticket asks you about the angles."
-
-  **CYU and exit (5 min).** CYU 1 (2 min) checks "opposite": $M$ goes with $K$, $N$ with $L$. Exit 2 (3 min) checks that students use the triangle congruence from Problem 4, not "because it's a parallelogram."
+  **QuickNotes (4 min).** Read the ASA bullets and point back to {ref:asa_why}. For the Parallelogram Theorem, point back to {ref:para_proof}: it proved the sides part.
 
 guide_notes: |
-  **Nov 16: trimmed to 40 minutes.** The source notes (2.7 parts) run about an hour. Kept, in source order: Warm-up 2.7.1, Activity 2.7.2 (now Problems 1-2), the parallelogram definition and Activity 2.7.4 (Problems 3-4), the Parallelogram Theorem (QuickNotes and CYU 1). Merged: Cool-down 1 (the two-column proof) is the same proof as "Prove the two triangles are congruent" in 2.7.4, so it is now Problem 4, printed and blanked as in the source table. Changed: "draw an auxiliary line" is now "draw diagonal $\overline{BD}$" so the proof boxes have one answer (diagonal $\overline{AC}$ is the advancing question in the plan). Cut: "Explain why one pair of opposite sides must be congruent" (Row 7 of the proof says it with its reason). Moved: "Explain why one pair of opposite angles must be congruent" is the exit ticket. The parallelogram vertices are printed (letters from the Cool-down figure) so everyone's proof uses the same names. Source typo fixed: "$\overline{BE} \parallel \overline{AD}$" is $\overline{BC} \parallel \overline{AD}$. Cool-down 2 and Activity 2.9.2 are in Lesson 2.9.
+  **Nov 19 (round 2): no exit ticket.** The exit item ($\angle A \cong \angle C$ from the parallelogram proof) was cut (it checks corresponding parts, the same step as Statement 7 of {ref:para_proof}, not the ray argument; practice 1 uses the opposite angles). The handout prints only the Warm-up heading.
 
-  **Practice.** Source problems 1-8 kept in order. The source answer key listed "4. 125°" and "5. D" from another version; here 4 is D and 5 is a proof. Practice 6 is SAS review from Lesson 2.6, and it is the same proof as Lesson 2.9 practice 5 (same figure, givens, and table). Row 5 is $\triangle KBQ \cong \triangle ABQ$ ($K \to A$, $B \to B$, $Q \to Q$); the 2.9 source key's $\triangle AQB$ has the wrong order.
+  **Nov 19: cut for the core idea.** Warm-up: the DOG and CAT drawings (6 min, protractors) are now two printed DOG triangles; students find the third angle and say whether they are congruent (3 min). Problem 1: the triangles are printed with labels and marks, and Steps 1-2 (translate, rotate: review from 2.6) are printed, so the boxes are only the ray argument. The Step 3 reflection box is cut (this pair never needs it; it is a question in the plan). Problems 3-4 are now one problem: the definition is printed, and the parallel marks and diagonal are on the figure. In the proof, the shared side and both Given rows are printed; the blanks are the angle pairs, the congruence, and the reasons that matter. Cut the Check your understanding section ($MNKL$ fill-in); it is now practice 1, which replaces the old practice 1 (the same bowtie as {ref:asa_example}).
+
+  **Source.** 2.7 & 2.9 Student Notes (Warm-up 2.7.1, Activity 2.7.2, Activity 2.7.4, Cool-down 1) and 2.7 Practice Problems. Cool-down 1 is the same proof as Activity 2.7.4, so it is the partner problem. Source typo fixed: "$\overline{BE} \parallel \overline{AD}$" is $\overline{BC} \parallel \overline{AD}$.
+
+  **Practice.** The source key listed "4. 125°" and "5. D" from another version; here 4 is D and 5 is a proof. Practice 6 is SAS review from Lesson 2.6. Row 5 is $\triangle KBQ \cong \triangle ABQ$ ($K \to A$, $B \to B$, $Q \to Q$).
 
   **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "equal", or a home-language word for congruent; "alt. int. angles"; "CPCTC" or "matching parts" for corresponding parts; a reason written as a short phrase.
-
-  **Nov 16 (round 3):** cut extra instructions and flair.

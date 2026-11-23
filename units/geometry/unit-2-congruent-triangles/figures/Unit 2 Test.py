@@ -2,6 +2,8 @@
 Given ink (layer="given") prints on the student copy and the key; answer ink (layer="answer") is red, key only.
 Shapes follow the source drawings in UNIT 2 TEST 2025-26 (first copy), redrawn because the source images print
 under 150 dpi and two of them use colour (blue dots in #5, green angle arcs in #8).
+Names keep the source item numbers. Nov 19: old items 1 and 4 were cut (the _q4 figure is gone), so _q2 is item 1,
+_q3 item 2, _q5 item 3, _q6 item 4, _q7 item 5, _q8 item 6, _q9 item 7. _q8 was redrawn with new letters.
 Loop: uv run lesson-builder figs units/geometry/unit-2-congruent-triangles -l "Unit 2 Test"
 """
 import numpy as np
@@ -61,24 +63,6 @@ def q3() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- 4: DEF onto CBA (SSS, opposite orientation)
-D4, E4, F4 = P((0, 0), (1.84, 0.70), (1.38, -0.16))
-C4, B4, A4 = translate(rotate(reflect([D4, E4, F4], (0, 0), (1, 0)), 70.3, about=(0, 0)), (-0.9, 0))
-assert is_rigid_image([D4, E4, F4], [C4, B4, A4])
-assert needs_reflection([D4, E4, F4], [C4, B4, A4])   # translate + rotate alone can't do it
-
-
-@figure(f"{S}_q4")
-def q4() -> Figure:
-    f = Figure(width_in=2.3, height_in=2.0)
-    for tri, names in (([D4, E4, F4], "DEF"), ([C4, B4, A4], "CBA")):
-        f.poly(tri)
-        f.dots(tri, size=10)
-        f.label_poly(tri, names)
-    mark_congruent(f, [((F4, D4), (A4, C4)), ((F4, E4), (A4, B4)), ((E4, D4), (B4, C4))], size=0.11)
-    return f
-
-
 # ---------------------------------------------------------------- 5: kite CADB, reflect across AB
 A5, B5, C5, D5 = P((0, 0.6), (0, -0.8), (-2, 0.3), (2, 0.3))
 assert np.allclose(reflect(C5, A5, B5)[0], D5)
@@ -132,35 +116,39 @@ def q7() -> Figure:
     f.label_poly([A7, B7, C7, D7], "ABCD")
     mark_congruent(f, [((A7, B7), (C7, D7)), ((B7, C7), (D7, A7))], size=0.13)
     f.arc(A7, D7, B7, r=0.5)
+    f.angle_label(A7, D7, B7, r'$30^\circ$', dist=1.05, size=10)   # Nov 19: the stem's 30 degrees, on the figure
     return f
 
 
-# ---------------------------------------------------------------- 8: bent figures ABC and DEF (SAS marks)
+# ---------------------------------------------------------------- 8: bent figures PQR and KLM (SAS marks)
+# Nov 19: new letters and drawing. The old figures ABC and DEF had the names, SAS marks, and task of Lesson 2.5
+# practice 1. PQR is a V (72 degrees at Q); KLM is its mirror image turned upside down, so a reflection is needed.
 def _polar(p, r, deg):
     return np.asarray(p, float) + r * np.array([np.cos(np.radians(deg)), np.sin(np.radians(deg))])
 
 
-B8 = np.array((1.2, 2.0))
-A8, C8 = _polar(B8, 1.6, 125), _polar(B8, 1.8, 241)
-_ABC = np.array([A8, B8, C8])
-D8, E8, F8 = translate(rotate(reflect(_ABC, B8, B8 + (0, 1)), -14, about=B8), (1.75, 0.45))
-assert is_rigid_image(_ABC, [D8, E8, F8]) and needs_reflection(_ABC, [D8, E8, F8])
-assert np.isclose(angle_deg(B8, A8, C8), angle_deg(E8, D8, F8))
+Q8 = np.array((0.9, 0.0))
+P8, R8 = _polar(Q8, 1.5, 112), _polar(Q8, 1.9, 40)
+_PQR = np.array([P8, Q8, R8])
+K8, L8, M8 = translate(rotate(reflect(_PQR, Q8, Q8 + (0, 1)), 165, about=Q8), (3.0, 0.9))
+assert is_rigid_image(_PQR, [K8, L8, M8]) and needs_reflection(_PQR, [K8, L8, M8])
+assert np.isclose(angle_deg(Q8, P8, R8), 72) and np.isclose(angle_deg(L8, K8, M8), 72)
+assert np.isclose(dist(P8, Q8), dist(K8, L8)) and np.isclose(dist(Q8, R8), dist(L8, M8))
 
 
 @figure(f"{S}_q8")
 def q8() -> Figure:
-    f = Figure(width_in=2.3, height_in=2.1)
-    for pts, names in ((_ABC, "ABC"), ([D8, E8, F8], "DEF")):
+    f = Figure(width_in=2.25, height_in=1.45)
+    for pts in (_PQR, [K8, L8, M8]):
         f.poly(pts, closed=False)
         f.dots(pts, size=10)
-    f.label(A8, "A", direction=(-0.5, 1))
-    f.label(B8, "B", direction=(1, 0))
-    f.label(C8, "C", direction=(-0.5, -1))
-    f.label(D8, "D", direction=(0.5, 1))
-    f.label(E8, "E", direction=(-1, 0))
-    f.label(F8, "F", direction=(0.5, -1))
-    mark_congruent(f, [((A8, B8), (D8, E8)), ((B8, C8), (E8, F8)), ((B8, A8, C8), (E8, D8, F8))], size=0.13,
+    f.label(P8, "P", direction=(-0.5, 1))
+    f.label(Q8, "Q", direction=(0, -1))
+    f.label(R8, "R", direction=(0.6, 1))
+    f.label(K8, "K", direction=(-0.6, -1))
+    f.label(L8, "L", direction=(0, 1))
+    f.label(M8, "M", direction=(0.6, -1))
+    mark_congruent(f, [((P8, Q8), (K8, L8)), ((Q8, R8), (L8, M8)), ((Q8, P8, R8), (L8, K8, M8))], size=0.13,
                    r=0.3)
     return f
 

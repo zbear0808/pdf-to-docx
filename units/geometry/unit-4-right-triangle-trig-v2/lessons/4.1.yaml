@@ -1,0 +1,249 @@
+id: '4.1'
+title: 'Angles and steepness'
+notes_title: 'Angles and steepness'
+framing: >-
+  If you only know one angle of a right triangle, what do you know about its sides?
+materials: 'calculator, ruler'
+source: '4.1 Student Notes; 4.1 Practice Problems'
+numbering: auto
+headings: warmup
+numbering_after_notes: continue
+targets:
+  - id: LT1
+    understand: 'Students will understand that all right triangles with the same acute angle are similar (AA), so knowing one acute angle fixes the ratio of the side lengths.'
+    able_to: 'Students will be able to explain why two right triangles with a matching acute angle have equal side ratios, and use a known ratio to find a missing side.'
+    standard: 'G-SRT.C.6, G-SRT.B.5'
+  - id: LT2
+    understand: 'Students will understand that the steepness of a ramp is an angle, and the same angle means the same rise : run ratio (1 : 12 is about 4.8 degrees).'
+    able_to: 'Students will be able to use a rise : run ratio to find a horizontal distance and check a design against the ADA rules.'
+    standard: 'G-SRT.C.6, G-MG.A.3'
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        target: LT1
+        prompt: '$\triangle ABC \sim \triangle DEF$. Finish the equations for the angles and the sides.'
+        figure: '4.1_warmup'
+        frame:
+          - ['Angles: $\angle A = \angle D$,', '$\angle B = \angle E$, $\angle C = \angle F$', '', 2.3]
+          - ['Sides: $\frac{AB}{DE} =$', '$\frac{BC}{EF} = \frac{AC}{DF}$', '', 1.8]
+
+  - kind: together
+    bank: ['leg', 'hypotenuse (across from the right angle)', 'ratio', 'similar (same shape)', 'rise = vertical', 'run = horizontal']
+    items:
+      - id: together_a
+        minutes: 1
+        target: LT1
+        prompt: 'Find $x$. By the Pythagorean Theorem, $x^2 = 3^2 + 5^2$.'
+        figure: '4.1_together_a'
+        fill: [['$x =$', '$\sqrt{34} \approx 5.83$']]
+        box_w: 1.5
+      - id: together_b
+        minutes: 2
+        target: LT1
+        prompt: 'Can you find $z$?'
+        figure: '4.1_together_b'
+        frame:
+          - ['I', 'cannot', 'find $z$ with this information.', 1.1]
+          - ['If not, I need to know', 'one more side length', '.', 2.0]
+        work: 0.25
+        answer: 'The Pythagorean Theorem needs two sides. After {ref:pno}: $z = 5$.'
+
+  - kind: partner
+    items:
+      - id: pno
+        minutes: 5
+        target: LT1
+        prompt:
+          - 'Use $\triangle NOP$ to find $z$ in {ref:together_b}. Explain why you can use $\triangle NOP$.'
+          - '*Optional start:* I can use $\triangle NOP$ because ...'
+        figure: '4.1_partner_pno'
+        fill: [['$z =$', '5']]
+        box: 1.3
+        page_break_after: true
+        answer: '$\triangle GHJ \sim \triangle NOP$ by AA: both have a right angle and a $53^\circ$ angle. Similar triangles have equal side ratios, so $\frac{z}{3} = \frac{15}{9}$ and $z = 5$.'
+
+  - kind: partner
+    intro: 'Read the rules three times. Read 3: underline every number.'
+    box:
+      - '**The ADA ramp rules**'
+      - 'The Americans with Disabilities Act (ADA) has these rules for ramps:'
+      - '• A ramp is required for any change in level greater than 2 inches.'
+      - '• A ramp has a maximum (biggest) slope of 1 : 12 (about 4.8°).'
+      - '• A ramp has a minimum (smallest) width of 36 inches.'
+      - '• There must be a flat area at least 5 feet by 5 feet at the top and bottom of the ramp for turning.'
+      - '• A ramp can go no more than 30 feet horizontally between flat rest or turn platforms.'
+    items:
+      - id: ramp
+        minutes: 8
+        target: LT2
+        type: performance
+        demand: dm
+        prompt: 'A school has 4 steps to the front door. Each step is 7 inches tall, so the total rise is 28 inches. Design a ramp for the school that follows the ADA rules.'
+        figure: '4.1_ramp'
+        layout: stacked
+        parts:
+          - label: a.
+            prompt: 'A 1 : 12 slope means 12 inches across for every 1 inch up. How far across (horizontal) does the ramp go? Give inches and feet (12 inches = 1 foot).'
+            fill: [['Run:', '336 in = 28 ft']]
+            box_w: 1.7
+            work: 0.4
+            answer: '$12 \times 28 = 336$ in, $336 \div 12 = 28$ ft'
+          - label: b.
+            prompt: 'Does the ramp need a flat rest platform in the middle? Explain.'
+            work: 0.8
+            answer: 'No. 28 ft is less than 30 ft, so one ramp run is enough.'
+          - label: c.
+            prompt: 'Sketch your ramp on the picture. Label the run and the flat landings. Write the width next to the ramp.'
+            work: 0.25
+            answer: 'See the picture. Any run of 336 in or more is fine.'
+
+  - kind: notes
+
+  - kind: apply
+    items:
+      - id: flared
+        minutes: 4
+        prompt: 'Flared sides connect a curb ramp to the sidewalk. The rule for flared sides: no more than $5.7^\circ$ with the ground, so a 1 : 10 ratio of rise to run.'
+        figure: '4.1_exit'
+        parts:
+          - label: a.
+            target: LT2
+            prompt: 'Find the run for a flared side with a 4 inch rise.'
+            fill: [['Run:', '40 in']]
+            work: 0.25
+            answer: '$4 \times 10 = 40$ in'
+          - label: b.
+            target: LT1
+            prompt: 'A bigger flared side also makes a $5.7^\circ$ angle with the ground. Explain why its rise : run ratio is still 1 : 10.'
+            work: 1.4
+            answer: 'Both flared sides are right triangles with a $5.7^\circ$ angle, so they are similar (AA). Similar triangles have equal side ratios, so rise : run is 1 : 10 for both.'
+
+quicknotes:
+  - target: LT1
+    title: 'One angle decides the side ratios'
+    bullets:
+      - 'Two right triangles with one matching acute angle are similar (AA).'
+      - 'Similar triangles have equal side ratios. So one acute angle decides every ratio of sides.'
+  - target: LT2
+    title: 'Steepness'
+    bullets:
+      - 'Steepness of a ramp: rise : run (vertical : horizontal).'
+      - 'ADA ramp: at most 1 : 12, about 4.8°.'
+      - 'For a 1 : 12 ramp, run = 12 × rise.'
+
+practice:
+  title: 'Angles and steepness: practice'
+  rows:
+    - cells:
+        - n: '1'
+          prompt: 'The ADA says a ramp must have an angle less than or equal to 4.8°. A 4.8° angle in a right triangle has a 1 : 12 ratio for the legs. Decide if each ramp below meets the ADA rule.'
+          work: 0.25
+          answer: 'A, C, and D meet the rule. B and E do not.'
+    - cells:
+        - n: ''
+          prompt: 'Triangle A'
+          figure: '4.1_pr1_a'
+          fill: [['Meets the rule?', 'A: yes, 1 : 12']]
+        - n: ''
+          prompt: 'Triangle C'
+          figure: '4.1_pr1_c'
+          fill: [['Meets the rule?', 'C: yes, 1 : 12']]
+          box_w: 1.7
+    - cells:
+        - n: ''
+          prompt: 'Triangle B'
+          figure: '4.1_pr1_b'
+          fill: [['Meets the rule?', 'B: no, too steep']]
+          box_w: 1.7
+        - n: ''
+          prompt: 'Triangle D'
+          figure: '4.1_pr1_d'
+          fill: [['Meets the rule?', 'D: yes, 1 : 15']]
+          box_w: 1.7
+    - cells:
+        - n: ''
+          prompt: 'Triangle E'
+          figure: '4.1_pr1_e'
+          fill: [['Meets the rule?', 'E: no, about 7.7°']]
+          box_w: 1.7
+          work: 0.25
+          answer: '15 is the hypotenuse, not the run. The run is about 14.9, so 2 : 14.9 is steeper than 1 : 12.'
+    - cells:
+        - n: '2'
+          prompt: 'Find the lengths of $AC$ and $DE$ using any method. Check your answers with a different method.'
+          figure: '4.1_pr2'
+          work: 1.2
+          fill: [['$AC =$', '13'], ['$DE =$', '24']]
+          answer: 'Pythagorean Theorem: $AC = \sqrt{5^2 + 12^2} = 13$ and $DE = \sqrt{26^2 - 10^2} = 24$. Similar triangles: scale 2, so $DE = 2 \cdot 12 = 24$.'
+    - cells:
+        - n: '3'
+          prompt: 'In the diagram, segments $AC$ and $DE$ are parallel, and line $DC$ is perpendicular to both. $BD = \tfrac{4}{3}$. Find $DE$.'
+          figure: '4.1_pr3'
+          choices: ['$\tfrac{1}{3}$', '1', '3', '6']
+          key: B
+          work: 0.55
+          answer: '$\triangle EBD \sim \triangle ABC$ (AA). Scale $\tfrac{4/3}{4} = \tfrac{1}{3}$, so $DE = \tfrac{1}{3} \cdot 3 = 1$.'
+        - n: '4'
+          prompt: 'In $\triangle ABC$, $\angle A = 35^\circ$ and $\angle B = 20^\circ$. In $\triangle DEF$, $\angle D = 35^\circ$ and $\angle F = 125^\circ$. Are the triangles similar? Explain.'
+          work: 1.5
+          answer: 'Yes. $\angle C = 125^\circ$ and $\angle E = 20^\circ$, so both have $35^\circ$, $20^\circ$, $125^\circ$ (AA).'
+    - heading: 'SBA review'
+      cells:
+        - n: '5'
+          prompt: 'Find the value of $k$ so that the line $2x + 3k = y$ passes through the point $(4,\ 20)$.'
+          work: 1.2
+          answer: '$2(4) + 3k = 20$, so $3k = 12$ and $k = 4$.'
+        - n: '6'
+          prompt: ['Solve the system by graphing. Shade the solution.', '$y > -\tfrac{2}{3}x + 1$', '$y \le \tfrac{2}{3}x - 3$']
+          figure: '4.1_pr6'
+          layout: stacked
+          work: 0.5
+          answer: 'The lines meet at $(3, -1)$. Upper line dashed, lower line solid. Shade between them, right of $(3, -1)$.'
+  selected: []
+
+plan: |
+  **Overview.** First lesson of Unit 4. Students see that one acute angle fixes the side ratios of a right triangle (AA from Unit 3), then use the ADA's 1 : 12 ratio to design a ramp. Lesson 4.5 names these ratios (sine, cosine, tangent).
+
+  **Core idea.** Students see that right triangles with the same acute angle are similar (AA: the right angles match too), so one acute angle fixes every ratio of the sides. That is why $\triangle NOP$ gives $z$ in {ref:together_b}, and why the ADA can write its $4.8^\circ$ limit as a 1 : 12 ratio for every ramp. Spend whole-class time on the {ref:pno} share. Printed so you can move past them: every side length and angle on the figures, the Pythagorean setup in {ref:together_a}, the total rise of the steps (28 in), what 1 : 12 means, 12 in = 1 ft, and the 1 : 10 ratio in {ref:flared}. Calculators are fine for all the arithmetic. The in-class practice, {ref:flared}, checks the idea on its own: part b asks why a bigger $5.7^\circ$ flared side still has a 1 : 10 ratio, with only the QuickNotes to lean on.
+
+  **Objectives.** (1) Explain why two right triangles with a matching acute angle have equal side ratios. (2) Use a rise : run ratio to find a run and check a ramp against the ADA rules. **Standards.** G-SRT.C.6, G-SRT.B.5, G-MG.A.3. SMP 3, 4, 7.
+
+  **Quick look (30 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up | Students, quick share |
+  | 3-6 | Together: Problems {num:together_a}-{num:together_b} | Teacher + class |
+  | 6-12 | With a partner: Problem {num:pno} | Students (pairs), 1 min share |
+  | 12-21 | With a partner: Problem {num:ramp} (ADA rules) | Teacher (launch, 3-Reads), then pairs |
+  | 21-24 | QuickNotes | Teacher + class |
+  | 24-28 | In-class practice: Problem {num:flared} | Students, on their own |
+  | 28-30 | Collect, assign practice | Teacher |
+
+  **Warm-up (3 min).** One equation of each kind is printed. Quick share: the angles match in the order of the letters, and the side ratios are equal. {ref:pno} uses the side ratios.
+
+  **Together (3 min, doc camera).** {ref:together_a}: the Pythagorean setup is printed, so it is one calculator step ($\sqrt{34}$). Say it: two sides are enough. {ref:together_b}: let students say "we can't" and why: only one side. Leave $z$ open on the board, ask "Does the $53^\circ$ angle tell us anything?", and send pairs to {ref:pno}.
+
+  **With a partner (15 min).**
+  - {ref:pno} (5 min, then 1 min share) is the core. Assessing: "Which angles do $\triangle NOP$ and $\triangle GHJ$ share?" "Which side of $\triangle NOP$ matches $GH$?" Advancing: "Would any right triangle with a $53^\circ$ angle work?" (Yes: same shape, so hypotenuse : short leg is always 5 : 3.)
+  - Watch for: matching 9 with $z$, or "they look the same" with no angle reason. A pair that finds $PN = 12$, then $GJ = 4$ and $z$ by the Pythagorean Theorem is right too; ask why dividing by 3 works.
+  - Share: one pair reads its explanation. Revoice it as same angles, so similar, so same side ratios.
+  - {ref:ramp} (9 min with the launch). Launch (1 min): point at the stairs in the picture and ask "What makes a ramp safe?" Talk in any language first. Push toward "not too steep" and ask "How could we measure steep?" Then 3-Reads on the ADA box (Read 1 the context, Read 2 the question, Read 3 underline the numbers). Call out "steps" and "run" (everyday vs math meaning).
+  - In {ref:ramp}, part b doesn't name the 30 ft rule and part c doesn't print the 36 in width, so pairs find both in the box. If a pair is stuck, ask "Which rule is about a long ramp?" Any run of 336 in or more is correct; the ramp surface is about 337.2 in at about 4.8°.
+  - MLL supports: word bank on page 1, labeled figures, the optional start on {ref:pno}, talk in any language. "Similar" has its math meaning (same shape), not "kind of alike."
+
+  **QuickNotes (3 min).** Hand out page 3 (QuickNotes and {ref:flared}) only now: its LT1 bullets answer {ref:pno}, and its LT2 bullets answer {ref:ramp} part a. Start from one pair's {ref:pno} explanation, then read the bullets.
+
+  **In-class practice (4 min, on their own).** {ref:flared} with the QuickNotes. Part a is the routine step (the 1 : 10 ratio is printed). Part b is the core idea on its own, with no start: look for the matching $5.7^\circ$ angle (with the right angle), "similar", and "same ratio". Watch for "because the rule says 1 : 10", which repeats the given; ask what the two flared sides have in common. Collect page 3: part b shows who has the idea before 4.5.
+
+guide_notes: |
+  **v2 (Nov 23).** 30 minutes. {ref:flared} (the old exit item, the last partner problem since Nov 19) is now the in-class practice under the QuickNotes on page 3, done on their own. Cut the ramp-safety problem (context, no math); its question is the spoken launch for {ref:ramp}, and the photo stays in `assets/4.1/`. {ref:together_a} prints the Pythagorean setup; {ref:ramp} parts b and c no longer name the 30 ft rule or print the 36 in width, so pairs read them from the rules box. Practice unchanged.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:flared} (part b asks why a bigger $5.7^\circ$ flared side is still 1 : 10, the core idea for any size; no other problem asks it). The handout prints only the Warm-up heading; "The ADA ramp rules" is now the bold first line of the rules box.
+
+  **Nov 19: cut for the core idea.** Scaffolded: the warm-up prints one angle equation and one side ratio (two boxes instead of "write as many as you can"), and {ref:ramp} prints the total rise (28 in, also on the figure) and 12 in = 1 ft, so the old $4 \times 7$ part is gone. Cut: the $\triangle MKL$ problem (same move as {ref:pno}; practice 2 still asks for a second method), the Check your understanding curb ramp (same move as {ref:ramp} part a and {ref:flared} part a), the 5th-step extension, the Activity titles, and the talk direction on the handout. {ref:pno} now asks for $z$ and an open "why" with an optional start. {ref:flared} part b (on the exit ticket then) is new: why a bigger $5.7^\circ$ flared side keeps the 1 : 10 ratio. Practice unchanged.
+
+  **Source notes.** All source answers checked. The ADA rule wording was fixed ("A ramp is required for any change in level greater than 2 inches"). 1 : 12 is 4.76°, written "about 4.8°". Practice 3 now says "segments AC and DE are parallel" instead of using segment bars on lines. Practice 1 was split into a yes/no box for each triangle; Triangle E keeps the trap (15 is the hypotenuse) and the key says why. The ramp and flared-side pictures are not drawn to scale; the numbers carry the math.
+
+  **Scoring notes (MLL).** Score the math, not grammar. On {ref:pno} and {ref:flared} part b, accept "same angles", "same shape", "AA", or a home-language word for similar, if the student ties the matching angle to the matching side ratio. Accept "1 up, 12 across" or "12 times the rise" for the 1 : 12 ratio.

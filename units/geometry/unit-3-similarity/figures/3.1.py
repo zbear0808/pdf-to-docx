@@ -1,7 +1,8 @@
-"""Lesson 3.1 figures: dilations on a grid. Given layer = student copy, answer layer (red) = key."""
+"""Lesson 3.1 figures: dilations on a grid. Given layer = student copy, answer layer (red) = key.
+Problems 1-2 print the rays from the center (routine); students place only the image points."""
 import numpy as np
 
-from lesson_builder.figures import (Figure, P, assert_lengths, assert_similar, dilate, dist, figure,
+from lesson_builder.figures import (Figure, P, assert_lengths, assert_similar, dilate, dist, extend, figure,
                                     similarity_ratio)
 
 
@@ -33,8 +34,19 @@ def _rays(f: Figure, center, img_or_pts):
         f.seg(center, q, layer="answer", dashed=True, lw=0.8)
 
 
+def _given_rays(f: Figure, center, pts, img, box):
+    """Dashed black rays from the center through each point to the grid edge (printed, routine).
+    Each ray runs on past its image point, so the end of the ray doesn't mark the answer."""
+    for p, q in zip(pts, img):
+        a, b = extend(center, p, box)
+        assert np.allclose(a, center)
+        assert dist(center, b) > dist(center, q) + 0.5, (p, q, b)
+        f.seg(a, b, dashed=True, lw=0.8)
+
+
 # Together 1: center C, point H, k = 3
 T1_C, T1_H = P(0, 0), P(2, 1)
+T1_BOX = (0, 7, -1, 4)
 T1_H2 = dilate([T1_H], 3, T1_C)[0]
 _check(T1_C, [T1_H], [T1_H2], 3)
 assert np.allclose(T1_H2, (6, 3))
@@ -43,11 +55,11 @@ assert np.allclose(T1_H2, (6, 3))
 @figure("3.1_t1")
 def t1() -> Figure:
     f = Figure(width_in=2.5, height_in=1.6)
-    _grid(f, 0, 7, -1, 4)
+    _grid(f, *T1_BOX)
+    _given_rays(f, T1_C, [T1_H], [T1_H2], T1_BOX)
     f.dots([T1_C, T1_H])
     f.label(T1_C, "C", direction=(-1, -0.6))
     f.label(T1_H, "H", direction=(-0.3, 1))
-    _rays(f, T1_C, [T1_H2])
     f.dots([T1_H2], layer="answer")
     f.label(T1_H2, "H′", layer="answer", direction=(0.3, 1))
     return f
@@ -60,32 +72,22 @@ _check(T2_O, [T2_K], [T2_K2], 0.75)
 assert np.allclose(T2_K2, (3, 3))
 
 
-@figure("3.1_t2")
-def t2() -> Figure:
-    f = Figure(width_in=1.7, height_in=1.7)
-    _grid(f, -1, 5, -1, 5)
-    f.dots([T2_O, T2_K])
-    f.label(T2_O, "O", direction=(-1, -0.6))
-    f.label(T2_K, "K", direction=(0.6, 1))
-    _rays(f, T2_O, [T2_K])
-    f.dots([T2_K2], layer="answer")
-    f.label(T2_K2, "K′", layer="answer", direction=(1, -0.6))
-    return f
-
-
-def _poly_dilation(center, pts, names, k, grid, size, cname="P", cdir=(-1, -0.6), overrides=None):
+def _poly_dilation(center, pts, names, k, grid, size, cname="P", cdir=(-1, -0.6), overrides=None,
+                   given_rays=False):
     img = dilate(pts, k, center)
     _check(center, pts, img, k)
     f = Figure(width_in=size[0], height_in=size[1])
     _grid(f, *grid)
+    if given_rays:
+        _given_rays(f, center, pts, img, grid)
     closed = len(pts) > 2
     f.poly(pts, closed=closed)
     f.dots(np.vstack([pts, [center]]))
     f.label(center, cname, direction=cdir)
     f.label_poly(pts, names, overrides=overrides) if closed else [
         f.label(p, n, direction=(overrides or {}).get(n, (0.6, 0.8))) for p, n in zip(pts, names)]
-    far = [q if k > 1 else p for p, q in zip(pts, img)]
-    _rays(f, center, far)
+    if not given_rays:
+        _rays(f, center, [q if k > 1 else p for p, q in zip(pts, img)])
     f.poly(img, closed=closed, layer="answer")
     f.dots(img, layer="answer")
     primes = [n + "′" for n in names]
@@ -97,7 +99,7 @@ def _poly_dilation(center, pts, names, k, grid, size, cname="P", cdir=(-1, -0.6)
     return f, img
 
 
-# Problem 3: triangle ABC, center P, k = 2
+# Problem 2 (figure name kept from the old numbering): triangle ABC, center P, k = 2, rays printed
 P3_P = P(1, 1)
 P3_PTS = P((2, 3), (4, 2), (3, 4))
 assert np.allclose(dilate(P3_PTS, 2, P3_P), [(3, 5), (7, 3), (5, 7)])
@@ -105,7 +107,8 @@ assert np.allclose(dilate(P3_PTS, 2, P3_P), [(3, 5), (7, 3), (5, 7)])
 
 @figure("3.1_p3")
 def p3() -> Figure:
-    return _poly_dilation(P3_P, P3_PTS, "ABC", 2, (0, 8, 0, 8), (2.4, 2.4), overrides={"C": (1, 0.2), "A": (-1, 0.2)})[0]
+    return _poly_dilation(P3_P, P3_PTS, "ABC", 2, (0, 8, 0, 8), (2.4, 2.4), overrides={"C": (1, 0.2), "A": (-1, 0.2)},
+                          given_rays=True)[0]
 
 
 # Problem 4: quadrilateral DEFG, center P, k = 1/2
@@ -114,12 +117,7 @@ P4_PTS = P((6, 4), (8, 4), (8, 8), (4, 8))
 assert np.allclose(dilate(P4_PTS, 0.5, P4_P), [(3, 2), (4, 2), (4, 4), (2, 4)])
 
 
-@figure("3.1_p4")
-def p4() -> Figure:
-    return _poly_dilation(P4_P, P4_PTS, "DEFG", 0.5, (0, 9, 0, 9), (2.5, 2.5), overrides={"D": (0.4, -1)})[0]
-
-
-# Exit ticket: segment ST, center P, k = 1/3
+# Problem 3 (was the exit ticket; figure name kept): segment ST, center P, k = 1/3
 EX_P = P(0, 0)
 EX_PTS = P((6, 3), (3, 6))
 assert np.allclose(dilate(EX_PTS, 1 / 3, EX_P), [(2, 1), (1, 2)])
@@ -161,18 +159,6 @@ PP = np.array([(0, 6), PP_TR, PP_BR, (-1, 1)], float)
 PQ = dilate(PP, 0.75) + np.array([8.0, 1.2])
 assert_similar(PP, PQ, 0.75)
 assert_lengths([(PP[0], PP[1], 4), (PP[1], PP[2], 6), (PQ[0], PQ[1], 3), (PQ[1], PQ[2], 4.5)])
-
-
-@figure("3.1_prac2")
-def prac2() -> Figure:
-    f = Figure(width_in=2.3, height_in=1.2)
-    for pts, name, top, side in ((PP, "P", "4", "x"), (PQ, "Q", "3", "y")):
-        c = pts.mean(axis=0)
-        f.poly(pts)
-        f.text(c, f"${name}$")
-        f.side_label(pts[0], pts[1], top, c)
-        f.side_label(pts[1], pts[2], side, c, italic=True)
-    return f
 
 
 # Practice 3: Figure f is a 2/3 scaled copy of Figure e (AB 6 -> XY 4, CD 3 -> ZW a = 2)

@@ -1,15 +1,43 @@
 id: Unit 3 Test A
 doc_type: assessment
 title: 'Unit 3 Test: Version A'
-directions: 'NO WORK = NO CREDIT!'
-total_points: 20
+directions: Show your work.
+numbering: auto
+set: Unit 3 Test
+form: A
+source: 'Unit 3 Test.docx (Version A)'
+total_points: 18
 max_pages: 2
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along its ray from the center to k times as far, and keeps angle measures'
+    able_to: 'dilate a figure from a center by a scale factor and say what happens to its angles'
+    standard: G.SRT.1
+  - id: LT2
+    understand: 'figures are similar when rigid motions and a dilation take one onto the other, and the letter order of a similarity statement shows which vertices match'
+    able_to: 'write a sequence of transformations between similar triangles, and write a similarity statement with the vertices in matching order'
+    standard: G.SRT.2
+  - id: LT3
+    understand: 'similar figures have congruent corresponding angles and proportional corresponding sides, all with the same ratio k'
+    able_to: 'pick true proportions, find the scale factor and missing sides and angles, and test a similarity statement with side ratios'
+    standard: 'G.SRT.2, G.SRT.5'
+  - id: LT4
+    understand: 'a line parallel to one side of a triangle makes a similar triangle, so the parallel side matches the whole side'
+    able_to: 'find lengths in nested triangles with whole sides, and decide whether two lines are parallel'
+    standard: 'G.SRT.4, G.SRT.5'
+  - id: LT5
+    understand: 'the altitude to the hypotenuse makes right triangles that are similar to each other'
+    able_to: 'match the vertices of those triangles by their angles, and find lengths with similar triangles or the Pythagorean theorem'
+    standard: 'G.SRT.5, 8.G.B.7'
 
 sections:
   - kind: plain
     items:
-      - n: 1
+      - id: ratios
         points: 3
+        target: LT3
+        type: sr
+        demand: pwoc
         prompt: '$\triangle ABC$ can be taken to $\triangle A''B''C''$ using rigid motions and a dilation. Select **all** the equations that are true. (1/2 point off for each wrong choice.)'
         figure: Unit 3 Test A_ratios
         fig_w: 1.45
@@ -21,10 +49,19 @@ sections:
           - '$\dfrac{A''B''}{AB} = \dfrac{C''B''}{CB}$'
           - '$\dfrac{AB}{BC} = \dfrac{A''C''}{B''C''}$'
         choice_cols: 3
-        answer: '[A], [D], [E]. Each one compares matching sides in the same order. [B] flips one side of the equation; [C] puts the original on top on the left and the image on top on the right; [F] matches $\overline{BC}$ with $\overline{B''C''}$ but $\overline{AB}$ with $\overline{A''C''}$.'
+        key: 'A, D, E'
+        select_all: true
+        answer: 'Each one compares matching sides in the same order.'
+        distractors:
+          B: 'flips one side of the equation'
+          C: 'original over image on the left, image over original on the right'
+          F: 'pairs $\overline{AB}$ with $\overline{A''C''}$, which do not match'
         work: 0.1
-      - n: 2
+      - id: splitter
         points: 3
+        target: LT4
+        type: cr
+        demand: pwc
         prompt: 'In $\triangle ABC$, $\overline{DE} \parallel \overline{BC}$. Solve for $x$.'
         figure: Unit 3 Test A_splitter
         fig_w: 2.2
@@ -32,64 +69,84 @@ sections:
         box_w: 1.3
         answer: ['$\triangle ADE \sim \triangle ABC$, so use the whole side: $AB = 5 + 6 = 11$.', '$\frac{x}{8} = \frac{5}{11}$, so $11x = 40$ and $x = \frac{40}{11} \approx 3.64$.']
         work: 1.0
-      - n: 3
-        prompt: 'The two triangles are similar. The figures are not drawn to scale. (1 pt for each box)'
+      - id: similar
+        prompt: 'The two triangles are similar. The figures are not drawn to scale.'
         figure: Unit 3 Test A_similar
         fig_w: 2.7
         layout: stacked
         parts:
           - label: a.
             points: 1
+            target: LT2
+            type: cr
+            demand: pwc
             prompt: 'Complete the similarity statement.'
             frame: [['$\triangle CAB \sim \triangle$', '$EDF$', '']]
-            answer: '$m\angle C = 180^\circ - 85^\circ - 56^\circ = 39^\circ = m\angle E$, so $C \to E$, $A \to D$, $B \to F$.'
-            work: 0
+            answer: '$\angle C$ and $\angle E$ are both $39^\circ$, and $\angle B$ and $\angle F$ are both $56^\circ$, so $C \to E$, $A \to D$, $B \to F$.'
           - label: b.
             points: 1
-            prompt: 'What is the scale factor that moves $\triangle ABC$ onto $\triangle DFE$?'
+            target: LT3
+            type: cr
+            demand: pwoc
+            prompt: 'What scale factor takes $\triangle CAB$ onto the small triangle?'
             fill: [['Scale factor:', '$\frac{1}{4}$']]
             box_w: 1.0
             answer: '$\frac{FE}{BC} = \frac{6}{24} = \frac{1}{4}$'
             work: 0.4
           - label: c.
-            points: 4
+            points: 2
+            target: LT3
+            type: cr
+            demand: pwoc
             prompt: 'Find each measure.'
-            fill: [['$DF =$', '3.75'], ['$DE =$', '5'], ['$m\angle C =$', '$39^\circ$'], ['$m\angle D =$', '$85^\circ$']]
+            fill: [['$DF =$', '3.75'], ['$m\angle D =$', '$85^\circ$']]
             fill_cols: 2
             box_w: 1.0
-            answer: '$DF = \frac{1}{4} \cdot 15 = 3.75$, $DE = \frac{1}{4} \cdot 20 = 5$, $m\angle D = m\angle A = 85^\circ$'
+            answer: '$DF = \frac{1}{4} \cdot 15 = 3.75$. $m\angle D = m\angle A = 85^\circ$ (or $180^\circ - 39^\circ - 56^\circ$); either method earns the point.'
             work: 0.5
         page_break_after: true
-      - n: 4
-        prompt: 'Use $\triangle ABC$ and point $P$. Use a ruler.'
+      - id: dilate
+        prompt: 'Use a ruler.'
         figure: Unit 3 Test A_dilate
         fig_w: 2.3
         parts:
           - label: a.
             points: 2
+            target: LT1
+            type: cr
+            demand: pwoc
             prompt: 'Dilate $\triangle ABC$ using center $P$ and scale factor 3. Label the image $A''B''C''$.'
             answer: 'See the red image. $A''$ and $C''$ stay on line $AC$, with $PA'' = 3 \cdot PA$ and $PC'' = 3 \cdot PC$. $B''$ is on ray $PB$ with $PB'' = 3 \cdot PB$.'
             work: 0.2
           - label: b.
             points: 1
+            target: LT1
+            type: cr
+            demand: mem
             prompt: 'How does $\angle B''$ compare to $\angle B$? Explain.'
             frame:
               - ['$\angle B''$ is', 'congruent to', '$\angle B$.']
               - ['Reason:', 'Dilations do not change angle measures.', '', 3.2]
             answer: 'So $m\angle B'' = m\angle B$.'
             work: 0.3
-      - n: 5
+      - id: rect
         points: 2
-        prompt: 'Rectangle $ABCD$ has some right triangles inside it. $EF = 8$ and $ED = 10$. Find $FD$.'
+        target: LT5
+        type: cr
+        demand: pwoc
+        prompt: 'In right $\triangle EFD$, $EF = 8$ and $ED = 10$. Find $FD$.'
         figure: Unit 3 Test A_rect
         fig_w: 2.6
         fill: [['$FD =$', '6 units']]
         box_w: 1.1
-        answer: ['$\triangle EFD$ has a right angle at $F$. Its hypotenuse is $\overline{ED}$.', '$8^2 + FD^2 = 10^2$, so $FD^2 = 36$ and $FD = 6$.']
+        answer: ['The right angle is at $F$, so the hypotenuse is $\overline{ED}$.', '$8^2 + FD^2 = 10^2$, so $FD^2 = 36$ and $FD = 6$.']
         work: 1.7
-      - n: 6
+      - id: seq
         points: 3
-        prompt: '$\triangle ABC \sim \triangle DEF$. Write a sequence of transformations that moves $\triangle ABC$ onto $\triangle DEF$. Write one move in each box. For a dilation, name the center and the scale factor.'
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: '$\triangle ABC \sim \triangle DEF$ with scale factor $\frac{3}{7}$. Write a sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$. For a dilation, name the center and the scale factor.'
         figure: Unit 3 Test A_seq
         fig_w: 2.0
         fill:
@@ -97,17 +154,19 @@ sections:
           - ['Step 2:', 'Reflect across line $AB$.']
           - ['Step 3:', 'Translate $B$ to $E$.']
         box_w: 3.0
-        answer: 'Scale factor $\frac{DF}{AC} = \frac{3}{7}$. $\triangle DEF$ faces the other way, so a reflection is needed. After Steps 1-2, $C$ is to the left of $B$; the translation lands $A$ on $D$, $B$ on $E$, and $C$ on $F$.'
+        answer: '$\triangle DEF$ faces the other way, so a reflection is needed. After Steps 1 and 2, $C$ is to the left of $B$; the translation lands $A$ on $D$, $B$ on $E$, and $C$ on $F$.'
         work: 0.6
 
 guide_notes: |
-  **Scoring (20 pts).**
-  - Problem 1 (3 pts): 1 pt for each of [A], [D], [E]; 1/2 pt off for each wrong choice (lowest score 0).
-  - Problem 2 (3 pts): 1 pt for a proportion that uses the whole side 11 (not 6), 1 pt for solving, 1 pt for $\frac{40}{11}$ or 3.64. The proportion $\frac{x}{8} = \frac{5}{6}$ (part over part) earns 1 pt for work at most.
-  - Problem 3 (6 pts): 1 pt per box. Follow through on parts b and c from a wrong statement in part a. Accept $\frac{1}{4}$, 0.25, or "1 to 4". A scale factor of 4 goes the wrong way (0 pts for part b), but follow through on part c.
-  - Problem 4 (3 pts): part a, 1 pt for each image point on the correct ray at about 3 times the distance (2 pts for all three); part b, 1 pt for "congruent" or "the same measure" with a reason (dilations keep angle measures).
-  - Problem 5 (2 pts): 1 pt for the Pythagorean theorem (or a 6-8-10 triangle), 1 pt for 6. Also accept a similarity method that reaches 6.
-  - Problem 6 (3 pts): 1 pt per move: a dilation by $\frac{3}{7}$ with a center, a reflection (any line that flips the triangle), and a translation that says where it goes. Accept any valid order. Take 1/2 pt off a dilation with no center or with scale factor $\frac{7}{3}$.
+  **Nov 19: less is more, no headings.** Cut two boxes from {ref:similar}c: $DE$ (the same move as $DF$) and $m\angle C$ (the triangle sum). $m\angle C = 39^\circ$ is now printed on the figure, so {ref:similar}a scores the matching, not the subtraction. {ref:similar}b says "the small triangle"; it used to name $\triangle DFE$, which gave away part a. {ref:seq} prints the scale factor $\frac{3}{7}$ (finding one is {ref:similar}b), so it scores the moves. {ref:rect} names right $\triangle EFD$ instead of the rectangle. Directions: "Show your work." No section headings; targets are in the blueprint. 20 points to 18.
+
+  **Scoring (18 pts).**
+  - {ref:ratios} (3 pts): 1 pt for each of [A], [D], [E]; 1/2 pt off for each wrong choice (lowest score 0).
+  - {ref:splitter} (3 pts): 1 pt for a proportion that uses the whole side 11 (not 6), 1 pt for solving, 1 pt for $\frac{40}{11}$ or 3.64. The proportion $\frac{x}{8} = \frac{5}{6}$ (part over part) earns 1 pt for work at most.
+  - {ref:similar} (4 pts): 1 pt per box. Follow through on parts b and c from a wrong statement in part a. Accept $\frac{1}{4}$, 0.25, or "1 to 4". A scale factor of 4 goes the wrong way (0 pts for part b), but follow through on part c. Part c, $m\angle D$: the matching angle ($\angle A$) or the triangle sum both earn the point.
+  - {ref:dilate} (3 pts): part a, 1 pt for each image point on the correct ray at about 3 times the distance (2 pts for all three); part b, 1 pt for "congruent" or "the same measure" with a reason (dilations keep angle measures).
+  - {ref:rect} (2 pts): 1 pt for the Pythagorean theorem (or a 6-8-10 triangle), 1 pt for 6. Also accept a similarity method that reaches 6.
+  - {ref:seq} (3 pts): 1 pt per move: a dilation by $\frac{3}{7}$ with a center, a reflection (any line that flips the triangle), and a translation that says where it goes. Accept any valid order. Take 1/2 pt off a dilation with no center.
 
   **MLL notes.** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent, "flip", "slide", "shrink by 3/7" for the moves, and a decimal comma (3,64). Accept answers that end with the claim after the work.
 

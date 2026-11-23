@@ -1,0 +1,229 @@
+schema_version: 1
+id: '4.6'
+title: 'Working with trigonometric ratios'
+notes_title: 'Sine, cosine, and tangent'
+framing: >-
+  Which ratio do I use, and what do I do when the unknown is on the bottom?
+materials: 'Scientific calculator (degree mode), pencil'
+numbering: auto
+headings: warmup
+source: 'This unit: 4.6 Student Notes.md, 4.6 Practice Problems.md; requirements.md.'
+targets:
+  - id: LT1
+    understand: 'Sine, cosine, and tangent are names for the fixed side ratios of a right triangle with a given acute angle. The sides you know and want, seen from that angle, tell you which ratio to use.'
+    able_to: 'Name opposite, adjacent, and hypotenuse for an angle, use a calculator for sin, cos, and tan, and solve a sin, cos, or tan equation for a missing side (nearest tenth), including when the unknown is on the bottom.'
+    standard: 'G-SRT.C.6, G-SRT.C.8'
+  - id: LT2
+    understand: 'The acute angles of a right triangle add to 90°, so one side and one acute angle are enough to find every missing side and angle.'
+    able_to: 'Find all the missing sides and angles of a right triangle from a figure.'
+    standard: G-SRT.C.8
+
+sections:
+  - kind: warmup
+    target: LT1
+    bank:
+      - '**opposite**: across from the angle'
+      - '**adjacent**: next to the angle, not the hypotenuse'
+      - '**hypotenuse**: across from the right angle'
+    items:
+      - id: warmup
+        minutes: 3
+        target: LT1
+        type: cr
+        demand: mem
+        prompt: 'Label the **hypotenuse**, **opposite**, and **adjacent** sides of the triangle, as seen from angle $J$.'
+        figure: '4.6_warmup'
+        work: 0.3
+        answer: 'Hypotenuse $JH$, opposite $GH$, adjacent $GJ$.'
+
+  - kind: together
+    target: LT1
+    box:
+      - 'Sine, cosine, and tangent are called **trigonometric ratios**. For an acute angle $\theta$ of a right triangle (SOH-CAH-TOA):'
+      - '$\sin\theta = \dfrac{\text{opposite}}{\text{hypotenuse}} \quad \cos\theta = \dfrac{\text{adjacent}}{\text{hypotenuse}} \quad \tan\theta = \dfrac{\text{opposite}}{\text{adjacent}}$'
+    items:
+      - id: findz
+        minutes: 4
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Find $z$ in the warm-up triangle. Round to the nearest tenth.'
+        fill: [['$z \approx$', '4.7']]
+        work: 0.8
+        answer: '$\sin 40^\circ = \dfrac{3}{z}$, so $z = \dfrac{3}{\sin 40^\circ} \approx 4.7$.'
+
+  - kind: partner
+    target: LT2
+    page_break_before: true
+    intro: 'Round sides to the nearest tenth.'
+    items:
+      - id: solvex
+        minutes: 3
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Solve for $x$.'
+        figure: '4.6_3'
+        fill: [['$x \approx$', '10.5']]
+        work: 0.8
+        answer: '$\cos 17^\circ = \dfrac{10}{x}$, so $x = \dfrac{10}{\cos 17^\circ} \approx 10.5$.'
+      - id: solvey
+        minutes: 3
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Solve for $y$.'
+        figure: '4.6_4'
+        fill: [['$y \approx$', '5.2']]
+        work: 0.8
+        answer: '$\cos 42^\circ = \dfrac{y}{7}$, so $y = 7\cos 42^\circ \approx 5.2$.'
+      - id: allpqn
+        minutes: 4
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'Find all the missing sides and angles of $\triangle PQN$.'
+        figure: '4.6_5'
+        fill:
+          - ['$\angle P =$', '$30^\circ$']
+          - ['$PQ \approx$', '6.9']
+          - ['$PN =$', '8']
+        fill_cols: 1
+        work: 0.8
+        answer: '$\angle P = 90^\circ - 60^\circ = 30^\circ$. $PQ = 4\tan 60^\circ \approx 6.9$. $PN = \dfrac{4}{\cos 60^\circ} = 8$.'
+
+  - kind: notes
+
+notes_figure: '4.6_vocab'
+notes_fig_w: 2.0
+quicknotes:
+  - target: LT1
+    title: 'I can use sine, cosine, and tangent to find side lengths of right triangles.'
+    bullets:
+      - 'SOH-CAH-TOA: $\sin\theta = \dfrac{\text{opposite}}{\text{hypotenuse}}$, $\cos\theta = \dfrac{\text{adjacent}}{\text{hypotenuse}}$, $\tan\theta = \dfrac{\text{opposite}}{\text{adjacent}}$'
+      - 'Which ratio? From the angle, label the side you have and the side you want. Use the ratio that has both.'
+      - 'Unknown on top: multiply. Unknown on the bottom: divide. In {ref:findz}, $\sin 40^\circ = \dfrac{3}{z}$, so $z \sin 40^\circ = 3$ and $z = \dfrac{3}{\sin 40^\circ}$.'
+      - 'Check: the hypotenuse is the longest side.'
+  - target: LT2
+    title: 'I can find all the missing sides and angles of a right triangle.'
+    bullets:
+      - 'The two acute angles add to $90^\circ$.'
+      - 'Find each missing side from the given side and angle, not from a side you rounded.'
+
+practice:
+  title: 'Working with trigonometric ratios: practice'
+  rows:
+    - cells:
+        - id: pr1
+          target: LT1
+          prompt: 'Select **all** the true statements.'
+          figure: '4.6_p1'
+          layout: stacked
+          select_all: true
+          choices:
+            - '$\sin\theta = \dfrac{4}{\sqrt{97}}$'
+            - '$\tanβ = \dfrac{9}{4}$'
+            - '$\tanβ = \dfrac{4}{9}$'
+            - '$\cosβ = \dfrac{4}{\sqrt{97}}$'
+            - '$4^2 + 9^2 = 97$'
+          key: 'A, B, D, E'
+          distractors:
+            C: 'opposite over adjacent for $\theta$, not $β$'
+          answer: 'From $β$, the opposite side is 9 and the adjacent side is 4, so $\tan β = 9/4$.'
+        - id: pr2
+          target: LT1
+          prompt:
+            - '$\triangle ABC$ has a right angle at $C$. The hypotenuse is 15 units.'
+            - 'Andre says the legs could be 9 and 12 units long. Clare says $\angle B$ could be $20^\circ$, and then side $BC$ would be 14.1 units long.'
+            - 'Do you agree with either of them? Explain.'
+          frame:
+            - ['I (agree / disagree) with Andre because', '$9^2 + 12^2 = 15^2$', '.', 1.4]
+            - ['I (agree / disagree) with Clare because', '$15\cos 20^\circ \approx 14.1$', '.', 1.4]
+          work: 0.8
+          answer: 'Agree with both: $9^2 + 12^2 = 15^2$, and $BC$ is adjacent to $\angle B$, so $BC = 15\cos 20^\circ \approx 14.1$.'
+    - cells:
+        - id: pr3
+          target: LT2
+          prompt: 'Find the length of each leg.'
+          figure: '4.6_p4'
+          layout: stacked
+          fill:
+            - ['$PQ =$', '2']
+            - ['$QR \approx$', '3.5']
+          answer: '$PQ = 4\sin 30^\circ = 2$ and $QR = 4\cos 30^\circ = 2\sqrt{3} \approx 3.5$.'
+        - id: pr4
+          target: LT1
+          prompt: 'A triangle has sides 5, 12, and 13.'
+          parts:
+            - label: a.
+              prompt: 'Show that it is a right triangle.'
+              answer: '$5^2 + 12^2 = 25 + 144 = 169 = 13^2$.'
+            - label: b.
+              prompt: 'The smallest angle is across from the 5 side. Write its sine, cosine, and tangent as fractions.'
+              fill:
+                - ['$\sin =$', '$\dfrac{5}{13}$']
+                - ['$\cos =$', '$\dfrac{12}{13}$']
+                - ['$\tan =$', '$\dfrac{5}{12}$']
+              fill_cols: 3
+              box_w: 0.9
+    - heading: 'SBA review'
+      cells:
+        - id: pr5
+          prompt: 'Write T (true) or F (false) for each comparison.'
+          fill:
+            - ['$\sqrt{37} < 5\frac{1}{4}$', 'F']
+            - ['$3\pi > 3\sqrt{3}$', 'T']
+            - ['$\sqrt{5} > \frac{5}{7}$', 'T']
+            - ['$\frac{15}{\sqrt{10}} > 8.38$', 'F']
+          fill_cols: 2
+          box_w: 0.9
+          answer: '$\sqrt{37} \approx 6.08$, $3\pi \approx 9.42 > 5.20$, $\sqrt{5} \approx 2.24$, $15/\sqrt{10} \approx 4.74$.'
+        - id: pr6
+          prompt: 'Select **all** possible values of $x$ for $x^3 = 375$.'
+          select_all: true
+          choices: ['$5∛3$', '$∛375$', '$75∛5$', '$125∛3$']
+          choice_cols: 2
+          key: 'A, B'
+          distractors:
+            C: 'took the cube root of 5 only, not of $375 = 125 \cdot 3$'
+            D: 'wrote 125 instead of its cube root 5'
+          answer: '$375 = 125 \cdot 3$, so $x = ∛375 = 5∛3$.'
+  selected: []
+
+plan: |
+  **Overview.** In 4.5 students labeled opposite, adjacent, and hypotenuse from an angle and wrote the side ratios. Today the ratios get their names (sine, cosine, tangent), and students use them to find missing sides, including when the unknown ends up on the bottom of the ratio. Lesson 4.7 puts right triangles in words and pictures. Calculators in degree mode. Lengths round to the nearest tenth.
+
+  **Core idea.** Students see that the side they have and the side they want, labeled from the angle, pick sin, cos, or tan, and that the ratio is an equation they can solve for the missing side: multiply when the unknown is on top, divide when it is on the bottom. Spend whole-class time on the modeled solve in {ref:findz} and on the {ref:solvex} share, the first time pairs divide on their own. Printed so you can move past them: the side names (warm-up bank, on the same triangle {ref:findz} uses), the three ratio definitions (box above {ref:findz}), and every given side, angle, and right-angle mark. Calculators do the arithmetic.
+
+  **Objective.** Students will use sine, cosine, and tangent to find the missing sides and angles of a right triangle, including when the unknown is on the bottom. **Standards.** G-SRT.C.6, G-SRT.C.8. SMP 6 (rounding).
+
+  **Quick look (27 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-8 | Together: Problem 1 | Teacher + class |
+  | 8-20 | With a partner: Problems 2-4 | Students (pairs), 2 min share |
+  | 20-24 | QuickNotes | Teacher + class |
+  | 24-27 | Collect, assign practice | Teacher |
+
+  **Warm-up (4 min).** Review from 4.5. Point at the bank. Stand at $J$: $JH$ is across from the right angle, $GH$ is across from $J$, and $GJ$ touches $J$. Leave the labels up; {ref:findz} uses this triangle.
+
+  **Together (4 min, doc camera).** Check DEG mode. Read the box: these are the 4.5 ratios with their names. Type $\sin 40^\circ$ (about 0.6428), the same number for every right triangle with a $40^\circ$ angle. {ref:findz}: "I have the side opposite $J$ and I want the hypotenuse. Opposite and hypotenuse, so sine." Write $\sin 40^\circ = \frac{3}{z}$ and ask "Where is $z$?" Multiply both sides by $z$, then divide by $\sin 40^\circ$: $z = \frac{3}{\sin 40^\circ} \approx 4.7$. Ask "Does 4.7 make sense?" (Yes. The hypotenuse has to be longer than 3.)
+
+  **With a partner (12 min).** {ref:solvex} and {ref:solvey} (3 min each), {ref:allpqn} (4 min), then a 2 min share. Turn and talk in any language, then share in English.
+  - Assessing: "Which side do you have? Which side do you want? Which ratio has both?" "Is the unknown on top or on the bottom?"
+  - Advancing: "Could you find $PN$ another way?" (Pythagorean Theorem with $PQ$. The rounded 6.9 gives about 8.0; the given side 4 gives exactly 8.)
+  - Watch for: $x = 10\cos 17^\circ \approx 9.6$ in {ref:solvex}. That is shorter than the leg 10, so it can't be the hypotenuse. $x$ is on the bottom, so divide. In {ref:solvey} the right angle is at the top ($F$), so the hypotenuse is the bottom side, 7.
+  - Share: one pair shows {ref:solvex}. Revoice it as have, want, ratio, solve.
+  - MLL supports: the bank, the ratio box, labeled figures, talk in any language. "Round" means round the number, not a round shape. "Opposite" here means across from the angle.
+
+  **QuickNotes (4 min).** Read together. Tie the "unknown on the bottom" bullet to {ref:findz} and {ref:solvex}, and the longest-side check to the 9.6 error.
+
+guide_notes: |
+  **Nov 19: cut for the core idea.** Scaffolded: the three ratio definitions are printed in a box above {ref:findz}, and the warm-up labels the same triangle {ref:findz} uses. Cut the calculator table (six values and "What do you notice?"): calculators were already in use in 4.5, and $\sin 50^\circ = \cos 40^\circ$ isn't needed to find a side. Cut the $\triangle KLM$ problem from words: its two sides repeat the multiply case in {ref:solvey}, and sketching from words is lesson 4.7. Cut the Check your understanding section ($\triangle END$ equations): practice 1 checks the same ratios, and lesson 4.10 does the full $\triangle END$ list. No extension item; the Buffer row is gone. The partner intro keeps only the rounding direction, the framing box is the question only, and the learning target is the LT1 QuickNotes heading. QuickNotes gained the {ref:findz} solve and the longest-side check and lost the "from words" bullet. Practice: cut old practice 2 ($JH$ and $GJ$ as expressions, the same move as {ref:solvey} and practice 3); renumbered 1-6.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item ($\triangle MKL$) was cut: {ref:allpqn} already finds every missing side and angle from one leg and one angle with the same two moves (tan, multiply; cos with the unknown on the bottom, divide). The handout prints only the Warm-up heading.
+
+  **Source changes.** Activity 1 #1-2 (calculator values) cut on Nov 19; #3 is {ref:findz}. Activity 2 #3a and #3c (triangles from words) cut. Activity 2 #3d is the same triangle as cool-down 1; it was the exit ticket until Nov 19 (round 2), then cut. Cool-down 2 ($\triangle END$) cut on Nov 19. Added the right-angle mark at $F$ in {ref:solvey}. Practice 4b (source 5b) asked for the acute angles, which needs inverse trig (4.10); replaced with sine, cosine, and tangent of the smallest angle as fractions.
+
+  **Scoring notes.** Formative, no points. Score the math, not grammar or spelling. Accept home-language words, decimal commas, and answers rounded to the hundredth when the method is right.

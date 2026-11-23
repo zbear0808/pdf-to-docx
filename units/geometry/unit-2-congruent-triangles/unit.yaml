@@ -12,6 +12,7 @@ lessons:             # one YAML per lesson (handout + practice), teaching order
   - 2.5.yaml
   - 2.6.yaml
   - 2.7.yaml
+  - 2.8.yaml
   - 2.9.yaml
 assessments:         # progress checks, review, test, summary notes (doc_type: assessment | reference)
   - assessments/*.yaml

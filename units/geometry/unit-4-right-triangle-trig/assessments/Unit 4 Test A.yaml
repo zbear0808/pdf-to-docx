@@ -1,0 +1,155 @@
+id: 'Unit 4 Test A'
+doc_type: assessment
+title: 'Unit 4 Test: Right Triangles and Trigonometry'
+directions: 'Show your work. Use a calculator in degree mode.'
+numbering: auto
+set: 'Unit 4 Test'
+form: 'A'
+source: 'Unit 4 Test Actual.md (Unit 4 Test Version A); item bank from Version B and Form B'
+total_points: 18
+max_pages: 3
+targets:
+  - id: LT1
+    understand: 'each trig ratio compares two sides named from one acute angle, and the two acute angles are complementary, so sin of one equals cos of the other'
+    able_to: 'find the second acute angle and pick every true sin, cos, tan equation for a labeled triangle'
+    standard: 'G.SRT.6, G.SRT.7'
+  - id: LT2
+    understand: 'one side and one acute angle fix the whole right triangle'
+    able_to: 'use sin, cos, or tan to find a missing side from one side and one acute angle, including an unknown hypotenuse'
+    standard: G.SRT.8
+  - id: LT3
+    understand: 'inverse trig turns a side ratio back into an angle'
+    able_to: 'use inverse tan (and inverse sin, inverse cos) to find an acute angle from two sides'
+    standard: G.SRT.8
+  - id: LT4
+    understand: 'a real situation can be modeled with a right triangle, and the answer has to be checked against the situation'
+    able_to: 'model a context with a right triangle, solve it, and judge the answer against a rule'
+    standard: 'G.SRT.8, G.MG.1'
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - id: tri_abc
+        target: LT1
+        prompt: 'In $\triangle ABC$, $\angle C$ is a right angle and $\angle B = 47^\circ$.'
+        figure: 'Unit 4 Test A_1'
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: mem
+            prompt: 'Find $m\angle A$.'
+            fill: [['$m\angle A =$', '$43^\circ$']]
+            answer: '$90^\circ - 47^\circ = 43^\circ$. 1 pt method, 1 pt answer.'
+          - label: b.
+            points: 2
+            type: sr
+            demand: pwc
+            select_all: true
+            prompt: 'Circle **all** the true equations. (Two are true.)'
+            choices: ['$\cos(47^\circ) = \dfrac{a}{c}$', '$\sin(47^\circ) = \dfrac{c}{b}$', '$\tan(47^\circ) = \dfrac{a}{b}$', '$\cos A = \dfrac{b}{c}$']
+            choice_cols: 2
+            key: 'A, D'
+            answer: 'From $47^\circ$: $a$ is adjacent, $b$ is opposite. From $\angle A$, $b$ is adjacent, so $\cos A = \sin(47^\circ)$. Half a point off for each wrong choice circled or true choice missed (lowest score 0).'
+            distractors:
+              B: 'flips the ratio (hypotenuse over opposite)'
+              C: 'flips the ratio (adjacent over opposite)'
+
+  - kind: plain
+    target: LT4
+    items:
+      - id: ramp
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'A wheelchair ramp rises 2 ft over a ground distance of 28 ft. A ramp is safe when its angle $\theta$ with the ground is **less than** $5^\circ$. Find $\theta$. Round to the nearest tenth of a degree. Is the ramp safe?'
+        figure: 'Unit 4 Test A_2'
+        work: 1.0
+        fill: [['Equation:', '$\tan\theta = \frac{2}{28}$'], ['$\theta \approx$', '$4.1^\circ$'], ['Safe? (YES or NO)', 'YES']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$\theta = \tan^{-1}(2/28) \approx 4.1^\circ$, less than $5^\circ$, so YES. 1 pt equation, 1 pt angle, 1 pt YES/NO that matches the angle. Angle point only with tan ($\sin^{-1}(2/28)$ also gives $4.1^\circ$).'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: hyp
+        points: 2
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: 'Find $x$. Round to the nearest tenth.'
+        figure: 'Unit 4 Test A_3'
+        work: 1.0
+        fill: [['Equation:', '$\sin(22^\circ) = \frac{16}{x}$'], ['$x \approx$', '42.7']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$x = 16 / \sin(22^\circ) \approx 42.7$. 1 pt equation, 1 pt answer.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: beta
+        points: 2
+        target: LT3
+        type: cr
+        demand: pwoc
+        prompt: 'Find $\beta$. Round to the nearest tenth of a degree.'
+        figure: 'Unit 4 Test A_4'
+        work: 1.0
+        fill: [['Equation:', '$\cos\beta = \frac{4.9}{8.9}$'], ['$\beta \approx$', '$56.6^\circ$']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$\beta = \cos^{-1}(4.9/8.9) \approx 56.6^\circ$. 1 pt equation, 1 pt answer. $\sin^{-1}(4.9/8.9) \approx 33.4^\circ$ is the other angle (full credit only if subtracted from $90^\circ$); $\tan^{-1}$ gives $28.8^\circ$ (no points).'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: legs
+        points: 4
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'In $\triangle LMN$, $\angle N$ is a right angle, $LM = 7$, and $\angle M = 66^\circ$. Find $LN$ and $MN$. Round to the nearest tenth.'
+        figure: 'Unit 4 Test A_5'
+        work: 0.6
+        fill: [['Equation for $LN$:', '$\sin(66^\circ) = \frac{LN}{7}$'], ['$LN \approx$', '6.4'], ['Equation for $MN$:', '$\cos(66^\circ) = \frac{MN}{7}$'], ['$MN \approx$', '2.8']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: 'Multiply: $LN = 7\sin(66^\circ)$ and $MN = 7\cos(66^\circ)$. Each side: 1 pt equation, 1 pt answer.'
+
+  - kind: plain
+    target: LT4
+    items:
+      - id: tower
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'You stand 150 ft from the bottom of a cell tower. The angle of elevation (the angle up from the ground) to the top of the tower is $68^\circ$. Find the height $h$ of the tower. Round to the nearest foot.'
+        figure: 'Unit 4 Test A_6'
+        work: 1.0
+        fill: [['Equation:', '$\tan(68^\circ) = \frac{h}{150}$'], ['$h \approx$', '371 ft']]
+        fill_cols: 1
+        box_w: 1.6
+        answer: '$h = 150\tan(68^\circ) \approx 371$ ft. 1 pt equation, 1 pt work, 1 pt answer.'
+
+  - kind: plain
+    items:
+      - prompt: 'Is there anything you want Ms. Freedman to know?'
+        work: 0.7
+        answer: 'Not scored.'
+        no_answer: true
+
+guide_notes: |
+  **Scoring notes.** Credit any valid method (cos instead of sin, the other acute angle, or the Pythagorean Theorem). Score the math, not English grammar or spelling. Accept home-language words and a decimal comma (6,4 = 6.4). Rounding is not the target: an answer rounded one place off (for example $57^\circ$ for $56.6^\circ$) gets full credit when the method is right.
+
+  **Before test day.** Tell students this test has no sin, cos, tan box ({num:tri_abc}b measures the ratios); the 4.6-4.7 checks had one.
+
+  **MLL support.** If you preview the contexts, launch {ref:ramp} and {ref:tower} with 3-Reads (no calculating). Keep the words opposite, adjacent, hypotenuse, and angle of elevation.
+
+  **Nov 19: less is more, no headings.** Cut the $m\angle A$ blank from old Problem 5 (2 pts; it repeated {num:tri_abc}a). {ref:legs} asks for the two legs, with an Equation box each. Cut: the side-name sentence in {ref:tri_abc} (it gave the step {num:tri_abc}b measures), "ALL" in capitals, the "accessibility" gloss, and "Round as each problem says"; "base" is now "bottom". No headings print. Total 20 to 18.
+
+  **Nov 20 (audit).** {ref:beta} is a leg and the hypotenuse, so students choose $\cos^{-1}$ (was legs 5 and 12, Lesson 4.10 practice 8's triangle). {num:tri_abc}b choice D is $\cos A = b/c$, like the Retake's true pair. {ref:legs} is now $\triangle LMN$.

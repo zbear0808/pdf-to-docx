@@ -1,0 +1,76 @@
+id: '4.1-4.5 Progress Check Retake'
+doc_type: assessment
+title: 'Progress check retake: square roots, Pythagorean Theorem, labeling sides'
+directions: Show your work.
+numbering: auto
+set: '4.1-4.5 Progress Check'
+form: 'Retake'
+parallel_to: '4.1-4.5 Progress Check A'
+source: 'Progress Check Square Roots, Pythag, Labeling Sides (RETAKE; Pythagorean item replaced, and item 2 changed from the square root of 64 on Nov 19; see changes.md)'
+total_points: 9
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'Students will understand that the names opposite and adjacent depend on which acute angle you look from; the hypotenuse is always across from the right angle.'
+    able_to: 'Students will be able to label the opposite leg, adjacent leg, and hypotenuse for a marked acute angle.'
+    standard: G.SRT.6
+  - id: LT2
+    understand: 'Students will understand that a square root can be split into factors, so a perfect-square factor comes out as a whole number.'
+    able_to: 'Students will be able to simplify a square root fully.'
+    standard: N.RN.A.2
+  - id: LT3
+    understand: 'Students will understand that $a^2 + b^2 = c^2$ is true only for right triangles, and $c$ is the hypotenuse.'
+    able_to: 'Students will be able to use the Pythagorean Theorem to find a missing leg.'
+    standard: 8.G.B.7
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - points: 3
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Look from the $30^\circ$ angle. Write **opposite**, **adjacent**, or **hypotenuse** next to each side of the triangle.'
+        figure: '4.1-4.5 Progress Check Retake_1'
+        work: 0.45
+        answer: 'Bottom leg: opposite. Vertical leg: adjacent. Slanted side: hypotenuse.'
+
+  - kind: plain
+    target: LT2
+    intro: 'Simplify (write it in simplest form).'
+    columns: 2
+    items:
+      - points: 1
+        target: LT2
+        type: cr
+        demand: mem
+        prompt: '$\sqrt{49}$'
+        work: 0.9
+        answer: '7'
+      - points: 2
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: '$\sqrt{500}$'
+        work: 0.9
+        answer: '$\sqrt{100 \cdot 5} = 10\sqrt{5}$'
+
+  - kind: plain
+    target: LT3
+    items:
+      - points: 3
+        target: LT3
+        type: cr
+        demand: pwoc
+        prompt:
+          - 'Find the missing side length $x$.'
+          - '$8^2 = 64$ and $17^2 = 289$.'
+        figure: '4.1-4.5 Progress Check Retake_3'
+        work: 1.6
+        answer: '$x^2 + 8^2 = 17^2$, $x^2 + 64 = 289$, $x^2 = 225$, $x = 15$'
+
+guide_notes: |
+  **Scoring notes.** Item 1: 1 point per correct side name. Item 2: 1 point for 7. Item 3: 1 point for $100 \cdot 5$, 1 point for $10\sqrt{5}$. Item 4: 1 point each for the equation with 17 as the hypotenuse, the subtraction ($x^2 = 225$), and the answer. Credit any valid method. Score the math, not English grammar or spelling. On item 1, accept phonetic spelling and home-language words for the side names (hipotenusa).
+
+  **Nov 19: less is more, no headings.** Nothing cut: items 2 and 3 make different moves (a perfect square; a perfect-square factor), and items 1 and 4 are the only items for LT1 and LT3. Scaffolded: item 4 prints $8^2 = 64$ and $17^2 = 289$, so its squares point is gone; the setup with 17 as the hypotenuse, the subtraction, and the root stay open. Item 2 is now $\sqrt{49}$ (it was $\sqrt{64}$, which the printed $8^2 = 64$ would answer). Cut the word bank above item 1 (the prompt already names the three words in bold). No section headings. Total 10 -> 9.

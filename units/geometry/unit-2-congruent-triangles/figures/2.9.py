@@ -76,15 +76,15 @@ assert np.allclose(U2, reflect([J], G, H)[0]), "after Steps 1-2, U'' is the mirr
 
 @figure(f"{S}_label")
 def label_pair() -> Figure:
-    """Two triangles as in the notes; the key adds the tick marks for ST = GH, TU = HJ, SU = GJ."""
+    """Two triangles as in the notes, with tick marks for ST = GH, TU = HJ, SU = GJ (given)."""
     f = Figure(width_in=3.0, height_in=1.55)
     for tri, names in ((STU, "STU"), (GHJ, "GHJ")):
         f.poly(tri)
         f.dots(tri)
         f.label_poly(tri, names)
     for n, (a, b, c, d) in enumerate(((S_, T_, G, H), (T_, U_, H, J), (S_, U_, G, J)), start=1):
-        f.ticks(a, b, n, layer="answer")
-        f.ticks(c, d, n, layer="answer")
+        f.ticks(a, b, n)
+        f.ticks(c, d, n)
     return f
 
 
@@ -234,18 +234,4 @@ def pr_sas() -> Figure:
         f.ticks(a, b, 1)
         f.ticks(a, c, 2)
         f.arc(a, b, c, 1, r=0.3)
-    return f
-
-
-@figure(f"{S}_pr_bisect")
-def pr_bisect() -> Figure:
-    """Practice 5: quadrilateral KQAB with diagonal QB; K is the mirror image of A across QB, so QK = QA."""
-    Q, B, A = _px((405, 52), (347, 190), (455, 128))
-    K = reflect([A], Q, B)[0]
-    assert np.isclose(dist(Q, K), dist(Q, A)) and np.isclose(angle_deg(Q, K, B), angle_deg(Q, A, B))
-    f = Figure(width_in=1.5, height_in=1.6)
-    f.poly([K, Q, A, B])
-    f.seg(Q, B)
-    f.dots([K, Q, A, B])
-    f.label_poly([K, Q, A, B], "KQAB")
     return f

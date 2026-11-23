@@ -3,7 +3,7 @@ import numpy as np
 
 from lesson_builder.figures import (
     Figure, P, angle_deg, assert_distinct, assert_lengths, dilate, dist, figure, is_rigid_image,
-    needs_reflection, reflect, rotate, similarity_ratio, translate,
+    midpoint, needs_reflection, reflect, rotate, similarity_ratio, translate,
 )
 
 
@@ -16,10 +16,6 @@ def tri(base, a_left, a_right, left=(0, 0), turn=0.0):
     assert np.isclose(angle_deg(pts[0], pts[1], pts[2]), a_left)
     assert np.isclose(angle_deg(pts[1], pts[0], pts[2]), a_right)
     return pts
-
-
-def law_of_sines_side(known, opp_known, opp_want):
-    return known * np.sin(np.radians(opp_want)) / np.sin(np.radians(opp_known))
 
 
 def _names(f, pts, names, dirs=None):
@@ -60,123 +56,65 @@ def warmup() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- Together 1 and Partner 3 (key drawings)
-@figure("3.9_p1_key")
-def p1_key() -> Figure:
-    t1 = tri(2.8, 45, 100)
-    t2 = translate(tri(3.2, 45, 90), (4.0, 0))
-    assert_distinct([angle_deg(t1[1], t1[0], t1[2]), angle_deg(t2[1], t2[0], t2[2])])
-    f = Figure(width_in=3.2, height_in=1.4)
-    for t, nm in ((t1, "Triangle 1"), (t2, "Triangle 2")):
-        f.poly(t, layer="answer")
-        f.arc(t[0], t[1], t[2], r=0.35, layer="answer")
-        f.angle_label(t[0], t[1], t[2], "45°", dist=0.75, layer="answer", size=9)
-        f.text(((t[0] + t[1]) / 2) + (0, -0.35), nm, layer="answer", size=10)
-    f.angle_label(t1[1], t1[0], t1[2], "100°", dist=0.5, layer="answer", size=9)
-    f.angle_label(t2[1], t2[0], t2[2], "90°", dist=0.55, layer="answer", size=9)
+# ---------------------------------------------------------------- Together 1: one pair of congruent angles is not enough
+# Both triangles have a 45 degree angle (one arc); every angle is printed, so students only compare.
+P1_A = tri(2.8, 45, 100)                            # 45, 100, 35
+P1_B = translate(tri(3.3, 45, 60), (4.1, 0))       # 45, 60, 75
+assert np.isclose(angle_deg(P1_A[2], P1_A[0], P1_A[1]), 35)
+assert np.isclose(angle_deg(P1_B[2], P1_B[0], P1_B[1]), 75)
+assert_distinct([100, 35, 60, 75])                  # only the 45 degree angles match
+
+
+@figure("3.9_p1")
+def p1() -> Figure:
+    f = Figure(width_in=2.7, height_in=1.3)
+    for t, (a, b, c) in ((P1_A, ("45°", "100°", "35°")), (P1_B, ("45°", "60°", "75°"))):
+        f.poly(t)
+        f.arc(t[0], t[1], t[2], r=0.4)
+        f.angle_label(t[0], t[1], t[2], a, dist=0.95, size=9)
+        f.angle_label(t[1], t[0], t[2], b, dist=0.6, size=9)
+        f.angle_label(t[2], t[0], t[1], c, dist=1.0, size=9)
     return f
 
 
-# 45 and 30 degree base angles; side between them 2 cm and 6 cm, so k = 3 and the third angle is 105.
-P3_SMALL = tri(2.0, 45, 30)
-P3_BIG = translate(tri(6.0, 45, 30), (2.8, 0))
-assert np.isclose(similarity_ratio(P3_SMALL, P3_BIG), 3)
+# ---------------------------------------------------------------- Partner 2: two angles fix the shape (actual size, cm)
+# Base angles 45 (left) and 30 (right); the side between them is 2 cm and 6 cm, so k = 3 and the third angle is 105.
+# Given: each side, its 45 degree ray (long enough to pass the apex), and since Nov 23 the start of its 30 degree side
+# (short of the apex). Answer: the rest of each 30 degree side, the apex, "105°".
+P2_SMALL = tri(2.0, 45, 30)
+P2_BIG = translate(tri(6.0, 45, 30), (3.3, 0))
+P2_RAYS = (1.5, 3.9)                                # printed length of each 45 degree ray, cm
+P2_STARTS = (0.65, 1.4)                             # printed start of each 30 degree side, cm
+assert np.isclose(similarity_ratio(P2_SMALL, P2_BIG), 3)
+assert all(dist(t[0], t[2]) < r - 0.3 for t, r in zip((P2_SMALL, P2_BIG), P2_RAYS))
+assert all(s < dist(t[1], t[2]) - 0.5 for t, s in zip((P2_SMALL, P2_BIG), P2_STARTS))   # students extend each one
+assert np.isclose(angle_deg(P2_BIG[2], P2_BIG[0], P2_BIG[1]), 105)
 
 
-@figure("3.9_p3_key")
-def p3_key() -> Figure:
-    f = Figure(width_in=3.0, height_in=1.3)
-    assert_lengths([(P3_SMALL[0], P3_SMALL[1], 2), (P3_BIG[0], P3_BIG[1], 6)])
-    for t, base in ((P3_SMALL, "2 cm"), (P3_BIG, "6 cm")):
-        f.poly(t, layer="answer")
-        r = 0.4 if base == "6 cm" else 0.25
-        f.arc(t[0], t[1], t[2], r=r, layer="answer")
-        f.arc(t[1], t[0], t[2], n=2, r=r, gap=0.08, layer="answer")
-        f.side_label(t[0], t[1], base, center=t[2], layer="answer", size=11)
-    for txt, v, a, b, d in (("45°", 0, 1, 2, 0.85), ("30°", 1, 0, 2, 0.95), ("105°", 2, 0, 1, 0.6)):
-        f.angle_label(P3_BIG[v], P3_BIG[a], P3_BIG[b], txt, dist=d, layer="answer", size=11)
-    return f
-
-
-# ---------------------------------------------------------------- Partner 6: add one measurement
-# JKL: J = 50, K = 70 (so L = 60). XYZ: only X = 50 is given. The key adds Y = 70 (Z = 60 also works).
-@figure("3.9_p6")
-def p6() -> Figure:
-    J, K, L = tri(4.4, 50, 70)
-    X, Y, Z = tri(5.5, 50, 70, left=(13.6, 1.6), turn=160)
-    assert np.isclose(angle_deg(L, J, K), 60) and np.isclose(angle_deg(Z, X, Y), 60)
-    assert np.isclose(similarity_ratio([J, K, L], [X, Y, Z]), 1.25)
-    f = Figure(width_in=3.6, height_in=1.5)
-    _names(f, [J, K, L], "JKL")
-    _names(f, [X, Y, Z], "XYZ")
-    f.angle_label(J, K, L, "50°", dist=1.0, size=9)
-    f.angle_label(K, J, L, "70°", dist=0.95, size=9)
-    f.angle_label(X, Y, Z, "50°", dist=1.3, size=9)
-    f.angle_label(Y, X, Z, "70°", dist=1.1, layer="answer", size=9)
-    return f
-
-
-# ---------------------------------------------------------------- CYU 1: bowtie, AD parallel CB
-_A, _D = P((0, 0), (0, 2.6))
-_E = P((2.7, 2.05))[0]
-_C = _A + (3.6 / 2.7) * (_E - _A)
-_B = _D + (3.6 / 2.7) * (_E - _D)
-assert np.isclose(_C[0], _B[0])                           # CB vertical, so CB parallel to AD
-assert np.isclose(angle_deg(_A, _D, _E), angle_deg(_C, _B, _E))
-assert np.isclose(similarity_ratio([_D, _E, _A], [_B, _E, _C]), 1 / 3)   # DEA ~ BEC
-
-
-@figure("3.9_cyu")
-def cyu() -> Figure:
-    f = Figure(width_in=2.4, height_in=1.75)
-    f.seg(_A, _C)
-    f.seg(_D, _B)
-    f.seg(_A, _D)
-    f.seg(_C, _B)
-    f.dots([_A, _B, _C, _D, _E])
-    for p, nm, d in ((_A, "A", (-1, -0.5)), (_D, "D", (-1, 0.5)), (_E, "E", (0, 1)), (_C, "C", (0.6, 1)),
-                     (_B, "B", (0.6, -1))):
-        f.label(p, nm, direction=d)
-    f.arc(_A, _D, _E, r=0.45)
-    f.arc(_C, _B, _E, r=0.3)
-    f.arc(_E, _D, _A, n=2, r=0.25, gap=0.07, layer="answer")
-    f.arc(_E, _B, _C, n=2, r=0.25, gap=0.07, layer="answer")
-    return f
-
-
-# ---------------------------------------------------------------- exit ticket: 40-60 and 40-80 triangles
-# ABC: A = 40, B = 60 (C = 80). BC = 3, AB = 4.6 (rounded), AC = x.
-# DEF: D = 40, E = 80 (F = 60). EF = 6, DE = 8.1 (rounded), DF = y.  A->D, B->F, C->E, k = 2.
-# DEF sits on side DE (8.1), so "bottom side" matching (4.6 with 8.1) gives the wrong scale factor.
-EX1 = tri(4.596, 40, 60)                                   # A, B, C
-_eD, _eE, _eF = translate(tri(law_of_sines_side(6, 40, 60), 40, 80), (7.0, -0.4))   # D, E, F (left, right, apex)
-EX2 = np.array([_eD, _eF, _eE])                            # D, F, E: same order as A, B, C
-assert np.isclose(dist(EX1[1], EX1[2]), 3, atol=0.01) and np.isclose(dist(EX1[0], EX1[1]), 4.596)
-assert np.isclose(similarity_ratio(EX1, EX2), 2, atol=1e-3)
-assert np.isclose(law_of_sines_side(3, 40, 60), 4.042, atol=1e-3)     # x, true value; 8.1 / 2 = 4.05
-assert np.isclose(dist(EX2[0], EX2[2]), 8.08, atol=0.01)              # DE
-assert np.isclose(2 * 4.6, 9.2)                                       # y
-assert_lengths([(EX1[1], EX1[2], 3), (EX1[0], EX1[1], 4.6), (EX1[0], EX1[2], 4.05),
-                (EX2[2], EX2[1], 6), (EX2[0], EX2[2], 8.1), (EX2[0], EX2[1], 9.2)])
-
-
-@figure("3.9_exit")
-def exit_fig() -> Figure:
-    A, B, C = EX1
-    D, F, E = EX2
-    f = Figure(width_in=3.6, height_in=1.6)
-    _names(f, [A, B, C], "ABC")
-    _names(f, [D, F, E], "DFE")
-    f.angle_label(A, B, C, "40°", dist=1.25, size=8.5)
-    f.angle_label(B, A, C, "60°", dist=1.05, size=8.5)
-    f.angle_label(D, F, E, "40°", dist=2.2, size=8.5)
-    f.angle_label(E, D, F, "80°", dist=1.0, size=8.5)
-    f.side_label(B, C, "3", center=A, size=11)
-    f.side_label(A, B, "4.6", center=C, size=11)
-    f.side_label(A, C, "x", center=B, italic=True, size=11)
-    f.side_label(E, F, "6", center=D, size=11)
-    f.side_label(D, E, "8.1", center=F, size=11)
-    f.side_label(D, F, "y", center=E, italic=True, size=11)
+@figure("3.9_p2")
+def p2() -> Figure:
+    f = Figure(actual_size="cm")
+    assert_lengths([(P2_SMALL[0], P2_SMALL[1], 2), (P2_BIG[0], P2_BIG[1], 6)])
+    for t, ray, start, base, name, r in ((P2_SMALL, P2_RAYS[0], P2_STARTS[0], "2 cm", "Triangle 1", 0.3),
+                                         (P2_BIG, P2_RAYS[1], P2_STARTS[1], "6 cm", "Triangle 2", 0.45)):
+        L, R, A = t
+        u = (A - L) / dist(L, A)
+        v = (A - R) / dist(R, A)
+        assert np.isclose(angle_deg(R, L, R + start * v), 30)
+        f.seg(L, R)
+        f.seg(L, L + ray * u)
+        f.seg(R, R + start * v)
+        f.dots([L, R])
+        f.arc(L, R, A, r=r)
+        f.arc(R, L, A, n=2, r=r, gap=0.08)
+        f.side_label(L, R, base, center=A, size=10)
+        f.text(midpoint(L, R) + (0, -0.95), name, size=10)
+        f.seg(R + start * v, A, layer="answer")
+        f.dots([A], layer="answer")
+    L, R, A = P2_BIG
+    f.angle_label(L, R, A, "45°", dist=1.25, size=10)
+    f.angle_label(R, L, A, "30°", dist=1.35, size=10)
+    f.angle_label(A, L, R, "105°", dist=0.75, size=10, layer="answer")
     return f
 
 
@@ -235,34 +173,7 @@ def pr3() -> Figure:
     return f
 
 
-# Pr 5: quadrilateral Q is a dilation of P with k = 5/4 (4 -> 5, 2 -> 2.5).
-_T1, _T2 = P((0, 0), (4, 0))
-_I = _T2 + 3 * np.array([np.cos(np.radians(205)), np.sin(np.radians(205))])
-_Bt = _I + 2 * np.array([-0.15, -1]) / np.hypot(0.15, 1)
-_QP = np.array([_T1, _T2, _I, _Bt])
-_QQ = translate(dilate(_QP, 1.25, _T1), (5.2, -2.6))
-assert np.isclose(similarity_ratio(_QP, _QQ), 1.25)
-assert np.isclose(dist(_QQ[2], _QQ[3]), 2.5) and np.isclose(dist(_QQ[0], _QQ[1]), 5)
-assert_lengths([(_QP[0], _QP[1], 4), (_QP[1], _QP[2], 3), (_QP[2], _QP[3], 2), (_QQ[0], _QQ[1], 5), (_QQ[2], _QQ[3], 2.5)])
-
-
-@figure("3.9_pr5")
-def pr5() -> Figure:
-    f = Figure(width_in=2.3, height_in=1.6)
-    for q, nm, at in ((_QP, "P", (-0.9, -1.6)), (_QQ, "Q", None)):
-        f.poly(q)
-        f.dots(q)
-        c = (q[0] + q[1] + q[2]) / 3 + (-0.2, -0.15) if at is None else np.asarray(at, float)
-        f.text(c, f"${nm}$", size=12)
-    f.side_label(_QP[0], _QP[1], "4", center=_QP[2], size=10)
-    f.side_label(_QP[1], _QP[2], "3", center=_QP[0], size=10)
-    f.side_label(_QP[2], _QP[3], "2", center=_QP[0], size=10)
-    f.side_label(_QQ[0], _QQ[1], "5", center=_QQ[2], size=10)
-    f.side_label(_QQ[2], _QQ[3], "2.5", center=_QQ[0], size=10)
-    return f
-
-
-# Pr 7: sides are proportional (6:2 and 9:3), but the angles are not given, so we can't tell.
+# Pr 5: sides are proportional (6:2 and 9:3), but the angles are not given, so we can't tell.
 def _pgram(base, side, deg, at):
     a = np.asarray(at, float)
     u = side * np.array([np.cos(np.radians(deg)), np.sin(np.radians(deg))])
@@ -287,33 +198,4 @@ def pr7() -> Figure:
         f.side_label(q[0], q[1], s, center=c, size=10)
         f.side_label(q[2], q[3], s, center=c, size=10)
         f.side_label(q[3], q[0], b, center=c, size=10)
-    return f
-
-
-# Pr 8: right triangles inscribed on a diameter. Small: 3-x-5 with x = 4. Big: diameter 20, k = 4, leg 16.
-def _circle(f, c, r):
-    t = np.linspace(0, 2 * np.pi, 120)
-    f.poly(np.c_[c[0] + r * np.cos(t), c[1] + r * np.sin(t)])
-
-
-@figure("3.9_pr8")
-def pr8() -> Figure:
-    f = Figure(width_in=3.0, height_in=1.5)
-    for c, r, lab in (((0, 0), 2.5, "small"), ((8.6, 0), 5.0, "big")):
-        c = np.asarray(c, float)
-        L, R = c + (-r, 0), c + (r, 0)
-        V = L + (3 / 5) * (2 * r) * np.array([3 / 5, 4 / 5])           # 3-4-5 shape, right angle at V
-        assert np.isclose(angle_deg(V, L, R), 90)
-        _circle(f, c, r)
-        f.poly([L, R, V])
-        f.right_angle(V, L, R, size=0.12 * r)
-        f.dots([c])
-        if lab == "small":
-            assert np.isclose(dist(V, R), 4) and np.isclose(dist(L, V), 3)
-            f.label(c, "R", direction=(0, -1), size=11)
-            f.side_label(L, V, "3", center=R, size=10)
-            f.side_label(V, R, "x", center=L, italic=True, size=10)
-        else:
-            f.label(c, "Q", direction=(0, -1), size=11)
-            f.side_label(V, R, "16", center=2 * (V + R) / 2 - L, size=10)    # inside the triangle
     return f

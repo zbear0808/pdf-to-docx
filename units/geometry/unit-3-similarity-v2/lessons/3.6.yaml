@@ -1,0 +1,191 @@
+id: 3.6
+title: Similarity and transformations
+notes_title: Similarity and transformations
+framing: >-
+  When are two figures similar, and how do we write it?
+numbering: auto
+headings: warmup
+numbering_after_notes: continue
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        prompt: 'Why is $GHFE$ not a dilation of $ADCB$ with center $P$?'
+        figure: 3.6_warmup
+        key_figure: 3.6_warmup_key
+        fig_w: 2.6
+        frame:
+          - ['$GH = 2 \cdot AD$, but $GE =$', '1', '$\cdot AB$.']
+          - ['With scale factor 2, $GE$ should be', '4', '.']
+        answer: 'A dilation multiplies every length by the same scale factor. $GH$ was doubled, but $GE$ was not. Red dashed: the real image.'
+        work: 0.6
+        after: 0.06
+
+  - kind: together
+    bank: [translate, rotate around a point, reflect across a line, 'dilate (center, scale factor)']
+    items:
+      - n: 1
+        id: seq
+        minutes: 4
+        prompt:
+          - 'Finish the sequence of transformations that takes $\triangle ABC$ onto $\triangle DEF$. Each side of $\triangle DEF$ is $\frac{1}{2}$ as long as the matching side of $\triangle ABC$.'
+          - 'Step 1: Translate $\triangle ABC$ so that $A$ lands on $D$.'
+          - 'Step 2: Rotate $90^\circ$ counterclockwise around $D$. Now $B$ is on ray $DE$, and $C$ is on ray $DF$.'
+        figure: 3.6_together
+        fig_w: 2.5
+        fill:
+          - ['Step 3:', 'Dilate with center $D$, $k = \frac{1}{2}$.']
+        box_w: 3.0
+        answer: 'Rigid motions keep lengths; only a dilation halves them.'
+        after: 0.06
+
+  - kind: partner
+    items:
+      - n: 2
+        id: soup
+        minutes: 7
+        prompt: '$\overline{AB} \parallel \overline{QR}$ and $\overline{AE} \parallel \overline{QT}$. Each side of the small triangle is $\frac{2}{5}$ as long as the matching side of the large triangle.'
+        figure: 3.6_soup
+        fig_w: 2.0
+        parts:
+          - label: a.
+            prompt: 'Finish the sequence that takes the large triangle onto the small triangle. Step 1 translates the large triangle so that $A$ lands on $Q$.'
+            fill:
+              - ['Step 2:', 'Dilate with center $Q$, $k = \frac{2}{5}$.']
+            box_w: 3.0
+            answer: 'After Step 1, $A$ is on $Q$, so the dilation has center $Q$.'
+          - label: b.
+            prompt: 'Write a similarity statement.'
+            frame:
+              - ['$\triangle EAB \sim \triangle$', '$TQR$', '']
+          - label: c.
+            prompt: 'Is each statement right or wrong?'
+            fill: [['$\triangle ABE \sim \triangle QRT$', 'right'], ['$\triangle EAB \sim \triangle RQT$', 'wrong']]
+            box_w: 0.9
+            answer: 'Keep $E \to T$, $A \to Q$, $B \to R$. The second one pairs $E$ with $R$.'
+
+  - kind: notes
+
+  - kind: apply
+    items:
+      - n: 3
+        id: jkl
+        minutes: 5
+        prompt: '$\triangle JKL \sim \triangle XYZ$. $JK = 6$, $KL = 8$, $JL = 10$, and $YZ = 6$. Are the triangles congruent? Explain how you know.'
+        box: 2.0
+        answer: 'No. $K \to Y$ and $L \to Z$, so $\overline{KL}$ matches $\overline{YZ}$ and $k = \frac{6}{8} = \frac{3}{4}$, not 1. Every side shrinks ($XY = 4.5$), so the triangles are not congruent.'
+
+quicknotes:
+  - '**LT 1: I know the definition of similarity.**'
+  - '- Two figures are **similar** if a sequence of rigid motions and/or dilations takes one figure onto the other.'
+  - '- Rigid motions keep lengths and angles. A dilation keeps angles and multiplies every length by the scale factor $k$.'
+  - '- Going back from the image to the original uses scale factor $\frac{1}{k}$.'
+  - '- Congruent figures are always similar ($k = 1$). Similar figures are congruent only when $k = 1$.'
+  - '**LT 2: I can write similarity statements.**'
+  - '- The symbol $\sim$ means "is similar to."'
+  - '- $\triangle ABC \sim \triangle DEF$ matches letters by position: $A \to D$, $B \to E$, $C \to F$. So $\angle A \cong \angle D$, and $\overline{AB}$ matches $\overline{DE}$.'
+  - '- You can list the vertices in any order, as long as both names use the same matching: $\triangle BCA \sim \triangle EFD$ says the same thing.'
+
+practice:
+  title: 'Similarity and transformations: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt:
+            - 'Finish the sequence that takes square $ABCD$ onto square $EFGH$. Each side of $EFGH$ is $\frac{2}{5}$ as long as each side of $ABCD$.'
+            - 'Step 1: Translate $ABCD$ so that $A$ lands on $E$.'
+            - 'Step 2: Rotate around $E$ until $B$ is on ray $EF$ and $D$ is on ray $EH$.'
+          figure: 3.6_pr_squares
+          fig_w: 2.2
+          layout: stacked
+          fill:
+            - ['Step 3:', 'Dilate with center $E$ by $\frac{2}{5}$.']
+          box_w: 2.1
+        - n: 2
+          prompt: 'Quadrilaterals $P$ and $Q$ are similar.'
+          figure: assets/3.6/prac2_PQ.png
+          fig_w: 1.6
+          layout: stacked
+          parts:
+            - label: a.
+              prompt: 'What is the scale factor of the dilation that takes $P$ onto $Q$?'
+              fill: [['Scale factor:', '$\frac{5}{4}$']]
+              box_w: 0.9
+              answer: '$\frac{5}{4} = \frac{2.5}{2} = 1.25$'
+            - label: b.
+              prompt: 'What is the scale factor of the dilation that takes $Q$ onto $P$?'
+              fill: [['Scale factor:', '$\frac{4}{5}$']]
+              box_w: 0.9
+              answer: 'Going back uses $\frac{1}{k} = \frac{4}{5}$.'
+    - cells:
+        - n: 3
+          prompt: 'Which is our definition of similar?'
+          choices:
+            - 'Two figures with the same angles are similar.'
+            - 'Two figures with proportional sides are similar.'
+            - 'Two figures are similar if a sequence of rigid motions takes one onto the other.'
+            - 'Two figures are similar if a sequence of rigid motions and dilations takes one onto the other.'
+          answer: '[D] [A] and [B] are not our definition (and fail for some polygons). [C] describes congruent figures.'
+          work: 0.1
+    - heading: SBA review
+      cells:
+        - n: 4
+          prompt: 'The point $(k, 8)$ is on the line $y = 3x + 5$. What is $k$?'
+          answer: ['$8 = 3k + 5$', '$3 = 3k$', '$k = 1$']
+        - n: 5
+          prompt: 'A line passes through $(2, 8)$ and has a $y$-intercept of 4. What is its slope?'
+          answer: ['The line passes through $(0, 4)$ and $(2, 8)$.', '$m = \frac{8 - 4}{2 - 0} = 2$']
+  selected: [[1, 'dilate with center $E$ by $\frac{2}{5}$'], [2, 'a. $\frac{5}{4}$  b. $\frac{4}{5}$'], [3, D], [4, '$k = 1$'], [5, '$m = 2$']]
+
+plan: |
+  **Overview.** 3.1-3.5: dilations scale lengths and keep angles. Today: define similar with transformations (rigid motions and dilations) and write similarity statements. Lesson 3.7 uses this definition to reason about angles and sides; 3.9 shortens it to AA.
+
+  **Core idea.** Students see that rigid motions can line a triangle up with a bigger or smaller copy but can't change its size, so a dilation finishes the sequence. Where each vertex lands gives the letter order of the similarity statement. Spend whole-class time on Step 3 of {ref:seq} and on the {ref:soup}c share. Known steps are printed: the rigid motions (Steps 1-2 of {ref:seq}, Step 1 of {ref:soup}a: Unit 1), each scale factor ($\frac{1}{2}$ and $\frac{2}{5}$: Lesson 3.3), and every side length. Only the new steps are blank: the dilation that finishes each sequence, the statement in {ref:soup}b, right or wrong in {ref:soup}c, and {ref:jkl}. Faded version: the later problems print less, so students carry the whole argument in {ref:jkl}. The in-class practice, {ref:jkl}, checks both halves on their own with the QuickNotes: students read the matching from the statement alone ($\overline{KL}$ with $\overline{YZ}$) and see that $k = \frac{3}{4}$, not 1, so the triangles are similar but not congruent.
+
+  **Objectives.** (1) Write a sequence of rigid motions and dilations that takes one figure onto another. (2) Write a similarity statement with the vertices in matching order. **Standards.** G-SRT.A.2, G-SRT.A.1b. SMP 3, 6.
+
+  **Quick look (26 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up | Students, 1 min share |
+  | 3-7 | Together: Problem 1 | Teacher + class |
+  | 7-15 | With a partner: Problem 2 | Students (pairs), 2 min share |
+  | 15-18 | QuickNotes | Teacher + class |
+  | 18-23 | In-class practice: {ref:jkl} | Students (on their own) |
+  | 23-26 | Collect, assign practice | Teacher |
+
+  **Warm-up (3 min).** 2 min to fill, 1 min share. Review only (Lesson 3.3): a dilation multiplies every length by the same scale factor. Ask "Which length broke the rule?"
+
+  **Together (4 min, doc camera).** {ref:seq}: trace $\triangle ABC$ on patty paper and do Steps 1-2 quickly. Then stop and ask "Can another rigid motion finish the job?" (No: rigid motions keep lengths, and each side of $\triangle DEF$ is half as long.) Take Step 3 from a student and push for the center; the scale factor is printed. Then say where each vertex landed: $A$ on $D$, $B$ on $E$, $C$ on $F$, so $\triangle ABC \sim \triangle DEF$. The QuickNotes use this pair.
+
+  **With a partner (8 min).** 1 min to pair up, about 5 min on {ref:soup}, 2 min share of part c.
+  - Part a: Step 1 (translate $A$ to $Q$) and the scale factor are printed, so the blank is the dilation that finishes it: center $Q$, $k = \frac{2}{5}$. No rotation is needed because the sides are already parallel. Watch for center $A$: after Step 1, the large triangle sits at $Q$.
+  - Assessing: "After Step 2, where does $E$ land? Where does $B$ land?"
+  - Part c is the key talk. Ask "Which vertex does $E$ match? How do you know?"
+  - Advancing: "Write one more right statement that starts with $B$." ($\triangle BEA \sim \triangle RTQ$ or $\triangle BAE \sim \triangle RQT$.)
+  - Watch for: the small triangle's letters in alphabetical order ($\triangle EAB \sim \triangle QRT$ pairs $E$ with $Q$), and calling $\triangle ABE \sim \triangle QRT$ wrong because it doesn't start with $E$.
+  - MLL supports: move bank, Step labels on the boxes, the side lengths and scale factor printed, a sentence frame for part b. "Similar" has an everyday meaning ("kind of alike"); in math it means a sequence of rigid motions and dilations takes one figure exactly onto the other. Turn and Talk in any language before writing.
+
+  **QuickNotes (3 min).** Students turn to the QuickNotes page only now: its last LT 2 bullet answers {ref:soup}c. Read the definition together. For the $\frac{1}{k}$ bullet, point back to {ref:seq}: $\triangle ABC$ to $\triangle DEF$ uses $\frac{1}{2}$, so going back uses 2. Tie the last LT 2 bullet to the part c share. Say out loud as you collect: "So are congruent figures similar?" (always, $k = 1$).
+
+  **In-class practice (5 min, on their own).** {ref:jkl}, under the QuickNotes. Quiet work; circulate. There is no figure: the letters in the statement give the matching.
+  - Assessing: "Which side of $\triangle JKL$ matches $\overline{YZ}$? How do the letters tell you?"
+  - Advancing, for a student who stops at $k = \frac{3}{4}$: "So how long is $\overline{XY}$? Are the triangles congruent?"
+  - Watch for: "6 and 6, so congruent" ($\overline{YZ}$ matches $\overline{KL}$, not $\overline{JK}$); point to the letter-order bullet in the QuickNotes. $\frac{4}{3}$ is right only as the scale factor from $\triangle XYZ$ to $\triangle JKL$; either way it isn't 1.
+  - MLL supports: the lengths are printed, and arrows ($K \to Y$, $L \to Z$) or a quick sketch count as the explanation if the matching and $k$ are clear.
+
+guide_notes: |
+  **v2 (Nov 23).** New lesson structure (30 min). {ref:jkl}, the former exit ticket (git HEAD 3.6, `kind: exit`) and the last partner problem since Nov 19, moves after the QuickNotes as the in-class practice, with its printed givens and one open box (1.6 to 2.0 in). Partner work is {ref:soup} alone. Page 2 is now the QuickNotes with {ref:jkl} under them: the notes answer {ref:soup}c, on page 1, and for {ref:jkl} they are the tools, with no matching for these triangles printed. The warm-up, Problems 1-2, QuickNotes, and practice are unchanged. Item minutes 19 (unchanged), plan 25 to 26.
+
+  **Faded version (Nov 23).** Less scaffolding at the end of the lesson; everything else matches the standard version. {ref:jkl} has one open box instead of the two labeled boxes (scale factor, yes or no), so students find the side that matches $\overline{YZ}$, find $k$, and decide on their own: 4 to 5 minutes. The warm-up and Problems 1-2 are unchanged. 2a's printed Step 1 repeats Problem 1's Step 1, but it stays printed: both 2c statements pair $A$ with $Q$ on the same page. Item minutes 18 to 19.
+
+  **Nov 23: known content printed.** {ref:seq} now prints its scale factor ($\frac{1}{2}$, Lesson 3.3) with Steps 1-2. {ref:soup}a prints Step 1 (translate so $A$ lands on $Q$, Unit 1), so its one box is the dilation. Practice 1 prints Steps 1-2 and the scale factor the same way, with a Step 3 box. Still blank (new): each dilation step, {ref:soup}b-c, {ref:jkl}, and practice 2b-3. Practice 2a stays blank as the one 3.3 skill it reviews. Item minutes 19 to 18.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:jkl} (a different representation: students read the matching from the statement alone, with no figure, and use it to decide congruence; the "6 and 6" trap is in no other problem). The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** Warm-up: each box is now one number ($GE = 1 \cdot AB$, and $GE$ should be 4 with scale factor 2) instead of "$1 \cdot AB$" and "same". {ref:seq}: Steps 1-2 (translate and rotate, Unit 1) are printed, so the one box is the dilation, the core step. {ref:soup}: the scale factor $\frac{2}{5}$ is printed (finding it is Lesson 3.3, with decimal division), and part a leaves the moves open instead of printing "dilate" and "translate" with boxes for the numbers. Part a says "large" and "small" so the prompt doesn't print the letter order part b asks for. The QuickNotes moved to their own page, since the last LT 2 bullet answers part c. Practice: cut the midpoint-triangle item (the same figure and question as Lesson 3.5 practice 2); the SBA items are now 4-5.
+
+  **Earlier cuts (Nov 16).** To fit 30 minutes: the nested-triangles problem ($\triangle QOR$ and $\triangle PON$) and the squares $F$ and $G$ problem (the same moves as the other sequences; practice covers the squares sequence and $\frac{1}{k}$), the "rigid motions alone?" question (asked out loud in Together), the warm-up's third box, the check-your-understanding letter-order item ({ref:soup}c checks the same thing), and the exit part "congruent figures are similar" (asked out loud at collect). The old exit ticket ("Similar figures are congruent") was answered word for word by the QuickNotes; it was replaced by the $\triangle JKL \sim \triangle XYZ$ item (now {ref:jkl}). Practice went from 11 to 6 problems: cut the right-angle, perimeter, center-$C$ dilation, and draw-a-dilation items and the parallelogram review. Extra instructions and flair cut.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "same size", or a home-language word for congruent. Accept any sequence that works, with the moves in any valid order. Accept "shrink" for a dilation if the center and the scale factor are clear. On {ref:jkl}, accept arrows ($K \to Y$) or a sketch for the matching.

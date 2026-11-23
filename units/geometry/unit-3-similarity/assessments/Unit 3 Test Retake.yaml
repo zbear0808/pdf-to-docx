@@ -1,15 +1,44 @@
 id: Unit 3 Test Retake
 doc_type: assessment
 title: 'Unit 3 Test: Retake'
-directions: 'NO WORK = NO CREDIT!'
-total_points: 20
+directions: Show your work.
+numbering: auto
+set: Unit 3 Test
+form: Retake
+parallel_to: Unit 3 Test A
+source: 'Unit 3 Test.docx (Retake)'
+total_points: 16
 max_pages: 4
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along its ray from the center to k times as far, and keeps angle measures'
+    able_to: 'dilate a figure from a center by a scale factor and say what happens to its angles'
+    standard: G.SRT.1
+  - id: LT2
+    understand: 'figures are similar when rigid motions and a dilation take one onto the other, and the letter order of a similarity statement shows which vertices match'
+    able_to: 'write a sequence of transformations between similar triangles, and write a similarity statement with the vertices in matching order'
+    standard: G.SRT.2
+  - id: LT3
+    understand: 'similar figures have congruent corresponding angles and proportional corresponding sides, all with the same ratio k'
+    able_to: 'pick true proportions, find the scale factor and missing sides and angles, and test a similarity statement with side ratios'
+    standard: 'G.SRT.2, G.SRT.5'
+  - id: LT4
+    understand: 'a line parallel to one side of a triangle makes a similar triangle, so the parallel side matches the whole side'
+    able_to: 'find lengths in nested triangles with whole sides, and decide whether two lines are parallel'
+    standard: 'G.SRT.4, G.SRT.5'
+  - id: LT5
+    understand: 'the altitude to the hypotenuse makes right triangles that are similar to each other'
+    able_to: 'match the vertices of those triangles by their angles, and find lengths with similar triangles or the Pythagorean theorem'
+    standard: 'G.SRT.5, 8.G.B.7'
 
 sections:
   - kind: plain
     items:
-      - n: 1
+      - id: ratios
         points: 3
+        target: LT3
+        type: sr
+        demand: pwoc
         prompt: '$\triangle XYZ$ can be taken to $\triangle X''Y''Z''$ using rigid motions and a dilation. Select **all** the equations that are true. (1/2 point off for each wrong choice.)'
         figure: Unit 3 Test Retake_ratios
         fig_w: 1.6
@@ -21,10 +50,19 @@ sections:
           - '$\dfrac{Z''X''}{ZX} = \dfrac{XY}{X''Y''}$'
           - '$\dfrac{XY}{XZ} = \dfrac{X''Z''}{X''Y''}$'
         choice_cols: 3
-        answer: '[A], [C], [D]. Each one compares matching sides in the same order. [B] and [E] put the original on top on one side and the image on top on the other; [F] flips one side of the equation.'
+        key: 'A, C, D'
+        select_all: true
+        answer: 'Each one compares matching sides in the same order.'
+        distractors:
+          B: 'original over image on the left, image over original on the right'
+          E: 'image over original on the left, original over image on the right'
+          F: 'flips one side of the equation'
         work: 0.1
-      - n: 2
+      - id: parallel
         points: 1
+        target: LT4
+        type: sr
+        demand: pwc
         prompt: 'Is $\overleftrightarrow{AB} \parallel \overleftrightarrow{DE}$? Choose the best reason.'
         figure: Unit 3 Test Retake_parallel
         fig_w: 2.3
@@ -33,43 +71,64 @@ sections:
           - 'Yes. $\triangle CAB$ is a dilation of $\triangle CDE$ with center $C$ and scale factor 3.'
           - 'Yes. $\triangle CAB$ is a dilation of $\triangle CDE$ with center $C$ and scale factor 1.5.'
           - 'No. No dilation takes $\triangle CDE$ onto $\triangle CAB$, so the lines are not parallel.'
-        answer: '[A] $\frac{CA}{CD} = \frac{16}{4} = 4$ and $\frac{CB}{CE} = \frac{24}{6} = 4$. A dilation takes a line to a parallel line. [B] uses $\frac{DA}{CD} = \frac{12}{4}$ (part over part); [C] uses $\frac{CE}{CD} = \frac{6}{4}$; [D] misses that the ratios match.'
+        key: A
+        answer: '$\frac{CA}{CD} = \frac{16}{4} = 4$ and $\frac{CB}{CE} = \frac{24}{6} = 4$. A dilation takes a line to a parallel line.'
+        distractors:
+          B: 'part over part: $\frac{DA}{CD} = \frac{12}{4}$'
+          C: 'divides two sides of the small triangle: $\frac{CE}{CD} = \frac{6}{4}$'
+          D: 'does not see that the two ratios match'
         work: 0.1
-      - n: 3
-        prompt: 'Is this statement true or false: $\triangle PQR \sim \triangle FHG$? The letter order shows which vertices match. Matching arcs show congruent angles.'
+      - id: sas
+        prompt: 'Statement: $\triangle PQR \sim \triangle FHG$. The letter order shows which vertices match. Matching arcs show congruent angles.'
         figure: Unit 3 Test Retake_sas
         fig_w: 2.2
         parts:
           - label: a.
             points: 1
+            target: LT3
+            type: cr
+            demand: pwc
             prompt: 'Set up a proportion to test the statement.'
             answer: '$\frac{FH}{PQ} = \frac{FG}{PR}$? $\frac{22}{25} = 0.88$ and $\frac{10}{55} \approx 0.18$'
             work: 0.7
           - label: b.
             points: 0.5
+            target: LT3
+            type: cr
+            demand: pwc
             prompt: 'Is the statement true or false?'
             fill: [['TRUE or FALSE:', 'FALSE']]
             box_w: 1.1
             answer: 'The ratios are not equal.'
-            work: 0
           - label: c.
             points: 0.5
+            target: LT3
+            type: cr
+            demand: pwc
             prompt: 'How do you know?'
             frame: [['The ratios', 'are not equal: $0.88 \neq 0.18$', '.', 2.6]]
             answer: 'The statement matches $Q \to H$ and $R \to G$, so $\frac{FH}{PQ}$ should equal $\frac{FG}{PR}$. But $\frac{22}{25} \neq \frac{10}{55}$. (The triangles are similar with a different matching: $\triangle PQR \sim \triangle FGH$, since $\frac{10}{25} = \frac{22}{55} = 0.4$ and $\angle P \cong \angle F$.)'
             work: 0.4
         page_break_after: true
-      - n: 4
+      - id: lake
         points: 1
+        target: LT4
+        type: sr
+        demand: pwc
         prompt: 'Jian used $\frac{x}{15} = \frac{16}{10}$ to find the distance $x$ across Heritage Lake. That equation is wrong. What was Jian''s mistake?'
         figure: Unit 3 Test Retake_lake
         fig_w: 2.0
         choices:
           - 'The ratio $\frac{16}{10}$ should be $\frac{10}{16}$.'
-          - 'Jian used part of the bottom side instead of the whole side.'
+          - 'Jian used part of the bottom side.'
           - 'The 15 m side does not match side $x$.'
           - 'The two triangles are not similar.'
-        answer: '[B] The big triangle''s bottom side is $16 + 10 = 26$ m. [A] keeps the part 16; [C] 15 m and $x$ are both vertical legs, so they match; [D] the triangles share an angle and both have a right angle (AA).'
+        key: B
+        answer: 'The big triangle''s bottom side is $16 + 10 = 26$ m.'
+        distractors:
+          A: 'sees an error but blames the order, not the part 16'
+          C: 'does not see that 15 m and $x$ are both vertical legs'
+          D: 'misses AA: the triangles share an angle and both have a right angle'
         parts:
           - label: Correction.
             points: 1
@@ -78,99 +137,97 @@ sections:
             box_w: 1.1
             answer: '$\frac{x}{15} = \frac{26}{10}$, so $10x = 390$ and $x = 39$ m.'
             work: 0.8
-      - n: 5
-        prompt: '$\triangle ABC \sim \triangle EFD$.'
-        figure: Unit 3 Test Retake_sf
-        fig_w: 2.3
-        parts:
-          - label: a.
-            points: 1
-            prompt: 'What scale factor dilates $\triangle ABC$ so that its image $\triangle A''B''C''$ is congruent to $\triangle EFD$?'
-            choices: ['$\frac{5}{12}$', '$\frac{1}{3}$', '$\frac{12}{5}$', '3']
-            choice_cols: 4
-            answer: '[A] $\frac{EF}{AB} = \frac{5}{12}$. [B] is $\frac{5}{15}$ (sides that don''t match); [C] goes from $\triangle EFD$ back to $\triangle ABC$; [D] is $\frac{15}{5}$.'
-            work: 0.1
-          - label: b.
-            points: 1
-            prompt: 'What is the length of $\overline{ED}$?'
-            fill: [['$ED =$', '6.25']]
-            box_w: 1.0
-            answer: '$\overline{ED}$ matches $\overline{AC}$: $ED = \frac{5}{12} \cdot 15 = 6.25$'
-            work: 0.7
-        page_break_after: true
-      - n: 6
-        prompt: 'The two triangles are similar. (Part c: 1/2 pt for each box.)'
+      - id: similar
+        prompt: 'The two triangles are similar.'
         figure: Unit 3 Test Retake_similar
         fig_w: 2.4
         parts:
           - label: a.
             points: 1
+            target: LT2
+            type: cr
+            demand: pwc
             prompt: 'Complete the similarity statement.'
             frame: [['$\triangle PNU \sim \triangle$', '$BDA$', '']]
-            answer: '$m\angle P = 180^\circ - 88^\circ - 39^\circ = 53^\circ = m\angle B$, so $P \to B$, $N \to D$, $U \to A$.'
-            work: 0
+            answer: '$\angle P$ and $\angle B$ are both $53^\circ$, and $\angle N$ and $\angle D$ are both $88^\circ$, so $P \to B$, $N \to D$, $U \to A$.'
           - label: b.
             points: 1
-            prompt: 'What is the scale factor that moves $\triangle DAB$ onto $\triangle NUP$?'
+            target: LT3
+            type: cr
+            demand: pwoc
+            prompt: 'What scale factor takes the small triangle onto $\triangle PNU$?'
             fill: [['Scale factor:', '2']]
             box_w: 1.0
             answer: '$\frac{NU}{DA} = \frac{20}{10} = 2$'
             work: 0.4
           - label: c.
-            points: 2
+            points: 1
+            target: LT3
+            type: cr
+            demand: pwoc
             prompt: 'Find each measure.'
-            fill: [['$AB =$', '12.5'], ['$BD =$', '8'], ['$m\angle A =$', '$39^\circ$'], ['$m\angle P =$', '$53^\circ$']]
+            fill: [['$AB =$', '12.5'], ['$m\angle A =$', '$39^\circ$']]
             fill_cols: 2
             box_w: 0.9
-            answer: '$AB = 25 \div 2 = 12.5$, $BD = 16 \div 2 = 8$, $m\angle A = m\angle U = 39^\circ$'
+            answer: ['$AB = 25 \div 2 = 12.5$', '$m\angle A = m\angle U = 39^\circ$, or $180^\circ - 88^\circ - 53^\circ$.', 'Either method earns the point.']
             work: 0.5
-      - n: 7
-        prompt: 'Use $\triangle WIN$ and point $Z$. Use a ruler.'
+        page_break_after: true
+      - id: dilate
+        prompt: 'Use a ruler.'
         figure: Unit 3 Test Retake_dilate
         fig_w: 2.3
         parts:
           - label: a.
             points: 1.5
+            target: LT1
+            type: cr
+            demand: pwoc
             prompt: 'Dilate $\triangle WIN$ using center $Z$ and scale factor 2. Label the image $W''I''N''$.'
             answer: 'See the red image. $W''$ and $I''$ stay on line $WI$, with $ZW'' = 2 \cdot ZW$ and $ZI'' = 2 \cdot ZI$. $N''$ is on ray $ZN$ with $ZN'' = 2 \cdot ZN$.'
             work: 0.2
           - label: b.
             points: 0.5
-            prompt: 'What do the properties of dilations tell you about $\angle N''$?'
-            answer: '$\angle N'' \cong \angle N$. Dilations do not change angle measures.'
-            work: 0.8
-      - n: 8
+            target: LT1
+            type: cr
+            demand: mem
+            prompt: 'How does $\angle N''$ compare to $\angle N$? Explain.'
+            frame:
+              - ['$\angle N''$ is', 'congruent to', '$\angle N$.']
+              - ['Reason:', 'Dilations do not change angle measures.', '', 3.2]
+            answer: 'So $m\angle N'' = m\angle N$.'
+            work: 0.3
+      - id: squares
         points: 1
-        prompt: 'Tyler wants to prove that all squares are similar. He thinks, "If I draw two squares, I can find a dilation that takes one square onto the other." Select **all** the statements that are true for ANY two squares. (1/4 point off for each wrong choice.)'
+        target: LT3
+        type: sr
+        demand: pwc
+        prompt: 'A dilation and rigid motions can take one square onto another. Select **all** the statements that are true for **any** two squares. (1/4 point off for each wrong choice.)'
         choices:
           - 'Corresponding diagonals are congruent.'
           - 'Corresponding sides are proportional.'
-          - 'The same value can be added to all sides of a square.'
           - 'Corresponding angles are congruent.'
           - 'Corresponding sides are congruent.'
           - 'Each angle is multiplied by the scale factor.'
         choice_cols: 2
-        answer: '[B], [D]. All four sides of a square are equal, so every side ratio is the same; all angles are $90^\circ$. [A] and [E] are only true when the squares are the same size; [C] adding is not scaling; [F] dilations keep angles.'
+        key: 'B, C'
+        select_all: true
+        answer: 'All four sides of a square are equal, so every pair of matching sides has the same ratio, and every angle is $90^\circ$.'
+        distractors:
+          A: 'true only when the squares are the same size'
+          D: 'true only when the squares are the same size'
+          E: 'thinks a dilation changes angles too'
         work: 0.1
-        page_break_after: true
-      - n: 9
-        points: 1
-        prompt: 'A ramp has a vertical brace. Find the length of the brace.'
-        figure: Unit 3 Test Retake_brace
-        fig_w: 2.8
-        layout: stacked
-        fill: [['Brace:', '1.6 ft']]
-        box_w: 1.1
-        answer: ['The small triangle and the whole ramp share the left angle, and both have a right angle (AA).', 'The brace is $10 - 6 = 4$ ft from the left end. $\frac{b}{4} = \frac{4}{10}$, so $b = 1.6$ ft.']
-        work: 0.8
-      - n: 10
-        prompt: 'Rectangle $ABDE$ has some right triangles inside it.'
+      - id: rect
+        prompt: '$ABDE$ is a rectangle.'
         figure: Unit 3 Test Retake_rect
         fig_w: 2.6
         layout: stacked
         parts:
           - label: a.
             points: 1
+            target: LT5
+            type: sr
+            demand: pwc
             prompt: 'Which similarity statements are true? Select **all**. (1/4 point off for each wrong choice.)'
             choices:
               - '$\triangle AEC \sim \triangle FEC$'
@@ -182,32 +239,45 @@ sections:
               - '$\triangle AEC \sim \triangle FCA$'
               - '$\triangle AEC \sim \triangle CBA$'
             choice_cols: 4
-            answer: '[C], [D], [E], [F]. In $\triangle AEC$: $A = 30^\circ$, $E = 60^\circ$, $C = 90^\circ$. Each correct triangle lists its $30^\circ$, $60^\circ$, and $90^\circ$ angles in that order. [A], [B], [G], [H] are similar triangles with the letters in the wrong order.'
+            key: 'C, D, E, F'
+            select_all: true
+            answer: 'In $\triangle AEC$: $A = 30^\circ$, $E = 60^\circ$, $C = 90^\circ$. Each correct triangle lists its $30^\circ$, $60^\circ$, and $90^\circ$ angles in that order.'
+            distractors:
+              A: 'keeps $E$ and $C$ in place instead of matching the angles'
+              B: 'keeps $E$ and $C$ in place instead of matching the angles'
+              G: '$\triangle ACF$ with the letters reversed'
+              H: '$\triangle CAB$ with $A$ and $B$ swapped'
             work: 0.1
           - label: b.
             points: 1
-            prompt: 'Use $CE = 10$ and $FE = 5$. What is $BC$? Explain with math or words.'
-            fill: [['$BC =$', '15 units']]
+            target: LT5
+            type: cr
+            demand: pwc
+            prompt: 'Use $CE = 10$ and $FE = 5$. What is $AF$? Explain with math or words.'
+            fill: [['$AF =$', '15 units']]
             box_w: 1.1
-            answer: '$\triangle CEF \sim \triangle AEC$, so $\frac{FE}{CE} = \frac{CE}{AE}$: $\frac{5}{10} = \frac{10}{AE}$ and $AE = 20$. $AF = 20 - 5 = 15$. $ABCF$ is a rectangle, so $BC = AF = 15$.'
+            answer: '$\triangle CEF \sim \triangle AEC$, so $\frac{FE}{CE} = \frac{CE}{AE}$: $\frac{5}{10} = \frac{10}{AE}$ and $AE = 20$. So $AF = 20 - 5 = 15$.'
             work: 1.2
-      - prompt: ['**Confidence level.** Circle the score you think you earned.', 'Below 60%      60      65      70      75      80      85      90      95      100      100+']
+      - n: ''
+        prompt: ['**Confidence level.** Circle the score you think you earned.', 'Below 60%      60      65      70      75      80      85      90      95      100      100+']
         no_answer: true
         work: 0
 
 guide_notes: |
-  **Scoring (20 pts).** The source had no total; its point values (27) were scaled to 20.
-  - Problem 1 (3 pts): 1 pt for each of [A], [C], [D]; 1/2 pt off for each wrong choice (lowest score 0).
-  - Problem 2 (1 pt): [A].
-  - Problem 3 (2 pts): 1 pt for a proportion with matching sides (follow the statement's order), 1/2 pt for FALSE, 1/2 pt for the reason (the ratios are not equal). A student who tests $\triangle FGH$, finds $0.4 = 0.4$, and writes TRUE earns 1 pt for the proportion.
-  - Problem 4 (2 pts): 1 pt for [B], 1 pt for a whole-side equation and 39 m.
-  - Problem 5 (2 pts): 1 pt for [A], 1 pt for 6.25 (follow through on a wrong scale factor).
-  - Problem 6 (4 pts): 1 pt each for parts a and b; part c, 1/2 pt per box. Follow through on parts b and c from a wrong statement in part a.
-  - Problem 7 (2 pts): part a, 1/2 pt per image point on the correct ray at about 2 times the distance; part b, 1/2 pt for "congruent" or "same measure".
-  - Problem 8 (1 pt): 1/2 pt each for [B] and [D]; 1/4 pt off for each wrong choice.
-  - Problem 9 (1 pt): 1.6 ft with a proportion.
-  - Problem 10 (2 pts): part a, 1/4 pt each for [C], [D], [E], [F], 1/4 pt off for each wrong choice; part b, 1 pt for 15 with a reason (similar triangles, or the Pythagorean theorem plus similarity).
+  **Nov 20: audit fixes.** {ref:parallel}: the "6" now sits beside $\overline{CE}$ (it printed under $\overline{DE}$ and read as $DE = 6$). {ref:squares} gets back one plain sentence about the dilation. {ref:rect} starts "$ABDE$ is a rectangle." {ref:lake} [B] is shorter, so the key is not the longest choice. {ref:similar}c: the angle box accepts the matching angle or the triangle sum. Points unchanged (16).
 
-  **MLL notes.** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent, ratios written as decimals, a decimal comma (6,25), and reasons written as a list of steps.
+  **Nov 19: less is more, no headings.** Cut old item 5 (find the scale factor, then $ED$: the same two moves as old 6b and 6c) and old item 9 (the ramp brace: the same move as the correction in {ref:lake}, nested right triangles). Cut two boxes from old 6c, now {ref:similar}c: $BD$ (the same move as $AB$) and $m\angle P$ (the triangle sum); $m\angle P = 53^\circ$ is now printed on the figure. {ref:similar}b says "the small triangle"; it used to name $\triangle DAB$ and $\triangle NUP$, which gave away part a. {ref:dilate}b uses the Version A and B frame. {ref:squares}: the Tyler story is now one plain sentence about the dilation, and choice C ("The same value can be added to all sides of a square") is cut, since it is true for squares. {ref:rect}b asks for $AF$ instead of $BC$, so the rectangle step ($BC = AF$) is gone. Directions: "Show your work." No section headings; targets are in the blueprint. 10 items to 8, 20 points to 16.
 
-  **Changes from the source.** Letters in Problem 1 are new ($XYZ$), so the retake does not repeat Version A. "None of the above" choices are gone. Problem 4 now lists Jian's possible mistakes (the source said "circle one" with no choices). Problem 6 uses $PN = 16$ and $PU = 25$ (the source's 14 and 26 don't fit the angles). Problem 8 replaces two statements that were true but not part of the proof. Problem 10 uses $FE = 5$ (the source's 6 doesn't fit the $60^\circ$ angle).
+  **Scoring (16 pts).** The source's 27 points were scaled to 20 (teacher approved); the Nov 19 cuts took 4 off.
+  - {ref:ratios} (3 pts): 1 pt for each of [A], [C], [D]; 1/2 pt off for each wrong choice (lowest score 0).
+  - {ref:parallel} (1 pt): [A].
+  - {ref:sas} (2 pts): 1 pt for a proportion with matching sides (follow the statement's order), 1/2 pt for FALSE, 1/2 pt for the reason (the ratios are not equal). A student who tests $\triangle FGH$, finds $0.4 = 0.4$, and writes TRUE earns 1 pt for the proportion.
+  - {ref:lake} (2 pts): 1 pt for [B], 1 pt for a whole-side equation and 39 m.
+  - {ref:similar} (3 pts): 1 pt each for parts a and b; part c, 1/2 pt per box. Follow through on parts b and c from a wrong statement in part a. A scale factor of $\frac{1}{2}$ goes the wrong way (0 pts for part b), but follow through on part c. Part c, $m\angle A$: the matching angle ($\angle U$) or the triangle sum both earn the 1/2 pt.
+  - {ref:dilate} (2 pts): part a, 1/2 pt per image point on the correct ray at about 2 times the distance; part b, 1/2 pt for "congruent" or "the same measure" with a reason (dilations keep angle measures).
+  - {ref:squares} (1 pt): 1/2 pt each for [B] and [C]; 1/4 pt off for each wrong choice.
+  - {ref:rect} (2 pts): part a, 1/4 pt each for [C], [D], [E], [F], 1/4 pt off for each wrong choice; part b, 1 pt for 15 with a reason (similar triangles, or the Pythagorean theorem plus similarity).
+
+  **MLL notes.** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent, ratios written as decimals, a decimal comma (12,5), and reasons written as a list of steps.
+
+  **Changes from the source.** Letters in {ref:ratios} are new ($XYZ$), so the retake does not repeat Version A. "None of the above" choices are gone. {ref:lake} lists Jian's possible mistakes (the source said "circle one" with no choices). {ref:similar} uses $PN = 16$ and $PU = 25$ (the source's 14 and 26 don't fit the angles). {ref:squares} replaces two statements that were true but not part of the proof. {ref:rect} uses $FE = 5$ (the source's 6 doesn't fit the $60^\circ$ angle).

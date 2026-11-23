@@ -14,7 +14,7 @@ def _collinear(a, b, c, tol=1e-9) -> bool:
     return _parallel(a, b, a, c, tol)
 
 
-# Warm-up and Problem 4: triangle ABC dilated from P with scale factor 2
+# Warm-up and Problem 2: triangle ABC dilated from P with scale factor 2
 WP = np.array((-0.6, -0.8), float)
 WA, WB, WC = P((1.6, 2.6), (2.8, 1.8), (0.9, 1.8))
 WA2, WB2, WC2 = dilate([WA, WB, WC], 2, WP)
@@ -41,7 +41,8 @@ def warmup() -> Figure:
     return f
 
 
-# Problem 4: E between P and B (key uses PE = 0.35 PB), E' is its image
+# Problem 2: E between P and B (PE = 0.35 PB), E' is its image. Both are given (routine: the 3.1 move);
+# the key adds only the congruent corresponding angles at B and B'.
 WE = WP + 0.35 * (WB - WP)
 WE2 = dilate([WE], 2, WP)[0]
 assert _collinear(WP, WB, WE2) and dist(WP, WE2) < dist(WP, WB)
@@ -54,85 +55,37 @@ def proof() -> Figure:
     _pair(f)
     f.seg(WP, WB2 + 0.12 * (WB2 - WP), dashed=True, lw=0.9)
     side = np.array([(WB - WP)[1], -(WB - WP)[0]])
-    f.dots([WE, WE2], layer="answer")
-    f.label(WE, "E", layer="answer", direction=side)
-    f.label(WE2, "E'", layer="answer", direction=side)
+    f.dots([WE, WE2])
+    f.label(WE, "E", direction=side)
+    f.label(WE2, "E'", direction=side)
     f.arc(WB, WE, WC, n=1, r=0.85, layer="answer")
     f.arc(WB2, WE2, WC2, n=1, r=0.85, layer="answer")
     return f
 
 
-# Problem 1 (Together): center C on line AB (D on the other side of C) and on line CE
-U = np.array([np.cos(np.radians(55)), np.sin(np.radians(55))])
+# Problem 1 (Together): line CE goes through the center C; scale factor 2
 TC = np.array((0, 0), float)
-TA, TB, TD = 4 * U, 2 * U, -2 * U
 TE = np.array((2.6, 0.1), float)
-TA2 = dilate([TA], 0.75, TC)[0]
-TB2 = dilate([TB], 1 / 3, TC)[0]
-TD2 = dilate([TD], 1.5, TC)[0]
 TE2 = dilate([TE], 2, TC)[0]
-for p in (TA2, TB2, TD2):
-    assert _collinear(TC, TA, p)
-assert _collinear(TC, TE, TE2)
-assert np.dot(TD2 - TC, TD - TC) > 0  # D' stays on D's side of C
+assert _collinear(TC, TE, TE2) and abs(dist(TC, TE2) - 2 * dist(TC, TE)) < 1e-9
+assert np.dot(TE2 - TC, TE - TC) > 0  # E' stays on E's side of C
 
 
 @figure("3.4_lines")
 def lines() -> Figure:
-    f = Figure(width_in=2.9, height_in=3.0)
-    f.seg(-3.6 * U, 4.7 * U)
+    # Nov 23: C' = C and E' are printed (the 3.1 move is known content); the frame asks only where line C'E' lands
+    f = Figure(width_in=3.0, height_in=0.9)
     ue = TE / np.linalg.norm(TE)
-    f.seg(-0.8 * ue, TE2 + 0.5 * ue)
-    f.dots([TA, TB, TC, TD, TE])
-    nrm = np.array([U[1], -U[0]])
-    f.label(TA, "A", direction=nrm)
-    f.label(TB, "B", direction=nrm)
-    f.label(TD, "D", direction=nrm)
-    f.label(TC, "C", direction=(0.6, -1))
+    f.seg(-1.0 * ue, TE2 + 0.6 * ue)
+    f.dots([TC, TE, TE2])
+    f.label(TC, "C", direction=(0, -1))
     f.label(TE, "E", direction=(0, -1))
-    f.dots([TD2, TE2], layer="answer")
-    f.label(TD2, "D'", layer="answer", direction=-nrm)
-    f.label(TE2, "E'", layer="answer", direction=(0, -1))
+    f.label(TC, "C'", direction=(0, 1))
+    f.label(TE2, "E'", direction=(0, -1))
     return f
 
 
-# Problem 3: the same idea on a grid. P = (0, 0), scale factor 2
-GP = np.array((0, 0), float)
-GA, GB, GC = P((1, 3), (3, 2), (2, 1))
-GA2, GB2, GC2 = dilate([GA, GB, GC], 2, GP)
-SLOPES = {"AB": -1 / 2, "AC": -2, "BC": 1}
-
-
-def _slope(a, b):
-    return (b[1] - a[1]) / (b[0] - a[0])
-
-
-assert abs(_slope(GA, GB) - SLOPES["AB"]) < 1e-12 and abs(_slope(GA2, GB2) - SLOPES["AB"]) < 1e-12
-assert abs(_slope(GA, GC) - SLOPES["AC"]) < 1e-12 and abs(_slope(GA2, GC2) - SLOPES["AC"]) < 1e-12
-assert abs(_slope(GB, GC) - SLOPES["BC"]) < 1e-12 and abs(_slope(GB2, GC2) - SLOPES["BC"]) < 1e-12
-
-
-@figure("3.4_grid")
-def grid() -> Figure:
-    f = Figure(width_in=2.5, height_in=2.5)
-    n = 7
-    for k in range(n + 1):
-        f.seg((k, 0), (k, n), lw=0.35)
-        f.seg((0, k), (n, k), lw=0.35)
-    f.poly([GA, GB, GC], lw=1.5)
-    f.poly([GA2, GB2, GC2], lw=1.5)
-    f.dots([GP, GA, GB, GC, GA2, GB2, GC2], size=18)
-    f.label(GP, "P", direction=(-1, -1), offset_pt=8)
-    f.label(GA, "A", direction=(-1, 0.4), offset_pt=8)
-    f.label(GB, "B", direction=(0.2, 1), offset_pt=8)
-    f.label(GC, "C", direction=(0.4, -1), offset_pt=8)
-    f.label(GA2, "A'", direction=(-0.6, 1), offset_pt=9)
-    f.label(GB2, "B'", direction=(1, 0.4), offset_pt=10)
-    f.label(GC2, "C'", direction=(0.5, -1), offset_pt=9)
-    return f
-
-
-# CYU: triangle ABC dilated from D with scale factor 2; C is the midpoint of DB, so C' = B
+# Problem 3 (the exit ticket until Nov 19, round 2): triangle ABC dilated from D with scale factor 2; C is the midpoint of DB, so C' = B
 V = np.array([np.cos(np.radians(38)), np.sin(np.radians(38))])
 CD = np.array((0, 0), float)
 CC, CB = 1.5 * V, 3.0 * V

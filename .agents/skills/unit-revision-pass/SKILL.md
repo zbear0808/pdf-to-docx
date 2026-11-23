@@ -56,9 +56,10 @@ Write `units/<course>/_temp_<pass>_instructions.md`. Its sections:
 
 | Pass | Instruction file |
 |---|---|
-| Core idea, scaffolding, fewer repeats | `units/geometry/unit-3-similarity/_temp/specs/coreidea_instructions.md` |
+| Core idea, scaffolding, fewer repeats | `units/geometry/_temp_coreidea_instructions.md` (Unit 4 version: `_temp_coreidea_unit4_instructions.md`) |
 | No exit tickets, Warm-up heading only | `units/geometry/_temp_no_exit_instructions.md` |
 | Assessments: less is more, no headings | `units/geometry/_temp_assessment_pass_instructions.md`, plus `_temp_assessment_audit_instructions.md` |
 | Known content printed, new blank | `units/geometry/_temp_known_new_instructions.md` |
 | Faded scaffolding copy | `units/geometry/_temp_faded_instructions.md` |
 | Cut extra wording | `units/geometry/_temp_lean_pass_instructions.md` |
+| New structure on a copy (v2: 30 min, in-class practice, default scaffolding) | `units/geometry/_temp_v2_structure_instructions.md` |

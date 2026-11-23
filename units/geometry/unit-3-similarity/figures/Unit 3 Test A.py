@@ -87,6 +87,8 @@ def similar() -> Figure:
     f.angle_label(A, B, C, r"$85^\circ$", dist=3.4, size=10)
     f.arc(B, A, C, r=2.4)
     f.angle_label(B, A, C, r"$56^\circ$", dist=4.4, size=10)
+    f.arc(C, A, B, r=3.2)      # third angle printed (Nov 19): the triangle sum is routine for part a
+    f.angle_label(C, A, B, r"$39^\circ$", dist=6.4, size=10)
     f.arc(E, D, Fp, r=1.4)
     f.angle_label(E, D, Fp, r"$39^\circ$", dist=3.4, size=10)
     f.arc(Fp, D, E, r=1.2)

@@ -26,7 +26,7 @@ def _parallel(a, b, c, d, tol=1e-9) -> bool:
     return abs(u[0] * v[1] - u[1] * v[0]) < tol
 
 
-# ---------------------------------------------------------------- Problem 2: dilate EFGH, center C, k = 2
+# ---------------------------------------------------------------- Problem 1: dilate EFGH, center C, k = 2
 D_C = P(2, 0)
 D_PTS = P((0, 1), (2, 2), (3, 4), (4, 1))          # E, F, G, H (concave at F)
 D_IMG = dilate(D_PTS, 2, D_C)
@@ -58,14 +58,13 @@ def dilate_fig() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- Problem 4: midsegment MN of triangle ABC
+# ---------------------------------------------------------------- Problem 3: midsegment MN of triangle ABC
 @figure("Unit 3 Review_midseg")
 def midseg() -> Figure:
     B, C = P((0, 0), (6, 0))
     A = B + 4.2 * np.array([np.cos(np.radians(64)), np.sin(np.radians(64))])
     M, N = (A + B) / 2, (A + C) / 2
-    assert _close(angle_deg(B, A, C), 64) and _parallel(M, N, B, C) and _close(dist(M, N), dist(B, C) / 2)
-    assert _close(angle_deg(M, A, N), angle_deg(B, A, C))
+    assert _parallel(M, N, B, C) and _close(dist(M, N), dist(B, C) / 2)
     assert_lengths([(B, C, 18), (M, N, 9)])
     k = 0.36
     A, B, C, M, N = (x * k for x in (A, B, C, M, N))
@@ -83,12 +82,10 @@ def midseg() -> Figure:
     f.ticks(A, N, 2)
     f.ticks(N, C, 2)
     f.side_label(B, C, "18", A, size=11)
-    f.arc(B, A, C, r=0.16)
-    f.angle_label(B, A, C, "64°", dist=0.3, size=10)
     return f
 
 
-# ---------------------------------------------------------------- Problem 5: ST parallel to QR in triangle PQR
+# ---------------------------------------------------------------- Problem 4: ST parallel to QR in triangle PQR
 @figure("Unit 3 Review_pqr")
 def pqr() -> Figure:
     Q, R = P((0, 0), (16, 0))
@@ -122,48 +119,50 @@ def pqr() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- Problem 6: triangle RST and triangle XYZ
-TR_R, TR_S = P((0, 0), (6, 0))
+# ---------------------------------------------------------------- Problem 5: triangle HJK and triangle NML
+SM_H, SM_J = P((0, 0), (6, 0))
 _dir = np.array([np.cos(np.radians(180 - 95)), np.sin(np.radians(180 - 95))])
-TR_T = TR_S + 8 * _dir                                    # SAS: RS = 6, angle S = 95, ST = 8
-assert _close(angle_deg(TR_S, TR_R, TR_T), 95)
-assert abs(angle_deg(TR_R, TR_S, TR_T) - 50) < 0.1 and abs(angle_deg(TR_T, TR_R, TR_S) - 35) < 0.1
-# image: dilate from R by 1.5, rotate 90 degrees clockwise around R, translate R to Z
-_img = translate(rotate(dilate([TR_R, TR_S, TR_T], 1.5, TR_R), -90, TR_R), (12, 9))
-XZ, XY_, XX = _img                                        # R -> Z, S -> Y, T -> X
-assert _close(similarity_ratio([TR_R, TR_S, TR_T], [XZ, XY_, XX]), 1.5)
-assert _close(dist(XZ, XY_), 9) and _close(dist(XY_, XX), 12)
-assert_lengths([(TR_R, TR_S, 6), (TR_S, TR_T, 8), (XZ, XY_, 9)])
-assert abs(angle_deg(XY_, XZ, XX) - 95) < 0.1 and abs(angle_deg(XZ, XY_, XX) - 50) < 0.1
+SM_K = SM_J + 8 * _dir                                    # SAS: HJ = 6, angle J = 95, JK = 8
+assert _close(angle_deg(SM_J, SM_H, SM_K), 95)
+assert abs(angle_deg(SM_H, SM_J, SM_K) - 50) < 0.1 and abs(angle_deg(SM_K, SM_H, SM_J) - 35) < 0.1
+# image: dilate from H by 1.5, rotate 90 degrees clockwise around H, translate H to N
+_img = translate(rotate(dilate([SM_H, SM_J, SM_K], 1.5, SM_H), -90, SM_H), (12, 9))
+SM_N, SM_M, SM_L = _img                                   # H -> N, J -> M, K -> L
+assert _close(similarity_ratio([SM_H, SM_J, SM_K], [SM_N, SM_M, SM_L]), 1.5)
+assert _close(dist(SM_N, SM_M), 9) and _close(dist(SM_M, SM_L), 12)
+assert_lengths([(SM_H, SM_J, 6), (SM_J, SM_K, 8), (SM_N, SM_M, 9)])
+assert abs(angle_deg(SM_M, SM_N, SM_L) - 95) < 0.1 and abs(angle_deg(SM_N, SM_M, SM_L) - 50) < 0.1
+assert abs(angle_deg(SM_L, SM_N, SM_M) - 35) < 0.1         # printed: the third angle of the large triangle
 assert_distinct([50, 35, 95])
 
 
-@figure("Unit 3 Review_rst")
-def rst() -> Figure:
+@figure("Unit 3 Review_similar")
+def similar() -> Figure:
     k = 0.17
-    R, S, T = (p * k for p in (TR_R, TR_S, TR_T))
-    Z, Y, X = (p * k for p in (XZ, XY_, XX))
+    H, J, K = (p * k for p in (SM_H, SM_J, SM_K))
+    N, M, L = (p * k for p in (SM_N, SM_M, SM_L))
     f = Figure(width_in=3.2, height_in=2.0)
-    f.poly([R, S, T])
-    f.poly([X, Y, Z])
-    f.dots([R, S, T, X, Y, Z])
-    f.label(R, "R", direction=(-1, -0.4))
-    f.label(S, "S", direction=(1, -0.6))
-    f.label(T, "T", direction=(0, 1))
-    f.label(Z, "Z", direction=(-0.6, 1))
-    f.label(Y, "Y", direction=(-0.6, -1))
-    f.label(X, "X", direction=(1, 0.3))
-    f.side_label(R, S, "6", T, size=10)
-    f.side_label(S, T, "8", R, size=10)
-    f.side_label(Z, Y, "9", X, size=10)
-    f.angle_label(R, S, T, "50°", dist=0.38, size=9)
-    f.angle_label(T, R, S, "35°", dist=0.62, size=9)
-    f.angle_label(Y, X, Z, "95°", dist=0.3, size=9)
-    f.angle_label(Z, X, Y, "50°", dist=0.42, size=9)
+    f.poly([H, J, K])
+    f.poly([L, M, N])
+    f.dots([H, J, K, L, M, N])
+    f.label(H, "H", direction=(-1, -0.4))
+    f.label(J, "J", direction=(1, -0.6))
+    f.label(K, "K", direction=(0, 1))
+    f.label(N, "N", direction=(-0.6, 1))
+    f.label(M, "M", direction=(-0.6, -1))
+    f.label(L, "L", direction=(1, 0.3))
+    f.side_label(H, J, "6", K, size=10)
+    f.side_label(J, K, "8", H, size=10)
+    f.side_label(N, M, "9", L, size=10)
+    f.angle_label(H, J, K, "50°", dist=0.38, size=9)
+    f.angle_label(K, H, J, "35°", dist=0.62, size=9)
+    f.angle_label(M, L, N, "95°", dist=0.3, size=9)
+    f.angle_label(N, L, M, "50°", dist=0.42, size=9)
+    f.angle_label(L, N, M, "35°", dist=0.75, size=9)
     return f
 
 
-# ---------------------------------------------------------------- Problem 8: triangle DOG and triangle CAT
+# ---------------------------------------------------------------- Problem 7: triangle DOG and triangle CAT
 def _tri(a_deg, b_deg, base):
     """Base from (0, 0) to (base, 0); a_deg at the left vertex, b_deg at the right vertex."""
     A, B = P((0, 0), (base, 0))
@@ -174,7 +173,7 @@ def _tri(a_deg, b_deg, base):
 @figure("Unit 3 Review_dogcat")
 def dogcat() -> Figure:
     D, O, G = _tri(40, 75, 4.8)                          # angle D = 40, angle O = 75, so angle G = 65
-    C, A, T = _tri(65, 75, 3.0)                          # drawn for x = 75: angle C = 65, angle A = 75, angle T = 40
+    C, A, T = _tri(65, 75, 3.8)                          # drawn for x = 75: angle C = 65, angle A = 75, angle T = 40
     C, A, T = translate([C, A, T], (7.4, 0))
     assert _close(angle_deg(D, O, G), 40) and _close(angle_deg(O, D, G), 75) and _close(angle_deg(G, D, O), 65)
     assert _close(angle_deg(C, A, T), 65) and _close(angle_deg(A, C, T), 75) and _close(angle_deg(T, C, A), 40)
@@ -182,7 +181,7 @@ def dogcat() -> Figure:
     assert similarity_ratio([D, O, G], [T, A, C]) is not None
     k = 0.38
     D, O, G, C, A, T = (p * k for p in (D, O, G, C, A, T))
-    f = Figure(width_in=3.4, height_in=1.4)
+    f = Figure(width_in=3.6, height_in=1.8)
     f.poly([D, O, G])
     f.poly([C, A, T])
     f.dots([D, O, G, C, A, T])
@@ -193,12 +192,12 @@ def dogcat() -> Figure:
         f.arc(v, p1, p2, r=0.16)
     f.angle_label(D, O, G, "40°", dist=0.6, size=10)
     f.angle_label(O, D, G, "75°", dist=0.4, size=10)
-    f.angle_label(C, A, T, "65°", dist=0.36, size=10)
-    f.angle_label(A, C, T, "$x°$", dist=0.3, size=10)
+    f.angle_label(C, A, T, "65°", dist=0.42, size=10)
+    f.angle_label(A, C, T, "$x°$", dist=0.34, size=10)
     return f
 
 
-# ---------------------------------------------------------------- Problem 9: P on KL, Q on KM (no marks)
+# ---------------------------------------------------------------- Problem 8: P on KL, Q on KM (no marks)
 @figure("Unit 3 Review_splitter")
 def splitter() -> Figure:
     K, L, M = P((1.2, 2.6), (0, 0), (4, 0))
@@ -215,29 +214,29 @@ def splitter() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- Problem 10: right triangle ACB, altitude CD
-AL_A, AL_D, AL_B, AL_C = P((0, 0), (16, 0), (25, 0), (16, 12))
-assert _close(angle_deg(AL_C, AL_A, AL_B), 90)
-assert _close(dist(AL_A, AL_C), 20) and _close(dist(AL_C, AL_B), 15)
-assert _close(similarity_ratio([AL_A, AL_D, AL_C], [AL_C, AL_D, AL_B]), 0.75)
-assert_lengths([(AL_A, AL_D, 16), (AL_D, AL_B, 9), (AL_C, AL_D, 12)])
+# ---------------------------------------------------------------- Problem 9: right triangle XZY, altitude ZW
+AL_X, AL_W, AL_Y, AL_Z = P((0, 0), (16, 0), (25, 0), (16, 12))
+assert _close(angle_deg(AL_Z, AL_X, AL_Y), 90)
+assert _close(dist(AL_X, AL_Z), 20) and _close(dist(AL_Z, AL_Y), 15)
+assert _close(similarity_ratio([AL_X, AL_W, AL_Z], [AL_Z, AL_W, AL_Y]), 0.75)
+assert_lengths([(AL_X, AL_W, 16), (AL_W, AL_Y, 9), (AL_Z, AL_W, 12)])
 
 
 @figure("Unit 3 Review_altitude")
 def altitude() -> Figure:
     k = 0.11
-    A, D, B, C = (p * k for p in (AL_A, AL_D, AL_B, AL_C))
+    X, W, Y, Z = (p * k for p in (AL_X, AL_W, AL_Y, AL_Z))
     f = Figure(width_in=2.8, height_in=1.45)
-    f.poly([A, B, C])
-    f.seg(C, D)
-    f.dots([A, B, C, D])
-    f.label(A, "A", direction=(-1, -0.3))
-    f.label(B, "B", direction=(1, -0.3))
-    f.label(D, "D", direction=(0, -1))
-    f.label(C, "C", direction=(0, 1))
-    f.right_angle(C, A, B, size=0.13)
-    f.right_angle(D, B, C, size=0.13)
-    f.side_label(A, D, "16", C, size=10)
-    f.side_label(D, B, "9", C, size=10)
-    f.text((C + D) / 2 + P(-0.15, 0), "$h$", size=11)
+    f.poly([X, Y, Z])
+    f.seg(Z, W)
+    f.dots([X, Y, Z, W])
+    f.label(X, "X", direction=(-1, -0.3))
+    f.label(Y, "Y", direction=(1, -0.3))
+    f.label(W, "W", direction=(0, -1))
+    f.label(Z, "Z", direction=(0, 1))
+    f.right_angle(Z, X, Y, size=0.13)
+    f.right_angle(W, Y, Z, size=0.13)
+    f.side_label(X, W, "16", Z, size=10)
+    f.side_label(W, Y, "9", Z, size=10)
+    f.text((Z + W) / 2 + P(-0.15, 0), "$h$", size=11)
     return f

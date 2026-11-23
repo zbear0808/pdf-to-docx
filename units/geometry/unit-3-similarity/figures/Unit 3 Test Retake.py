@@ -56,13 +56,13 @@ def parallel() -> Figure:
         f.label(pt, nm, direction=d)
     f.side_label(_C2, _D2, "4", c, size=11)
     f.side_label(_D2, _A2, "12", c, size=11)
-    f.side_label(_C2, _E2, "6", c, size=11)
+    f.side_label(_C2, _E2, "6", c, size=11, fixed=True)     # beside CE, not under DE (a "6" under DE reads as DE = 6)
     # dimension line for the whole side CB
     u = (_B2 - _C2) / 24
     n = np.array([u[1], -u[0]])
     if np.dot(n, (_C2 + _B2) / 2 - c) < 0:
         n = -n
-    p, q = _C2 + 4.2 * n, _B2 + 4.2 * n
+    p, q = _C2 + 6.0 * n, _B2 + 6.0 * n
     f.seg(p, q, lw=0.9)
     f.seg(p - 0.6 * n, p + 0.6 * n, lw=0.9)
     f.seg(q - 0.6 * n, q + 0.6 * n, lw=0.9)
@@ -128,34 +128,7 @@ def lake() -> Figure:
     return f
 
 
-# 5: triangle ABC ~ triangle EFD. AB = 12, AC = 15, EF = 5, so k = 5/12 and ED = 6.25
-_A5 = P((0, 0))[0]
-_B5, _C5 = 12 * _dir(205), 15 * _dir(-60)
-_EFD = translate(rotate(dilate([_A5, _B5, _C5], 5 / 12, _A5), 25, _A5), (12, 4))   # E, F, D
-
-
-@figure("Unit 3 Test Retake_sf")
-def sf() -> Figure:
-    E, Fp, D = _EFD
-    ABC = np.array([_A5, _B5, _C5])
-    assert np.isclose(dist(E, Fp), 5) and np.isclose(dist(E, D), 6.25)
-    assert_lengths([(_A5, _B5, 12), (_A5, _C5, 15), (E, Fp, 5)])
-    f = Figure(width_in=2.6, height_in=1.8)
-    for tri, names in ((ABC, "ABC"), (_EFD, "EFD")):
-        f.poly(tri)
-        f.dots(tri)
-        f.label_poly(tri, names)
-        a, b, c = tri
-        f.arc(a, b, c, n=1, r=1.6 if tri is ABC else 0.9, gap=0.5)
-        f.arc(b, a, c, n=2, r=1.6 if tri is ABC else 0.9, gap=0.5)
-        f.arc(c, a, b, n=3, r=1.6 if tri is ABC else 0.9, gap=0.5)
-    f.side_label(_A5, _B5, "12", ABC.mean(0), size=11)
-    f.side_label(_A5, _C5, "15", ABC.mean(0), size=11)
-    f.side_label(E, Fp, "5", _EFD.mean(0), size=11)
-    return f
-
-
-# 6: triangle DAB (AD = 10, D = 88, B = 53) and triangle NUP (N = 88, U = 39, PN = 16, NU = 20, PU = 25)
+# 5: triangle DAB (AD = 10, D = 88, B = 53) and triangle NUP (N = 88, U = 39, P = 53, PN = 16, NU = 20, PU = 25)
 _s6 = 25 / np.sin(np.radians(88))
 _P6, _U6 = P((0, 0), (25, 0))
 _N6 = _s6 * np.sin(np.radians(39)) * _dir(53)
@@ -186,6 +159,8 @@ def similar() -> Figure:
     f.angle_label(N, U, Pp, r"$88^\circ$", dist=3.2, size=10)
     f.arc(U, N, Pp, r=2.6)
     f.angle_label(U, N, Pp, r"$39^\circ$", dist=5.0, size=10)
+    f.arc(Pp, N, U, r=2.2)     # third angle printed (Nov 19): the triangle sum is routine for part a
+    f.angle_label(Pp, N, U, r"$53^\circ$", dist=4.4, size=10)
     f.arc(D, A, B, r=1.0)
     f.angle_label(D, A, B, r"$88^\circ$", dist=2.4, size=10)
     f.arc(B, D, A, r=1.2)
@@ -193,7 +168,7 @@ def similar() -> Figure:
     return f
 
 
-# 7: dilate triangle WIN, center Z on side WI, scale factor 2
+# 6: dilate triangle WIN, center Z on side WI, scale factor 2
 _W7, _I7, _N7 = P((0, 2.2), (2.6, 2.6), (1.3, 0))
 _Z7 = _W7 + 0.3 * (_I7 - _W7)
 
@@ -219,32 +194,7 @@ def dilate_win() -> Figure:
     return f
 
 
-# 9: ramp. Right triangle with legs 10 ft and 4 ft; vertical brace 6 ft from the 4 ft post. Brace = 1.6 ft
-_O9, _R9, _T9 = P((0, 0), (10, 0), (10, 4))
-_b0, _b1 = P((4, 0), (4, 1.6))
-
-
-@figure("Unit 3 Test Retake_brace")
-def brace() -> Figure:
-    assert np.isclose(_cross(_T9 - _O9, _b1 - _O9), 0)       # brace top is on the ramp
-    assert_lengths([(_O9, _R9, 10), (_R9, _T9, 4), (_b0, _R9, 6)])
-    f = Figure(width_in=3.0, height_in=1.4)
-    f.poly([_O9, _R9, _T9])
-    f.seg(_b0, _b1, lw=2.4)
-    f.right_angle(_R9, _O9, _T9, size=0.35)
-    f.right_angle(_b0, _O9, _b1, size=0.3)
-    f.side_label(_O9, _R9, "10 ft", _T9, size=10)
-    f.side_label(_R9, _T9, "4 ft", _O9, size=10)
-    y = 0.45
-    f.arrow((7, y), (4, y), layer="given", dashed=False)
-    f.arrow((7, y), (10, y), layer="given", dashed=False)
-    f.text((7, y + 0.4), "6 ft", size=10)
-    f.text((2.2, 2.1), "brace", size=10)
-    f.arrow((2.6, 1.85), (3.9, 1.1), layer="given", dashed=False)
-    return f
-
-
-# 10: rectangle ABDE, C on BD, F on AE, CF perpendicular to AE, angle ACE = 90, angle AEC = 60. CE = 10, FE = 5
+# 8: rectangle ABDE, C on BD, F on AE, CF perpendicular to AE, angle ACE = 90, angle AEC = 60. CE = 10, FE = 5, AF = 15
 _h = 5 * np.sqrt(3)
 _A10, _F10, _E10 = P((0, _h), (15, _h), (20, _h))
 _B10, _C10, _D10 = P((0, 0), (15, 0), (20, 0))
@@ -253,7 +203,7 @@ _B10, _C10, _D10 = P((0, 0), (15, 0), (20, 0))
 @figure("Unit 3 Test Retake_rect")
 def rect() -> Figure:
     assert np.isclose(angle_deg(_C10, _A10, _E10), 90) and np.isclose(angle_deg(_E10, _A10, _C10), 60)
-    assert np.isclose(dist(_C10, _E10), 10) and np.isclose(dist(_B10, _C10), 15)
+    assert np.isclose(dist(_C10, _E10), 10) and np.isclose(dist(_B10, _C10), 15) and np.isclose(dist(_A10, _F10), 15)
     assert_lengths([(_C10, _E10, 10), (_F10, _E10, 5)])
     f = Figure(width_in=3.0, height_in=1.7)
     f.poly([_A10, _B10, _D10, _E10])

@@ -1,0 +1,174 @@
+id: Unit 3 Test B
+doc_type: assessment
+title: 'Unit 3 Test: Version B'
+directions: Show your work.
+numbering: auto
+set: Unit 3 Test
+form: B
+parallel_to: Unit 3 Test A
+source: 'Unit 3 Test.docx (Version B was a copy of A; rewritten to mirror A)'
+total_points: 18
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along its ray from the center to k times as far, and keeps angle measures'
+    able_to: 'dilate a figure from a center by a scale factor and say what happens to its angles'
+    standard: G.SRT.1
+  - id: LT2
+    understand: 'figures are similar when rigid motions and a dilation take one onto the other, and the letter order of a similarity statement shows which vertices match'
+    able_to: 'write a sequence of transformations between similar triangles, and write a similarity statement with the vertices in matching order'
+    standard: G.SRT.2
+  - id: LT3
+    understand: 'similar figures have congruent corresponding angles and proportional corresponding sides, all with the same ratio k'
+    able_to: 'pick true proportions, find the scale factor and missing sides and angles, and test a similarity statement with side ratios'
+    standard: 'G.SRT.2, G.SRT.5'
+  - id: LT4
+    understand: 'a line parallel to one side of a triangle makes a similar triangle, so the parallel side matches the whole side'
+    able_to: 'find lengths in nested triangles with whole sides, and decide whether two lines are parallel'
+    standard: 'G.SRT.4, G.SRT.5'
+  - id: LT5
+    understand: 'the altitude to the hypotenuse makes right triangles that are similar to each other'
+    able_to: 'match the vertices of those triangles by their angles, and find lengths with similar triangles or the Pythagorean theorem'
+    standard: 'G.SRT.5, 8.G.B.7'
+
+sections:
+  - kind: plain
+    items:
+      - id: ratios
+        points: 3
+        target: LT3
+        type: sr
+        demand: pwoc
+        prompt: '$\triangle JKL$ can be taken to $\triangle J''K''L''$ using rigid motions and a dilation. Select **all** the equations that are true. (1/2 point off for each wrong choice.)'
+        figure: Unit 3 Test B_ratios
+        fig_w: 1.8
+        choices:
+          - '$\dfrac{J''K''}{JK} = \dfrac{L''K''}{LK}$'
+          - '$\dfrac{KL}{K''L''} = \dfrac{J''L''}{JL}$'
+          - '$\dfrac{J''L''}{J''K''} = \dfrac{JL}{JK}$'
+          - '$\dfrac{K''J''}{K''L''} = \dfrac{KL}{KJ}$'
+          - '$\dfrac{LJ}{L''J''} = \dfrac{LK}{L''K''}$'
+          - '$\dfrac{JK}{KL} = \dfrac{J''L''}{K''L''}$'
+        choice_cols: 3
+        key: 'A, C, E'
+        select_all: true
+        answer: 'Each one compares matching sides in the same order.'
+        distractors:
+          B: 'original over image on the left, image over original on the right'
+          D: 'flips one side of the equation'
+          F: 'pairs $\overline{JK}$ with $\overline{J''L''}$, which do not match'
+        work: 0.1
+      - id: splitter
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'In $\triangle FGH$, $\overline{JK} \parallel \overline{GH}$. Solve for $x$.'
+        figure: Unit 3 Test B_splitter
+        fig_w: 2.1
+        fill: [['$x =$', '$\frac{120}{13} \approx 9.23$']]
+        box_w: 1.3
+        answer: ['$\triangle FJK \sim \triangle FGH$, so use the whole side: $FG = 6 + 7 = 13$.', '$\frac{x}{20} = \frac{6}{13}$, so $13x = 120$ and $x = \frac{120}{13} \approx 9.23$.']
+        work: 1.0
+      - id: similar
+        prompt: 'The two triangles are similar. The figures are not drawn to scale.'
+        figure: Unit 3 Test B_similar
+        fig_w: 2.7
+        layout: stacked
+        parts:
+          - label: a.
+            points: 1
+            target: LT2
+            type: cr
+            demand: pwc
+            prompt: 'Complete the similarity statement.'
+            frame: [['$\triangle JGH \sim \triangle$', '$YZX$', '']]
+            answer: '$\angle J$ and $\angle Y$ are both $62^\circ$, and $\angle G$ and $\angle Z$ are both $48^\circ$, so $J \to Y$, $G \to Z$, $H \to X$.'
+          - label: b.
+            points: 1
+            target: LT3
+            type: cr
+            demand: pwoc
+            prompt: 'What scale factor takes the small triangle onto $\triangle JGH$?'
+            fill: [['Scale factor:', '4']]
+            box_w: 1.0
+            answer: '$\frac{JG}{YZ} = \frac{20}{5} = 4$'
+            work: 0.4
+          - label: c.
+            points: 2
+            target: LT3
+            type: cr
+            demand: pwoc
+            prompt: 'Find each measure.'
+            fill: [['$XZ =$', '4.75'], ['$m\angle X =$', '$70^\circ$']]
+            fill_cols: 2
+            box_w: 1.0
+            answer: '$XZ = 19 \div 4 = 4.75$. $m\angle X = m\angle H = 70^\circ$ (or $180^\circ - 48^\circ - 62^\circ$); either method earns the point.'
+            work: 0.5
+        page_break_after: true
+      - id: dilate
+        prompt: 'Use a ruler.'
+        figure: Unit 3 Test B_dilate
+        fig_w: 2.4
+        parts:
+          - label: a.
+            points: 2
+            target: LT1
+            type: cr
+            demand: pwoc
+            prompt: 'Dilate $\triangle JKL$ using center $Q$ and scale factor 3. Label the image $J''K''L''$.'
+            answer: 'See the red image. $J''$ and $K''$ stay on line $JK$, with $QJ'' = 3 \cdot QJ$ and $QK'' = 3 \cdot QK$. $L''$ is on ray $QL$ with $QL'' = 3 \cdot QL$.'
+            work: 0.2
+          - label: b.
+            points: 1
+            target: LT1
+            type: cr
+            demand: mem
+            prompt: 'How does $\angle L''$ compare to $\angle L$? Explain.'
+            frame:
+              - ['$\angle L''$ is', 'congruent to', '$\angle L$.']
+              - ['Reason:', 'Dilations do not change angle measures.', '', 3.2]
+            answer: 'So $m\angle L'' = m\angle L$.'
+            work: 0.3
+      - id: rect
+        points: 2
+        target: LT5
+        type: cr
+        demand: pwoc
+        prompt: 'In right $\triangle MNK$, $MN = 9$ and $MK = 15$. Find $KN$.'
+        figure: Unit 3 Test B_rect
+        fig_w: 2.6
+        fill: [['$KN =$', '12 units']]
+        box_w: 1.1
+        answer: ['The right angle is at $N$, so the hypotenuse is $\overline{MK}$.', '$9^2 + KN^2 = 15^2$, so $KN^2 = 144$ and $KN = 12$.']
+        work: 1.7
+      - id: seq
+        points: 3
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: '$\triangle PQR \sim \triangle XYZ$ with scale factor $\frac{5}{2}$. Write a sequence of transformations that takes $\triangle PQR$ onto $\triangle XYZ$. For a dilation, name the center and the scale factor.'
+        figure: Unit 3 Test B_seq
+        fig_w: 2.2
+        fill:
+          - ['Step 1:', 'Dilate with center $Q$ and scale factor $\frac{5}{2}$.']
+          - ['Step 2:', 'Reflect across line $QR$.']
+          - ['Step 3:', 'Translate $Q$ to $Y$.']
+        box_w: 3.0
+        answer: '$\triangle XYZ$ faces the other way, so a reflection is needed. After Steps 1 and 2, $P$ is below $Q$; the translation lands $P$ on $X$, $Q$ on $Y$, and $R$ on $Z$.'
+        work: 0.6
+
+guide_notes: |
+  **Nov 19: less is more, no headings.** Same changes as Version A. Cut two boxes from {ref:similar}c: $XY$ (the same move as $XZ$) and $m\angle J$ (the triangle sum). $m\angle J = 62^\circ$ is now printed on the figure, so {ref:similar}a scores the matching, not the subtraction. {ref:similar}b says "the small triangle"; it used to name $\triangle XYZ$ and $\triangle HJG$, which gave away part a. {ref:seq} prints the scale factor $\frac{5}{2}$ (finding one is {ref:similar}b), so it scores the moves. {ref:rect} names right $\triangle MNK$ instead of the rectangle. Directions: "Show your work." No section headings; targets are in the blueprint. 20 points to 18.
+
+  **Scoring (18 pts).** Same rubric as Version A.
+  - {ref:ratios} (3 pts): 1 pt for each of [A], [C], [E]; 1/2 pt off for each wrong choice (lowest score 0).
+  - {ref:splitter} (3 pts): 1 pt for a proportion that uses the whole side 13 (not 7), 1 pt for solving, 1 pt for $\frac{120}{13}$ or 9.23. The proportion $\frac{x}{20} = \frac{6}{7}$ (part over part) earns 1 pt for work at most.
+  - {ref:similar} (4 pts): 1 pt per box. Follow through on parts b and c from a wrong statement in part a. Accept 4 or "4 to 1". A scale factor of $\frac{1}{4}$ goes the wrong way (0 pts for part b), but follow through on part c. Part c, $m\angle X$: the matching angle ($\angle H$) or the triangle sum both earn the point.
+  - {ref:dilate} (3 pts): part a, 1 pt for each image point on the correct ray at about 3 times the distance (2 pts for all three); part b, 1 pt for "congruent" or "the same measure" with a reason (dilations keep angle measures).
+  - {ref:rect} (2 pts): 1 pt for the Pythagorean theorem (or a 9-12-15 triangle), 1 pt for 12. Also accept a similarity method that reaches 12.
+  - {ref:seq} (3 pts): 1 pt per move: a dilation by $\frac{5}{2}$ with a center, a reflection (any line that flips the triangle), and a translation that says where it goes. Accept any valid order. Take 1/2 pt off a dilation with no center.
+
+  **MLL notes.** Score the math, not grammar or spelling. Accept "same", "equal", or a home-language word for congruent, "flip", "slide", "grow by 5/2" for the moves, and a decimal comma (9,23). Accept answers that end with the claim after the work.
+
+  **Version B vs A.** Same targets, item types, and points. New letters, numbers, and orientation: Problem 3 asks for an enlargement (scale factor 4) instead of a reduction, Problem 5 uses the left triangle, and Problem 6 reflects across a horizontal line.

@@ -1,0 +1,159 @@
+id: 3.13
+title: Altitude to the hypotenuse
+notes_title: Altitude to the hypotenuse
+framing: >-
+  When you draw the altitude from the right angle of a right triangle, how are the three triangles related?
+materials: patty paper, calculator
+headings: warmup
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        prompt: 'The Pythagorean theorem says $a^2 + b^2 = c^2$, where $c$ is the hypotenuse. Find $x$.'
+        figure: 3.13_warmup
+        fig_w: 1.5
+        after: 0.04
+        fill: [['$x =$', '9']]
+        box_w: 0.9
+        answer: '$x^2 + 12^2 = 15^2$, so $x^2 = 225 - 144 = 81$ and $x = 9$.'
+        work: 0.4
+
+  - kind: together
+    items:
+      - n: 1
+        id: minimum
+        minutes: 4
+        prompt: '$\angle ACB$ and $\angle ADC$ are right angles. Can you prove $\triangle ADC \sim \triangle CDB$ by adding just one measurement? Which one? Explain.'
+        figure: 3.13_together
+        fig_w: 2.4
+        after: 0.04
+        frame:
+          - ['Add:', 'one acute angle', '. So $\triangle ADC \sim \triangle CDB$ by AA.', 1.5]
+        work: 0.8
+        answer: 'Yes. One acute angle is enough, for example $m\angle A = 53^\circ$. Then $m\angle ACD = 37^\circ$ and $m\angle DCB = 90^\circ - 37^\circ = 53^\circ$, so AA. Any value works the same way ($x$ and $90^\circ - x$), so the triangles are always similar.'
+
+  - kind: partner
+    items:
+      - n: 2
+        id: untangle
+        minutes: 5
+        prompt:
+          - 'In right $\triangle HFE$, $\overline{EG}$ is the altitude to the hypotenuse. Untangle the two small triangles.'
+          - 'Step 1: Trace $\triangle HEG$ and $\triangle EFG$ on separate pieces of patty paper.'
+          - 'Step 2: Turn or flip each tracing until it fits one of the blank triangles.'
+          - 'Step 3: On each blank triangle, label the vertices, the lengths you know, and the angle measures.'
+        figure: 3.13_untangle
+        layout: stacked
+        work: 0.3
+        answer: '$\triangle HFE \sim \triangle HEG \sim \triangle EFG$. All three have angles $53^\circ$, $37^\circ$, and $90^\circ$.'
+      - n: 3
+        id: lengths
+        minutes: 3
+        prompt: 'In $\triangle HFE$, use similar triangles to find $HG$. Write a proportion.'
+        fill: [['$HF =$', '20'], ['$HG =$', '7.2']]
+        fill_cols: 2
+        box_w: 0.9
+        answer: ['$HF^2 = 12^2 + 16^2 = 400$, so $HF = 20$ (Pythagorean theorem).', '$\triangle HEG \sim \triangle HFE$, so $\frac{HG}{HE} = \frac{HE}{HF}$. Then $\frac{HG}{12} = \frac{12}{20}$ and $HG = 7.2$.']
+        work: 1.6
+
+  - kind: notes
+
+quicknotes:
+  - '**LT 1: I can find the similar triangles made by the altitude to the hypotenuse of a right triangle.**'
+  - '- An altitude goes from a vertex to the opposite side and is perpendicular to that side.'
+  - '- In right $\triangle ABC$ with right angle $C$, altitude $\overline{CD}$ makes three similar triangles: $\triangle ABC \sim \triangle ACD \sim \triangle CBD$.'
+  - '- Why: each small triangle has a right angle and shares one acute angle with $\triangle ABC$ (AA).'
+  - '- Match each vertex of $\triangle ABC$ to the vertex with the same angle. The right angle $C$ goes with the right angle $D$.'
+  - '**LT 2: I can use the Pythagorean theorem and similarity to find lengths.**'
+  - '- Pythagorean theorem: in a right triangle, $a^2 + b^2 = c^2$. The hypotenuse $c$ is across from the right angle and is the longest side.'
+  - '- Similarity: write a proportion with matching sides. One side can be in two triangles: $\overline{AC}$ is a leg of $\triangle ABC$ and the hypotenuse of $\triangle ACD$, so $\frac{AD}{AC} = \frac{AC}{AB}$. Then check with the other method.'
+
+practice:
+  title: 'Altitude to the hypotenuse: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: 'In right $\triangle ABC$, altitude $\overline{CD}$ is drawn to the hypotenuse. Select **all** the triangles that are similar to $\triangle ABC$.'
+          figure: 3.13_p1
+          fig_w: 1.9
+          choices: ['$\triangle ACD$', '$\triangle BCD$', '$\triangle BDC$', '$\triangle CAD$', '$\triangle CBD$']
+          answer: ['[A], [E]', '$\triangle ABC \sim \triangle ACD$: $A \to A$, $B \to C$, $C \to D$.', '$\triangle ABC \sim \triangle CBD$: $A \to C$, $B \to B$, $C \to D$.', '[B], [C], [D] match the vertices in the wrong order.']
+          work: 0.1
+        - n: 2
+          prompt: 'In $\triangle ABC$ (**not** a right triangle), altitude $\overline{CD}$ is drawn to side $\overline{AB}$, and $AB = c$. Which statement must be true?'
+          figure: 3.13_p2
+          fig_w: 2.2
+          choices: ['$m\angle ACB = m\angle B$', '$b^2 = c^2 + a^2$', '$\triangle ADC \sim \triangle ACB$', 'The area of $\triangle ABC$ is $\frac{1}{2}hc$.']
+          answer: ['[D]', 'Area $= \frac{1}{2} \cdot$ base $\cdot$ height, with base $AB = c$ and height $CD = h$. [B] and [C] need a right angle at $C$, and $m\angle ACB = 75^\circ$. [A] has no reason to be true.']
+          work: 0.1
+    - cells:
+        - n: 3
+          prompt: 'In right $\triangle ABC$, altitude $\overline{CD}$ with length $h$ is drawn to the hypotenuse. $AD = 12$ and $DB = 3$. Find $h$.'
+          figure: 3.13_p3
+          fig_w: 2.3
+          answer: ['$\triangle ADC \sim \triangle CDB$, so $\frac{AD}{CD} = \frac{CD}{DB}$: $\frac{12}{h} = \frac{h}{3}$.', '$h^2 = 36$, so $h = 6$.']
+          work: 1.2
+        - n: 4
+          prompt:
+            - '$\overline{A''B''} \parallel \overline{AB}$, so $\triangle CA''B'' \sim \triangle CAB$ (AA).'
+            - 'Scale factor: $AB \div A''B'' = 20 \div 8 = 2.5$'
+            - 'Find $A''A$.'
+          figure: 3.13_p4
+          fig_w: 1.9
+          answer: ['$CA = 12 \cdot 2.5 = 30$ (the whole side).', '$A''A = 30 - 12 = 18$']
+          work: 0.9
+    - heading: SBA review
+      cells:
+        - n: 5
+          prompt: 'Hassan has twice as many five-dollar bills as one-dollar bills in his wallet. He has 33 dollars in all. How many of each bill does he have?'
+          answer: ['Let $x$ = number of one-dollar bills, so $2x$ = number of five-dollar bills.', '$1x + 5(2x) = 33$, $11x = 33$, $x = 3$.', '3 one-dollar bills and 6 five-dollar bills.']
+          work: 2.0
+        - n: 6
+          prompt: ['Solve the system by graphing.', '$y = x - 2$', '$y = x^2 - x - 2$']
+          figure: 3.13_p7
+          fig_w: 2.4
+          answer: ['$(0, -2)$ and $(2, 0)$', 'Check: $x - 2 = x^2 - x - 2$ gives $x^2 - 2x = 0$, so $x = 0$ or $x = 2$.']
+          work: 0.1
+  selected: [[1, 'A, E'], [2, D], [3, '6'], [4, '18'], [5, '3 ones, 6 fives'], [6, '(0, -2), (2, 0)']]
+
+plan: |
+  **Overview.** Last lesson of Unit 3. Students already know AA (3.9) and the Pythagorean theorem. Today they see that the altitude from the right angle splits a right triangle into two smaller triangles that are similar to it and to each other. Then they use matching sides to find lengths.
+
+  **Core idea.** Students see that each small triangle has a right angle and shares an acute angle with the big triangle, so all three triangles have the same angles and are similar, with the vertices matched by their angles. Spend whole-class time on the {ref:minimum} explanation (why one acute angle is enough) and on the labeled blank triangles in {ref:untangle}: $E$ is the $37^\circ$ angle in $\triangle HEG$ but the $53^\circ$ angle in $\triangle EFG$, and $\overline{HE}$ is a leg of $\triangle HFE$ but the hypotenuse of $\triangle HEG$. Known steps are printed so you can move past them: both right angles and the AA reason (3.9) in {ref:minimum} and the turned blank triangles in {ref:untangle} (students label them instead of redrawing). Only the new steps are blank: the one measurement and why it is enough ({ref:minimum}), the vertices, hypotenuse, and angles on the blank triangles ({ref:untangle}), and the proportion for $HG$ ({ref:lengths}). Faded version: the later problems print less, so students carry the whole argument in {ref:lengths}. Calculators do the arithmetic.
+
+  **Objectives.** (1) Name the three similar triangles and match their vertices by their angles. (2) Find missing lengths with similar triangles and check with the Pythagorean theorem. **Standards.** G-SRT.B.4, G-SRT.B.5. SMP 3, 5 (patty paper), 7.
+
+  **Quick look (23 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up | Students, 1 min share |
+  | 3-7 | Together: {ref:minimum}, then hand out patty paper | Teacher + class |
+  | 7-17 | With a partner: Problems {num:untangle}-{num:lengths} | Students (pairs), 2 min share |
+  | 17-20 | QuickNotes | Teacher + class |
+  | 20-23 | Collect, assign practice | Teacher |
+
+  **Warm-up (3 min).** Pythagorean review with the formula printed (LT 2). Share: 15 is the hypotenuse because it is across from the right angle; students find the hypotenuse of each small triangle the same way in Problems {num:untangle} and {num:lengths}.
+
+  **Together (4 min, doc camera).** {ref:minimum} (from Math Medic 6.4): ask "what is the least we need to know?" Take a guess, then write $m\angle A = 53^\circ$ on the figure and chase the angles out loud: $m\angle ACD = 37^\circ$, so $m\angle DCB = 53^\circ$, and AA. Push to "any one acute angle," then "actually nothing: $x$ and $90^\circ - x$ always work." "By AA" is printed in the frame, so students fill the one box (the measurement) and write one sentence (why it is enough).
+
+  **With a partner (10 min: 5 + 3, then a 2 min share).**
+  - {ref:untangle} is the core (5 min). Pairs trace each small triangle, turn or flip it until it fits a blank triangle, and copy the letters, lengths, and angles onto it. Both tracings have to be flipped. Assessing: "Which angle in $\triangle HEG$ is $53^\circ$? How do you know?" Advancing: "Which side of $\triangle HEG$ matches $\overline{HF}$?"
+  - {ref:lengths} (3 min). $HF$ is not printed: pairs find it with the Pythagorean theorem, as in the warm-up. If a pair is stuck on the proportion, point to the hypotenuses: 12 in $\triangle HEG$ and 20 in $\triangle HFE$.
+  - Share: each pair says $\triangle HFE \sim \triangle HEG \sim \triangle EFG$ out loud. Common error: $\triangle HGE$ (figure order); send them back to the angles on their blank triangles.
+  - MLL supports: the blank triangles (no redrawing), labeled figures, the frame on {ref:minimum}, the fill boxes on {ref:lengths}, any language in pair talk. Keep the words *altitude*, *hypotenuse*, *leg*; point to each one as you say it.
+
+  **QuickNotes (3 min).** Page 2. Students turn to it only now: the Why bullet answers {ref:minimum}. Connect the AA bullet to {ref:minimum}, the vertex-matching bullet to {ref:untangle}, and the proportion bullet to {ref:lengths} ($\overline{HE}$ is in two triangles, like $\overline{AC}$).
+
+guide_notes: |
+  **Faded version (Nov 23).** Only {ref:lengths} changed: $HF = 20$ is a box now, so students find it with the Pythagorean theorem (the warm-up move) before the proportion for $HG$. Work 0.9 to 1.6 in; 2 to 3 min.
+
+  **Nov 23: known content printed.** Printed now: "So $\triangle ADC \sim \triangle CDB$ by AA" in {ref:minimum} (3.9; it was a box), and in practice 4 the AA similarity and the scale factor $20 \div 8 = 2.5$ (3.9, 3.7). Still blank: the one measurement and the reason in {ref:minimum}, every label on the blank triangles in {ref:untangle}, the proportion and $HG$ in {ref:lengths}, the warm-up's $x$ (the reviewed skill), practice 1-3 (today's content), $A'A$ in practice 4 (the reviewed 3.11 step: whole side, then the piece), and the SBA items. Item minutes went from 15 to 14.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item was cut (finding a length with a proportion from two of the triangles is {ref:lengths} with new letters, and practice 3 finds the altitude the same way). The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** {ref:minimum}: the leftover side lengths and angles are off the figure (no more "ignore the measurements"), and both right angles are marked. {ref:untangle}: the $\triangle HFE$ setup is part of the problem, next to two blank triangles turned like $\triangle HFE$ at the same size as the small triangles, so a tracing fits on top. Students label them instead of redrawing. {ref:lengths}: the $GE$ box is cut (same triangles and scale factor as $HG$). The QuickNotes are back on their own page, since their proportion example is the {ref:lengths} proportion with other letters. Practice unchanged; practice 4 repeats Lesson 3.11 practice 1b but is the only 3.11 review here.
+
+  **Earlier cuts (Nov 16).** To fit 30 minutes: warm-up b (converse), the Together angle chase, the check your understanding item (practice 1 covers it), "name the three right triangles", the similarity statement frame, $HF$ by the Pythagorean theorem, and $GF$. Practice 7 to 6: the midsegment select-all and part b of the side splitter item. The title was "Tangled triangles".
+
+  **Scoring notes (MLL).** Score the math, not the English. Accept decimal commas (7,2 for $HG$) and home-language words.

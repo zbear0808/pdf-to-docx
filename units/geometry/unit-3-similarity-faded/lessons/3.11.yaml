@@ -1,0 +1,179 @@
+id: 3.11
+title: The side splitter theorem
+notes_title: The side splitter theorem
+framing: >-
+  When a line is parallel to one side of a triangle, how does it split the other two sides?
+materials: calculator
+headings: warmup
+notes_figure: 3.11_notes
+notes_fig_w: 1.2
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 2
+        prompt:
+          - '$\overleftrightarrow{AC} \parallel \overleftrightarrow{MN}$, and $\angle B$ is in both triangles.'
+          - 'Corresponding angles: $\angle BMN \cong \angle BAC$'
+        figure: 3.11_warmup
+        fig_w: 1.5
+        fill: [['By AA, $\triangle MBN \sim$', '$\triangle ABC$']]
+        box_w: 1.0
+        answer: 'Two angle pairs, so AA. Order matters: $M \to A$, $B \to B$, $N \to C$.'
+
+  - kind: together
+    intro: 'Two roads leave the library ($L$): Oak Ave. and Lincoln Rd. Maple St. and Chestnut St. are parallel, so $\triangle LPA \sim \triangle LQB$ by AA.'
+    items:
+      - n: 1
+        id: map_dist
+        minutes: 3
+        prompt:
+          - 'Use the scale factor to find the distances on Oak Ave.'
+          - '$LQ = 900 + 600 = 1500$ ft, the whole road.'
+          - 'Scale factor: $LQ \div LP = 1500 \div 900 = \frac{5}{3}$'
+          - 'Library to Chestnut St.: $LB = 1200 \cdot \frac{5}{3} = 2000$ ft'
+        figure: 3.11_map
+        fig_w: 2.4
+        fill: [['Maple St. to Chestnut St.: $AB =$', '800 ft']]
+        box_w: 1.0
+        answer: '$AB = LB - LA = 2000 - 1200 = 800$ ft.'
+
+  - kind: partner
+    items:
+      - n: 2
+        id: ratios
+        minutes: 1
+        prompt:
+          - 'Compare how Maple St. splits each road.'
+          - 'Lincoln Rd.: $LP \div PQ = 900 \div 600 = 1.5$'
+        fill: [['Oak Ave.: $LA \div AB =$', '1.5']]
+        box_w: 0.9
+      - n: 3
+        id: why
+        minutes: 6
+        prompt:
+          - 'Explain why the two ratios in {ref:ratios} are equal.'
+          - '*Optional start:* The ratios are equal because ...'
+        box: 1.9
+        answer: '$\triangle LPA \sim \triangle LQB$, so one scale factor, $\frac{5}{3}$, stretches both roads from the library: $LQ = \frac{5}{3} LP$ and $LB = \frac{5}{3} LA$. So on both roads the part past Maple St. is $\frac{2}{3}$ of the part before it ($600 = \frac{2}{3} \cdot 900$ and $800 = \frac{2}{3} \cdot 1200$), and both ratios are $\frac{3}{2} = 1.5$.'
+
+  - kind: notes
+
+quicknotes:
+  - '**LT 1: I can explain why a segment parallel to one side of a triangle makes a similar triangle.**'
+  - '- In $\triangle PQR$, $M$ is on $\overline{QP}$ and $N$ is on $\overline{QR}$. If $\overline{MN} \parallel \overline{PR}$, then $\angle QMN \cong \angle QPR$ (corresponding angles) and $\angle Q$ is shared. So $\triangle MQN \sim \triangle PQR$ by AA.'
+  - '- The small triangle is a dilation of the large triangle, centered at the shared vertex $Q$.'
+  - '**LT 2: I can use the side splitter theorem to find lengths and to test for parallel lines.**'
+  - '- **Side splitter theorem:** a line parallel to one side of a triangle divides the other two sides proportionally: $\frac{QM}{MP} = \frac{QN}{NR}$.'
+  - '- Why ({ref:why}): one scale factor stretches both sides from $Q$. So $MP$ is the same fraction of $QM$ as $NR$ is of $QN$.'
+  - '- **Converse:** if a line divides two sides of a triangle proportionally, then it is parallel to the third side.'
+  - '- To find the parallel side, use whole sides: $\frac{MN}{PR} = \frac{QM}{QP} = \frac{QN}{QR}$. $\overline{MN}$ matches the whole side $\overline{PR}$.'
+
+practice:
+  title: 'The side splitter theorem: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt: '$\overline{A''B''} \parallel \overline{AB}$, so $\triangle CA''B'' \sim \triangle CAB$ (AA).'
+          figure: 3.11_p1
+          fig_w: 2.2
+          parts:
+            - label: a.
+              prompt: 'Find $AB$.'
+              answer: 'Scale factor: $9 \div 6 = 1.5$. $AB = 5 \times 1.5 = 7.5$'
+              work: 1.2
+            - label: b.
+              prompt: 'Find $B''B$.'
+              answer: '$CB = 7 \times 1.5 = 10.5$, so $B''B = 10.5 - 7 = 3.5$'
+              work: 1.2
+        - n: 2
+          prompt: 'Explain how you know that $\overline{DE}$ is **not** parallel to $\overline{BC}$.'
+          figure: 3.11_p2
+          fig_w: 2.5
+          layout: stacked
+          work: 1.1
+          answer: '$AD \div DB = 4 \div 2 = 2$, but $AE \div EC = 9 \div 5 = 1.8$. The sides are not split proportionally, so $\overline{DE}$ is not parallel to $\overline{BC}$ (converse of the side splitter theorem).'
+    - cells:
+        - n: 3
+          prompt: 'In right $\triangle ABC$, $AC = 4$ and $BC = 5$. $D$ and $E$ are the midpoints of $\overline{AC}$ and $\overline{BC}$. Area of a triangle $= \frac{bh}{2}$.'
+          figure: 3.11_p4
+          fig_w: 1.5
+          parts:
+            - label: a.
+              prompt: 'Area of $\triangle ABC = \frac{4 \cdot 5}{2} = 10$ square units.'
+              answer: 'The legs are the base and the height.'
+              work: 0
+            - label: b.
+              prompt: '$DC = 2$ and $EC = 2.5$, so the area of $\triangle DEC = \frac{2 \cdot 2.5}{2} = 2.5$ square units.'
+              answer: 'The midpoints cut each leg in half.'
+              work: 0
+            - label: c.
+              prompt: 'The sides of $\triangle DEC$ are $\frac{1}{2}$ as long as the sides of $\triangle ABC$. Is its area also $\frac{1}{2}$ as large? Explain.'
+              answer: 'No. $2.5 \div 10 = \frac{1}{4}$. The area scales by $\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$.'
+              work: 1.0
+        - n: 4
+          prompt: 'In $\triangle ABC$, $m\angle B = 180^\circ - 47^\circ - 33^\circ = 100^\circ$.'
+          figure: 3.11_p5
+          fig_w: 2.4
+          parts:
+            - label: a.
+              prompt: 'Are $\triangle ABC$ and $\triangle DEF$ similar? Explain.'
+              answer: 'Yes. $\angle A \cong \angle D$ (both $47^\circ$) and $\angle B \cong \angle E$ (both $100^\circ$), so $\triangle ABC \sim \triangle DEF$ by AA.'
+              work: 1.0
+            - label: b.
+              prompt: 'If possible, find $EF$. If not, explain why not.'
+              answer: '$DE$ matches $AB$: scale factor $12 \div 9 = \frac{4}{3}$. $EF$ matches $BC$: $EF = 12 \cdot \frac{4}{3} = 16$.'
+              work: 1.0
+    - heading: SBA review
+      cells:
+        - n: 5
+          prompt: 'The slope of the line through $(k, 12)$ and $(6, 4)$ is $-2$. Find $k$.'
+          work: 1.2
+          answer: ['$\frac{4 - 12}{6 - k} = -2$', '$-8 = -2(6 - k)$, so $6 - k = 4$', '$k = 2$']
+        - n: 6
+          prompt: 'A lemonade recipe uses 4 cups of water and 2 cups of lemon juice to make 6 cups of lemonade. How many cups of lemon juice do you need for 30 cups of lemonade?'
+          work: 1.2
+          answer: ['$30 \div 6 = 5$ batches', '$5 \times 2 = 10$ cups of lemon juice']
+  selected: [[1, 'a. 7.5, b. 3.5'], [3, 'c. No, 1/4'], [4, 'b. 16'], [5, 'k = 2'], [6, '10 cups']]
+
+plan: |
+  **Overview.** Second lesson on splitting triangle sides. Lesson 3.5 did the midsegment and other matching fractions with a dilation, and 3.9 did AA. Today a line parallel to one side of a triangle makes a similar triangle (AA), so it splits the other two sides proportionally (the side splitter theorem). The converse tests for parallel lines. Lesson 3.13 uses similar triangles inside a right triangle.
+
+  **Core idea.** Students see that a line parallel to one side of a triangle cuts the other two sides in the same ratio, because the small and large triangles are similar: one scale factor stretches both roads from the library, so the part past Maple St. is the same fraction of the part before it on both roads. Spend whole-class time on {ref:why}: the pairs' reasons and the share. Known steps are printed so you can move past them: the corresponding angles in the warm-up (parallel lines), $\triangle LPA \sim \triangle LQB$ with the angle marks, the whole road $LQ = 1500$ and the scale factor $\frac{5}{3}$ (3.7), $LB = 2000$, and the Lincoln Rd. ratio $900 \div 600 = 1.5$. Only these stay blank: the warm-up's similarity statement (the AA review), $AB$ in {ref:map_dist} (the part of Oak Ave. between the parallel streets), the Oak Ave. ratio in {ref:ratios}, and the reason in {ref:why}. Calculators do the arithmetic. Faded version: the later problems print less, so students carry the whole argument in {ref:why}.
+
+  **Objectives.** Students will be able to: (1) explain with AA why a segment parallel to one side of a triangle makes a similar triangle; (2) explain why a line parallel to one side splits the other two sides proportionally, and use the side splitter theorem and its converse to find lengths and test for parallel lines. **Standards.** G-SRT.B.4, G-SRT.B.5. SMP 3, 7.
+
+  **Quick look (21 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-2 | Warm-up | Students, 1 min share |
+  | 2-5 | Together: Problem 1 | Teacher + class |
+  | 5-14 | With a partner: Problems 2-3 | Students (pairs), 2 min share |
+  | 14-18 | QuickNotes | Teacher + class |
+  | 18-21 | Collect, assign practice | Teacher |
+
+  **Warm-up (2 min).** 1 min to fill, 1 min share. Review from 3.9: the corresponding angles are printed (line $BA$ cuts the parallel lines), and $\angle B$ is in both triangles. That is AA, so students write only the similarity statement, in matching order. The map in {ref:map_dist} has the same shape, so its similarity is printed.
+
+  **Together (3 min, doc camera).** {ref:map_dist}. The street map is from Math Medic 6.5 with new streets and numbers. Read the map first: point to the library, the two roads, and the two parallel streets, and trace the small and large triangles. The whole road, the scale factor, and $LB$ are printed. Point to $LQ = 900 + 600 = 1500$ and say "the whole road, not 600." Then ask "How far is it on Oak Ave. from Maple St. to Chestnut St.?" and fill the $AB$ box together ($2000 - 1200 = 800$). Then ask "How does Maple St. split each road?" and send that question to partners.
+
+  **With a partner (9 min: 1 + 6, then a 2 min share).** {ref:ratios}: the Lincoln Rd. ratio is printed, so pairs find only the Oak Ave. ratio ($1200 \div 800 = 1.5$) and see that it matches. {ref:why} is the point of the lesson. Its optional start is neutral here, so pairs find the scale-factor link themselves.
+  - Assessing: "Which two triangles are similar? What is the scale factor?" "What does the scale factor do to Lincoln Rd.? To Oak Ave.?"
+  - Advancing: "$PQ$ is what fraction of $LP$? $AB$ is what fraction of $LA$?" (Both $\frac{2}{3}$.) "Where does the $\frac{2}{3}$ come from?" ($\frac{5}{3} - 1$.)
+  - Watch for: "because the streets are parallel" with no link to the scale factor, and the Oak Ave. ratio flipped ($800 \div 1200$).
+  - Share: one pair reads their reason. Revoice it as "one scale factor for both roads, so the same split." Then ask "Would another street parallel to Maple St. split the roads the same way?"
+  - MLL supports: street names in the printed lines, the box labels, and on the map; the optional start; Turn and Talk in any language before writing. Keep *ratio* and *scale factor*; point to the printed 1.5 and the Oak Ave. box when you say "the same ratio."
+
+  **QuickNotes (4 min).** Students turn to page 2 only now: the Why bullet answers {ref:why}. Read the two theorems and tie the Why bullet to the share. For the converse, ask out loud: "A bike path crosses Lincoln Rd. 300 ft from the library and Oak Ave. 450 ft from the library. Is it parallel to Maple St.?" ($300 \div 900 = \frac{1}{3}$, $450 \div 1200 = \frac{3}{8}$, not equal, so no.) Practice 2 is the written converse item. Point at the last bullet: the parallel segment matches the whole side, not a piece. Practice 1a needs it ($CA = 6 + 3 = 9$, not the piece 3).
+
+guide_notes: |
+  **Faded version (Nov 23).** Same problems, figures, QuickNotes, and practice as the standard 3.11; the warm-up and Problems {num:map_dist}-{num:ratios} are unchanged. In {ref:why}, the optional start "The scale factor takes $LP$ to $LQ$ and $LA$ to $LB$, so ..." gave the first step of the argument; it is now "The ratios are equal because ...", so students connect the similar triangles to the scale factor themselves. Its box grew from 1.4 to 1.9 in and its time from 5 to 6 min (plan 21 min).
+
+  **Nov 23: known content printed.** Printed now: the warm-up's corresponding angles (parallel lines), the whole road $LQ = 1500$, the scale factor $\frac{5}{3}$ and $LB = 2000$ in {ref:map_dist} (3.7), the Lincoln Rd. ratio in {ref:ratios}, the AA similarity in practice 1, the two areas in practice 3a-b, and $m\angle B = 100^\circ$ (angle sum) in practice 4. Still blank: the warm-up's similarity statement (the AA review), $AB$, the Oak Ave. ratio, the reason in {ref:why}, practice 1-2 (today's theorem and converse), practice 3c and 4 (the reviewed skill), and the SBA items. Item minutes went from 14 to 11.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item was cut (practice 1 is the same item with new numbers: the parallel side from whole sides, then a piece). The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** Warm-up: the notice and wonder is now the AA review on the same figure (the source's "complete each statement"), two fill-ins. The map AA frame is cut: the warm-up does that move, so the Together intro prints $\triangle LPA \sim \triangle LQB$ and the angle marks are printed on the map. The map distance is now the Together problem ({ref:map_dist}), with the scale factor and $AB$ as boxes, so the routine steps are done as a class. The ratios are {ref:ratios}, and {ref:why} is new: an open explanation of why the ratios match, the core of the lesson. The QuickNotes moved to their own page and have a Why bullet, which answers {ref:why}. Practice is unchanged.
+
+  **Earlier cuts (Nov 16).** To fit 30 minutes: the right-triangle check-your-understanding item, the $\overline{BD} \parallel \overline{FG}$ Together problem (same scale-factor move as the map), and the bike-path converse problem (asked out loud in the QuickNotes; practice 2 is the written converse). Practice went from 10 to 6: cut the $\overline{MN} \parallel \overline{XZ}$ item (repeats practice 1), the find-$DF$ item (repeats practice 4), the AA multiple choice (4a covers it), and the scale factors under 1 item (earlier-lesson review). Extra instructions and flair cut.
+
+  **Scoring notes (MLL).** Score the math, not grammar. For {ref:why}, accept "both roads get multiplied by the same number", "same scale factor", or a home-language word, if the student ties the equal ratios to the similar triangles. Accept 800 for $AB$ in {ref:map_dist}, and 1.5, $\frac{3}{2}$, or $\frac{1200}{800}$ for the Oak Ave. ratio in {ref:ratios}.

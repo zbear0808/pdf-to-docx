@@ -1,0 +1,134 @@
+id: 3.3-3.5 Progress Check A
+doc_type: assessment
+schema_version: 1
+numbering: auto
+set: 3.3-3.5 Progress Check
+form: A
+title: '3.3-3.5 Progress Check, Version A'
+directions: Show your work.
+total_points: 10
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along the ray from the center to $k$ times as far, so $k > 1$ enlarges and $0 < k < 1$ shrinks'
+    able_to: 'dilate a figure given a center and a scale factor'
+    standard: G-SRT.A.1
+  - id: LT2
+    understand: 'a dilation multiplies every length by the scale factor $k$'
+    able_to: 'find $k$ from a side and its image, and use $k$ to find a missing length'
+    standard: G-SRT.A.1b
+  - id: LT3
+    understand: 'a dilation keeps angle measures and takes a line that misses the center to a parallel line (a line through the center to itself)'
+    able_to: 'tell what a dilation does to angles, lines, and segments'
+    standard: G-SRT.A.1a
+  - id: LT4
+    understand: 'when two sides of a triangle are cut the same fraction of the way from a vertex, one dilation with that vertex as center takes the triangle onto the small one, so the cut segment is parallel to the third side and that fraction of its length, and the angles match'
+    able_to: 'check the fractions and use the dilation to find a length or an angle'
+    standard: G-SRT.B.4
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - id: q1
+        target: LT1
+        type: cr
+        demand: pwoc
+        points: 2
+        prompt: 'Dilate $\triangle ABC$ using center $P$ and scale factor $\frac{1}{2}$. Label the image $\triangle A''B''C''$.'
+        figure: 3.3-3.5 Progress Check A_dilate
+        fig_w: 3.0
+        work: 0
+        answer: 'Red triangle. Each image point is halfway from $P$ to its point. From $P$: $A''$ is right 3, up 2; $B''$ is right 5, up 1; $C''$ is right 4, down 1.'
+      - id: q2
+        target: LT1
+        type: sr
+        demand: mem
+        key: 'C, D'
+        select_all: true
+        points: 2
+        prompt:
+          - 'Parallelogram $JKLM$ is dilated to parallelogram $J''K''L''M''$. Select **all** the scale factors that make the image **larger** than the original.'
+          - 'Each wrong or missing choice loses 1 point (lowest score 0).'
+        choices: ['$\frac{7}{10}$', '$1$', '$\frac{5}{4}$', '$2$']
+        choice_cols: 4
+        work: 0.1
+        answer: '[C] and [D]. A scale factor greater than 1 makes the image larger. ([A] makes it smaller. [B] keeps the same size.) A blank or all four scores 0.'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: q3
+        target: LT2
+        type: cr
+        prompt: 'Polygon $N$ is a dilation of polygon $M$.'
+        figure: 3.3-3.5 Progress Check A_rects
+        fig_w: 2.6
+        parts:
+          - label: a.
+            demand: pwoc
+            points: 1
+            prompt: 'What is the scale factor?'
+            fill: [['$k =$', '$\frac{3}{2}$']]
+            box_w: 0.9
+            answer: '$k = \frac{12}{8} = \frac{3}{2}$ (image length $\div$ original length).'
+            work: 0.7
+          - label: b.
+            demand: pwoc
+            points: 2
+            prompt: 'If $x = 12$, what is $y$?'
+            fill: [['$y =$', '18']]
+            box_w: 0.9
+            answer: '$y = \frac{3}{2} \cdot 12 = 18$'
+            work: 1.2
+
+  - kind: plain
+    target: LT4
+    page_break_before: true
+    items:
+      - id: q4
+        target: LT4
+        type: cr
+        demand: pwc
+        points: 1
+        prompt: 'Here are $\triangle QRS$ and $\triangle Q''R''S$. What is the measure of $\angle Q''R''S$ in degrees? Show how you know.'
+        figure: 3.3-3.5 Progress Check A_angle
+        fig_w: 2.0
+        fill: [['$m\angle Q''R''S =$', '$45^\circ$']]
+        box_w: 0.9
+        work: 1.2
+        answer: '$\frac{SR''}{SR} = \frac{8}{12} = \frac{2}{3}$ and $\frac{SQ''}{SQ} = \frac{6}{9} = \frac{2}{3}$, so a dilation with center $S$ and scale factor $\frac{2}{3}$ takes $\triangle QRS$ to $\triangle Q''R''S$. A dilation keeps angle measures, so $m\angle Q''R''S = 45^\circ$. No point for $45^\circ$ without the fractions.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: q5
+        target: LT3
+        type: sr
+        demand: pwoc
+        key: 'B, D'
+        select_all: true
+        points: 2
+        prompt:
+          - 'Select **all** the lines that could be the image of line $t$ after a dilation.'
+          - 'Each wrong or missing choice loses 1 point (lowest score 0).'
+        figure: 3.3-3.5 Progress Check A_lines
+        fig_w: 2.1
+        choices: ['$u$', '$v$', '$w$', '$z$']
+        work: 0
+        answer: '[B] and [D]. A dilation takes line $t$ to a parallel line (or to $t$ itself if the center is on $t$). Lines $v$ and $z$ are parallel to $t$. Lines $u$ and $w$ cross $t$. A blank or all four scores 0.'
+
+guide_notes: |
+  **Nov 19: less is more, no headings.** No items cut: each item makes a different move or works at a different level, so nothing repeats. No section headings; the targets are in the blueprint. Item {num:q2} is one sentence ("Select all the scale factors that make the image larger"), and item {num:q4} says "in degrees" instead of "(How many degrees is it?)". Item {num:q4} has new letters ($\triangle QRS$, center $S$) and is flipped top to bottom: it had the letters, layout, and question of Lesson 3.5 practice 1, with only the lengths and angle changed. The routine steps were already printed (grid, labeled sides, $x$, every piece length). Scoring now accepts an unsimplified scale factor in {num:q3}a and carries a wrong {num:q3}a into {num:q3}b. Total stays 10.
+
+  **Nov 20: audit fixes.** Item {num:q4} now asks "Show how you know." and its point needs the matching fractions; the marked angle alone gave the point before, so no item measured LT4. Item {num:q5} is redrawn with new line names ($t$, $u$, $v$, $w$, $z$), steep parallels, and key B, D: it was Lesson 3.4 practice 2 with the labels moved. On the select-all items a blank or every choice now scores 0. A and B still share $k = \frac{3}{2}$ in {num:q3}a (kept for equal difficulty).
+
+  **Targets.** LT1 (3.1): dilate a figure given a center and a scale factor; $k > 1$ enlarges, $0 < k < 1$ shrinks (items {num:q1}-{num:q2}). LT2 (3.3): a dilation multiplies every length by $k$ (item {num:q3}). LT4 (3.5): two sides cut the same fraction of the way from a vertex give one dilation from that vertex (item {num:q4}). LT3 (3.4): a dilation keeps angles and takes a line to a parallel line, or to itself (item {num:q5}).
+
+  **Scoring.**
+  - Item {num:q1} (2 pts): 1 point for image points halfway along each ray from $P$ (all three), 1 point for a labeled triangle $A'B'C'$. Small drawing error (half a grid unit): full credit if the halfway idea is clear.
+  - Items {num:q2} and {num:q5} (2 pts each): start at 2 and take off 1 for each wrong or missing choice (2 divided by the 2 wrong choices), lowest 0. A blank or all four choices scores 0.
+  - {num:q3}a (1 pt): $\frac{3}{2}$, 1.5, or $\frac{12}{8}$. {num:q3}b (2 pts): 1 point for a correct method ($y = 1.5x$ or a proportion), 1 point for 18. Carry a wrong {num:q3}a through: $y = k \cdot 12$ with the student's $k$ earns both points.
+  - Item {num:q4} (1 pt): $45^\circ$ backed by the matching fractions, $\frac{8}{12}$ and $\frac{6}{9}$ (or both as $\frac{2}{3}$), or the dilation named with center $S$ and scale factor $\frac{2}{3}$. Equal piece ratios also count ($\frac{8}{4} = \frac{6}{3}$). The math alone is a full reason; no sentence is needed. $45^\circ$ with no fractions, or "it looks parallel", earns 0. A student who scales the angle (for example $30^\circ$ or $67.5^\circ$) still thinks a dilation changes angles; reteach with Lesson 3.4 QuickNotes. If the reason is blank, ask "What fraction of $\overline{SR}$ is $\overline{SR'}$? Of $\overline{SQ}$?"
+
+  **Scoring notes (MLLs).** Score the math, not grammar or spelling. Accept a decimal comma (1,5 = 1.5), home-language words, and answers written as a drawing or labeled figure.

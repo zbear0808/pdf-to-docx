@@ -1,0 +1,117 @@
+schema_version: 1
+id: Unit 4 Summary Notes
+doc_type: reference
+title: 'Unit 4 summary notes: Right triangles'
+max_pages: 3
+do_not_reuse: ['Unit 4 Test*', '4.1-4.5 Progress Check*', '4.6-4.7 Progress Check*']
+source: '_temp/ingest/Unit 4 Summary Notes.md; lessons 4.1, 4.4, 4.5, 4.6, 4.7, 4.8, 4.10'
+targets:
+  - {id: SN1, able_to: 'Find a hypotenuse and design a ramp that meets the 1:12 rule.', standard: '8.G.B.7, G.MG.1'}
+  - {id: SN2, able_to: 'Check a Pythagorean triple and find its acute angles.', standard: G.SRT.8}
+  - {id: SN3, able_to: 'Set up and solve a trig equation for one side.', standard: 'G.SRT.6, G.SRT.8'}
+  - {id: SN4, able_to: 'Solve an angle-of-elevation height problem.', standard: G.SRT.8}
+  - {id: SN5, able_to: 'Use arcsin, arccos, arctan to find an angle.', standard: G.SRT.8}
+sections:
+  - kind: plain
+    title: '4.1 Angles and steepness'
+    target: SN1
+    items:
+      - id: pythag
+        prompt:
+          - 'In a right triangle, $a^2+b^2=c^2$.'
+          - 'The **legs** $a$ and $b$ are the two sides that make the right angle.'
+          - 'The **hypotenuse** $c$ is the longest side. It is across from the right angle.'
+          - 'Only use this rule for right triangles.'
+        figure: Unit 4 Summary Notes_pythag
+        work: 0
+      - id: ramp
+        prompt:
+          - 'Right triangles with the same acute angle are **similar** (AA), so their side ratios are equal. One acute angle decides every side ratio.'
+          - '**Example.** A wheelchair ramp must rise 1 inch for every 12 inches of run (1:12). A ramp goes up 4 steps that are 8 in tall each. How long is the ramp?'
+          - 'Rise: $4\cdot 8=32$ in. Run: $12\cdot 32=384$ in.'
+          - 'EQUATION: $32^2+384^2=c^2$, so $c=\sqrt{1024+147456}=\sqrt{148480}\approx 385.3$ in.'
+          - 'The ramp is about 385.3 inches long (about 32.1 ft). Every 1:12 ramp has the same angle, about $4.8^\circ$.'
+        figure: Unit 4 Summary Notes_4.1
+        layout: stacked
+        work: 0
+  - kind: plain
+    title: '4.4 Naming the sides'
+    target: SN3
+    items:
+      - id: sides
+        prompt:
+          - 'The two acute angles of a right triangle are **complementary**: they add to $90^\circ$.'
+          - 'Pick one acute angle first. The **opposite** side is across from it. The **adjacent** side touches it and is not the hypotenuse.'
+          - 'In $\triangle XYZ$: $YZ$ is opposite $\angle X$ and adjacent to $\angle Y$. $XZ$ is adjacent to $\angle X$ and opposite $\angle Y$. $XY$ is the hypotenuse from both angles.'
+        figure: Unit 4 Summary Notes_4.4
+        work: 0
+  - kind: plain
+    title: '4.5 Side ratios in right triangles'
+    target: SN2
+    items:
+      - id: triple
+        prompt:
+          - 'A **Pythagorean triple** is three whole numbers with $a^2+b^2=c^2$. Converse: if the sides fit $a^2+b^2=c^2$, the triangle is a right triangle.'
+          - '**Example.** Is 33, 56, 65 a right triangle?'
+          - '$33^2+56^2=1089+3136=4225$ and $65^2=4225$. They are equal.'
+          - 'Yes. 33, 56, 65 is a Pythagorean triple, so the triangle is a right triangle.'
+          - 'Angles: from the angle across from 33, 56 is adjacent and 65 is the hypotenuse, so the angle is $\cos^{-1}\left(\frac{56}{65}\right)\approx 30.5^\circ$. The other angle is $90^\circ-30.5^\circ=59.5^\circ$.'
+          - 'One acute angle and one side are enough to find every side.'
+        figure: Unit 4 Summary Notes_4.5
+        work: 0
+  - kind: plain
+    title: '4.6 Sine, cosine, and tangent'
+    target: SN3
+    page_break_before: true
+    items:
+      - id: ratios
+        prompt:
+          - 'For $\triangle ABC$ with right $\angle C$, side $a$ is across from $A$, $b$ across from $B$, $c$ is the hypotenuse.'
+          - '**SOH**: $\sin A=\dfrac{\text{opposite}}{\text{hypotenuse}}=\dfrac{a}{c}$'
+          - '**CAH**: $\cos A=\dfrac{\text{adjacent}}{\text{hypotenuse}}=\dfrac{b}{c}$'
+          - '**TOA**: $\tan A=\dfrac{\text{opposite}}{\text{adjacent}}=\dfrac{a}{b}$'
+          - 'For $\angle B$: $\sin B=\dfrac{b}{c}$, $\cos B=\dfrac{a}{c}$, $\tan B=\dfrac{b}{a}$. The sine of one acute angle equals the cosine of the other: $\sin A=\cos B$.'
+          - 'Pick the ratio that has the side you know and the side you want. Unknown on top: multiply. Unknown on the bottom: divide.'
+        figure: Unit 4 Summary Notes_4.6
+        work: 0
+      - id: ratio_ex
+        prompt:
+          - '**Example.** $BC=10$ and $m\angle A=41^\circ$. Find $x=AB$.'
+          - 'From $\angle A$: 10 is opposite and $x$ is the hypotenuse, so use sine.'
+          - 'EQUATION: $\sin 41^\circ=\dfrac{10}{x}$. The unknown is on the bottom, so divide: $x=\dfrac{10}{\sin 41^\circ}\approx 15.2$.'
+          - '$AB$ is about 15.2 units long.'
+        work: 0
+  - kind: plain
+    title: '4.7 Angle of elevation'
+    target: SN4
+    items:
+      - id: statue
+        prompt:
+          - 'The **angle of elevation** is the angle from the flat ground up to what you look at.'
+          - '**Example.** From a boat 82 ft from the bottom of the Statue of Liberty, the angle of elevation to the top is $75^\circ$. How tall is the statue?'
+          - 'From the $75^\circ$ angle: $h$ is opposite, 82 is adjacent, so use tangent.'
+          - 'EQUATION: $\tan 75^\circ=\frac{h}{82}$, so $h=82\tan 75^\circ\approx 306$ ft.'
+          - 'The statue is about 306 feet tall.'
+        figure: Unit 4 Summary Notes_4.7
+        work: 0
+  - kind: plain
+    title: '4.10 Arcsine, arccosine, and arctangent'
+    target: SN5
+    page_break_before: true
+    items:
+      - id: inverse
+        prompt:
+          - 'The inverse turns a side ratio back into an angle: $\sin^{-1}$ (arcsin), $\cos^{-1}$ (arccos), $\tan^{-1}$ (arctan). If $\sin A=0.5$, then $m\angle A=\sin^{-1}(0.5)=30^\circ$.'
+          - 'Name the two sides you know from the angle you want. Opposite and hypotenuse: $\sin^{-1}$. Adjacent and hypotenuse: $\cos^{-1}$. Opposite and adjacent: $\tan^{-1}$.'
+          - '**Example.** In right $\triangle ABC$ with right $\angle A$, $AB=10$ and $AC=13$. Find $BC$, $\angle C$, and $\angle B$.'
+          - '$BC=\sqrt{10^2+13^2}=\sqrt{269}\approx 16.4$.'
+          - 'From $\angle C$: 10 is opposite and 13 is adjacent, so use $\tan^{-1}$.'
+          - 'EQUATION: $m\angle C=\tan^{-1}\left(\frac{10}{13}\right)\approx 37.6^\circ$, about $38^\circ$.'
+          - '$m\angle B=90^\circ-37.6^\circ\approx 52^\circ$.'
+          - '$BC\approx 16.4$, $m\angle C\approx 38^\circ$, and $m\angle B\approx 52^\circ$.'
+        figure: Unit 4 Summary Notes_4.10
+        work: 0
+  - kind: plain
+    items:
+      - prompt: '**Additional Unit 4 notes**'
+        box: 4.5

@@ -1,0 +1,284 @@
+schema_version: 1
+id: '4.10'
+title: 'Using trigonometric ratios to find angles'
+notes_title: 'Arcsine, arccosine, and arctangent'
+framing: >-
+  We know two sides of a right triangle. How do we find the angles?
+materials: 'Scientific calculator (degree mode), pencil'
+numbering: auto
+headings: warmup
+source: 'This unit: 4.10 Student Notes.md (no source practice or key); requirements.md.'
+targets:
+  - id: LT1
+    understand: 'Arcsine, arccosine, and arctangent undo sine, cosine, and tangent: they take a side ratio and give back the acute angle.'
+    able_to: 'Choose arcsin, arccos, or arctan from the two known sides and find an acute angle to the nearest degree; find the angle for a ratio on a calculator.'
+    standard: 'G-SRT.C.8, G-SRT.C.6'
+  - id: LT2
+    understand: 'Once two sides are known, the Pythagorean Theorem gives the third side and the two acute angles add to 90°.'
+    able_to: 'Find all missing sides and angles of a right triangle from two sides; use the converse of the Pythagorean Theorem to show a triangle is right.'
+    standard: 'G-SRT.C.8, 8.G.B.6'
+
+sections:
+  - kind: warmup
+    target: LT1
+    items:
+      - id: warmup
+        minutes: 3
+        target: LT1
+        type: cr
+        demand: pwoc
+        prompt: 'Find each angle with the $\sin^{-1}$, $\cos^{-1}$, or $\tan^{-1}$ key. Round to the nearest degree.'
+        fill:
+          - ['$\sin B = 0.4848$, so $\angle B \approx$', '$29^\circ$']
+          - ['$\cos A = 0.5878$, so $\angle A \approx$', '$54^\circ$']
+          - ['$\tan W = 19.0811$, so $\angle W \approx$', '$87^\circ$']
+        fill_cols: 1
+        box_w: 0.9
+        work: 0.3
+        answer: '$\sin^{-1}(0.4848) \approx 29^\circ$, $\cos^{-1}(0.5878) \approx 54^\circ$, $\tan^{-1}(19.0811) \approx 87^\circ$.'
+
+  - kind: together
+    target: LT1
+    box:
+      - '**arcsine**: the arcsine of a number between 0 and 1 is the acute angle whose sine is that number.'
+      - '**arccosine**: the arccosine of a number between 0 and 1 is the acute angle whose cosine is that number.'
+      - '**arctangent**: the arctangent of a positive number is the acute angle whose tangent is that number.'
+      - '$\theta = \text{arcsin}\left(\dfrac{\text{opp}}{\text{hyp}}\right) \quad \theta = \text{arccos}\left(\dfrac{\text{adj}}{\text{hyp}}\right) \quad \theta = \text{arctan}\left(\dfrac{\text{opp}}{\text{adj}}\right)$'
+      - 'Calculator keys: $\sin^{-1}$, $\cos^{-1}$, $\tan^{-1}$. The $-1$ is not an exponent.'
+    items:
+      - id: ex_sin
+        minutes: 5
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Find $\angle C$, $\angle B$, and $AC$. Round angles to the nearest degree and sides to the nearest tenth.'
+        figure: '4.10_1'
+        fig_w: 1.0
+        frame:
+          - ['$\angle C =$', '$\text{arcsin}\left(\frac{9}{10}\right) \approx 64^\circ$', '', 1.9]
+          - ['$\angle B = 90^\circ - \angle C \approx$', '$26^\circ$', '', 0.9]
+          - ['$AC = \sqrt{10^2 - 9^2} \approx$', '4.4', '', 0.9]
+        work: 0.4
+        answer: 'From $C$, 9 is opp and 10 is hyp, so arcsin.'
+
+  - kind: partner
+    target: LT1
+    page_break_before: true
+    intro: 'Round angles to the nearest degree.'
+    items:
+      - id: legs
+        minutes: 2
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Find the angle marked ?.'
+        figure: '4.10_5'
+        fig_w: 1.5
+        frame:
+          - ['$? =$', '$\text{arctan}\left(\frac{27}{38}\right) \approx 35^\circ$', '', 1.9]
+        work: 0.4
+        answer: '27 and 38 are both legs: opp and adj from the angle.'
+      - id: ex_cos
+        minutes: 4
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt: 'Find $\angle D$ and $\angle E$.'
+        figure: '4.10_2'
+        fig_w: 1.9
+        frame:
+          - ['$\angle D =$', '$\text{arccos}\left(\frac{4}{7}\right) \approx 55^\circ$', '', 1.9]
+          - ['$\angle E \approx$', '$35^\circ$', '', 0.9]
+        work: 0.6
+        answer: 'From $D$, 4 is adj and 7 is hyp. $\angle E = 90^\circ - 55^\circ = 35^\circ$, or from $E$, 4 is opp: $\text{arcsin}\left(\frac{4}{7}\right) \approx 35^\circ$.'
+      - id: synth
+        minutes: 5
+        target: LT1
+        type: cr
+        demand: dm
+        prompt:
+          - 'In $\triangle END$, $\sin\theta = \dfrac{e}{n}$, $\cos\theta = \dfrac{d}{n}$, $\tan\theta = \dfrac{e}{d}$, and $\theta + \alpha = 90^\circ$.'
+          - 'Write every equation you can that starts with $\theta =$ or $\alpha =$.'
+        figure: '4.10_7'
+        fig_w: 1.6
+        box: 1.8
+        answer:
+          - '$\theta = \text{arcsin}\left(\dfrac{e}{n}\right) = \text{arccos}\left(\dfrac{d}{n}\right) = \text{arctan}\left(\dfrac{e}{d}\right) = 90^\circ - \alpha$;'
+          - '$\alpha = \text{arcsin}\left(\dfrac{d}{n}\right) = \text{arccos}\left(\dfrac{e}{n}\right) = \text{arctan}\left(\dfrac{d}{e}\right) = 90^\circ - \theta$'
+
+  - kind: notes
+
+quicknotes:
+  - target: LT1
+    title: 'I can use arcsine, arccosine, and arctangent to find angle measures in right triangles.'
+    bullets:
+      - 'arcsin, arccos, and arctan undo sin, cos, and tan. They take a side ratio and give back the angle.'
+      - 'Know opp and hyp: $\theta = \text{arcsin}\left(\dfrac{\text{opp}}{\text{hyp}}\right)$. Calculator: $\sin^{-1}$.'
+      - 'Know adj and hyp: $\theta = \text{arccos}\left(\dfrac{\text{adj}}{\text{hyp}}\right)$. Calculator: $\cos^{-1}$.'
+      - 'Know opp and adj: $\theta = \text{arctan}\left(\dfrac{\text{opp}}{\text{adj}}\right)$. Calculator: $\tan^{-1}$.'
+      - 'Name the sides from the angle you want. In {ref:ex_cos}, the 4 side is adj from $\angle D$ but opp from $\angle E$.'
+      - 'The $-1$ in $\sin^{-1}$ is not an exponent. Check that the calculator is in degree mode.'
+  - target: LT2
+    title: 'Finish the triangle'
+    bullets:
+      - 'The other acute angle $= 90^\circ -$ the first angle.'
+      - 'The third side: $a^2 + b^2 = c^2$, where $c$ is the hypotenuse.'
+notes_figure: '4.10_def'
+notes_fig_w: 2.1
+
+practice:
+  title: 'Using trigonometric ratios to find angles: practice'
+  rows:
+    - cells:
+        - id: pr1
+          target: LT1
+          type: cr
+          demand: pwoc
+          prompt: 'Find each angle to the nearest degree.'
+          fill:
+            - ['$\sin A = 0.6820$, so $\angle A \approx$', '$43^\circ$']
+            - ['$\cos B = 0.2588$, so $\angle B \approx$', '$75^\circ$']
+            - ['$\tan C = 0.3640$, so $\angle C \approx$', '$20^\circ$']
+          box_w: 0.9
+          work: 0.8
+          answer: '$\sin^{-1}(0.6820) \approx 43^\circ$, $\cos^{-1}(0.2588) \approx 75^\circ$, $\tan^{-1}(0.3640) \approx 20^\circ$.'
+        - id: pr2
+          target: LT1
+          type: cr
+          demand: pwc
+          prompt: 'Find $\theta$ to the nearest degree.'
+          figure: '4.10_p2'
+          layout: stacked
+          fill: [['$\theta \approx$', '$16^\circ$']]
+          box_w: 0.9
+          work: 1.0
+          answer: 'Opp 7, adj 24: $\theta = \text{arctan}(7/24) \approx 16^\circ$.'
+    - cells:
+        - id: pr3
+          target: LT1
+          type: cr
+          demand: pwc
+          prompt: 'Find $\theta$ to the nearest degree.'
+          figure: '4.10_p3'
+          layout: stacked
+          fill: [['$\theta \approx$', '$49^\circ$']]
+          box_w: 0.9
+          work: 1.0
+          answer: 'Adj 13, hyp 20: $\theta = \text{arccos}(13/20) \approx 49^\circ$.'
+        - id: pr4
+          target: LT1
+          type: cr
+          demand: pwc
+          prompt: 'Find $\theta$ to the nearest degree.'
+          figure: '4.10_p4'
+          layout: stacked
+          fill: [['$\theta \approx$', '$33^\circ$']]
+          box_w: 0.9
+          work: 1.0
+          answer: 'Opp 6, hyp 11: $\theta = \text{arcsin}(6/11) \approx 33^\circ$.'
+    - page_break_before: true
+      cells:
+        - id: pr5
+          target: LT1
+          type: sr
+          demand: pwc
+          prompt: 'Which equation gives $\theta$? Then find $\theta$ to the nearest degree.'
+          figure: '4.10_p5'
+          layout: stacked
+          choices:
+            - '$\theta = \text{arcsin}\left(\dfrac{12}{15}\right)$'
+            - '$\theta = \text{arctan}\left(\dfrac{9}{12}\right)$'
+            - '$\theta = \text{arccos}\left(\dfrac{9}{15}\right)$'
+            - '$\theta = \text{arctan}\left(\dfrac{12}{9}\right)$'
+          choice_cols: 2
+          key: B
+          distractors:
+            A: 'used the adjacent side 12 as opp'
+            C: 'used opp over hyp with arccos'
+            D: 'flipped the tangent ratio (adj over opp)'
+          fill: [['$\theta \approx$', '$37^\circ$']]
+          box_w: 0.9
+          work: 0.5
+          answer: 'From $\theta$: opp 9, adj 12, so $\text{arctan}(9/12) \approx 37^\circ$. (A, C, and D give $53^\circ$, the other angle.)'
+        - id: pr6
+          target: LT2
+          type: cr
+          demand: pwc
+          prompt: 'A triangle has side lengths 20, 21, and 29.'
+          parts:
+            - label: a.
+              prompt: 'Show that it is a right triangle.'
+              work: 0.7
+              answer: ['$20^2 + 21^2 = 400 + 441 = 841 = 29^2$,', 'so it is a right triangle.']
+            - label: b.
+              prompt: 'Find the two acute angles to the nearest degree.'
+              fill:
+                - ['Angle across from the 20 side $\approx$', '$44^\circ$']
+                - ['Angle across from the 21 side $\approx$', '$46^\circ$']
+              box_w: 0.9
+              work: 0.6
+              answer: '$\text{arctan}(20/21) \approx 44^\circ$; $90^\circ - 44^\circ = 46^\circ$.'
+    - cells:
+        - id: pr7
+          target: LT1
+          type: cr
+          demand: dm
+          prompt: 'A 15 ft ladder leans on a wall. The foot of the ladder is 4 ft from the wall. The ladder is safe when its angle with the ground is from $70^\circ$ to $80^\circ$. Is the ladder safe?'
+          figure: '4.10_p7'
+          fig_w: 1.1
+          work: 0.6
+          frame:
+            - ['The angle with the ground is about', '$75^\circ$', '.', 0.9]
+            - ['So the ladder', 'is', 'safe.', 0.9]
+          answer: 'Adj 4, hyp 15: $\text{arccos}(4/15) \approx 75^\circ$. That is between $70^\circ$ and $80^\circ$, so it is safe.'
+        - id: pr8
+          target: LT1
+          type: cr
+          demand: dm
+          prompt: 'Sam says $\angle A = \text{arcsin}\left(\dfrac{5}{12}\right)$. Do you agree? Explain, then find $\angle A$.'
+          figure: '4.10_p8'
+          layout: stacked
+          work: 0.6
+          frame:
+            - ['I agree / disagree with Sam because', '12 is not the hypotenuse', '.', 1.9]
+            - ['$\angle A \approx$', '$23^\circ$', '', 0.9]
+          answer: 'Disagree. 5 and 12 are the legs (opp and adj), so use arctan: $\angle A = \text{arctan}(5/12) \approx 23^\circ$. (The hypotenuse is 13.)'
+  selected: []
+
+plan: |
+  **Overview.** In 4.5 students used the $\sin^{-1}$, $\cos^{-1}$, and $\tan^{-1}$ keys to turn a ratio into an angle; 4.6 and 4.7 used the ratios to find sides. Today the keys get their names (arcsine, arccosine, arctangent), and choosing the right one is the point. Calculators in degree mode. Angles round to the nearest degree.
+
+  **Core idea.** Students see that arcsin, arccos, and arctan undo sin, cos, and tan, and that the two sides you know, named from the angle you want, pick which one to use. Spend whole-class time on the think-aloud in {ref:ex_sin} and on the {ref:ex_cos} share, where the same 4 side is adj from $D$ but opp from $E$. Printed so you can move past them: the definitions and calculator keys (box above {ref:ex_sin}), the steps that finish $\triangle ABC$ ($90^\circ - \angle C$ and $\sqrt{10^2 - 9^2}$), the ratios for $\theta$ and the angle sum in {ref:synth}, and every side length and right-angle mark. Calculators do the arithmetic.
+
+  **Objective.** Students will choose arcsin, arccos, or arctan from the two sides they know and find an acute angle to the nearest degree. **Standards.** G-SRT.C.8, G-SRT.C.6. SMP 6 (rounding).
+
+  **Quick look (30 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, 1 min share |
+  | 4-10 | Together: Problem {num:ex_sin} | Teacher + class |
+  | 10-23 | With a partner: Problems {num:legs}-{num:synth} | Students (pairs), 2 min share |
+  | 23-27 | QuickNotes | Teacher + class |
+  | 27-30 | Collect, assign practice | Teacher |
+
+  **Warm-up (4 min).** Review from 4.5. Check DEG mode first: answers like 0.51 mean radian mode. On most calculators $\sin^{-1}$ is 2nd (or SHIFT), then sin. Share: "$\sin^{-1}$ took the sine, 0.4848, and gave back the angle, $29^\circ$." A tangent of 19 means the opposite side is 19 times the adjacent side, so $\angle W$ is close to $90^\circ$.
+
+  **Together (6 min, doc camera).** Read the box. "Arcsine undoes sine: it takes the ratio and gives back the angle. It is the $\sin^{-1}$ key from the warm-up." The $-1$ is a name, not an exponent: $\sin^{-1}(0.9)$ is not $\frac{1}{\sin 0.9}$. {ref:ex_sin}: stand at $C$ and think out loud. "$AB = 9$ is across from $C$, so it is opp. $BC = 10$ is across from the right angle, so it is hyp. Opp and hyp: arcsine." Write $\text{arcsin}\left(\frac{9}{10}\right) \approx 64^\circ$ in the first box. The other two boxes print their steps, so move through them fast. Ask "What changes if we stand at $B$?" (9 becomes adj, so arccos) and send pairs to {ref:legs}.
+
+  **With a partner (13 min).** {ref:legs} (2 min), {ref:ex_cos} (4 min), {ref:synth} (5 min), then a 2 min share of {ref:ex_cos}. Turn and talk in any language, then share in English.
+  - Assessing: "Which two sides do you know? Name them from the angle." "Which inverse uses those two sides?"
+  - Advancing: "Find $\angle E$ without subtracting." (From $E$, the 4 side is opp, so $\text{arcsin}\left(\frac{4}{7}\right) \approx 35^\circ$, the same as $90^\circ - 55^\circ$.) In {ref:synth}: "How many ways can you write $\theta$?" (Three inverses and $90^\circ - \alpha$.)
+  - Watch for: arcsin in {ref:legs} (27 and 38 are both legs, so arctan); typing $\tan(27/38)$ instead of $\tan^{-1}(27/38)$; in {ref:ex_cos}, calling 7 a leg (the right angle is at $F$, so the top side is the hyp); in {ref:synth}, copying the $\theta$ ratios for $\alpha$ (from $D$, $d$ is opp and $e$ is adj).
+  - Share: one pair shows {ref:ex_cos}. Revoice it as "name the sides from the angle, then pick the inverse."
+  - MLL supports: the definitions box, labeled figures, a first box in each problem that shows the inverse, talk in any language. "Inverse" means "undo." "Opposite" means across from the angle, not "the other one."
+
+  **QuickNotes (4 min).** Students turn to page 3 only now: one bullet names the sides in {ref:ex_cos}. Read together and tie that bullet to the share.
+
+guide_notes: |
+  **Nov 19: cut for the core idea.** The warm-up is now source Activity 2 #1, #3, #4 (angle from a ratio) with the keys named: it reviews the 4.5 inverse keys every problem uses. The converse warm-up is cut (no handout problem needs it; practice 6a has it). The definitions are a box above {ref:ex_sin}, not an unnumbered item. {ref:ex_sin} is the one modeled problem and prints the steps that finish the triangle; {ref:synth} prints the $\theta$ ratios and the angle sum, so pairs write only the equations that start with $\theta =$ or $\alpha =$. "Use arcsin" and "Use arccos" are gone, and the first box in each problem asks for the inverse (on the ramp exit ticket, cut in round 2, arcsin and arctan both rounded to $9^\circ$). Cut: $\triangle GHJ$ (same arctan case as {ref:legs}), the 42-40 problem (same arcsin case as {ref:ex_sin}), $EF$ in {ref:ex_cos}, the Synthesis heading, the partner-intro hints, the Buffer row, and the Check your understanding item (8, 15, 17: the same move as {ref:legs} and the same item as 4.5 practice 1b). No extension. Practice unchanged.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item (source cool-down 2, the parking-garage ramp) was cut: its core step, two legs so arctan, is {ref:legs}, and practice 7 (the ladder) already asks "is it safe?" with frames for the angle and the conclusion. {ref:synth} is now the last problem. The handout prints only the Warm-up heading.
+
+  **Source changes.** Activity 2 #2 ($\sin A = 0.5150$) cut: repeats #1. Activity 2 #6 (legs 9, 21) and #8 (hyp 39, opp 10) cut: they repeat #5 and #7. #7 (hyp 42, opp 40) cut on Nov 19. Fixed the source notation "$\sin^{-1} = \theta$" to "$\theta = \text{arcsin}(\text{opp}/\text{hyp})$" (same for cos and tan). Practice is new (the source had none). $\triangle END$ is redrawn from the source synthesis.
+
+  **Scoring notes.** Formative, no points. Score the math, not grammar or spelling. Accept home-language words, decimal commas, $\sin^{-1}$ for arcsin, and angles to the tenth when the method is right.

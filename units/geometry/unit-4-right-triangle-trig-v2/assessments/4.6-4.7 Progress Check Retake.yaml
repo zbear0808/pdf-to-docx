@@ -1,0 +1,126 @@
+id: '4.6-4.7 Progress Check Retake'
+doc_type: assessment
+title: 'Progress check retake: lessons 4.6-4.7'
+directions: Show your work. Use a calculator in degree mode.
+numbering: auto
+set: '4.6-4.7 Progress Check'
+form: 'Retake'
+parallel_to: '4.6-4.7 Progress Check A'
+source: 'Progress Check 4.6-4.7.md, RETAKE (items 3 and 4 rewritten to match Version A; item 2 replaced on Nov 19, see changes.md)'
+total_points: 10
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'Students will understand that opposite and adjacent depend on the angle you look from.'
+    able_to: 'Students will be able to sketch and label a named right triangle and tell if an angle is opposite a side.'
+    standard: G.SRT.6
+  - id: LT2
+    understand: 'Students will understand that sine, cosine, and tangent are fixed ratios for a given acute angle.'
+    able_to: 'Students will be able to choose sin, cos, or tan and find the missing sides and angle of a right triangle.'
+    standard: G.SRT.8
+  - id: LT3
+    understand: 'Students will understand that an angle of elevation and a ground distance make a right triangle with the height.'
+    able_to: 'Students will be able to write and solve a trig equation for a height.'
+    standard: G.SRT.8
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - target: LT1
+        prompt: 'Sketch right triangle $XYZ$ with $\angle X = 90^\circ$ in the space at the right.'
+        figure: '4.6-4.7 Progress Check Retake_1'
+        fig_w: 1.8
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: pwc
+            prompt: 'Mark the right angle. Label $X$, $Y$, and $Z$.'
+            work: 0.3
+            answer: 'See the red sketch: right angle at $X$.'
+          - label: b.
+            points: 1
+            type: sr
+            demand: pwc
+            prompt: 'Is $\angle Y$ opposite side $\overline{XY}$?'
+            choices: ['YES', 'NO']
+            choice_cols: 2
+            key: B
+            answer: '$\angle Y$ is opposite $\overline{XZ}$.'
+            work: 0.3
+            frame: [['I know because', 'XY touches angle Y', '', 2.4]]
+
+  - kind: plain
+    target: LT2
+    box: '$\sin\theta = \dfrac{\text{opposite}}{\text{hypotenuse}} \quad \cos\theta = \dfrac{\text{adjacent}}{\text{hypotenuse}} \quad \tan\theta = \dfrac{\text{opposite}}{\text{adjacent}}$'
+    items:
+      - points: 1
+        target: LT2
+        type: sr
+        demand: pwc
+        prompt: 'Which equation can you use to find $x$?'
+        figure: '4.6-4.7 Progress Check Retake_2'
+        fig_w: 1.8
+        work: 0.45
+        choices:
+          - '$\sin(51^\circ) = \dfrac{x}{9.5}$'
+          - '$\sin(51^\circ) = \dfrac{9.5}{x}$'
+          - '$\cos(51^\circ) = \dfrac{x}{9.5}$'
+          - '$\cos(51^\circ) = \dfrac{9.5}{x}$'
+        choice_cols: 2
+        key: A
+        answer: '$x$ is opposite $51^\circ$ and 9.5 is the hypotenuse.'
+        distractors:
+          B: 'right ratio, flipped'
+          C: 'uses adjacent for the side across from the angle'
+          D: 'uses cosine and flips the ratio'
+      - points: 3
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: 'In $\triangle JKL$, $\angle L = 90^\circ$. Find the missing angle and the two missing sides. Round sides to the nearest tenth.'
+        figure: '4.6-4.7 Progress Check Retake_3'
+        fig_w: 2.2
+        work: 1.8
+        fill:
+          - ['$m\angle J =$', '$23^\circ$']
+          - ['$LJ \approx$', '13.8']
+          - ['$KL \approx$', '5.9']
+        fill_cols: 3
+        answer: '$90 - 67 = 23$. $LJ = 15\sin(67^\circ)$, $KL = 15\cos(67^\circ)$.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - points: 3
+        target: LT3
+        type: cr
+        demand: pwc
+        prompt:
+          - 'Kiran stands 30 ft from a tree. He looks up at the top of the tree. The angle of elevation is $63^\circ$.'
+          - '*Angle of elevation*: the angle you look up from the ground.'
+          - 'How tall is the tree? Round to the nearest foot.'
+        figure: '4.6-4.7 Progress Check Retake_4'
+        fig_w: 1.6
+        work: 1.6
+        fill:
+          - ['Equation:', '$\tan(63^\circ) = \dfrac{h}{30}$']
+          - ['$h \approx$', '59 ft']
+        fill_cols: 2
+        box_w: 1.6
+        answer: '$h = 30\tan(63^\circ) \approx 58.9$'
+        rubric:
+          - {level: 3, desc: 'Correct tangent equation, correct work, 59 ft.'}
+          - {level: 2, desc: 'Correct equation, small error solving or rounding.'}
+          - {level: 1, desc: 'Sets up a trig ratio with the right sides.'}
+          - {level: 0, desc: 'No correct ratio.'}
+
+guide_notes: |
+  **Scoring notes.** Problem 1a: 1 point for the right angle at $X$, 1 for all three letters. Problem 1b: 1 point for NO; the "I know because" box is an optional start and isn't scored on its own. Problem 3: 1 point each blank. Credit any valid method. Score the math, not English grammar or spelling. Accept home-language words and a decimal comma (5,9 = 5.9). When you go over the check in class, launch Problem 4 with 3-Reads.
+
+  **Nov 19: less is more, no headings.** Nothing cut: items 2 and 3 share LT2 but one picks the equation (MC) and the other solves a whole triangle, and LT2 carries the most points. Scaffolded: a box with the three ratio definitions now sits above item 2 (4.6 and 4.7 print them; recall isn't the target), and the directions say to use a calculator in degree mode. Opposite and adjacent stay open. Item 2 is new: hypotenuse 9.5, $x$ opposite the marked angle, key [A]. The old item ($32^\circ$, 8.5, $x$ the hypotenuse) was 4.7 practice 4 with new letters, and it put $x$ on the bottom while form A puts it on top. Cut "Circle one." (1b) and "Write an equation, then solve." (4). Items 1 and 2 no longer sit in two columns, so the layout matches form A, and the 1b start reads "I know because" again. Total stays 10.
+
+  **Ratio box.** This check prints the sin, cos, and tan definitions because lessons 4.6 and 4.7 print them and its items measure naming the sides and choosing the ratio; the Unit 4 Test prints none on purpose, since its item 1b measures recalling the ratios.
+
+  **Nov 20 (audit fixes).** Item 2 now marks $51^\circ$ at the top vertex $M$, with $x$ on the bottom leg (it was $39^\circ$ at $N$, with $x$ on the vertical leg). As on form A, "the vertical side is opposite" now picks a distractor ([C]); the key stays [A]. 1a now says "Mark the right angle." without "at $X$", which repeated the stem and gave away its first point.

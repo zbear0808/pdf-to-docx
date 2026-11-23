@@ -66,6 +66,8 @@ P34 = np.array([0.0, 0.0])
 D, E = P((1.0, -0.6), (0.6, 1.0))
 D2, E2 = dilate([D, E], 2, P34)
 assert _parallel(D, E, D2, E2)
+# Why bullet: angle PD'E' is the image of angle PDE (corresponding angles on line PD'), marked with one arc each
+assert np.isclose(angle_deg(D, P34, E), angle_deg(D2, P34, E2))
 
 
 @figure(f"{S}_3.4")
@@ -79,6 +81,8 @@ def fig_34() -> Figure:
     f.seg(P34, D2, dashed=True, lw=0.8)
     f.seg(P34, E2, dashed=True, lw=0.8)
     f.dots([P34, D, E, D2, E2])
+    f.arc(D, P34, E, r=0.36)
+    f.arc(D2, P34, E2, r=0.36)
     f.label(P34, "P", direction=(-0.3, 1))
     f.label(D, "D", direction=(-1, -0.4))
     f.label(E, "E", direction=(-1, 0.3))

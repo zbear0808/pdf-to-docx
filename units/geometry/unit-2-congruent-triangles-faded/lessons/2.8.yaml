@@ -1,0 +1,288 @@
+id: '2.8'
+title: The Perpendicular Bisector Theorem
+notes_title: Perpendicular Bisector Theorem and converses
+source: 'Lesson 2.8 Student Notes and Practice Problems; IM Geo.2 Lesson 8 teacher guide (plan and key only)'
+framing: >-
+  If a point is the same distance from $A$ and $B$, does it have to be on the perpendicular bisector of $\overline{AB}$? Does it work the other way?
+numbering: auto
+headings: warmup
+targets:
+  - id: LT1
+    understand: 'Students will understand that if $C$ is the same distance from $A$ and $B$, a segment from $C$ to $\overline{AB}$ (a median or an angle bisector) makes two triangles that are congruent by SAS, so the two angles at $D$ are congruent. The two angles also make a straight angle, so each is $90^\circ$ and $C$ is on the perpendicular bisector of $\overline{AB}$.'
+    able_to: 'Students will be able to critique an argument for the theorem (what it already shows, what it still needs) and complete a two-column proof that a point the same distance from $A$ and $B$ is on the perpendicular bisector of $\overline{AB}$.'
+    standard: G-CO.C.9
+  - id: LT2
+    understand: 'Students will understand that the converse of an if-then statement switches the if part and the then part. The converse of a true statement is not always true, so it needs its own proof. This converse is true: SAS with the two right angles at the midpoint.'
+    able_to: 'Students will be able to describe how a statement and its converse are related, and complete a two-column proof that a point on the perpendicular bisector of $\overline{AB}$ is the same distance from $A$ and $B$.'
+    standard: G-CO.C.9
+
+sections:
+  - kind: warmup
+    box:
+      - '**Vocabulary**'
+      - '*Median:* a segment that connects a vertex of a triangle to the midpoint of the opposite side.'
+      - '*Angle bisector:* a line, segment, or ray that cuts an angle into two congruent angles.'
+      - '*Altitude:* a perpendicular segment from a vertex of a triangle to the line containing the opposite side.'
+      - '*Perpendicular bisector:* a line that is perpendicular to a segment at its midpoint.'
+    items:
+      - minutes: 3
+        target: LT1
+        type: cr
+        demand: pwoc
+        source: '2.8 Student Notes, warm-up and Vocabulary box'
+        prompt:
+          - 'Mark each fact on $\triangle ACR$.'
+          - '- $F$ is the midpoint of $\overline{AR}$, so $\overline{CF}$ is a median.'
+          - '- $\angle ACE \cong \angle RCE$, so $\overline{CE}$ is an angle bisector.'
+          - '- $\overline{CD} \perp \overline{AR}$, so $\overline{CD}$ is an altitude.'
+        figure: '2.8_warmup'
+        work: 0.5
+        answer: ['One tick on $\overline{AF}$ and $\overline{FR}$, and one arc on $\angle ACE$ and $\angle RCE$.', 'A right-angle mark at $D$.']
+
+  - kind: together
+    items:
+      - id: noah
+        minutes: 6
+        target: LT1
+        type: cr
+        demand: dm
+        source: '2.8 Student Notes, Activity 1 (Noah)'
+        prompt:
+          - 'Noah was asked to prove: if $C$ is the same distance from $A$ as it is from $B$, then $C$ is on the perpendicular bisector of $\overline{AB}$.'
+          - 'Noah''s argument: *I drew an angle bisector of $\angle ACB$. The point where the angle bisector hits $\overline{AB}$ is $D$. So $\triangle ACD \cong \triangle BCD$, which means $\overline{AD} \cong \overline{BD}$. So $D$ is a midpoint and $\overline{CD}$ is the perpendicular bisector.*'
+          - 'Noah is right that $\triangle ACD \cong \triangle BCD$ by SAS:'
+          - '- $\overline{AC} \cong \overline{BC}$ (given)'
+          - '- $\angle ACD \cong \angle BCD$ (angle bisector)'
+          - '- $\overline{CD} \cong \overline{CD}$ (reflexive property)'
+          - 'So $\overline{AD} \cong \overline{BD}$ and $\angle ADC \cong \angle BDC$ (CPCTC), and $D$ is the midpoint of $\overline{AB}$.'
+          - 'Noah still needs to show that $\overline{CD} \perp \overline{AB}$.'
+          - 'Explain why $\angle ADC$ and $\angle BDC$ are right angles.'
+        figure: '2.8_noah'
+        fig_w: 1.45
+        box: 1.2
+        answer:
+          - '$\angle ADC$ and $\angle BDC$ make a straight angle, so they add to $180^\circ$.'
+          - 'They are congruent, so each is $90^\circ$, and $\overline{CD} \perp \overline{AB}$.'
+          - '$D$ is the midpoint too, so $\overline{CD}$ is the perpendicular bisector of $\overline{AB}$.'
+        page_break_after: true
+
+  - kind: partner
+    items:
+      - id: median
+        minutes: 6
+        target: LT1
+        type: cr
+        demand: pwc
+        source: '2.8 Student Notes, Activity 2 #1-3'
+        prompt:
+          - 'Complete the proof.'
+          - '**Given:** $\triangle ABC$ is isosceles with $\overline{AC} \cong \overline{BC}$ ($C$ is the same distance from $A$ as it is from $B$), and $\overline{CD}$ is a median.'
+          - '**Prove:** $\overline{CD}$ is the perpendicular bisector of $\overline{AB}$, so $C$ is on the perpendicular bisector.'
+        figure: '2.8_median'
+        fig_w: 1.45
+        proof:
+          rows:
+            - ['$\triangle ABC$ is isosceles with $\overline{AC} \cong \overline{BC}$', 'Given']
+            - ['$\angle A \cong \angle B$', 'Isosceles Triangle Theorem']
+            - ['$\overline{CD}$ is a median', 'Given']
+            - ['$\overline{AD} \cong \overline{BD}$', 'Definition of median']
+            - ['$\triangle ADC \cong \triangle BDC$', 'SAS (rows 1, 2, 4)']
+            - ['$\angle ADC \cong \angle BDC$', 'CPCTC']
+            - ['$m\angle ADC + m\angle BDC = 180^\circ$', {ans: 'Linear pair ($A$, $D$, $B$ are on a line)'}]
+            - [{ans: '$m\angle ADC = m\angle BDC = 90^\circ$'}, {ans: 'Congruent (row 6) and add to $180^\circ$ (row 7)'}]
+            - ['$\overline{CD}$ is the perpendicular bisector of $\overline{AB}$', {ans: '$D$ is the midpoint (row 4) and $\overline{CD} \perp \overline{AB}$ (row 8)'}]
+      - id: compare
+        minutes: 4
+        target: LT2
+        type: cr
+        demand: pwc
+        source: '2.8 Student Notes, Synthesis (moved before the converse proof)'
+        prompt:
+          - 'How is Statement 2 different from Statement 1?'
+          - 'Statement 1 ({ref:median} proved it): **If** $C$ is the same distance from $A$ as it is from $B$, **then** $C$ is on the perpendicular bisector of $\overline{AB}$.'
+          - 'Statement 2: **If** $P$ is on the perpendicular bisector of $\overline{AB}$, **then** $P$ is the same distance from $A$ as it is from $B$.'
+        box: 1.2
+        answer: ['Both use the same two ideas: a point the same distance from $A$ and $B$, and the perpendicular bisector of $\overline{AB}$.', 'The if part and the then part are switched: Statement 2 is the converse of Statement 1.', 'The letters $C$ and $P$ do not matter.']
+        page_break_after: true
+      - id: converse
+        minutes: 6
+        target: LT2
+        type: cr
+        demand: pwc
+        source: '2.8 Student Notes, Not Too Close, Not Too Far'
+        prompt:
+          - 'Prove Statement 2: if $P$ is on the perpendicular bisector of $\overline{AB}$, then $P$ is the same distance from $A$ as it is from $B$.'
+          - '**Given:** $\overleftrightarrow{PM}$ is the perpendicular bisector of $\overline{AB}$: $\overline{AM} \cong \overline{BM}$ and $\overline{PM} \perp \overline{AB}$.'
+          - '**Prove:** $\overline{AP} \cong \overline{BP}$'
+        figure: '2.8_converse'
+        proof:
+          height: 0.5
+          rows:
+            - ['$\overline{AM} \cong \overline{BM}$', 'Given']
+            - ['$\overline{PM} \perp \overline{AB}$', 'Given']
+            - [{ans: '$\angle AMP \cong \angle BMP$'}, {ans: 'Both are right angles ($\overline{PM} \perp \overline{AB}$)'}]
+            - [{ans: '$\overline{PM} \cong \overline{PM}$'}, {ans: 'Reflexive Property'}]
+            - [{ans: '$\triangle AMP \cong \triangle BMP$'}, {ans: 'SAS (rows 1, 3, 4)'}]
+            - ['$\overline{AP} \cong \overline{BP}$', {ans: 'CPCTC'}]
+
+  - kind: notes
+    new_page: false
+
+notes_figure: '2.8_notes'
+notes_fig_w: 1.7
+quicknotes:
+  - target: LT1
+    title: 'I can critique and explain a proof of the Perpendicular Bisector Theorem.'
+    bullets:
+      - 'If a point is the same distance from $A$ as it is from $B$, then it is on the perpendicular bisector of $\overline{AB}$.'
+      - 'Why ({ref:median}): the median $\overline{CD}$ makes two congruent triangles, so the two angles at $D$ are congruent. The two angles also make a straight angle, so each is $90^\circ$. An angle bisector from $C$ works too ({ref:noah}).'
+  - target: LT2
+    title: 'I can explain what a converse is and prove the converse.'
+    bullets:
+      - '**Converse:** the statement you get when you switch the if part (hypothesis) and the then part (conclusion) of an if-then statement.'
+      - 'The converse of a true statement is not always true. True: "If a shape is a square, then it has 4 sides." Its converse is false: "If a shape has 4 sides, then it is a square."'
+      - 'If a point is on the perpendicular bisector of $\overline{AB}$, then it is the same distance from $A$ as it is from $B$.'
+      - 'Both statements are true. Together they are the **Perpendicular Bisector Theorem**.'
+      - 'A statement and its converse are both true when they come from a definition.'
+
+practice:
+  title: 'Perpendicular Bisector Theorem: practice'
+  rows:
+    - cells:
+        - id: pr_converse
+          target: LT2
+          source: '2.8 Practice Problems #1'
+          prompt: 'Each statement is always true. Select **all** the statements whose converse is also true.'
+          select_all: true
+          choices:
+            - '*Statement:* If two angles are vertical, then they are congruent. *Converse:* If two angles are congruent, then they are vertical.'
+            - '*Statement:* If two lines are perpendicular, then they intersect to form four right angles. *Converse:* If two lines intersect to form four right angles, then they are perpendicular.'
+            - '*Statement:* If a point is equidistant (the same distance) from the two endpoints of a segment, then it lies on the perpendicular bisector of the segment. *Converse:* If a point lies on the perpendicular bisector of a segment, then it is equidistant from the endpoints of the segment.'
+            - '*Statement:* In an isosceles triangle, the base angles are congruent. *Converse:* If the base angles of a triangle are congruent, then the triangle is isosceles.'
+            - '*Statement:* If two angles form a straight angle, then they are supplementary. *Converse:* If two angles are supplementary, then they form a straight angle.'
+          key: 'B, C, D'
+          distractors:
+            A: 'two $40^\circ$ angles in different places are congruent but not vertical'
+            E: 'a $50^\circ$ angle and a $130^\circ$ angle in different places are supplementary but do not make a straight angle'
+          answer:
+            - 'A: false. Two $40^\circ$ angles in different places are congruent but not vertical.'
+            - 'B: true. Lines that form four right angles are perpendicular by definition.'
+            - 'C: true. It is the Perpendicular Bisector Theorem; Problems 2 and 4 of the handout prove both halves.'
+            - 'D: true. In $\triangle ABC$ with $\angle A \cong \angle B$, bisect $\angle C$. The angle sum and ASA give $\overline{CA} \cong \overline{CB}$.'
+            - 'E: false. A $50^\circ$ and a $130^\circ$ angle in different places are supplementary but do not form a straight angle.'
+          work: 1.1
+    - cells:
+        - id: pr_kiran
+          target: LT1
+          source: '2.8 Practice Problems #2'
+          prompt: 'In isosceles $\triangle DAC$, $\overline{AD} \cong \overline{AC}$. Kiran knows that the base angles of an isosceles triangle are congruent. What else does Kiran need to know to show that $\overline{AB}$ is the perpendicular bisector of $\overline{CD}$?'
+          figure: '2.8_pr_kiran'
+          work: 1.6
+          answer:
+            - 'Any one of these facts:'
+            - '$B$ is the midpoint of $\overline{DC}$; $\overline{AB}$ bisects $\angle DAC$;'
+            - '$\overline{AB} \perp \overline{DC}$; or $\angle ABD \cong \angle ABC$.'
+            - 'Example: $\overline{DB} \cong \overline{CB}$ gives $\triangle ABD \cong \triangle ABC$ (SAS).'
+            - 'So $\angle ABD \cong \angle ABC$, a linear pair: each is $90^\circ$.'
+        - id: pr_median
+          target: LT1
+          source: '2.8 Practice Problems #5'
+          prompt:
+            - '$\overline{CD}$ is a median of $\triangle ABC$. The perimeter of $\triangle ABC$ is 60, and $AC = 22$.'
+            - 'The tick marks show $BC = AC = 22$, so $AB = 60 - 44 = 16$.'
+          figure: '2.8_pr_median'
+          fill: [['$AD =$', '8']]
+          box_w: 0.9
+          work: 0.45
+          answer: ['$D$ is the midpoint of $\overline{AB}$ (definition of median).', 'So $AD = 16 \div 2 = 8$.']
+    - cells:
+        - id: pr_bisector
+          target: LT1
+          source: '2.8 Practice Problems #6'
+          prompt:
+            - '$\overline{CD}$ is the angle bisector of $\angle ACB$, and $m\angle A = 54^\circ$.'
+            - 'By the Isosceles Triangle Theorem, $m\angle B = 54^\circ$.'
+            - 'So $m\angle ACB = 180^\circ - 108^\circ = 72^\circ$.'
+          figure: '2.8_pr_bisector'
+          fill: [['$m\angle ACD =$', '$36^\circ$']]
+          box_w: 0.9
+          work: 0.45
+          answer: 'The bisector cuts $\angle ACB$ in half: $72^\circ \div 2 = 36^\circ$.'
+        - id: pr_altitude
+          target: LT1
+          source: '2.8 Practice Problems #7'
+          prompt:
+            - '$\overline{CD}$ is an altitude of $\triangle ABC$. The perimeter of $\triangle ABC$ is 42, $m\angle ACD = 38^\circ$, and $AD = 8$.'
+            - 'In $\triangle ACD$, $m\angle A = 180^\circ - 90^\circ - 38^\circ = 52^\circ$.'
+            - '$CA = CB$ (tick marks), so $CB = (42 - AB) \div 2$.'
+          figure: '2.8_pr_altitude'
+          fill: [['$m\angle B =$', '$52^\circ$'], ['$CB =$', '13']]
+          box_w: 0.9
+          work: 1.3
+          answer:
+            - '$m\angle B = m\angle A = 52^\circ$ (Isosceles Triangle Theorem).'
+            - '$CA = CB$, so $C$ is on the perpendicular bisector.'
+            - 'Only one line through $C$ is perpendicular to $\overline{AB}$.'
+            - 'So the altitude is on the perpendicular bisector.'
+            - '$DB = 8$ and $AB = 16$, so $CB = (42 - 16) \div 2 = 13$.'
+    - heading: SBA review
+      cells:
+        - id: pr_point
+          source: '2.8 Practice Problems #8'
+          prompt: 'Is $(3, 4)$ a point on the line $y = -x + 2$? Explain.'
+          work: 1.0
+          answer: 'No. When $x = 3$, $y = -3 + 2 = -1$, and $-1 \neq 4$.'
+        - id: pr_value
+          source: '2.8 Practice Problems #9'
+          prompt: 'If $y = 4x - 1$ and $x = \frac{1}{2}$, what is the value of $3(2y + 2)$?'
+          work: 1.0
+          answer: ['$y = 4 \cdot \frac{1}{2} - 1 = 1$', '$3(2 \cdot 1 + 2) = 3 \cdot 4 = 12$']
+  selected: [[1, 'B, C, D'], [2, '$B$ is the midpoint of $\overline{DC}$ (or any of 3 other facts)'], [3, '8'], [4, '$36^\circ$'], [5, '$52^\circ$, 13'], [6, 'No'], [7, '12']]
+
+plan: |
+  **Overview.** Lessons 2.6 and 2.7 proved SAS and ASA and used them in two-column proofs, including the Isosceles Triangle Theorem (2.6). Today students prove both halves of the Perpendicular Bisector Theorem: a point the same distance from $A$ and $B$ is on the perpendicular bisector of $\overline{AB}$, and the converse. Lesson 2.9 uses the first half in the SSS proof.
+
+  **Core idea.** Students see that the segment from $C$ to $D$ on $\overline{AB}$ splits the figure into two triangles that are congruent by SAS, so the two angles at $D$ are congruent, and congruent angles that make a straight line are $90^\circ$ each, so $\overline{CD}$ is the perpendicular bisector. Switching the if part and the then part makes the converse, a new statement that needs its own proof. Known steps are printed, statement and reason; only the new steps are blank: why the angles at $D$ are right angles ({ref:noah}, {ref:median} rows 8-9), how the two statements differ ({ref:compare}), and the row where the converse proof connects the pieces ({ref:converse} row 3: the given perpendicular becomes the right angles SAS needs). Printed so you can move past them: the definitions and each warm-up segment's name, every given mark, what Noah gets right (SAS, CPCTC, the midpoint), {ref:median} rows 1-6 and the row 7 statement (givens, Isosceles Triangle Theorem, median, SAS, CPCTC), and the givens of {ref:converse}. Faded version: the later problems print less, so students carry the whole argument in {ref:converse}. Spend whole-class time on the right-angle step in {ref:noah} and on the {ref:compare} share.
+
+  **Objectives.** (1) Critique an argument for the Perpendicular Bisector Theorem, and complete a proof that a point the same distance from $A$ and $B$ is on the perpendicular bisector of $\overline{AB}$. (2) Describe how a statement and its converse are related, and prove the converse. **Standards.** G-CO.C.9. SMP 3, 6.
+
+  **Quick look (32 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up | Students, 1 min share |
+  | 3-9 | Together: Problem 1 | Teacher + class |
+  | 9-15 | With a partner: Problem 2 | Students (pairs), 1 min share |
+  | 15-19 | With a partner: Problem 3 | Students (pairs), 1 min share |
+  | 19-25 | With a partner: Problem 4 | Students (pairs) |
+  | 25-29 | QuickNotes | Teacher + class |
+  | 29-32 | Collect, assign practice | Teacher |
+
+  **Warm-up (3 min).** Review of the marks and the words Problems 1-2 use. Each fact prints its segment's name; students draw the marks. Share: one tick on $\overline{AF}$ and $\overline{FR}$, one arc on each angle at $C$, a right-angle mark at $D$. Ask "Could one segment be all three?" and leave it open.
+
+  **Together (6 min, doc camera).** Read Noah's task and argument aloud before anyone writes. The next lines print what he gets right: SAS, then CPCTC, the 2.6 isosceles proof, so move fast. Slow down on the box: Noah never shows $\overline{CD} \perp \overline{AB}$. Ask "What do $\angle ADC$ and $\angle BDC$ make together?" Then model it: they make a straight angle, so they add to $180^\circ$; they are congruent, so each is $90^\circ$. Draw the right-angle mark at $D$. With the midpoint, $\overline{CD}$ is the perpendicular bisector. Problem 2 asks for this step again.
+  - Optional stem, said out loud: "I know the angles at $D$ are right angles because ...".
+
+  **Partner work (16 min).** Problems 2-4. Hand out page 3 only after the Problem 3 share: its QuickNotes define *converse*.
+  - {ref:median} (6 min): rows 1-6 and the row 7 statement print. Pairs write the row 7 reason (linear pair, as in {ref:noah}), row 8 (congruent, add to $180^\circ$, so $90^\circ$ each), and the row 9 reason (midpoint, perpendicular). Share: rows 7-9.
+  - Assessing: "What do rows 6 and 7 say about $\angle ADC$ and $\angle BDC$?" "What two things does a perpendicular bisector need? Which rows give them?"
+  - Advancing: "What if $\overline{CD}$ were an altitude instead of a median? What would you know, and what would you still have to prove?" (The right angles are given. The angle sum gives $\angle ACD \cong \angle BCD$, then ASA gives $\overline{AD} \cong \overline{BD}$. Practice 5 is this case.)
+  - If a student asks why row 5 isn't SSS: it would be circular here. $\overline{CD} \cong \overline{CD}$ isn't a row, and Lesson 2.9 proves SSS with today's theorem.
+  - {ref:compare} (4 min with the share): only the two statements are printed; pairs work out what they share and how they differ. Take one answer and name it: switching the if part and the then part makes the **converse**. The converse of a true statement is not always true, so Statement 2 needs its own proof. Hand out page 3.
+  - {ref:converse} (6 min): only the givens and the row 6 statement print; pairs write the whole argument. Row 3 connects the pieces: the given $\overline{PM} \perp \overline{AB}$ makes $\angle AMP$ and $\angle BMP$ right angles, the angle SAS needs in row 5. In {ref:median} the right angles were what we proved; here they come from the given. Say that switch out loud: it is the converse.
+  - Watch for: Diego's move from the source notes (draw the perpendicular bisector through $C$ and call it proved; ask "How do you know that line goes through $C$?"); "it looks perpendicular" in {ref:noah} (2.6 QuickNotes: don't assume it unless it is marked or given); angles that aren't at $M$ in row 3 ($\angle A \cong \angle B$ isn't known yet; ask "Which angle is between $\overline{AM}$ and $\overline{PM}$?"); a congruence out of order in row 5 ($\triangle AMP \cong \triangle MBP$; ask "Which vertex matches $A$?"); "different letters" as the only difference in {ref:compare} (ask "What does each statement start with? What does it end with?").
+  - MLL supports: Noah's argument read aloud, the optional stems, the Vocabulary box, labeled figures with every given marked. *Median* has two meanings: the middle number of a data set, and here a segment to a midpoint. *Converse* in everyday English means to talk. Cognates for Spanish speakers: perpendicular, *mediana* (median), *bisectriz* (angle bisector), *mediatriz* (perpendicular bisector). Converse is *recíproco*, so it is not a cognate. Point to the dashed line every time you say "perpendicular bisector." In {ref:compare}, underline the if part and box the then part of each statement at the doc camera. Partner talk in any language.
+
+  **QuickNotes (4 min).** Read together. LT1: the first bullet is Statement 1; point to {ref:median} for the Why bullet and to {ref:noah} for the angle bisector. LT2: read the definition, then the square example, and ask for one more true statement with a false converse. Both halves are true, so they make one theorem. Lesson 2.9 uses the first half.
+
+guide_notes: |
+  **Faded version (Nov 23).** Same problems, figures, QuickNotes, and practice as the standard 2.8, with less printed toward the end. {ref:median}: the row 7 reason (linear pair) is blank. {ref:compare}: the line about what the statements share is cut. {ref:converse}: only the givens and the Prove statement print. Items 25 min, plan 32 min.
+
+  **Nov 22: new lesson** from the teacher's Lesson 2.8 Student Notes and Practice Problems, fit to 40 minutes around the core idea. The IM teacher guide is used for the plan and key only.
+
+  **Nov 22 (Fix): known steps printed, new steps blank.** Printed now: the warm-up names, what Noah gets right, {ref:median} rows 5-7 (SAS, CPCTC, linear pair), what the {ref:compare} statements share, and {ref:converse} rows 5 and 6 (SAS, CPCTC; row 3 is the blank now). Practice 3-5 print the earlier-lesson steps; each keeps one reviewed skill (median, angle bisector, Isosceles Triangle Theorem) plus, in practice 5, today's step ($CB$). Item minutes went from 30 to 22.
+
+  **Source.** Same problems and order, except that the Synthesis ({ref:compare}) moved before the converse proof (IM order), so it gives the reason for a second proof. Cut: Diego (his line through $C$ assumes the conclusion), Jada (her argument is {ref:median} stopped before the right angles), the mark-the-diagram steps (the marks are printed), Activity 2 #2 (now row 2) and #5 (Noah's case), and the IM-only parts (warm-up, extension, cool-down, Math Community, reflection). The warm-up's right-angle mark at $D$ moved to the key. {ref:median} now ends with "$\overline{CD}$ is the perpendicular bisector" (the source stopped at $\overline{AB} \perp \overline{CD}$). The THEOREM and converse boxes moved to the QuickNotes.
+
+  **Practice.** Cut source #3 (the bowtie from Lesson 2.7 Problem 2) and #4 (SAS on Kiran's $\triangle DAC$, review from 2.6); renumbered 1-7. Practice 1: D is the converse of the Isosceles Triangle Theorem, which the class hasn't stated, so the key proves it with ASA and the angle sum (2.7). Practice 2: $A$ is already on the perpendicular bisector of $\overline{DC}$ (today's theorem), so any one of the four facts makes line $AB$ that bisector. Practice 5: also accept the ASA route from the plan's advancing question.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same", "equal", or a home-language word for congruent; "straight line" or "makes 180" for linear pair; "CPCTC" or "matching parts" for corresponding parts; "definition of perpendicular bisector" for row 9 of {ref:median}. In {ref:compare}, accept "backwards" or "switched" when the student says which parts switch. Accept rows in a different valid order, and either side first in a congruence.

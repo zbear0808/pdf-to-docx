@@ -13,35 +13,24 @@ from lesson_builder.figures import (Figure, P, angle_deg, collinear, dist, figur
 S = '2.7'
 
 
-# ---------------------------------------------------------------- warm-up: DOG (two angles) vs CAT (ASA)
-@figure(f"{S}_warmup_key")
-def warmup_key() -> Figure:
-    """Key for the warm-up drawing: two DOGs of different sizes (same angles) and the one CAT (CA = 5 cm)."""
-    big = triangle_from_angles((0, 0), (4.0, 0), 75, 45)
-    small = triangle_from_angles((5.6, 0), (7.8, 0), 75, 45)
-    C, A, T = triangle_from_angles((9.6, 0), (14.6, 0), 75, 45)
-    for tri in (big, small, (C, A, T)):
+# ---------------------------------------------------------------- warm-up: two DOGs (same two angles, two sizes)
+@figure(f"{S}_warmup")
+def warmup() -> Figure:
+    """Two triangles DOG with angle D = 75 and angle G = 45, drawn at different sizes (given; angle O = 60)."""
+    big = triangle_from_angles((0, 0), (4.2, 0), 75, 45)
+    small = triangle_from_angles((5.8, 0), (8.9, 0), 75, 45)
+    for tri in (big, small):
         assert np.isclose(angle_deg(tri[2], tri[0], tri[1]), 60)
-    assert np.isclose(dist(C, A), 5) and not np.isclose(dist(big[0], big[1]), dist(small[0], small[1]))
-    f = Figure(width_in=4.6, height_in=1.75)
-    L = "answer"
-    for D, G, O in (big, small):
-        f.poly([D, G, O], layer=L)
-        f.dots([D, G, O], layer=L)
-        f.label(D, "D", layer=L, direction=(-1, -0.4))
-        f.label(G, "G", layer=L, direction=(1, -0.4))
-        f.label(O, "O", layer=L, direction=(0, 1))
-    f.angle_label(big[0], big[1], big[2], r'$75^\circ$', layer=L)
-    f.angle_label(big[1], big[0], big[2], r'$45^\circ$', layer=L, dist=1.5)
-    f.text((3.9, -0.95), "two DOGs: same angles, different sizes", layer=L)
-    f.poly([C, A, T], layer=L)
-    f.dots([C, A, T], layer=L)
-    f.label(C, "C", layer=L, direction=(-1, -0.4))
-    f.label(A, "A", layer=L, direction=(1, -0.4))
-    f.label(T, "T", layer=L, direction=(0, 1))
-    f.angle_label(C, A, T, r'$75^\circ$', layer=L)
-    f.angle_label(A, C, T, r'$45^\circ$', layer=L, dist=1.5)
-    f.side_label(C, A, "5 cm", center=T, layer=L)
+    assert not np.isclose(dist(big[0], big[1]), dist(small[0], small[1]))
+    f = Figure(width_in=3.6, height_in=1.5)
+    for i, (D, G, O) in enumerate((big, small)):
+        f.poly([D, G, O])
+        f.dots([D, G, O])
+        f.label(D, "D", direction=(-1, -0.4))
+        f.label(G, "G", direction=(1, -0.4))
+        f.label(O, "O", direction=(0, 1))
+        f.angle_label(D, G, O, r'$75^\circ$', dist=0.95 if i else 1.1, size=9 if i else None, fixed=bool(i))
+        f.angle_label(G, D, O, r'$45^\circ$', dist=1.35 if i else 1.5, size=9 if i else None, fixed=bool(i))
     return f
 
 
@@ -53,21 +42,20 @@ assert is_rigid_image(_L, _R) and not needs_reflection(_L, _R)
 
 @figure(f"{S}_asa_pair")
 def asa_pair() -> Figure:
-    """Two congruent triangles. Key: one labeling with W -> D, X -> E, Y -> F and the ASA marks."""
+    """Two congruent triangles, labeled W -> D, X -> E, Y -> F, with the ASA marks (all given)."""
     W, X, Y = _L
     D, E, F = _R
     f = Figure(width_in=2.8, height_in=1.9)
     f.poly(_L)
     f.poly(_R)
-    L = "answer"
-    f.label_poly(_L, "WXY", layer=L)
-    f.label_poly(_R, "DEF", layer=L)
-    mark_congruent(f, [((W, X), (D, E)), ((W, X, Y), (D, E, F)), ((X, W, Y), (E, D, F))], layer=L,
+    f.label_poly(_L, "WXY")
+    f.label_poly(_R, "DEF")
+    mark_congruent(f, [((W, X), (D, E)), ((W, X, Y), (D, E, F)), ((X, W, Y), (E, D, F))],
                    size=0.16, r=[0.42, 0.42])
     return f
 
 
-# ---------------------------------------------------------------- bowtie (notes ASA example and practice 1)
+# ---------------------------------------------------------------- bowtie (Together 2: ASA example)
 _A, _C = P((0, 0), (2.2, 1.8))
 _E = midpoint(_A, _C)
 _D = np.array((0.0, 1.15))
@@ -76,7 +64,9 @@ assert collinear(_D, _E, _B) and is_parallel(_D, _A, _C, _B)
 assert np.isclose(angle_deg(_A, _D, _E), angle_deg(_C, _B, _E))
 
 
-def _bowtie(vertical_marks: bool) -> Figure:
+@figure(f"{S}_bowtie")
+def bowtie() -> Figure:
+    """Angle A, side AE, and the vertical angles at E marked; DEA matches BEC."""
     f = Figure(width_in=2.0, height_in=1.65)
     f.seg(_D, _A)
     f.seg(_A, _C)
@@ -88,23 +78,9 @@ def _bowtie(vertical_marks: bool) -> Figure:
     f.label(_E, "E", direction=(0, 1))
     f.label(_C, "C", direction=(0.6, 1))
     f.label(_B, "B", direction=(1, -0.3))
-    groups = [((_A, _E), (_E, _C)), ((_A, _D, _E), (_C, _B, _E))]
-    if vertical_marks:
-        groups.append(((_E, _D, _A), (_E, _B, _C)))
+    groups = [((_A, _E), (_E, _C)), ((_A, _D, _E), (_C, _B, _E)), ((_E, _D, _A), (_E, _B, _C))]
     mark_congruent(f, groups, size=0.13, r=[0.3, 0.26])
     return f
-
-
-@figure(f"{S}_bowtie")
-def bowtie() -> Figure:
-    """Together 2: angle A, side AE, vertical angle at E marked; DEA matches BEC."""
-    return _bowtie(vertical_marks=True)
-
-
-@figure(f"{S}_pr_bowtie")
-def pr_bowtie() -> Figure:
-    """Practice 1: only the given marks (angle A, angle C, AE = CE); students find the vertical angles."""
-    return _bowtie(vertical_marks=False)
 
 
 # ---------------------------------------------------------------- partner: parallelogram ABCD (Cool-down figure)
@@ -116,7 +92,7 @@ assert np.isclose(angle_deg(_PD, _PA, _PB), angle_deg(_PB, _PC, _PD))
 
 @figure(f"{S}_para")
 def para() -> Figure:
-    """Student: labeled ABCD. Key: parallel arrows, diagonal BD, and the two pairs of alternate interior angles."""
+    """Given: ABCD with parallel arrows and diagonal BD. Key: the two pairs of alternate interior angles."""
     A, B, C, D = _PA, _PB, _PC, _PD
     f = Figure(width_in=2.5, height_in=1.35)
     f.poly([A, B, C, D])
@@ -125,17 +101,16 @@ def para() -> Figure:
     f.label(B, "B", direction=(0.5, 1))
     f.label(C, "C", direction=(0.5, -1))
     f.label(D, "D", direction=(-0.5, -1))
-    L = "answer"
-    mark_parallel(f, [(D, A), (C, B)], n=1, layer=L, size=0.15)
-    mark_parallel(f, [(A, B), (D, C)], n=2, layer=L, size=0.15)
-    f.seg(B, D, layer=L)
-    mark_congruent(f, [((B, A, D), (D, C, B)), ((D, A, B), (B, C, D))], layer=L, r=[0.42, 0.62])
+    mark_parallel(f, [(D, A), (C, B)], n=1, size=0.15)
+    mark_parallel(f, [(A, B), (D, C)], n=2, size=0.15)
+    f.seg(B, D)
+    mark_congruent(f, [((B, A, D), (D, C, B)), ((D, A, B), (B, C, D))], layer="answer", r=[0.42, 0.62])
     return f
 
 
 @figure(f"{S}_mnkl")
 def mnkl() -> Figure:
-    """CYU: parallelogram MNKL with MN parallel to KL and NK parallel to ML (given marks only)."""
+    """Practice 1: parallelogram MNKL with MN parallel to KL and NK parallel to ML (given marks only)."""
     M, N, K, L = P((0, 0), (0.6, 1.1), (2.6, 1.1), (2.0, 0))
     assert is_parallel(M, N, L, K) and is_parallel(N, K, M, L)
     f = Figure(width_in=1.9, height_in=0.95)

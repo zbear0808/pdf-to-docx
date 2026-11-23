@@ -1,7 +1,7 @@
 """Lesson 3.11 figures: side splitter theorem. Given layer = student copy, answer layer (red) = key."""
 import numpy as np
 
-from lesson_builder.figures import Figure, P, angle_deg, assert_lengths, dilate, dist, figure, rotate, translate
+from lesson_builder.figures import Figure, P, angle_deg, assert_lengths, dilate, dist, figure, rotate
 
 
 def _par(f, a, b, s, n=1, layer="given"):
@@ -51,29 +51,6 @@ def warmup() -> Figure:
     return f
 
 
-@figure("3.11_t2")
-def together2() -> Figure:
-    # Together 2: BD || FG, BD = 5, FG = 15, EG = 12, EB = 2.5 -> k = 3, ED = 4, EF = 7.5
-    F, G = P((0, 0), (15, 0))
-    ex = (7.5 ** 2 - 12 ** 2 + 15 ** 2) / 30
-    E = np.array([ex, -np.sqrt(7.5 ** 2 - ex ** 2)])
-    B, D = dilate([F, G], 1 / 3, E)
-    assert np.isclose(dist(E, F), 7.5) and np.isclose(dist(E, G), 12) and np.isclose(dist(B, D), 5)
-    assert np.isclose(dist(E, B), 2.5) and np.isclose(dist(E, D), 4) and _is_par(B, D, F, G)
-    assert_lengths([(F, G, 15), (B, D, 5), (E, G, 12), (E, B, 2.5)])
-    f = Figure(width_in=2.4, height_in=1.3)
-    f.poly([F, G, E])
-    f.seg(B, D)
-    _par(f, F, G, 0.9)
-    _par(f, B, D, 0.9)
-    f.dots([E, F, G, B, D])
-    _labels(f, [F, G, E, B, D], [("F", (-1, 0.5)), ("G", (1, 0.5)), ("E", (0, -1)), ("B", (-1, -0.3)),
-                                 ("D", (1, -0.3))])
-    f.side_label(F, G, "15", center=E, size=11)
-    f.side_label(B, D, "5", center=E, size=11)
-    return f
-
-
 # Street map (hundreds of feet). Library L; Lincoln Rd is LPQ, Oak Ave is LAB; Maple St || Chestnut St.
 _L, _Pm, _Q = P((0, 15), (0, 6), (0, 0))
 _A = np.array([-np.sqrt(12 ** 2 - 9 ** 2), 6.0])
@@ -105,69 +82,17 @@ def street_map() -> Figure:
     f.side_label(L, Pm, "900 ft", center=A, size=10, offset_pt=18)
     f.side_label(Pm, Q, "600 ft", center=B, size=10, offset_pt=18)
     f.side_label(L, A, "1200 ft", center=Pm, size=10, offset_pt=14)
-    f.arc(Pm, L, A, n=1, r=1.0, layer="answer")
-    f.arc(Q, L, B, n=1, r=1.0, layer="answer")
-    f.arc(A, L, Pm, n=2, r=1.0, gap=0.4, layer="answer")
-    f.arc(B, L, Q, n=2, r=1.0, gap=0.4, layer="answer")
-    return f
-
-
-@figure("3.11_cyu")
-def cyu() -> Figure:
-    # CYU 1: right angle at D, AB || EF, DA = 3, DB = 4, DE = 7.5 -> k = 2.5, AB = 5, DF = 10, EF = 12.5
-    D, B, A = P((0, 7.5), (4, 7.5), (0, 4.5))
-    E, F = dilate([A, B], 2.5, D)
-    assert np.isclose(dist(A, B), 5) and np.isclose(dist(D, F), 10) and np.isclose(dist(E, F), 12.5)
-    assert np.isclose(dist(D, E), 7.5) and _is_par(A, B, E, F) and np.isclose(angle_deg(D, B, E), 90)
-    assert_lengths([(D, B, 4), (D, A, 3), (D, E, 7.5)])
-    f = Figure(width_in=2.2, height_in=1.75)
-    f.seg(D, F)
-    f.seg(D, E)
-    f.seg(A, B)
-    f.seg(E, F)
-    f.right_angle(D, B, E, size=0.5)
-    _par(f, A, B, 0.55)
-    _par(f, E, F, 0.55)
-    f.dots([D, B, A, E, F])
-    _labels(f, [D, B, A, E, F], [("D", (-1, 0.6)), ("B", (0, 1)), ("A", (-1, 0)), ("E", (-1, -0.6)),
-                                 ("F", (1, 0.6))])
-    f.side_label(D, B, "4", center=A, size=11)
-    f.side_label(D, A, "3", center=B, size=11)
-    return f
-
-
-@figure("3.11_exit")
-def exit_ticket() -> Figure:
-    # Exit: DE || AC, BD = 2, BE = 4, EC = 6, DE = 5 -> k = 10/4 = 2.5, BA = 5, AD = 3, AC = 12.5
-    Bv, C = P((0, 0), (10, 0))
-    ax = (25 - 12.5 ** 2 + 100) / 20
-    A = np.array([ax, -np.sqrt(25 - ax ** 2)])
-    tri = rotate([Bv, A, C], 18, Bv)
-    Bv, A, C = tri
-    D, E = dilate([A, C], 0.4, Bv)
-    assert np.isclose(dist(Bv, D), 2) and np.isclose(dist(Bv, E), 4) and np.isclose(dist(E, C), 6)
-    assert np.isclose(dist(D, E), 5) and np.isclose(dist(A, C), 12.5) and np.isclose(dist(A, D), 3)
-    assert _is_par(D, E, A, C)
-    assert_lengths([(Bv, D, 2), (Bv, E, 4), (E, C, 6), (D, E, 5)])
-    f = Figure(width_in=2.5, height_in=1.8)
-    f.poly([Bv, A, C])
-    f.seg(D, E)
-    _par(f, D, E, 0.6)
-    _par(f, A, C, 0.6)
-    f.dots([Bv, A, C, D, E])
-    _labels(f, [Bv, A, C, D, E], [("B", (-1, 0.4)), ("A", (-0.6, -1)), ("C", (1, 0.4)), ("D", (1, -0.9)),
-                                  ("E", (0, 1))])
-    cen = (Bv + A + C) / 3
-    f.side_label(Bv, D, "2", center=cen, size=11)
-    f.side_label(Bv, E, "4", center=cen, size=11)
-    f.side_label(E, C, "6", center=cen, size=11)
-    f.side_label(D, E, "5", center=Bv, size=11)
+    # angle marks are given: the handout prints the AA similarity (the warm-up reviews the move)
+    f.arc(Pm, L, A, n=1, r=1.0)
+    f.arc(Q, L, B, n=1, r=1.0)
+    f.arc(A, L, Pm, n=2, r=1.0, gap=0.4)
+    f.arc(B, L, Q, n=2, r=1.0, gap=0.4)
     return f
 
 
 @figure("3.11_notes")
 def notes() -> Figure:
-    # QuickNotes: MN || PR, M on QP, N on QR (dilation at Q, k = 0.45). Letters differ from the exit ticket.
+    # QuickNotes: MN || PR, M on QP, N on QR (dilation at Q, k = 0.45).
     Q, P_, R = P((0, 0), (-1.0, 3.0), (3.2, 2.2))
     M, N = dilate([P_, R], 0.45, Q)
     assert _is_par(M, N, P_, R)
@@ -234,33 +159,6 @@ def prac2() -> Figure:
     return f
 
 
-@figure("3.11_p3")
-def prac3() -> Figure:
-    # Practice 3: MN || XZ, YN = 3, YM = 5, MX = 5, MN = 6 -> k = 2, NZ = 3, XZ = 12
-    Y = np.array([0.0, 0.0])
-    M = np.array([5.0, 0.0])
-    N = np.array([-0.2, np.sqrt(9 - 0.04)])
-    Y, M, N = rotate([Y, M, N], -15, Y)
-    X, Z = dilate([M, N], 2, Y)
-    assert np.isclose(dist(M, N), 6) and np.isclose(dist(N, Z), 3) and np.isclose(dist(X, Z), 12)
-    assert _is_par(M, N, X, Z)
-    assert_lengths([(Y, N, 3), (Y, M, 5), (M, X, 5), (M, N, 6)])
-    f = Figure(width_in=2.2, height_in=1.7)
-    f.poly([Y, X, Z])
-    f.seg(M, N)
-    _par(f, N, M, 0.6)
-    _par(f, Z, X, 0.6)
-    f.dots([Y, X, Z, M, N])
-    _labels(f, [Y, X, Z, M, N], [("Y", (-1, -0.3)), ("X", (1, -0.3)), ("Z", (0, 1)), ("M", (0, -1)),
-                                 ("N", (-1, 0))])
-    cen = (Y + X + Z) / 3
-    f.side_label(Y, N, "3", center=cen, size=11)
-    f.side_label(Y, M, "5", center=cen, size=11)
-    f.side_label(M, X, "5", center=cen, size=11)
-    f.side_label(M, N, "6", center=Y, size=11)
-    return f
-
-
 def _tri(v0, dir_deg, side, ang0, ang1, turn=1):
     """Triangle from vertex v0, side v0v1 of length `side` at heading dir_deg, angles ang0 at v0 and ang1 at v1.
     turn=+1 puts the third vertex counterclockwise of v0v1, -1 clockwise."""
@@ -318,33 +216,4 @@ def prac5() -> Figure:
     f.side_label(A, B, "9", center=C, size=11)
     f.side_label(B, C, "12", center=A, size=11)
     f.side_label(D, E, "12", center=F, size=11)
-    return f
-
-
-@figure("3.11_p6")
-def prac6() -> Figure:
-    # Practice 6: angle A = 68, angle B = 30; angle D = 68, angle F = 30 -> A-D, B-F, C-E.
-    # AC = 2 matches DE = 8 (k = 4); AB = 4 matches DF = 16.
-    A, C, B = _tri((0, 0), 0, 4 * np.sin(np.radians(30)) / np.sin(np.radians(82)), 68, 82, turn=1)
-    assert np.isclose(dist(A, B), 4) and abs(dist(A, C) - 2) < 0.05
-    D, F, E = _tri((9.5, 0), -3, 16, 68, 30, turn=1)
-    assert np.isclose(dist(D, E) / dist(A, C), 4) and np.isclose(dist(D, F), 16)
-    assert np.isclose(angle_deg(B, A, C), 30) and np.isclose(angle_deg(F, D, E), 30)
-    assert_lengths([(A, B, 4), (A, C, 2)])
-    assert_lengths([(D, E, 8), (D, F, 16)])   # each triangle to its own scale; prompt says not to scale
-    A, C, B = dilate([A, C, B], 2.6, A)   # small triangle drawn larger so its labels fit (not to scale)
-    D, F, E = translate([D, F, E], (4.0, 0))
-    f = Figure(width_in=3.2, height_in=1.8)
-    f.poly([A, B, C])
-    f.poly([D, E, F])
-    f.dots([A, B, C, D, E, F])
-    _labels(f, [A, B, C], [("A", (-1, -0.3)), ("B", (0, 1)), ("C", (1, -0.3))])
-    _labels(f, [D, E, F], [("D", (-0.2, -1)), ("E", (0, 1)), ("F", (1, -0.3))])
-    f.angle_label(A, C, B, "68°", dist=2.2, size=10)
-    f.angle_label(B, A, C, "30°", dist=4.6, size=10)
-    f.angle_label(D, F, E, "68°", dist=2.0, size=10)
-    f.angle_label(F, D, E, "30°", dist=3.2, size=10)
-    f.side_label(A, B, "4", center=C, size=11)
-    f.side_label(A, C, "2", center=B, size=11)
-    f.side_label(D, E, "8", center=F, size=11)
     return f

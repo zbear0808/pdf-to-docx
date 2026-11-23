@@ -3,11 +3,14 @@ Given ink (layer="given") prints on the student copy and the key; answer ink (la
 Loop: uv run lesson-builder figs <unit> -l "2.1-2.5 Progress Check" (0 errors, no label warnings).
 All four source images are redrawn: K was off line HF (q1), the marks were red (q4), EMF (q5), under 150 dpi (q6).
 No drawing tasks, so no answer layers.
+Names keep the source item numbers. Nov 19: old item 3 was cut, so _q4 is item 3, _q5 item 4, _q6 item 5.
+Nov 20: _q5 (item 4) is a new SSA case that answers "no"; the source's SAA pair JAR/DIL is gone.
 """
 import numpy as np
 
 from lesson_builder.figures import (Figure, P, angle_deg, assert_distinct, collinear, dist, figure,
-                                    is_rigid_image, mark_congruent, midpoint, reflect, rotate)
+                                    is_rigid_image, mark_congruent, midpoint, reflect, rotate, ssa_triangles,
+                                    translate)
 
 S = '2.1-2.5 Progress Check'
 
@@ -68,30 +71,34 @@ def q4() -> Figure:
     return f
 
 
-# q5: triangle LID is triangle JAR turned 180 deg about (1.75, 1): J -> D, A -> I, R -> L.
-# Marks: angle R = angle L (1 arc), angle A = angle I (2 arcs), JR = DL (1 tick, not between the angles: SAA).
-JAR = P((0, 2), (2.2, 2), (0.6, 0))
-DIL = rotate(JAR, 180, about=(1.75, 1.0))
-J5, A5, R5 = JAR
-D5, I5, L5 = DIL
-assert is_rigid_image(JAR, DIL)
-assert_distinct([angle_deg(J5, A5, R5), angle_deg(A5, J5, R5), angle_deg(R5, J5, A5)])
+# q5 (item 4, Nov 20): SSA, answer "no". Both triangles have a 40 degree angle (A, S), the side next to it
+# (AB = SP = 2.4, 1 tick), and the side across from it (BV = PW = 1.7, 2 ticks). The angle is not between the
+# marked sides, and 2.4 sin 40 < 1.7 < 2.4, so two different triangles fit: ssa_triangles gives both
+# (AV = 2.55 and SW = 1.12). The short one is turned 180 degrees. No numbers print (marks only, like 2.5 #4).
+_LONG, _SHORT = ssa_triangles(2.4, 1.7, 40)
+A5, B5, V5 = _LONG
+S5, P5, W5 = translate(rotate(_SHORT, 180, about=(0, 0)), (5.6, 1.4))
+for _v, _a, _o in ((A5, B5, V5), (S5, P5, W5)):
+    assert np.isclose(angle_deg(_v, _a, _o), 40)                       # the marked angle
+    assert np.isclose(dist(_v, _a), 2.4) and np.isclose(dist(_a, _o), 1.7)   # the two marked sides
+assert not is_rigid_image(_LONG, np.array([S5, P5, W5]))               # SSA: the triangles are not congruent
+assert dist(A5, V5) - dist(S5, W5) > 1.0                               # third sides clearly differ
 
 
 @figure(f"{S}_q5")
 def q5() -> Figure:
-    f = Figure(width_in=2.9, height_in=1.75)
-    f.poly(JAR)
-    f.poly(DIL)
-    f.dots(np.vstack([JAR, DIL]))
-    f.label(J5, "J", direction=(-1, 0.5))
-    f.label(A5, "A", direction=(-0.4, 1))
-    f.label(R5, "R", direction=(0, -1))
-    f.label(D5, "D", direction=(1, -0.5))
-    f.label(I5, "I", direction=(0, -1))
-    f.label(L5, "L", direction=(0.4, 1))
-    mark_congruent(f, [((J5, R5), (D5, L5)), ((R5, J5, A5), (L5, D5, I5)), ((A5, J5, R5), (I5, D5, L5))],
-                   size=0.15, r=[0.4, 0.4])
+    f = Figure(width_in=2.9, height_in=1.3)
+    f.poly([A5, B5, V5])
+    f.poly([S5, P5, W5])
+    f.dots([A5, B5, V5, S5, P5, W5])
+    f.label(A5, "A", direction=(-1, -0.4))
+    f.label(B5, "B", direction=(0.4, -1))
+    f.label(V5, "V", direction=(0, 1))
+    f.label(S5, "S", direction=(1, 0.4))
+    f.label(P5, "P", direction=(-0.4, 1))
+    f.label(W5, "W", direction=(0, -1))
+    mark_congruent(f, [((A5, B5), (S5, P5)), ((B5, V5), (P5, W5)), ((A5, B5, V5), (S5, P5, W5))],
+                   size=0.15, r=0.4)
     return f
 
 

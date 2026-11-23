@@ -50,8 +50,9 @@ def _rects(f, small, big, names, labels, gap=2.0):
         f.side_label(r[0], r[1], wl, c, italic=wl.isalpha())
 
 
-def _split(f, V, W, X, t_vw, t_xw, labels, angle_text, names):
-    """Triangle V (angle vertex), W (shared center), X. V2 on VW, X2 on XW, both at fraction t from W."""
+def _split(f, V, W, X, t_vw, t_xw, labels, angle_text, names, arc_r=0.1, label_d=0.22):
+    """Triangle V (angle vertex), W (shared center), X. V2 on VW, X2 on XW, both at fraction t from W.
+    arc_r and label_d (fractions of the longer side at V) place the angle mark and its label."""
     V2, X2 = W + t_vw * (V - W), W + t_xw * (X - W)
     f.poly([V, W, X])
     f.seg(V2, X2)
@@ -67,8 +68,8 @@ def _split(f, V, W, X, t_vw, t_xw, labels, angle_text, names):
     for (p, q), s in zip(((V, V2), (V2, W), (W, X2), (X2, X)), labels):
         f.side_label(p, q, s, c, offset_pt=9)
     span = max(dist(V, W), dist(V, X))
-    f.arc(V, W, X, r=0.1 * span)
-    f.angle_label(V, W, X, angle_text, dist=0.22 * span)
+    f.arc(V, W, X, r=arc_r * span)
+    f.angle_label(V, W, X, angle_text, dist=label_d * span)
     return V2, X2
 
 
@@ -108,24 +109,26 @@ def rects() -> Figure:
     return f
 
 
-# Item 4: angle at E = 50 deg, EE' = 4, E'F = 8, FD' = 8, D'D = 4 (both 2/3 of the way from F)
+# Item 4: angle at E = 50 deg, EE' = 6, E'F = 12, FD' = 10, D'D = 5 (both 2/3 of the way from F).
+# Two different fractions (12/18, 10/15), as on A (8/12, 6/9), so checking them takes the same work.
 T_E = np.array((0, 0), float)
 u_ef, u_ed = (np.array([np.cos(np.radians(a)), np.sin(np.radians(a))]) for a in (195, 245))
-T_F = 12 * u_ef
+T_F = 18 * u_ef
 _b = -2 * np.dot(u_ed, T_F)
-_t = (-_b + np.sqrt(_b * _b - 4 * (144 - 144))) / 2
+_t = (-_b + np.sqrt(_b * _b - 4 * (324 - 225))) / 2
 T_D = _t * u_ed
-assert abs(dist(T_F, T_D) - 12) < 1e-9 and abs(angle_deg(T_E, T_D, T_F) - 50) < 1e-9
+assert abs(dist(T_F, T_D) - 15) < 1e-9 and abs(angle_deg(T_E, T_D, T_F) - 50) < 1e-9
+assert 55 < angle_deg(T_F, T_E, T_D) < 75 and 55 < angle_deg(T_D, T_E, T_F) < 75   # no near-right angle
 
 
 @figure(f"{S}_angle")
 def angle_fig() -> Figure:
     f = Figure(width_in=2.3, height_in=2.1)
-    E2, D2 = _split(f, T_E, T_F, T_D, 8 / 12, 8 / 12, ("4", "8", "8", "4"), r"$50^\circ$",
-                    ("E", "F", "D", "E'", "D'"))
+    E2, D2 = _split(f, T_E, T_F, T_D, 12 / 18, 10 / 15, ("6", "12", "10", "5"), r"$50^\circ$",
+                    ("E", "F", "D", "E'", "D'"), arc_r=0.12, label_d=0.2)
     assert _parallel(E2, D2, T_E, T_D)
     assert abs(angle_deg(E2, D2, T_F) - 50) < 1e-9
-    assert_lengths([(T_E, E2, 4), (E2, T_F, 8), (T_F, D2, 8), (D2, T_D, 4)])
+    assert_lengths([(T_E, E2, 6), (E2, T_F, 12), (T_F, D2, 10), (D2, T_D, 5)])
     return f
 
 

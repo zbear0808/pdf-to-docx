@@ -4,104 +4,74 @@ notes_title: Dilating lines and angles
 framing: >-
   Does a dilation change angle measures? Where does a line go after a dilation?
 materials: ruler
+headings: warmup
+max_pages: 2                       # one double-sided sheet: Problem 3 on the front, QuickNotes on the back
 
 sections:
   - kind: warmup
     items:
       - minutes: 3
-        prompt: '$\triangle A''B''C''$ is a dilation of $\triangle ABC$ with center $P$ and scale factor 2.'
+        prompt: '$\triangle A''B''C''$ is a dilation of $\triangle ABC$ with center $P$ and scale factor 2. How do the angles of $\triangle A''B''C''$ compare to the angles of $\triangle ABC$?'
         figure: 3.4_warmup
         fig_w: 2.0
-        parts:
-          - label: a.
-            prompt: 'How do the angles of $\triangle A''B''C''$ compare to the angles of $\triangle ABC$?'
-            work: 0.5
-            answer: 'Sample: they look the same. $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, $\angle C \cong \angle C''$. The image is bigger but has the same shape.'
-          - label: b.
-            prompt: 'Is this true for every dilation?'
-            work: 0.4
-            answer: 'Sample: yes, a dilation changes size, not shape.'
+        fill:
+          - ['Bigger, the same, or smaller?', 'the same']
+          - ['Is your answer true for every dilation? (yes or no)', 'yes']
+        fill_cols: 1
+        box_w: 1.0
+        answer: '$\angle A \cong \angle A''$, $\angle B \cong \angle B''$, and $\angle C \cong \angle C''$. The image is bigger but has the same shape.'
 
   - kind: together
     items:
       - n: 1
-        minutes: 3
-        prompt: 'Estimate each dilation using center $C$.'
-        figure: 3.4_lines
-        fig_w: 3.0
-        parts:
-          - label: a.
-            prompt: 'Dilate point $D$ with scale factor $\frac{3}{2}$. Label the image $D''$.'
-            work: 0.3
-            answer: '$D''$ is on line $AB$, on $D$''s side of $C$, with $CD'' = 1.5CD$.'
-          - label: b.
-            prompt: 'Dilate line $CE$ with scale factor 2. Label the image $C''E''$.'
-            work: 0.3
-            answer: '$C'' = C$ and $CE'' = 2CE$, so line $C''E''$ is line $CE$.'
-      - n: 2
+        id: center_line
         minutes: 2
-        prompt: 'What happens when you dilate a line using a center that is ON the line?'
+        prompt: 'A dilation with center $C$ and scale factor 2 takes $C$ to $C'' = C$ and $E$ to $E''$, twice as far from $C$.'
+        figure: 3.4_lines
+        layout: stacked
         frame:
           - ['A line through the center of a dilation lands on', 'itself', '.']
+        answer: 'Both $C''$ and $E''$ are on line $CE$, so line $C''E''$ is line $CE$.'
 
   - kind: partner
     items:
-      - n: 3
+      - n: 2
         id: jada_proof
         minutes: 10
-        prompt: 'Each side of $\triangle ABC$ is parallel to its image in $\triangle A''B''C''$ (same dilation: center $P$, scale factor 2). Prove it for $\overline{BC}$.'
+        prompt:
+          - '$\triangle A''B''C''$ is the dilation of $\triangle ABC$ from the warm-up (center $P$, scale factor 2). $E$ is on $\overline{PB}$, and $E''$ is the image of $E$.'
+          - '**Fact:** A transversal cuts two lines. If corresponding angles are congruent, then the two lines are parallel.'
+          - 'Use the warm-up and the fact to explain why $\overline{BC} \parallel \overline{B''C''}$.'
+          - '*Optional start:* $\angle E''B''C''$ is the image of $\angle EBC$, so ...'
         figure: 3.4_proof
-        fig_w: 1.8
-        layout: stacked
-        parts:
-          - label: a.
-            prompt: 'Mark a point $E$ on $\overline{PB}$, between $P$ and $B$.'
-            work: 0
-            answer: 'Sample $E$ in red, between $P$ and $B$.'
-          - label: b.
-            prompt: 'Estimate the dilation of $E$ with center $P$ and scale factor 2. Label it $E''$.'
-            work: 0
-            answer: '$E''$ is on ray $PB$, twice as far from $P$ as $E$.'
-          - label: c.
-            prompt: 'Compare $\angle EBC$ and $\angle E''B''C''$. Then finish the proof.'
-            frame:
-              - ['$\angle E''B''C''$ is the image of $\angle EBC$, so the two angles are', 'congruent', '.']
-              - ['In the {ref:jada_proof} figure, they are', 'corresponding', 'angles for the transversal $\overleftrightarrow{PB}$.', 1.4]
-              - ['Congruent corresponding angles mean $\overline{BC}$ is', 'parallel', 'to $\overline{B''C''}$.']
-
-  - kind: notes
-    new_page: false
-
-  - kind: exit
-    items:
-      - n: 1
-        minutes: 5
-        prompt: '$\triangle ABC$ is dilated with center $D$ and scale factor 2. $m\angle ABC = 42^\circ$. Give a reason for each answer.'
+        fig_w: 2.0
+        box: 1.9
+        answer: '$\angle E''B''C''$ is the image of $\angle EBC$, and a dilation does not change angle measures, so $\angle E''B''C'' \cong \angle EBC$. Line $PB$ is a transversal that cuts $\overline{BC}$ and $\overline{B''C''}$, and the two angles are corresponding angles. Congruent corresponding angles mean $\overline{BC} \parallel \overline{B''C''}$.'
+      - n: 3
+        id: same_or_parallel
+        minutes: 4
+        prompt: '$\triangle ABC$ is dilated with center $D$ and scale factor 2. Give a reason for each answer.'
         figure: 3.4_cyu
         fig_w: 1.9
         parts:
           - label: a.
-            prompt: 'Find $m\angle A''B''C''$.'
-            work: 0.45
-            answer: '$42^\circ$. A dilation does not change angle measures.'
-          - label: b.
             prompt: 'Is line $A''B''$ the same line as line $AB$, or parallel to it?'
-            work: 0.45
             answer: 'Parallel. Line $AB$ does not pass through the center $D$.'
-          - label: c.
+          - label: b.
             prompt: 'Is line $B''C''$ the same line as line $BC$, or parallel to it?'
-            work: 0.45
             answer: 'The same line. Line $BC$ passes through the center $D$.'
+
+  - kind: notes
 
 notes_height: 1.5
 quicknotes:
   - '**LT 1: I can explain what a dilation does to angles.**'
-  - '- A dilation does not change angle measures. Corresponding angles are congruent.'
+  - '- A dilation does not change angle measures.'
   - '- If $\triangle A''B''C''$ is a dilation of $\triangle ABC$, then $\angle A \cong \angle A''$, $\angle B \cong \angle B''$, and $\angle C \cong \angle C''$.'
   - '**LT 2: I can explain what a dilation does to lines.**'
-  - '- A line through the center of the dilation does not change. It lands on itself.'
+  - '- A line through the center of the dilation lands on itself.'
   - '- A line that does not pass through the center goes to a parallel line.'
-  - '- Why: the angles at $B$ and $B''$ in {ref:jada_proof} are congruent corresponding angles, so $\overline{BC} \parallel \overline{B''C''}$.'
+  - '- Why ({ref:jada_proof}): line $PB$ is a transversal for $\overline{BC}$ and $\overline{B''C''}$. $\angle E''B''C''$ is the image of $\angle EBC$, so they are congruent corresponding angles, and $\overline{BC} \parallel \overline{B''C''}$.'
 
 practice:
   title: 'Dilating lines and angles: practice'
@@ -109,7 +79,6 @@ practice:
     - cells:
         - n: 1
           prompt: '$\angle A''B''C''$ is a dilation of $\angle ABC$ with center $P$ and scale factor 3. The measure of $\angle ABC$ is $21^\circ$. What is the measure (how many degrees) of $\angle A''B''C''$?'
-          work: 0.8
           answer: '$21^\circ$. A dilation does not change angle measures.'
         - n: 2
           prompt: 'Select **all** the lines that could be the image of line $m$ by a dilation.'
@@ -122,7 +91,7 @@ practice:
           answer: '[B], [C], [E]. $m$ itself (center on $m$), or a line parallel to $m$: $n$ and $p$.'
     - cells:
         - n: 3
-          prompt: 'Line $f$ is dilated with scale factor 2. The image is line $g$. Which labeled point could be the center of this dilation?'
+          prompt: 'Line $f$ is dilated with scale factor 2. The image is line $g$. With scale factor 2, each image point is twice as far from the center as the original point. Which labeled point could be the center of this dilation?'
           figure: 3.4_center
           fig_w: 1.9
           layout: stacked
@@ -157,35 +126,40 @@ practice:
 plan: |
   **Overview.** 3.1 and 3.3: dilations, lengths scale by $k$. Today: angles stay the same, and lines either stay put (through the center) or go to parallel lines. Lesson 3.5 uses the parallel result for the midsegment.
 
-  **Objectives.** (1) Explain why corresponding angles in a dilation are congruent. (2) Explain what a dilation does to a line through the center and to a line not through the center. **Standards.** G-SRT.A.1a, G-SRT.A.2. SMP 3, 7.
+  **Core idea.** Students see that a dilation keeps angle measures, so a line that misses the center goes to a parallel line: line $PB$ goes through the center, cuts $\overline{BC}$ and $\overline{B'C'}$, and makes congruent corresponding angles with them. Spend whole-class time on the {ref:jada_proof} share. Known steps are printed: $C' = C$ and $E'$ in {ref:center_line} (the 3.1 move), $E$, $E'$, and the corresponding angles fact in {ref:jada_proof}, and the image points in {ref:same_or_parallel}. Only the new steps are blank: where line $C'E'$ lands, why $\overline{BC} \parallel \overline{B'C'}$, and same line or parallel. The angle fact (3.3 QuickNotes) stays the warm-up's blank; printing it in {ref:jada_proof} would answer the warm-up.
 
-  **Quick look (30 min).**
+  **Objectives.** (1) Use the fact that a dilation does not change angle measures. (2) Explain what a dilation does to a line through the center and to a line not through the center. **Standards.** G-SRT.A.1a, G-SRT.A.2. SMP 3, 7.
+
+  **Quick look (25 min).**
   | Time | Part | Who talks |
   |---|---|---|
   | 0-3 | Warm-up | Students, 1 min share |
-  | 3-8 | Together: Problems 1-2 | Teacher + class |
-  | 8-18 | With a partner: Problem 3 | Students (pairs) |
-  | 18-21 | QuickNotes | Teacher + class |
-  | 21-27 | Exit ticket 1 (1 min to turn the page) | Students |
-  | 27-30 | Collect, assign practice | Teacher |
+  | 3-5 | Together: Problem 1 | Teacher + class |
+  | 5-19 | With a partner: Problems 2-3 | Students (pairs), 2 min share |
+  | 19-22 | QuickNotes | Teacher + class |
+  | 22-25 | Collect, assign practice | Teacher |
 
-  **Warm-up (3 min).** Take "they look the same" and ask "how could we check?" Protractor on one angle at the doc camera. Name it the assertion (LT 1 in QuickNotes).
+  **Warm-up (3 min).** Take "the same" and ask "How could we check?" Put a protractor on one angle at the doc camera. Name the fact: a dilation does not change angle measures. {ref:jada_proof} uses it.
 
-  **Together (5 min, doc camera).** Problem 1 (3 min): use a ruler along line $AB$ from $C$. Stress that $D'$ stays on $D$'s side of $C$ (the common error is putting it on the other side). Problem 2 (2 min): one box, call on two pairs.
+  **Together (2 min, doc camera).** {ref:center_line}: $C' = C$ and $E'$ are printed (the 3.1 move), so point to them and ask "Where is line $C'E'$?" Students fill the box. Then ask "What about a line that misses $C$?" and send that question to partners.
 
-  **Partners (10 min).**
-  - Problem 3 (10 min, 2 min share included): the key move is seeing $\overleftrightarrow{PB}$ as a transversal. Assessing: "Which line cuts both $\overline{BC}$ and $\overline{B'C'}$?" Advancing: "Does this work for $\overline{AC}$ too?" (Yes: the same steps with a point on $\overline{PC}$ or $\overline{PA}$ prove $\overline{AC} \parallel \overline{A'C'}$ and $\overline{AB} \parallel \overline{A'B'}$.)
-  - MLL supports: labeled figures, fill boxes on 2 and 3c; any language in talk. On the exit ticket, students can point to the QuickNotes bullet they used and name it in a few words.
+  **With a partner (14 min, 2 min share).** {ref:jada_proof}, then {ref:same_or_parallel}. The key move in {ref:jada_proof} is seeing line $PB$ as a transversal for $\overline{BC}$ and $\overline{B'C'}$.
+  - Assessing: "Which line cuts both $\overline{BC}$ and $\overline{B'C'}$?" "Which angle is the image of $\angle EBC$?"
+  - Advancing: "Does this work for $\overline{AC}$ too?" (Yes: a point on $\overline{PC}$ or $\overline{PA}$ gives $\overline{AC} \parallel \overline{A'C'}$ and $\overline{AB} \parallel \overline{A'B'}$.)
+  - Watch for: "they look parallel" or "same shape" with no angle reason, and "alternate interior" for the pair (both angles sit in the same spot at $B$ and at $B'$, so they are corresponding).
+  - Share: one pair reads their {ref:jada_proof} explanation; revoice it as image angle, transversal, corresponding angles, parallel.
+  - {ref:same_or_parallel}: students check whether each line passes through $D$. Credit the answer plus a short reason (the reasons are {ref:center_line} and {ref:jada_proof}). Common error: "parallel" in part b (didn't notice $D$, $C$, and $B$ are on one line; the tick marks and the $B = C'$ label show it).
+  - MLL supports: labeled figure, the printed fact, optional start, any language in talk. "Corresponding" has two meanings in this unit: matching parts of a figure and its image, and angles in the same spot along a transversal. Today it is the transversal one; point to line $PB$ when you say "transversal."
 
-  **QuickNotes (3 min).** Read together. Connect bullet 3 of LT 2 to a student's Problem 3.
-
-  **Exit (5 min + 1 to turn the page).** Students apply the QuickNotes to the figure: part a (LT 1) needs the angle stays $42^\circ$; parts b and c (LT 2) need them to check whether each line passes through $D$. Credit an answer plus a short reason (the "why"). Common errors: $84^\circ$ in part a (doubled the angle); "parallel" in part c (didn't notice $D$, $C$, $B$ are on one line).
+  **QuickNotes (3 min).** Students turn to page 2 only now: its Why bullet answers {ref:jada_proof}, and the LT 2 bullets answer {ref:same_or_parallel}. Read together and tie the Why bullet to the pair's explanation from the share.
 
 guide_notes: |
-  Nov 16: trimmed to 40 minutes. Cut: the old partner Problem 5 (scale factor less than 1), the old CYU 1 (angle measure after a dilation; practice 1 is the same item and exit 2a checks it), and the $\overline{AC}$ slope pair in the old grid problem.
+  **Nov 23: known content printed.** {ref:center_line} prints the 3.1 move ($C' = C$ and $E'$, in the prompt and in black on the figure), so its one blank is where the line lands. Practice 3 prints the 3.1 fact (each image point is twice as far from the center). Still blank (new): the {ref:jada_proof} explanation, {ref:same_or_parallel}, and practice 1-3. The angle fact stays the warm-up's blank (printing it in {ref:jada_proof} would answer the warm-up). Item minutes 20 to 19.
 
-  Nov 16 (round 2): cut to 30 minutes. Cut: Problem 1 parts a-b (two more points on line $AB$, same move as part c), the grid slope problem (shows the same "sides are parallel" fact the proof shows), the CYU (exit part b checks the same thing), and exit parts c-d (lengths scale by 2, Lesson 3.3 content). The proof is now Problem 3 and the exit ticket is 1.
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:same_or_parallel} (a new case: students decide on their own whether each line passes through the center, and line $BC$ does). The handout prints only the Warm-up heading.
 
-  Practice cut: 9 to 6 problems. Cut the perimeter item (same 3.3 scale-factor review as the quadrilateral item), the proportion item (same ratio move), and the system SBA item. Kept angle measure, the five lines, find the center, scale factor of the quadrilateral, the SSA sketch, and the slope SBA item.
+  **Nov 19: cut for the core idea.** Warm-up: the two open questions are now two short boxes (bigger, the same, or smaller; yes or no). Together: the dilate-$D$ part is cut (a point on a line through the center, the 3.1 move); dilating line $CE$ and the "lands on itself" box are now one problem. Partner: $E$ and $E'$ are printed on the figure, the corresponding angles fact is printed, and the problem points to the warm-up for the angle fact (printing it would answer the warm-up on the same page), so the 3-box frame is now one open explanation with an optional start. The QuickNotes moved to their own page, since the Why bullet answers {ref:jada_proof}. The exit ticket's angle part (find the image angle, $42^\circ$) is cut: practice 1 is the same item with new numbers. Practice is unchanged.
 
-  Nov 16 (round 3): cut extra instructions and flair.
+  **Earlier cuts (Nov 16).** To fit 30 minutes: the scale factor less than 1 partner item, the grid slope item (same "sides are parallel" fact the proof shows), both check-your-understanding items, two more points to dilate in the Together problem, and the exit parts on lengths (Lesson 3.3 content). Practice went from 9 to 6: cut the perimeter item and the proportion item (same scale-factor move as the quadrilateral item) and the system SBA item.
+
+  **Scoring notes (MLL).** Score the math, not grammar. Accept "same size", "equal", or a home-language word for congruent; "corr. angles" or "same spot" for corresponding if the student names or marks the pair; "goes through $D$" for passes through the center.

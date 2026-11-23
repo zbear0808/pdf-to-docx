@@ -108,44 +108,54 @@ def rects() -> Figure:
     return f
 
 
-# Item 4: angle at B = 45 deg, BB' = 4, B'C = 8, CA' = 6, A'A = 3 (both 2/3 of the way from C)
-T_B = np.array((0, 0), float)
-u_bc, u_ba = (np.array([np.cos(np.radians(a)), np.sin(np.radians(a))]) for a in (-15, -60))
-T_C = 12 * u_bc
-_b = -2 * np.dot(u_ba, T_C)
+# Item 4: angle at R = 45 deg, RR' = 4, R'S = 8, SQ' = 6, Q'Q = 3 (both 2/3 of the way from S).
+# Letters and a top-to-bottom flip (directions 15 and 60 deg) keep it from looking like Lesson 3.5 practice 1.
+T_R = np.array((0, 0), float)
+u_rs, u_rq = (np.array([np.cos(np.radians(a)), np.sin(np.radians(a))]) for a in (15, 60))
+T_S = 12 * u_rs
+_b = -2 * np.dot(u_rq, T_S)
 _t = (-_b + np.sqrt(_b * _b - 4 * (144 - 81))) / 2
-T_A = _t * u_ba
-assert abs(dist(T_C, T_A) - 9) < 1e-9 and abs(angle_deg(T_B, T_A, T_C) - 45) < 1e-9
+T_Q = _t * u_rq
+assert abs(dist(T_S, T_Q) - 9) < 1e-9 and abs(angle_deg(T_R, T_Q, T_S) - 45) < 1e-9
 
 
 @figure(f"{S}_angle")
 def angle_fig() -> Figure:
     f = Figure(width_in=2.3, height_in=2.1)
-    B2, A2 = _split(f, T_B, T_C, T_A, 8 / 12, 6 / 9, ("4", "8", "6", "3"), r"$45^\circ$",
-                    ("B", "C", "A", "B'", "A'"))
-    assert _parallel(B2, A2, T_B, T_A)
-    assert abs(angle_deg(B2, A2, T_C) - 45) < 1e-9
-    assert_lengths([(T_B, B2, 4), (B2, T_C, 8), (T_C, A2, 6), (A2, T_A, 3)])
+    R2, Q2 = _split(f, T_R, T_S, T_Q, 8 / 12, 6 / 9, ("4", "8", "6", "3"), r"$45^\circ$",
+                    ("R", "S", "Q", "R'", "Q'"))
+    assert _parallel(R2, Q2, T_R, T_Q)
+    assert abs(angle_deg(R2, Q2, T_S) - 45) < 1e-9
+    assert_lengths([(T_R, R2, 4), (R2, T_S, 8), (T_S, Q2, 6), (Q2, T_Q, 3)])
     return f
 
 
-# Item 5: image of line p. l and n are parallel to p; m and o are not
+def _deg(a, b) -> float:
+    """Direction of segment ab in degrees."""
+    d = np.asarray(b, float) - np.asarray(a, float)
+    return float(np.degrees(np.arctan2(d[1], d[0])))
+
+
+# Item 5: image of line t. v and z are parallel to t (steep, slope 2.5); u and w are not.
+# Not Lesson 3.4 practice 2 (l, m, n, o, p; parallels at 45 deg) or practice 3 (f, g).
 LINES = {
-    r"\ell": ((0, 1.4), (2.6, 4.0)),
-    "m": ((1.4, 4.2), (2.2, 0)),
-    "n": ((3.0, 0), (5.4, 2.4)),
-    "o": ((0, 3.2), (5.4, 0.6)),
-    "p": ((0.4, 0), (4.4, 4.0)),
+    "t": ((0.5, 0), (2.26, 4.4)),
+    "u": ((0, 2.4), (5.4, 0.2)),
+    "v": ((2.0, 0), (3.76, 4.4)),
+    "w": ((0, 3.2), (5.4, 3.848)),
+    "z": ((3.5, 0), (5.26, 4.4)),
 }
-for _nm in (r"\ell", "n"):
-    assert _parallel(*np.array(LINES["p"], float), *np.array(LINES[_nm], float))
-for _nm in ("m", "o"):
-    assert not _parallel(*np.array(LINES["p"], float), *np.array(LINES[_nm], float), tol=1e-2)
+for _nm in ("v", "z"):
+    assert _parallel(*np.array(LINES["t"], float), *np.array(LINES[_nm], float))
+for _nm in ("u", "w"):
+    assert not _parallel(*np.array(LINES["t"], float), *np.array(LINES[_nm], float), tol=1e-2)
+    _gap = abs(_deg(*LINES[_nm]) - _deg(*LINES["t"])) % 180
+    assert min(_gap, 180 - _gap) >= 40   # crossing lines sit well off the parallels
 
 
 @figure(f"{S}_lines")
 def lines_fig() -> Figure:
     f = Figure(width_in=2.2, height_in=1.7)
-    _lines(f, LINES, {r"\ell": 0.03, "m": 0.97, "n": 0.95, "o": 0.05, "p": 0.95},
-           {r"\ell": (-1, 0.2), "m": (-1, 0), "n": (0.7, -0.7), "o": (0, 1), "p": (-0.7, 0.7)})
+    _lines(f, LINES, {"t": 0.97, "u": 0.97, "v": 0.97, "w": 0.03, "z": 0.97},
+           {"t": (0, 1), "u": (1, 0), "v": (0, 1), "w": (-1, 0), "z": (0, 1)})
     return f

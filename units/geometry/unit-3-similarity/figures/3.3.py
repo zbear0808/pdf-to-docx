@@ -32,26 +32,6 @@ assert similarity_ratio([WF, WG, WH], [WF2, WG2, WH2]) == 3
 assert all(abs(v) <= 6 for p in (WF2, WG2, WH2) for v in p)
 
 
-@figure("3.3_warm_dilate")
-def warm_dilate() -> Figure:
-    f = Figure(width_in=2.6, height_in=2.6)
-    _grid(f, -6, 6, -6, 6, lw=0.3)
-    f.poly([WF, WG, WH], lw=1.4)
-    f.dots([WF, WG, WH, WC], size=16)
-    f.label(WF, "F", direction=(1, 0.6), offset_pt=6, size=11)
-    f.label(WG, "G", direction=(-0.87, -0.5), offset_pt=9, size=11)
-    f.label(WH, "H", direction=(0.6, -1), offset_pt=6, size=11)
-    f.label(WC, "C", direction=(0.64, -0.77), offset_pt=9, size=10)
-    for p in (WF2, WG2, WH2):
-        _ray(f, WC, p, past=0.4)
-    f.poly([WF2, WG2, WH2], layer="answer", lw=1.4)
-    f.dots([WF2, WG2, WH2], layer="answer", size=16)
-    f.label(WF2, "F'", layer="answer", direction=(0.4, 1), offset_pt=6, size=11)
-    f.label(WG2, "G'", layer="answer", direction=(0.3, 1), offset_pt=6, size=11)
-    f.label(WH2, "H'", layer="answer", direction=(1, -0.2), offset_pt=7, size=11)
-    return f
-
-
 # Warm-up b: triangle JKL from C with scale factor 2, but L' was placed at 3 times CL
 EC = np.array((0, 0), float)
 EJ, EK, EL = P((2, 1), (3, 1), (2, 2))
@@ -59,25 +39,6 @@ EJ2, EK2 = dilate([EJ, EK], 2, EC)
 EL2 = dilate([EL], 3, EC)[0]
 assert np.allclose(EJ2, (4, 2)) and np.allclose(EK2, (6, 2)) and np.allclose(EL2, (6, 6))
 assert abs(dist(EC, EL2) / dist(EC, EL) - 3) < 1e-12
-
-
-@figure("3.3_warm_error")
-def warm_error() -> Figure:
-    f = Figure(width_in=2.2, height_in=2.2)
-    _grid(f, 0, 7, 0, 7)
-    for p in (EJ2, EK2, EL2):
-        _ray(f, EC, p, past=0.7, layer="given")
-    f.poly([EJ, EK, EL], lw=1.4)
-    f.poly([EJ2, EK2, EL2], lw=1.4)
-    f.dots([EC, EJ, EK, EL, EJ2, EK2, EL2], size=16)
-    f.label(EC, "C", direction=(-1, -0.4), offset_pt=7)
-    f.label(EJ, "J", direction=(0.17, -0.98), offset_pt=12, size=10)
-    f.label(EK, "K", direction=(0.5, -1), offset_pt=7)
-    f.label(EL, "L", direction=(-1, 0.3), offset_pt=7)
-    f.label(EJ2, "J'", direction=(-0.3, 1), offset_pt=8)
-    f.label(EK2, "K'", direction=(1, -0.6), offset_pt=8)
-    f.label(EL2, "L'", direction=(-1, 0.3), offset_pt=8)
-    return f
 
 
 # Problems 1-5: right triangle EFG (3-4-5) from center C, scale factor 2; Problem 5 uses 1/2
@@ -116,30 +77,6 @@ def efg() -> Figure:
     return f
 
 
-# Exit ticket: triangle PQR with side lengths, center C, scale factor 1.5
-XC = np.array((0.0, 4.4))
-XP, XQ, XR = P((4.31, 3.75), (1.0, 0.0), (4.84, 0.70))
-EXIT = {"PQ": 5, "PR": 3.1, "QR": 3.9}
-assert_lengths([(XP, XQ, EXIT["PQ"]), (XP, XR, EXIT["PR"]), (XQ, XR, EXIT["QR"])], tol=0.01)
-assert EXIT["PQ"] * 1.5 == 7.5
-
-
-@figure("3.3_exit")
-def exit_fig() -> Figure:
-    f = Figure(width_in=1.9, height_in=2.0)
-    f.poly([XP, XQ, XR])
-    f.dots([XC, XP, XQ, XR])
-    f.label(XC, "C", direction=(0, 1))
-    f.label(XP, "P", direction=(0.3, 1))
-    f.label(XQ, "Q", direction=(-0.6, -1))
-    f.label(XR, "R", direction=(1, -0.3))
-    mid = np.mean([XP, XQ, XR], axis=0)
-    f.side_label(XP, XQ, "5", mid, size=11)
-    f.side_label(XP, XR, "3.1", mid, size=11)
-    f.side_label(XQ, XR, "3.9", mid, size=11)
-    return f
-
-
 # Practice 4: quadrilateral ABCD dilated from D with scale factor 2
 QD = np.array((2, 0), float)
 QA, QB, QC = P((1, 2), (3, 3), (5, 2))
@@ -147,24 +84,6 @@ QUAD = [QA, QB, QC, QD]
 QUAD2 = dilate(QUAD, 2, QD)
 assert np.allclose(QUAD2, P((0, 4), (4, 6), (8, 4), (2, 0)))
 assert similarity_ratio(QUAD, QUAD2) == 2
-
-
-@figure("3.3_prac_quad")
-def prac_quad() -> Figure:
-    f = Figure(width_in=2.4, height_in=2.0)
-    _grid(f, 0, 10, 0, 7)
-    f.poly(QUAD, lw=1.5)
-    f.dots(QUAD, size=18)
-    f.label_poly(QUAD, "ABCD", offset_pt=8)
-    a2, b2, c2, _ = QUAD2
-    for p in (a2, b2, c2):
-        _ray(f, QD, p, past=0.4)
-    f.poly(list(QUAD2), layer="answer", lw=1.5)
-    f.dots([a2, b2, c2], layer="answer", size=18)
-    f.label(a2, "A'", layer="answer", direction=(-1, 0.3), offset_pt=8)
-    f.label(b2, "B'", layer="answer", direction=(0, 1), offset_pt=8)
-    f.label(c2, "C'", layer="answer", direction=(0.3, 1), offset_pt=9)
-    return f
 
 
 # Practice 5: figure G (a "cone": two segments and a half circle) dilated from B with scale factor 3.
@@ -207,23 +126,6 @@ assert_lengths([(PENT[i], PENT[(i + 1) % 5], L) for i, L in enumerate(PENT_SIDES
 assert_lengths([(PENT[0], PENT[1], 3)] + [(PENT2[i], PENT2[(i + 1) % 5], L * 5 / 3)
                                           for i, L in enumerate(PENT_SIDES)], tol=0.005)
 assert _inside(PENT_F, PENT[:3]) or _inside(PENT_F, [PENT[0], PENT[2], PENT[4]])
-
-
-@figure("3.3_prac_pentagon")
-def prac_pentagon() -> Figure:
-    f = Figure(width_in=2.8, height_in=2.8)
-    f.poly(PENT, lw=1.3)
-    f.poly(PENT2, lw=1.3)
-    f.dots(PENT + PENT2 + [PENT_F], size=12)
-    f.label(PENT_F, "F", direction=(0, 1), offset_pt=6, size=11)
-    for pts, names in ((PENT, "ABCDE"), (PENT2, ["A'", "B'", "C'", "D'", "E'"])):
-        for p, n in zip(pts, names):
-            f.label(p, n, direction=p - PENT_F, offset_pt=6, size=11)
-    for i, L in enumerate(PENT_SIDES):
-        j = (i + 1) % 5
-        f.side_label(PENT[i], PENT[j], f"{L}", PENT_F, offset_pt=6, size=11)
-        f.side_label(PENT2[i], PENT2[j], f"{L * 5 // 3}", PENT_F, offset_pt=6, size=11)
-    return f
 
 
 # Practice 6: polygon Q is a dilation of polygon P with k = 3/4 (top 4 -> 3, side x = 6 -> y = 4.5)

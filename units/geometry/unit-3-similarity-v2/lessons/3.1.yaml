@@ -1,0 +1,177 @@
+id: 3.1
+title: Dilations
+notes_title: Dilations
+framing: >-
+  What happens to every point when we make a scaled copy?
+materials: ruler
+numbering: auto
+headings: warmup
+numbering_after_notes: continue
+
+sections:
+  - kind: warmup
+    items:
+      - minutes: 3
+        prompt: 'The photo on the left is the original. One edited copy, A (middle) or B (right), is a scaled copy. The other is stretched.'
+        figure: assets/3.1/controllers.png
+        fig_w: 4.6
+        layout: stacked
+        fill: [['Which copy is the scaled copy? (A or B)', 'B'], ['In the stretched copy, which length stays the same? (width or height)', 'width']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: 'B: the width and the height both shrink to 0.8 of the original. A: only the height shrinks.'
+
+  - kind: together
+    intro: 'A **dilation** with center $P$ and scale factor $k$ moves each point along the ray from $P$ through the point. The new point is $k$ times as far from $P$.'
+    items:
+      - n: 1
+        minutes: 4
+        prompt: '$H$ is 2 units right and 1 unit up from $C$. Dilate $H$ using center $C$ and scale factor 3. Plot and label the image $H''$.'
+        figure: 3.1_t1
+        fig_w: 2.4
+        fill: [['$H''$ is this many units right of $C$:', '6'], ['$H''$ is this many units up from $C$:', '3']]
+        fill_cols: 1
+        box_w: 0.9
+        answer: '$H''$ is on ray $CH$, 3 times as far from $C$: 6 right and 3 up.'
+
+  - kind: partner
+    items:
+      - n: 2
+        minutes: 6
+        prompt:
+          - 'Dilate $\triangle ABC$ using center $P$ and scale factor 2. Label the image $\triangle A''B''C''$.'
+        figure: 3.1_p3
+        fig_w: 2.8
+        work: 0
+        answer:
+          - 'From $P$: $A$ is 1 right, 2 up, so $A''$ is 2 right, 4 up.'
+          - '$B$ is 3 right, 1 up, so $B''$ is 6 right, 2 up.'
+          - '$C$ is 2 right, 3 up, so $C''$ is 4 right, 6 up.'
+          - 'Each image point is on its ray, twice as far from $P$.'
+
+  - kind: notes
+
+  - kind: apply
+    items:
+      - n: 3
+        minutes: 4
+        prompt:
+          - 'Dilate $\overline{ST}$ using center $P$ and scale factor $\frac{1}{3}$. Label $S''$ and $T''$.'
+        figure: 3.1_exit
+        fig_w: 2.6
+        work: 1.0
+        answer:
+          - 'From $P$: $S$ is 6 right, 3 up, so $S''$ is 2 right, 1 up.'
+          - '$T$ is 3 right, 6 up, so $T''$ is 1 right, 2 up.'
+          - 'Each is $\frac{1}{3}$ as far from $P$: the image is closer to $P$ and smaller.'
+
+quicknotes:
+  - '**LT: I can dilate a figure given a scale factor and center.**'
+  - '- **Scale factor:** the number every length in the original is multiplied by to make a scaled copy.'
+  - '- A **dilation** with center $P$ and scale factor $k$ moves each point $A$ along $\overrightarrow{PA}$ to $A''$, so that $PA'' = k \cdot PA$.'
+  - '- The center does not move.'
+  - '- $k > 1$: **enlargement**. The image is larger, and points move away from $P$.'
+  - '- $0 < k < 1$: **reduction**. The image is smaller, and points move closer to $P$.'
+  - '- $k = 1$: the image is the same as the original.'
+  - '- To dilate on a grid: count right/left and up/down from $P$ to the point, multiply both counts by $k$, and count again from $P$.'
+
+practice:
+  title: 'Dilations: practice'
+  rows:
+    - cells:
+        - n: 1
+          prompt:
+            - 'Dilate $\triangle JKL$ using center $J$ and scale factor 2. Label the image $J''K''L''$.'
+            - 'From $J$, $K$ is 2 right and $L$ is 2 up.'
+          figure: 3.1_prac1
+          fig_w: 1.7
+          work: 0
+          answer: '$J$ is the center, so $J'' = J$. $K''$ is 4 right of $J$ and $L''$ is 4 up from $J$.'
+        - n: 2
+          prompt:
+            - 'Figure $f$ is a scaled copy of Figure $e$. $AB = 6$, $CD = 3$, $XY = 4$, and $ZW = a$. Select **all** true equations.'
+            - '$\overline{AB}$ matches $\overline{XY}$, and $\overline{CD}$ matches $\overline{ZW}$.'
+          figure: 3.1_prac3
+          fig_w: 2.6
+          layout: stacked
+          choices: ['$\frac{6}{3} = \frac{4}{a}$', '$\frac{6}{4} = \frac{3}{a}$', '$\frac{3}{4} = \frac{6}{a}$', '$\frac{6}{3} = \frac{a}{4}$', '$\frac{6}{4} = \frac{a}{3}$', '$\frac{3}{4} = \frac{a}{6}$']
+          choice_cols: 3
+          answer: '[A], [B]. $AB$ matches $XY$ and $CD$ matches $ZW$, so $a = 2$. Only A ($2 = 2$) and B ($1.5 = 1.5$) are true.'
+          work: 0.1
+    - cells:
+        - n: 3
+          prompt: 'Solve each equation.'
+          parts:
+            - label: a.
+              prompt: '$\frac{2}{5} = \frac{x}{15}$'
+              fill: [['$x =$', '6']]
+              answer: '$x = 15 \cdot \frac{2}{5} = 6$'
+              work: 0.45
+            - label: b.
+              prompt: '$\frac{7}{5} = \frac{28}{x}$'
+              fill: [['$x =$', '20']]
+              answer: '$7x = 140$, so $x = 20$'
+              work: 0.45
+        - n: 4
+          prompt:
+            - 'Name a type of quadrilateral where a diagonal is also a line of symmetry. Explain how you know.'
+            - 'A line of symmetry is a line you can reflect a figure across so that it lands on itself (Unit 1).'
+          fill: [['Quadrilateral:', 'rhombus']]
+          box_w: 1.4
+          answer: 'Sample: rhombus $ABCD$. $AB = AD$ and $CB = CD$, so $A$ and $C$ are both on the perpendicular bisector of $\overline{BD}$, and that line is line $AC$. Reflecting across line $AC$ swaps $B$ and $D$ and keeps $A$ and $C$, so the rhombus lands on itself. Also accept square or kite.'
+          work: 1.8
+    - heading: SBA review
+      cells:
+        - n: 5
+          prompt: 'Write an equation of the line through $(-4, -3)$ and $(-1, 12)$.'
+          work: 1.3
+          answer: ['slope $= \frac{12 - (-3)}{-1 - (-4)} = \frac{15}{3} = 5$', '$-3 = 5(-4) + b$, so $b = 17$', '$y = 5x + 17$']
+  selected: [[3, 'a. 6  b. 20'], [4, 'rhombus, square, or kite'], [5, '$y = 5x + 17$']]
+
+plan: |
+  **Overview.** First lesson of Unit 3. Students know rigid motions keep lengths. Today: a dilation (center, scale factor) changes size. 3.3 measures side lengths; 3.4 does lines and angles.
+
+  **Core idea.** Students see that a dilation keeps each point on its ray from the center and makes it $k$ times as far from the center, so $k > 1$ pushes every point out (a larger copy) and $k < 1$ pulls every point in (a smaller copy). Spend whole-class time on where $H'$ goes in Problem 1 and on "farther or closer?" for $k = \frac{1}{2}$. Known steps are printed; only the new step is blank: where each image point goes ($k$ times as far along its ray) and the counts for it. Printed so you can move past them: the rays from the center (Problems 1 and 2), the counts from $C$ to $H$ (Problem 1), and the grid; every count is a small whole number. The warm-up's blanks are the one skill it reviews (scaled copy or stretched, Grade 7). Faded version: the later problems print less, so students carry the whole argument in Problem 3. The in-class practice (Problem 3, after the QuickNotes) checks the reduction half on each student's own paper: with no rays, counts, or boxes, it shows whether a student moves each point closer to $P$, $\frac{1}{3}$ as far along its ray.
+
+  **Objective.** I can dilate a figure given a scale factor and center. **Standards.** G-SRT.A.1, G-CO.A.2. SMP 5, 6.
+
+  **Quick look (24 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-3 | Warm-up | Students, 1 min share |
+  | 3-7 | Together: Problem 1 | Teacher + class |
+  | 7-13 | With a partner: Problem 2 | Students (pairs) |
+  | 13-17 | QuickNotes | Teacher + class |
+  | 17-21 | In-class practice: Problem 3 | Students (on their own) |
+  | 21-24 | Collect, assign practice | Teacher |
+
+  **Warm-up (3 min).** B is the scaled copy: the width and the height both shrink to 0.8. A keeps the width and shrinks only the height. In the share, ask "What would you measure to check?" Let "every length shrinks by the same amount" come from students. Don't define scale factor yet.
+
+  **Together (4 min, doc camera).** Read the definition above Problem 1. The ray from $C$ through $H$ is printed. Ask "Where on this ray does $H'$ go?", then count 2 right, 1 up three times and fill the boxes. Ask "What would $H'$ be with scale factor $\frac{1}{2}$? Farther or closer?" and take answers out loud. This is the only reduction before Problem 3, so make sure the class hears "closer to $C$".
+
+  **With a partner (6 min).** Problem 2. The rays from $P$ are printed; students count from $P$ to each vertex (as in Problem 1), place $A'$, $B'$, $C'$, and connect them. Problem 1 is the model, so there are no steps.
+  - Assessing: "How far is $A'$ from $P$, compared with $A$?"
+  - Advancing: "Which vertex moved the farthest? Why that one?" ($C$: it started farthest from $P$, and every distance from $P$ doubles.)
+  - Watch for: counting from the corner of the grid instead of from $P$ (ask "Where does the count start?").
+  - MLL supports: point to the same words in Problems 1 and 2 (center, scale factor, image). The printed rays show "along the ray" without words, and Problem 1's printed counts model the words for counting from the center (right, up, from). Any language for partner talk.
+
+  **QuickNotes (4 min).** The QuickNotes start page 2, so the grid method isn't printed next to Problems 1-2. Before reading, ask "Is $\triangle A'B'C'$ larger or smaller? Did the points move toward $P$ or away?" Connect enlargement to Problem 2 and reduction to the $k = \frac{1}{2}$ question from Together. The reduction bullet and the grid method are what students lean on in Problem 3.
+
+  **In-class practice (4 min, on their own).** Problem 3 is under the QuickNotes. It is a reduction ($k = \frac{1}{3}$) with no counts, no rays, and no boxes, so each student does the whole dilation and it shows whether they move the points closer, $\frac{1}{3}$ as far. Students may use the QuickNotes. Circulate and check $S'$ (2 right, 1 up from $P$) and $T'$ (1 right, 2 up).
+  - Assessing: "Is $S'$ closer to $P$ or farther than $S$? How do you know?"
+  - Advancing (stuck): "Count from $P$ to $S$ first. Which QuickNotes line says what to do with the counts?"
+  - Watch for: multiplying by 3 instead of $\frac{1}{3}$ (points 3 times as far), or $S'$ placed off the line through $P$ and $S$. Ask "Which way does a scale factor less than 1 move a point?"
+  - MLL supports: the grid bullet gives the steps in words (count, multiply, count again); a student can show $S'$ by pointing and answer in any language when you check in.
+
+guide_notes: |
+  **v2 (Nov 23).** New lesson shape. Problem 3 (the reduction, $k = \frac{1}{3}$, the former exit ticket) moves from the partner work to after the QuickNotes as the in-class practice, done on their own; its wording, figure, and key don't change, and it keeps its number (`numbering_after_notes: continue`). Problem 2 moves up to page 1, so the handout is one double-sided sheet: warm-up and Problems 1-2 on the front, the QuickNotes with Problem 3 under them on the back. The warm-up (already an intuition check), Problems 1-2, the QuickNotes, and the practice are unchanged. Items 17 min, plan 24 min.
+
+  **Faded version (Nov 23).** Same problems, figures, QuickNotes, and practice as the standard 3.1, with less printed toward the end. Problem 2: the counts from $P$ are cut (the rays stay), so pairs count from $P$ as in Problem 1. Problem 3: the counts are cut too, so pairs do the whole dilation with no rays and no counts. The key gives the counts. Items 17 min, plan 24 min.
+
+  **Nov 23: known content printed.** Printed now: the counts from the center to each given point in Problems 2 and 3 (counting grid units is known; Problem 1 already printed its counts), the counts from $J$ in practice 1, which segments match in practice 2, and the definition of a line of symmetry (Unit 1) in practice 4. Still blank: every image point (where it lands, $k$ times as far along its ray), Problem 1's two count boxes, the warm-up's two boxes (the Grade 7 skill it reviews), practice 2's choices, practice 3's two proportions, practice 4's shape and reason, and the SBA line. Problem 3 left its counts off on Nov 19 (counting from $P$ was the error it checked); counting is known, so they print now and Problem 3 checks the $k < 1$ step. Item minutes 17 to 15.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item is now Problem 3 (it is the only reduction on the handout and has no rays, so it checks the $0 < k < 1$ half of the core idea, which Problems 1-2 don't). Problem 2 now starts page 2, so both partner problems share a page and the QuickNotes (page 3) don't print next to Problem 3. The handout prints only the Warm-up heading.
+
+  **Nov 19: cut for the core idea.** The rays from the center are now printed in Problems 1 and 2, so students spend the time placing image points, not drawing rays. Cut Problem 2's steps (they spelled out "go twice as far along the ray"; Problem 1 is the model). Cut the fill-in item after Problem 2 ("larger"; "on the ray from $P$"): the drawing and the printed rays already show both, and the QuickNotes state them. Cut the exit ticket's count boxes: their labels said to count from $P$, the error that item (now Problem 3) checks. The warm-up is one box per answer (which copy is scaled, which length stays the same) instead of "name two lengths", which had no single answer. The QuickNotes now start their own page. Practice: cut the polygons $P$ and $Q$ item. It is the same item as Lesson 3.3 practice 4, and finding $k$ from two sides is the 3.3 target.
+
+  **Earlier cuts (Nov 16).** Trimmed from about 50 to 30 minutes: a second Together point ($k = \frac{3}{4}$), a quadrilateral reduction ($k = \frac{1}{2}$), a scale-factor table, and a multiple-choice check on distance from the center. Practice went from 9 to 6 problems (5 after Nov 19).

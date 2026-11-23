@@ -1,0 +1,165 @@
+id: 'Unit 4 Review'
+doc_type: assessment
+title: 'Unit 4 Review: Right Triangles and Trigonometry'
+directions: Show your work. Use a calculator in degree mode. Round sides to the nearest tenth and angles to the nearest degree.
+numbering: auto
+max_pages: 3
+source: 'Unit 4 Review Actual.docx (item order); Unit 4 Review.docx (item bank)'
+do_not_reuse: ['Unit 4 Test*', '4.1-4.5 Progress Check*', '4.6-4.7 Progress Check*']
+targets:
+  - id: LT1
+    understand: 'Students will understand that $a^2+b^2=c^2$ links the three sides of a right triangle, and $c$ is the side across from the right angle.'
+    able_to: 'Students will be able to find a missing leg or hypotenuse, exact or rounded.'
+    standard: '8.G.B.7, G.SRT.8'
+  - id: LT2
+    understand: 'Students will understand that each trig ratio is named from one acute angle (opposite, adjacent, hypotenuse).'
+    able_to: 'Students will be able to pick true sin, cos, and tan statements for a labeled triangle.'
+    standard: 'G.SRT.6, G.SRT.7'
+  - id: LT3
+    understand: 'Students will understand that one side and one acute angle fix the whole right triangle.'
+    able_to: 'Students will be able to use sin, cos, and tan to find missing sides and the missing angle.'
+    standard: G.SRT.8
+  - id: LT4
+    understand: 'Students will understand that inverse trig turns a side ratio back into an angle.'
+    able_to: 'Students will be able to use inverse sin, cos, and tan to find acute angles.'
+    standard: G.SRT.8
+  - id: LT5
+    understand: 'Students will understand that a real situation can be modeled with a right triangle.'
+    able_to: 'Students will be able to draw and solve angle of elevation and rope problems.'
+    standard: 'G.SRT.8, G.MG.1'
+
+sections:
+  - kind: plain
+    target: LT1
+    bank:
+      - '**hypotenuse**: the longest side, across from the right angle'
+      - '**opposite**: the leg across from the angle'
+      - '**adjacent**: the leg next to the angle'
+      - '**angle of elevation**: the angle you look up from the ground'
+    items:
+      - id: pythag
+        target: LT1
+        type: cr
+        demand: pwoc
+        prompt: 'Find the missing side in each triangle.'
+        figure: 'Unit 4 Review_1'
+        fig: wide
+        layout: stacked
+        work: 0.6
+        fill: [['$AC =$', '$48$'], ['$FJ \approx$', '$\sqrt{73} \approx 8.5$']]
+        fill_cols: 2
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: select
+        target: LT2
+        type: sr
+        demand: pwc
+        prompt: 'Circle **all** the true statements. (Three are true.)'
+        figure: 'Unit 4 Review_4'
+        fig: medium
+        select_all: true
+        choices:
+          - '$3^2+10^2=109$'
+          - '$\cos\theta=\dfrac{3}{\sqrt{109}}$'
+          - '$\sin\beta=\dfrac{10}{\sqrt{109}}$'
+          - '$\tan\theta=\dfrac{3}{10}$'
+          - '$\tan\beta=\dfrac{3}{10}$'
+        key: 'A, C, D'
+        answer: 'B is false: $\cos\theta=\frac{10}{\sqrt{109}}$. E is false: $\tan\beta=\frac{10}{3}$.'
+        distractors:
+          B: 'uses opposite for cosine'
+          E: 'ratio from the wrong angle'
+      - id: equation
+        target: LT2
+        type: sr
+        demand: pwc
+        prompt: 'Which equation is true?'
+        figure: 'Unit 4 Review_5'
+        fig: small
+        choices: ['$\sin 36^\circ=\dfrac{x}{13}$', '$\cos 36^\circ=\dfrac{x}{13}$', '$\sin 36^\circ=\dfrac{13}{x}$', '$\cos 36^\circ=\dfrac{13}{x}$']
+        choice_cols: 2
+        work: 0.6
+        key: B
+        answer: '$x$ is adjacent to the $36^\circ$ angle and 13 is the hypotenuse; $x \approx 10.5$.'
+        distractors:
+          A: 'sine for the adjacent leg'
+          C: 'uses sine and flips the ratio'
+          D: 'right ratio, flipped'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: pqn
+        target: LT3
+        type: cr
+        demand: pwc
+        prompt: 'Find all the missing sides and angles.'
+        figure: 'Unit 4 Review_6'
+        fig_w: 2.0
+        work: 1.4
+        fill: [['$m\angle P =$', '$38^\circ$'], ['$NP \approx$', '$10\tan 52^\circ \approx 12.8$'], ['$PQ \approx$', '$10 / \cos 52^\circ \approx 16.2$']]
+        fill_cols: 1
+        box_w: 1.6
+      - id: uvw
+        target: LT3
+        type: cr
+        demand: pwoc
+        prompt: 'Find $x$ and $y$.'
+        figure: 'Unit 4 Review_7'
+        fig_w: 2.0
+        work: 1.4
+        fill: [['$x \approx$', '$10\cos 34^\circ \approx 8.3$'], ['$y \approx$', '$10\sin 34^\circ \approx 5.6$']]
+        fill_cols: 1
+        box_w: 1.6
+
+  - kind: plain
+    target: LT4
+    items:
+      - id: wxy
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'Find all the missing sides and angles.'
+        figure: 'Unit 4 Review_8'
+        fig: medium
+        work: 0.8
+        fill: [['$\alpha \approx$', '$\sin^{-1}\left(\frac{9.1}{25.4}\right) \approx 21^\circ$'], ['$\beta = 90^\circ - \alpha \approx$', '$69^\circ$'], ['$XY = \sqrt{25.4^2 - 9.1^2} \approx$', '23.7']]
+        fill_cols: 1
+        box_w: 1.7
+        answer: 'From $\alpha$: 9.1 is opposite, 25.4 is the hypotenuse, so $\sin^{-1}$.'
+
+  - kind: plain
+    target: LT5
+    items:
+      - id: flagpole
+        target: LT5
+        type: cr
+        demand: pwc
+        prompt: 'You stand 35 meters from the bottom of a flagpole. You look up at a $26^\circ$ angle to see the top. Sketch a right triangle. Then find the height $h$ of the flagpole.'
+        draw: {height: 1.5, steps_w: 3.4, key_figure: 'Unit 4 Review_9', key_fig_w: 1.8}
+        fill: [['$h \approx$', '$35\tan 26^\circ \approx 17.1$ m']]
+      - id: tent
+        target: LT5
+        type: cr
+        demand: pwc
+        prompt: 'Andre tied a rope to the top corner of a tent. The rope is 54 feet long. The rope makes an $18^\circ$ angle with the ground. How tall is the tent?'
+        figure: 'Unit 4 Review_10'
+        fig: medium
+        work: 0.9
+        fill: [['$h \approx$', '$54\sin 18^\circ \approx 16.7$ ft']]
+      - id: school
+        target: LT5
+        type: cr
+        demand: pwc
+        prompt: 'Mai''s school is 44 feet tall. She looks up at a $64^\circ$ angle to see the top. Sketch a right triangle. Then find her distance $d$ from the bottom of the school. Round to the nearest foot.'
+        draw: {height: 1.5, steps_w: 3.4, key_figure: 'Unit 4 Review_11', key_fig_w: 1.0}
+        fill: [['$d \approx$', '$\dfrac{44}{\tan 64^\circ} \approx 21$ ft']]
+
+guide_notes: |
+  **Scoring notes.** Unscored. Credit any valid method. Score the math, not grammar or spelling; accept home-language words and a decimal comma (8,3 = 8.3).
+
+  **MLL support.** If you go over the review in class, launch Problems {num:flagpole}-{num:school} with 3-Reads (no calculating) and check each sketch before students solve.
+
+  **Nov 19: less is more, no headings.** Cut old items 2 and 3. Old 2 ($45^\circ$, leg 4) repeats the hypotenuse move in {ref:pythag}, and no Nov 19 lesson teaches special right triangles. Old 3 (leg 4 next to $60^\circ$) repeats {ref:pqn}. {ref:uvw} is now $34^\circ$ and $56^\circ$: its $38^\circ$ and $52^\circ$ sat under {ref:pqn}, which asks for $38^\circ$, and its 7.9 was a Test Retake answer. Scaffolded: the $XY$ and $\beta$ steps in {ref:wxy}, degree mode, and the count in {ref:select}. Cut bold "Calculate", "ALL", "(ONE)", and the HINT lines. 11 items to 9.

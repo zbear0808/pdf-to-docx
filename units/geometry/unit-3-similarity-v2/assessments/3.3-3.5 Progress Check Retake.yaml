@@ -1,0 +1,154 @@
+id: 3.3-3.5 Progress Check Retake
+doc_type: assessment
+schema_version: 1
+numbering: auto
+set: 3.3-3.5 Progress Check
+form: Retake
+parallel_to: 3.3-3.5 Progress Check A
+title: '3.3-3.5 Progress Check, Retake'
+directions: Show your work.
+total_points: 10
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'a dilation moves each point along the ray from the center to $k$ times as far, so $k > 1$ enlarges and $0 < k < 1$ shrinks'
+    able_to: 'dilate a figure given a center and a scale factor'
+    standard: G-SRT.A.1
+  - id: LT2
+    understand: 'a dilation multiplies every length by the scale factor $k$'
+    able_to: 'find $k$ from a side and its image, and use $k$ to find a missing length'
+    standard: G-SRT.A.1b
+  - id: LT3
+    understand: 'a dilation keeps angle measures and takes a line that misses the center to a parallel line (a line through the center to itself)'
+    able_to: 'tell what a dilation does to angles, lines, and segments'
+    standard: G-SRT.A.1a
+  - id: LT4
+    understand: 'when two sides of a triangle are cut the same fraction of the way from a vertex, one dilation with that vertex as center takes the triangle onto the small one, so the cut segment is parallel to the third side and that fraction of its length, and the angles match'
+    able_to: 'check the fractions and use the dilation to find a length or an angle'
+    standard: G-SRT.B.4
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - id: q1
+        target: LT1
+        type: cr
+        demand: pwoc
+        points: 2
+        prompt: 'Dilate $\triangle RST$ using center $O$ and scale factor $\frac{1}{2}$. Label the image $\triangle R''S''T''$.'
+        figure: 3.3-3.5 Progress Check Retake_dilate
+        fig_w: 3.0
+        work: 0
+        answer: 'Red triangle. Each image point is halfway from $O$ to its point. From $O$: $R''$ is left 3, up 3; $S''$ is left 1, up 3; $T''$ is left 3, up 1.'
+      - id: q2
+        target: LT1
+        type: sr
+        demand: mem
+        key: B
+        points: 1
+        prompt: 'Parallelogram $EFGH$ is dilated to parallelogram $E''F''G''H''$. Which scale factor makes the image **larger** than the original?'
+        choices: ['$\frac{8}{9}$', '$\frac{5}{4}$', '$\frac{1}{2}$', '$1$']
+        choice_cols: 4
+        work: 0.1
+        answer: '[B] $\frac{5}{4}$ is the only scale factor greater than 1. ([A] is close to 1 but less than 1, so the image is smaller. [C] makes it half as big. [D] keeps the same size.)'
+        distractors:
+          A: 'picks the fraction with the biggest numbers; $\frac{8}{9}$ is less than 1, so the image shrinks'
+          C: 'mixes up enlarging and shrinking'
+          D: 'thinks $k = 1$ makes the image larger (1 keeps the same size)'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: q3
+        target: LT2
+        type: cr
+        prompt: 'Polygon $V$ is a dilation of polygon $U$.'
+        figure: 3.3-3.5 Progress Check Retake_rects
+        fig_w: 2.6
+        parts:
+          - label: a.
+            demand: pwoc
+            points: 1
+            prompt: 'What is the scale factor?'
+            fill: [['$k =$', '$\frac{5}{2}$']]
+            box_w: 0.9
+            answer: '$k = \frac{20}{8} = \frac{5}{2}$ (image length $\div$ original length).'
+            work: 0.7
+          - label: b.
+            demand: pwoc
+            points: 1
+            prompt: 'If $x = 25$, what is $y$?'
+            fill: [['$y =$', '10']]
+            box_w: 0.9
+            answer: '$x$ is on the image, so divide: $y = 25 \div \frac{5}{2} = 10$. Check: $\frac{5}{2} \cdot 10 = 25$.'
+            work: 1.2
+
+  - kind: plain
+    target: LT4
+    page_break_before: true
+    items:
+      - id: q4
+        target: LT4
+        type: cr
+        demand: pwc
+        points: 1
+        prompt: 'Here are $\triangle KLM$ and $\triangle KL''M''$. What is the length of $\overline{L''M''}$?'
+        figure: 3.3-3.5 Progress Check Retake_split
+        fig_w: 2.8
+        fill: [['$L''M'' =$', '12']]
+        box_w: 0.9
+        work: 1.0
+        answer: '$\frac{KM''}{KM} = \frac{6}{8} = \frac{3}{4}$ and $\frac{KL''}{KL} = \frac{9}{12} = \frac{3}{4}$. Both sides are cut by the same fraction, so $\overline{L''M''} \parallel \overline{ML}$ and $L''M'' = \frac{3}{4} \cdot 16 = 12$.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: q5
+        target: LT3
+        type: sr
+        demand: pwc
+        key: 'A, C, D'
+        select_all: true
+        points: 2
+        prompt:
+          - 'Select **all** the lines that could be the image of line $c$ after a dilation.'
+          - 'Each wrong or missing choice loses 1 point (lowest score 0).'
+        figure: 3.3-3.5 Progress Check Retake_lines
+        fig_w: 2.1
+        choices: ['$a$', '$b$', '$c$', '$d$', '$e$']
+        work: 0
+        answer: '[A], [C], [D]. Line $c$ itself (if the center is on $c$), or a line parallel to $c$: $a$ and $d$. Lines $b$ and $e$ cross $c$. A blank or all five scores 0.'
+      - id: q6
+        target: LT3
+        type: sr
+        demand: mem
+        key: 'A, B, F'
+        select_all: true
+        points: 2
+        prompt:
+          - '$\triangle ABC$ is dilated with scale factor 3. The image is $\triangle DEF$. Select **all** the statements that are true.'
+          - 'Each wrong or missing choice loses $\frac{2}{3}$ point (lowest score 0).'
+        figure: 3.3-3.5 Progress Check Retake_k3
+        fig_w: 1.9
+        choices: ['$\angle D \cong \angle A$', '$\frac{DE}{AB} = 3$', '$m\angle D = 3 \cdot m\angle A$', '$\overline{AB} \cong \overline{DE}$', '$\frac{AB}{DE} = 3$', '$\overline{AB} \parallel \overline{DE}$']
+        choice_cols: 2
+        work: 0
+        answer: '[A], [B], [F]. A dilation keeps angles ([C] is false), multiplies lengths by 3 so $DE = 3 \cdot AB$ ([E] flips the ratio, [D] says same length), and takes $\overline{AB}$ to a parallel segment. A blank or all six scores 0.'
+
+guide_notes: |
+  **Nov 19: less is more, no headings.** No items cut: each item makes a different move or works at a different level. Item {num:q6}'s parallel choice repeats item {num:q5}'s fact at recall level, but item {num:q6} is this form's only item on angles, so it stays. No section headings; the targets are in the blueprint. The routine steps were already printed (grid, labeled sides, $x$, every piece length). Scoring now accepts an unsimplified scale factor in {num:q3}a and a correct setup in {num:q3}b. Total stays 10.
+
+  **Nov 20: audit fixes.** Item {num:q5}'s lines are renamed so the key is A, C, D (it was B, C, E, the key of Lesson 3.4 practice 2). Item {num:q6}'s choices are mixed so the true statements no longer fill the right column (key A, B, F, was B, D, F). On the select-all items a blank or every choice now scores 0. The Retake keeps the district's structure (see below).
+
+  **Targets.** LT1 (3.1): dilate a figure given a center and a scale factor; $k > 1$ enlarges, $0 < k < 1$ shrinks (items {num:q1}-{num:q2}). LT2 (3.3): a dilation multiplies every length by $k$ (item {num:q3}). LT4 (3.5): two sides cut the same fraction of the way from a vertex give one dilation from that vertex (item {num:q4}). LT3 (3.4): a dilation keeps angles and takes a line to a parallel line, or to itself (items {num:q5}-{num:q6}).
+
+  **Scoring.**
+  - Item {num:q1} (2 pts): 1 point for image points halfway along each ray from $O$ (all three), 1 point for a labeled triangle $R'S'T'$. Small drawing error (half a grid unit): full credit if the halfway idea is clear.
+  - Items {num:q2}, {num:q3}a, {num:q3}b, {num:q4} (1 pt each). {num:q3}a: $\frac{5}{2}$, 2.5, or $\frac{20}{8}$. In {num:q3}b, $y = 62.5$ means the student multiplied instead of dividing; $x$ is on the image. Carry a wrong {num:q3}a through, and give the point for a correct setup ($\frac{5}{2}y = 25$ or $y = 25 \div \frac{5}{2}$) with an arithmetic slip.
+  - Items {num:q5} and {num:q6} (2 pts each): start at 2 and take off 1 on item {num:q5} or $\frac{2}{3}$ on item {num:q6} for each wrong or missing choice (2 divided by the number of wrong choices), lowest 0. A blank or every choice scores 0.
+  - Item {num:q4}: a student who writes 16 or 6 likely thinks $\overline{L'M'}$ matches $\overline{ML}$ or $\overline{KM'}$; ask "What fraction of each side is the small triangle?" A student who writes 48 used the piece ratio $\frac{6}{2} = 3$ instead of $\frac{6}{8}$.
+
+  **How the Retake differs from A and B (on purpose).** On A and B, $x$ is on the original in {num:q3}b, so students multiply by $k$. Here $x$ is on the image, so they divide. This checks whether a student who missed {num:q3}b knows which way $k$ goes, not just the multiplication step. A student who multiplies gets 62.5; point back to which polygon is the image. Also: item {num:q2} has one answer (1 pt, select-all for 2 pts on A and B); item {num:q4} asks for a length instead of an angle (the same LT4 step: both cuts are $\frac{3}{4}$ of the way from $K$); item {num:q5} includes line $c$ itself; item {num:q6} has no match on A or B.
+
+  **Scoring notes (MLLs).** Score the math, not grammar or spelling. Accept a decimal comma (2,5 = 2.5), home-language words, and answers written as a drawing or labeled figure.

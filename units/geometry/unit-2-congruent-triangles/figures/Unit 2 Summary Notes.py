@@ -2,6 +2,8 @@
 Reference sheet: no key, so every figure is given ink only (black). Shapes follow the teacher's source drawings,
 redrawn because the source images are low resolution. Two examples get new letters and shapes so they don't
 match test items (see _temp/specs/Unit 2 Summary Notes/changes.md).
+Nov 20: one parallelogram figure (_para, sides and angles) replaces _para_sides and _para_angles; the 39 degree
+label in _25b sits next to R.
 Loop: uv run lesson-builder figs units/geometry/unit-2-congruent-triangles -l "Unit 2 Summary Notes"
 """
 import numpy as np
@@ -182,7 +184,9 @@ def ex25b() -> Figure:
     f.arc(_kK, _kJ, _kL, r=0.2)
     f.arc(_kJ, _kK, _kL, r=0.32)
     f.angle_label(_pP, _pR, _pQ, r'$112^\circ$', dist=0.5, size=9, fixed=True)
-    f.text(_inside(_pR, _pQ, _pP, 0.35, 0.95), r'$39^\circ$', size=9, fixed=True)
+    # Nov 20: R's wedge is too narrow for the label, so 39 sits just outside R, beside its arc (not near P)
+    f.text(_pR + 0.45 * np.array([np.cos(np.radians(-40)), np.sin(np.radians(-40))]), r'$39^\circ$', size=9,
+           fixed=True)
     f.angle_label(_kK, _kJ, _kL, r'$112^\circ$', dist=0.5, size=9, fixed=True)
     f.text(_inside(_kJ, _kL, _kK, 0.3, 1.05), r'$39^\circ$', size=9, fixed=True)
     f.ticks(_pP, _pQ, 1, size=0.11)
@@ -276,28 +280,21 @@ def asa_ex() -> Figure:
     return f
 
 
-# ---------------------------------------------------------------- 2.7 and 2.9 parallelogram MNKL
+# ---------------------------------------------------------------- 2.7 parallelogram MNKL (sides and angles)
+# Nov 20: one figure for the one Parallelogram Theorem (2.7 QuickNotes); it replaces para_sides and para_angles.
 _pM, _pN, _pK, _pL = P((0, 0), (0.7, 1.3), (3.0, 1.3), (2.3, 0))
 assert is_parallel(_pM, _pN, _pK, _pL) and is_parallel(_pN, _pK, _pM, _pL)
+assert np.isclose(angle_deg(_pM, _pN, _pL), angle_deg(_pK, _pN, _pL))
+assert np.isclose(angle_deg(_pN, _pM, _pK), angle_deg(_pL, _pM, _pK))
 
 
-def _para() -> Figure:
-    f = Figure(width_in=2.1, height_in=1.15)
+@figure(f"{S}_para")
+def para() -> Figure:
+    f = Figure(width_in=2.3, height_in=1.25)
     _tri(f, [_pM, _pN, _pK, _pL], "MNKL")
-    return f
-
-
-@figure(f"{S}_para_sides")
-def para_sides() -> Figure:
-    f = _para()
-    mark_congruent(f, [((_pM, _pN), (_pL, _pK)), ((_pN, _pK), (_pM, _pL))], size=0.12)
-    return f
-
-
-@figure(f"{S}_para_angles")
-def para_angles() -> Figure:
-    f = _para()
-    mark_congruent(f, [((_pM, _pN, _pL), (_pK, _pN, _pL)), ((_pN, _pM, _pK), (_pL, _pM, _pK))], r=[0.24, 0.2])
+    mark_congruent(f, [((_pM, _pN), (_pL, _pK)), ((_pN, _pK), (_pM, _pL)),
+                       ((_pM, _pN, _pL), (_pK, _pN, _pL)), ((_pN, _pM, _pK), (_pL, _pM, _pK))],
+                   size=0.12, r=[0.24, 0.2])
     return f
 
 

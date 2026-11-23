@@ -1,0 +1,133 @@
+id: 'Trig Word Problems Practice'
+schema_version: 1
+doc_type: assessment
+title: 'Trig word problems practice'
+directions: 'For each problem, sketch a right triangle. Label the right angle, the acute angle in the problem, and opp, adj, and hyp from that angle. Then solve. Round to the nearest tenth.'
+numbering: auto
+max_pages: 2
+source: 'Trig Word Problems Practice.docx (items 1-6)'
+do_not_reuse: ['Unit 4 Test*', '4.1-4.5 Progress Check*', '4.6-4.7 Progress Check*']
+targets:
+  - id: LT1
+    understand: 'a word problem becomes a right triangle once you sketch it and label the right angle, the given angle, and the sides (opposite, adjacent, hypotenuse from that angle)'
+    able_to: 'sketch and label a right triangle from a word problem, including an angle of elevation'
+    standard: G-SRT.C.8
+  - id: LT2
+    understand: 'the labels on the sketch decide the ratio: sin, cos, or tan'
+    able_to: 'choose and solve with sin, cos, tan, or an inverse to find a missing side or angle, with units'
+    standard: G-SRT.C.8
+  - id: LT3
+    understand: 'some problems need two right triangles that share a side'
+    able_to: 'solve two-triangle problems (shared height, shared base) and combine the results'
+    standard: G-SRT.C.8
+
+sections:
+  - kind: plain
+    target: LT1
+    bank:
+      - '**opposite**: across from the angle'
+      - '**adjacent**: next to the angle, not the hypotenuse'
+      - '**hypotenuse**: across from the right angle'
+    items:
+      - n: ''
+        prompt: '**Angle of elevation**: the angle you look up, from the ground to the top.'
+        figure: 'Trig Word Problems Practice_vocab'
+        work: 0
+        no_answer: true
+      - id: juan
+        target: LT1
+        type: cr
+        demand: pwoc
+        source: 'Trig Word Problems Practice #1, 1'
+        prompt: 'Juan is 25 feet from the bottom of a tree. He looks up at the top of the tree at a $51^\circ$ angle. What is the height of the tree?'
+        draw:
+          height: 2.4
+          key_figure: 'Trig Word Problems Practice_1'
+          key_fig_w: 1.9
+        frame:
+          - ['I know the', 'adjacent', 'side.', 1.1]
+          - ['I want the', 'opposite', 'side.', 1.1]
+          - ['So I used', 'tan', '.', 0.9]
+        answer: '$\tan 51^\circ = \dfrac{h}{25}$, so $h = 25\,\tan 51^\circ \approx 30.9$ ft.'
+      - id: yasmin
+        target: LT1
+        type: cr
+        demand: pwoc
+        source: 'Trig Word Problems Practice #1, 2'
+        prompt: 'Yasmin is standing some distance from the bottom of a 60-foot tree. She looks up at the top of the tree at a $31^\circ$ angle. How far from the tree is she standing?'
+        draw:
+          height: 2.4
+          key_figure: 'Trig Word Problems Practice_2'
+          key_fig_w: 1.8
+        answer: '$\tan 31^\circ = \dfrac{60}{d}$, so $d = \dfrac{60}{\tan 31^\circ} \approx 99.9$ ft.'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: ladder1
+        target: LT2
+        type: cr
+        demand: pwoc
+        source: 'Trig Word Problems Practice #1, 3'
+        prompt: 'A ladder is leaning against a wall. The ladder makes a $60^\circ$ angle with the ground and reaches 8.5 feet up the wall. How long is the ladder?'
+        draw:
+          height: 2.4
+          key_figure: 'Trig Word Problems Practice_3'
+          key_fig_w: 1.2
+        answer: '$\sin 60^\circ = \dfrac{8.5}{L}$, so $L = \dfrac{8.5}{\sin 60^\circ} \approx 9.8$ ft.'
+      - id: ladder2
+        target: LT2
+        type: cr
+        demand: pwoc
+        source: 'Trig Word Problems Practice #1, 4'
+        prompt: 'A 12-foot ladder is leaning against a wall. The bottom of the ladder is 3 feet from the wall. What angle does the ladder make with the ground?'
+        draw:
+          height: 2.4
+          key_figure: 'Trig Word Problems Practice_4'
+          key_fig_w: 1.1
+        answer: '$\cos\theta = \dfrac{3}{12}$, so $\theta = \cos^{-1}\left(\dfrac{3}{12}\right) \approx 75.5^\circ$.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: trees
+        target: LT3
+        type: cr
+        demand: pwc
+        source: 'Trig Word Problems Practice #1, 5'
+        prompt: 'Mohammad is standing between two trees. Each tree is 100 feet from him. He looks up at the pine tree at a $37^\circ$ angle. He looks up at the spruce tree at a $26^\circ$ angle. Which tree is taller, and by how much?'
+        draw:
+          height: 3.0
+          key_figure: 'Trig Word Problems Practice_5'
+          key_fig_w: 3.2
+        answer:
+          - 'Pine: $100\,\tan 37^\circ \approx 75.4$ ft. Spruce: $100\,\tan 26^\circ \approx 48.8$ ft.'
+          - 'The pine is taller by about 26.6 ft.'
+      - id: tower
+        target: LT3
+        type: cr
+        demand: pwc
+        source: 'Trig Word Problems Practice #1, 6 (unnumbered in the source)'
+        prompt: 'Mary is standing 500 feet south of a tower. She looks up at a $13^\circ$ angle to see the top of the tower. Christopher is standing west of the tower. He looks up at a $17^\circ$ angle to see the top of the tower. South and west make a right angle at the tower. How far apart are Mary and Christopher?'
+        draw:
+          height: 4.0
+          key_figure: 'Trig Word Problems Practice_6'
+          key_fig_w: 3.5
+        answer:
+          - 'Tower: $h = 500\,\tan 13^\circ \approx 115.4$ ft. Christopher: $\dfrac{h}{\tan 17^\circ} \approx 377.6$ ft from the tower.'
+          - 'The right angle is at the tower: $\sqrt{500^2 + 377.6^2} \approx 626.5$ ft apart.'
+
+guide_notes: |
+  **Unscored practice.** No points. Check each sketch (right angle, given angle, opp/adj/hyp) before students compute. Every sketch box is LT1 evidence; the blueprint tags Problems 1-2 LT1, 3-4 LT2, 5-6 LT3 (one tag per item). The Problem 1 frame: adjacent (25 ft), opposite ($h$), tan.
+
+  **Common errors.** Problem 2: tan upside down ($60\,\tan 31^\circ \approx 36.1$). Problem 4: using sine ($\sin^{-1}(3/12) \approx 14.5^\circ$ is the angle with the wall). Problem 6: adding $500 + 377.6$ instead of using the Pythagorean Theorem.
+
+  **Rounding.** Problem 5: rounding the heights first still gives 26.6 ft. Problem 6: round at the end (626.54); rounding $h$ to 115.4 first still gives about 626.5 ft. Key sketch for Problem 6 draws heights 2x so the small angles are visible.
+
+  **Time.** About 25-30 minutes. If time is short, Problem 6 is the cut.
+
+  **MLL support.** Launch Problem 1 with 3-Reads (no calculating) and act out "looks up". For the other problems, ask for the Problem 1 frame out loud ("I know the adjacent side. I want the opposite side. So I used tan.").
+
+  **Scoring notes.** Credit any valid method. Score the math, not English grammar or spelling.
+
+  **Nov 19: less is more, no headings.** Nothing cut: Problems 1 and 2 put the unknown on top and on the bottom, and each other problem makes its own move. Scaffolded: Problem 5 gives 100 ft to each tree (it said "halfway between two trees that are 200 feet apart"), and Problem 6 says south and west make a right angle at the tower. Cut: the angle of depression (no problem or lesson uses it; the picture now shows only elevation), "UP" in capitals, "Challenge." on Problem 6, and the second labels line (now in the directions). The sentence frame moved from the vocabulary block to Problem 1 as boxes. "Base" is now "bottom" (4.7's word). Three sections by target, no headings. Still 6 problems, unscored.

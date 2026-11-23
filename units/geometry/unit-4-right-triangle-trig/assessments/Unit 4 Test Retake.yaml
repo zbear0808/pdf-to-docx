@@ -1,0 +1,154 @@
+id: 'Unit 4 Test Retake'
+doc_type: assessment
+title: 'Unit 4 Test Retake: Right Triangle Trig'
+directions: 'Show your work. Use a calculator in degree mode.'
+numbering: auto
+set: 'Unit 4 Test'
+form: 'Retake'
+parallel_to: 'Unit 4 Test A'
+source: 'Unit 4 Test - RETAKE and Unit 4 Test Version A (rebuilt to mirror A)'
+total_points: 18
+max_pages: 3
+targets:
+  - id: LT1
+    understand: 'each trig ratio compares two sides named from one acute angle, and the two acute angles are complementary, so sin of one equals cos of the other'
+    able_to: 'find the second acute angle and pick every true sin, cos, tan equation for a labeled triangle'
+    standard: 'G.SRT.6, G.SRT.7'
+  - id: LT2
+    understand: 'one side and one acute angle fix the whole right triangle'
+    able_to: 'use sin, cos, or tan to find a missing side from one side and one acute angle, including an unknown hypotenuse'
+    standard: G.SRT.8
+  - id: LT3
+    understand: 'inverse trig turns a side ratio back into an angle'
+    able_to: 'use inverse tan (and inverse sin, inverse cos) to find an acute angle from two sides'
+    standard: G.SRT.8
+  - id: LT4
+    understand: 'a real situation can be modeled with a right triangle, and the answer has to be checked against the situation'
+    able_to: 'model a context with a right triangle, solve it, and judge the answer against a rule'
+    standard: 'G.SRT.8, G.MG.1'
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - id: tri_def
+        target: LT1
+        prompt: 'In $\triangle DEF$, $\angle F$ is a right angle and $\angle E = 58^\circ$.'
+        figure: 'Unit 4 Test Retake_1'
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: mem
+            prompt: 'Find $m\angle D$.'
+            fill: [['$m\angle D =$', '$32^\circ$']]
+            answer: '$90^\circ - 58^\circ = 32^\circ$. 1 pt method, 1 pt answer.'
+          - label: b.
+            points: 2
+            type: sr
+            demand: pwc
+            select_all: true
+            prompt: 'Circle **all** the true equations. (Two are true.)'
+            choices: ['$\tan(58^\circ) = \dfrac{d}{e}$', '$\cos(58^\circ) = \dfrac{d}{f}$', '$\cos D = \dfrac{e}{f}$', '$\sin(58^\circ) = \dfrac{f}{e}$']
+            choice_cols: 2
+            key: 'B, C'
+            answer: 'From $58^\circ$: $d$ is adjacent, $e$ is opposite. From $\angle D$, $e$ is adjacent, so $\cos D = \sin(58^\circ)$. Half a point off for each wrong choice circled or true choice missed (lowest score 0).'
+            distractors:
+              A: 'flips the ratio (adjacent over opposite)'
+              D: 'flips the ratio (hypotenuse over opposite)'
+
+  - kind: plain
+    target: LT4
+    items:
+      - id: ladder
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'A ladder leans against a wall. The bottom of the ladder is 6 ft from the wall, and the top is 14 ft up the wall. A ladder is safe when its angle $x$ with the ground is **at least** $70^\circ$. Find $x$. Round to the nearest tenth of a degree. Is the ladder safe?'
+        figure: 'Unit 4 Test Retake_2'
+        work: 1.0
+        fill: [['Equation:', '$\tan x = \frac{14}{6}$'], ['$x \approx$', '$66.8^\circ$'], ['Safe? (YES or NO)', 'NO']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$x = \tan^{-1}(14/6) \approx 66.8^\circ$, less than $70^\circ$, so NO. 1 pt equation, 1 pt angle, 1 pt YES/NO that matches the angle. Angle point only with tan (for example $\cos^{-1}(6/14) \approx 64.6^\circ$ gets none).'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: hyp
+        points: 2
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: 'Find $y$. Round to the nearest tenth.'
+        figure: 'Unit 4 Test Retake_3'
+        work: 1.0
+        fill: [['Equation:', '$\sin(28^\circ) = \frac{11}{y}$'], ['$y \approx$', '23.4']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$y = 11 / \sin(28^\circ) \approx 23.4$. 1 pt equation, 1 pt answer.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - id: alpha
+        points: 2
+        target: LT3
+        type: cr
+        demand: pwoc
+        prompt: 'Find $\alpha$. Round to the nearest tenth of a degree.'
+        figure: 'Unit 4 Test Retake_4'
+        work: 1.0
+        fill: [['Equation:', '$\sin\alpha = \frac{5.3}{10.2}$'], ['$\alpha \approx$', '$31.3^\circ$']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: '$\alpha = \sin^{-1}(5.3/10.2) \approx 31.3^\circ$. 1 pt equation, 1 pt answer. $\cos^{-1}(5.3/10.2) \approx 58.7^\circ$ is the other angle (full credit only if subtracted from $90^\circ$); $\tan^{-1}$ gives $27.5^\circ$ (no points).'
+
+  - kind: plain
+    target: LT2
+    items:
+      - id: legs
+        points: 4
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'In $\triangle PQR$, $\angle R$ is a right angle, $PQ = 9$, and $\angle P = 29^\circ$. Find $QR$ and $PR$. Round to the nearest tenth.'
+        figure: 'Unit 4 Test Retake_5'
+        work: 0.6
+        fill: [['Equation for $QR$:', '$\sin(29^\circ) = \frac{QR}{9}$'], ['$QR \approx$', '4.4'], ['Equation for $PR$:', '$\cos(29^\circ) = \frac{PR}{9}$'], ['$PR \approx$', '7.9']]
+        fill_cols: 1
+        box_w: 1.5
+        answer: 'Multiply: $QR = 9\sin(29^\circ)$ and $PR = 9\cos(29^\circ)$. Each side: 1 pt equation, 1 pt answer.'
+
+  - kind: plain
+    target: LT4
+    items:
+      - id: lighthouse
+        points: 3
+        target: LT4
+        type: cr
+        demand: pwc
+        prompt: 'You stand 130 ft from the bottom of a lighthouse. The angle of elevation (the angle up from the ground) to the top of the lighthouse is $58^\circ$. Find the height $h$ of the lighthouse. Round to the nearest foot.'
+        figure: 'Unit 4 Test Retake_6'
+        work: 1.0
+        fill: [['Equation:', '$\tan(58^\circ) = \frac{h}{130}$'], ['$h \approx$', '208 ft']]
+        fill_cols: 1
+        box_w: 1.6
+        answer: '$h = 130\tan(58^\circ) \approx 208$ ft. 1 pt equation, 1 pt work, 1 pt answer.'
+
+  - kind: plain
+    items:
+      - prompt: 'Is there anything you want Ms. Freedman to know?'
+        work: 0.7
+        answer: 'Not scored.'
+        no_answer: true
+
+guide_notes: |
+  **Scoring notes.** Credit any valid method (cos instead of sin, the other acute angle, or the Pythagorean Theorem). Score the math, not grammar or spelling. Accept home-language words and a decimal comma (4,4 = 4.4). Rounding one place off (for example $67^\circ$ for $66.8^\circ$) gets full credit when the method is right.
+
+  **Before test day.** Tell students this test has no sin, cos, tan box ({num:tri_def}b measures the ratios); the 4.6-4.7 checks had one. MLL support: if you preview the contexts, launch {ref:ladder} and {ref:lighthouse} with 3-Reads (no calculating), and keep the words opposite, adjacent, hypotenuse, and angle of elevation.
+
+  **Parallel to Test A.** Same targets, points, and boxes. The given angle is at the top vertex in {ref:tri_def} here and in Problem 5 on Test A. {ref:ladder} answers NO and {ref:alpha} needs $\sin^{-1}$ (Test A: YES and $\cos^{-1}$; until Nov 20, {ref:alpha} was legs 9 and 20 with $\tan^{-1}$).
+
+  **Nov 19: less is more, no headings.** Cut old 5a, $m\angle Q$ (2 pts; it repeated {num:tri_def}a). Old 5b-5c are now {ref:legs} and old 2a-2b {ref:ladder}, with Test A's boxes. Cut extra directions and the side-name sentence; "foot of the ladder" is now "bottom". Total 20 to 18.

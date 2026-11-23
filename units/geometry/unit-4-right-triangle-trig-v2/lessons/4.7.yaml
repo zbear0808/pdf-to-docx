@@ -1,0 +1,270 @@
+schema_version: 1
+id: '4.7'
+title: 'Applying ratios in right triangles'
+notes_title: 'Angle of elevation'
+framing: >-
+  How can a right triangle tell us how tall a building is without climbing it?
+materials: 'Scientific calculator (degree mode), pencil'
+numbering: auto
+headings: warmup
+numbering_after_notes: continue
+source: 'This unit: 4.7 Student Notes.md, 4.7 Practice Problems.md; requirements.md.'
+targets:
+  - id: LT1
+    understand: 'A real height or distance can be modeled by a right triangle. The angle of elevation is measured up from the horizontal at the observer.'
+    able_to: 'Sketch and label a right triangle from a description or a picture, pick the ratio, and find an unknown height or distance (nearest tenth).'
+    standard: G-SRT.C.8
+  - id: LT2
+    understand: 'In a triangle drawn in any direction, the angle (not the page) decides which sides are opposite, adjacent, and hypotenuse.'
+    able_to: 'Find missing sides of a tilted triangle and of a triangle given only in words.'
+    standard: G-SRT.C.8
+
+sections:
+  - kind: warmup
+    target: LT2
+    box:
+      - '**opposite**: across from the angle | **adjacent**: next to the angle, not the hypotenuse | **hypotenuse**: across from the right angle'
+      - '$\sin = \frac{\text{opp}}{\text{hyp}}$ | $\cos = \frac{\text{adj}}{\text{hyp}}$ | $\tan = \frac{\text{opp}}{\text{adj}}$'
+    items:
+      - id: warmup
+        minutes: 4
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: 'Name the sides of $\triangle ABC$ as seen from $\angle B$. Then find $AC$ to the nearest tenth.'
+        figure: '4.7_warmup'
+        fill:
+          - ['Hypotenuse:', '$AB$']
+          - ['Side opposite $\angle B$:', '$AC$']
+          - ['Side adjacent to $\angle B$:', '$BC$']
+          - ['$AC \approx$', '2.1']
+        fill_cols: 1
+        box_w: 0.9
+        work: 0.7
+        answer:
+          - 'The hypotenuse is on top, across from the right angle at $C$.'
+          - '$\sin 20^\circ = \dfrac{AC}{6}$, so $AC = 6\sin 20^\circ \approx 2.1$.'
+
+  - kind: together
+    target: LT2
+    items:
+      - id: abc
+        minutes: 4
+        target: LT2
+        type: cr
+        demand: pwc
+        prompt: 'The triangle is named $ABC$. $\angle C$ is a right angle and $\angle A = 42^\circ$. $AC = 4$ cm. $AB$ is the hypotenuse.'
+        steps:
+          - 'Sketch $\triangle ABC$. Put the right angle at $C$.'
+          - 'Label $42^\circ$ and 4 cm.'
+          - 'Find $AB$ to the nearest tenth.'
+        draw:
+          height: 2.7
+          key_figure: '4.7_1'
+          key_fig_w: 2.0
+        answer:
+          - 'From $A$, $AC$ is adjacent and $AB$ is the hypotenuse, so cosine.'
+          - '$\cos 42^\circ = \dfrac{4}{AB}$, so $AB = \dfrac{4}{\cos 42^\circ} \approx 5.4$ cm.'
+
+  - kind: partner
+    target: LT1
+    page_break_before: true
+    box:
+      - '**angle of elevation**: the angle you look up, from the ground to the top'
+      - '**height**: how tall, from the bottom to the top'
+      - '**distance from the bottom**: how far you stand from the object'
+    items:
+      - id: burj
+        minutes: 4
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt:
+          - 'The Burj Khalifa in Dubai is the tallest building in the world (January 2024). You stand on a bridge 250 m from the bottom of the building. You look up at a $73^\circ$ angle to see the top.'
+          - 'How tall is the building? Show your reasoning.'
+        figure: '4.7_3'
+        frame:
+          - ['The building is about', '817.7 m', 'tall.', 1.2]
+        work: 1.4
+        answer:
+          - 'From the $73^\circ$ angle at $C$, the height $AB$ is opposite and the 250 m is adjacent, so tangent.'
+          - '$\tan 73^\circ = \dfrac{AB}{250}$, so $AB = 250\tan 73^\circ \approx 817.7$ m.'
+      - id: cityhall
+        minutes: 5
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt:
+          - 'City Hall in Philadelphia is the tallest building made of stone and brick (January 2024). You stand on the street 1,300 feet from the bottom of the building. You look up at a $23^\circ$ angle to see the top.'
+          - 'Draw the right triangle on the picture. Label $23^\circ$ and the height $h$. Then find $h$.'
+        figure: '4.7_4'
+        fig_w: 3.6
+        layout: stacked
+        fill: [['$h \approx$', '551.8 ft']]
+        work: 1.2
+        answer:
+          - 'The right angle is at the bottom of the building and $23^\circ$ is at you, so $h$ is opposite and 1,300 ft is adjacent.'
+          - '$\tan 23^\circ = \dfrac{h}{1300}$, so $h = 1300\tan 23^\circ \approx 551.8$ ft.'
+
+  - kind: notes
+
+  - kind: apply
+    target: LT1
+    items:
+      - id: tree
+        minutes: 5
+        target: LT1
+        type: cr
+        demand: pwc
+        prompt:
+          - 'The tallest tree in the world is a redwood in California (January 2024). You stand on a trail 220 feet from the bottom of the tree. You look up at a $60^\circ$ angle to see the top.'
+          - 'How tall is the tree? Sketch the triangle and label the height $h$. Round to the nearest tenth.'
+        fill: [['$h \approx$', '381.1 ft']]
+        draw:
+          height: 2.6
+          key_figure: '4.7_exit'
+          key_fig_w: 1.5
+        answer:
+          - '$h$ is opposite the $60^\circ$ angle and 220 ft is adjacent.'
+          - '$\tan 60^\circ = \dfrac{h}{220}$, so $h = 220\tan 60^\circ \approx 381.1$ ft.'
+
+notes_figure: '4.7_qn'
+notes_fig_w: 2.3
+quicknotes:
+  - target: LT1
+    title: 'I can use sine, cosine, and tangent to find the height of an object.'
+    bullets:
+      - 'The **angle of elevation** starts at the ground and goes up to your line of sight.'
+      - 'From that angle, the height is **opposite** and the distance from the bottom is **adjacent**.'
+      - '$\tan(\text{angle}) = \dfrac{\text{height}}{\text{distance}}$, so height $=$ distance $\cdot \tan(\text{angle})$.'
+  - target: LT2
+    title: 'Any direction'
+    bullets:
+      - 'The angle decides opposite and adjacent, not the way the triangle sits on the page.'
+      - 'From words: sketch first, put the right angle where the problem says, then label.'
+
+practice:
+  title: 'Applying ratios in right triangles: practice'
+  rows:
+    - cells:
+        - id: pr1
+          target: LT1
+          prompt:
+            - 'Mai is in Paris. She stands 80 feet from the Eiffel Tower. She looks up at an angle of $85.7^\circ$ to see the top.'
+            - 'How tall is the Eiffel Tower? (The picture is not to scale.)'
+          figure: '4.7_p1'
+          fill: [['$h \approx$', '1,064 ft']]
+          work: 1.0
+          answer: '$h = 80\tan 85.7^\circ \approx$ 1,064.0 ft.'
+        - id: pr2
+          target: LT2
+          prompt: 'Find the missing measurements of the right triangle. Round to the nearest tenth.'
+          figure: '4.7_p2'
+          layout: stacked
+          fill:
+            - ['$\angle B =$', '$63^\circ$']
+            - ['$AB \approx$', '26.4']
+            - ['$AC \approx$', '23.6']
+          fill_cols: 3
+          box_w: 0.9
+          work: 0.9
+          answer: '$\angle B = 90^\circ - 27^\circ = 63^\circ$. $AB = \dfrac{12}{\sin 27^\circ} \approx 26.4$. $AC = \dfrac{12}{\tan 27^\circ} \approx 23.6$.'
+    - cells:
+        - id: pr3
+          target: LT1
+          prompt:
+            - 'The Gateway Arch in St. Louis, Missouri, is 630 feet tall. Priya looks up at a $50^\circ$ angle to see the top of the arch.'
+            - 'How far is Priya from the base of the arch? Draw a sketch first. Round to the nearest tenth.'
+          fill: [['$d \approx$', '528.6 ft']]
+          figure: '4.7_p3'
+          layout: stacked
+          work: 0.8
+          answer: '$\tan 50^\circ = \dfrac{630}{d}$, so $d = \dfrac{630}{\tan 50^\circ} \approx 528.6$ ft.'
+        - id: pr4
+          target: LT2
+          prompt: 'Which equation is true for the figure?'
+          figure: '4.7_p4'
+          choices:
+            - '$\sin 32^\circ = \dfrac{8.5}{x}$'
+            - '$\sin 32^\circ = \dfrac{x}{8.5}$'
+            - '$\cos 32^\circ = \dfrac{8.5}{x}$'
+            - '$\cos 32^\circ = \dfrac{x}{8.5}$'
+          choice_cols: 2
+          work: 0.4
+          key: A
+          distractors:
+            B: 'flipped the ratio'
+            C: 'called 8.5 adjacent; it is opposite $32^\circ$'
+            D: 'wrong ratio and flipped'
+          answer: '8.5 is opposite $32^\circ$ and $x$ is the hypotenuse, so sine.'
+    - cells:
+        - id: pr5
+          target: LT1
+          prompt: 'Kiran stakes his kite into the ground. The kite string is 12 feet long and makes a $45^\circ$ angle with the ground. How high is the kite?'
+          figure: '4.7_p5'
+          choices: ['12 ft', '$\dfrac{12}{\sqrt{2}}$ ft', '$12\sqrt{2}$ ft', '24 ft']
+          work: 0.45
+          key: B
+          distractors:
+            A: 'used the string length as the height'
+            C: 'multiplied by $\sqrt{2}$ instead of dividing'
+            D: 'doubled the string length'
+          answer: '$h = 12\sin 45^\circ = \dfrac{12}{\sqrt{2}} \approx 8.5$ ft.'
+        - id: pr6
+          target: LT2
+          prompt: 'In the right triangles, $\angle ABC$ and $\angle EBD$ have the same measure. Find $BE$.'
+          figure: '4.7_p6'
+          fill: [['$BE =$', '7.8']]
+          work: 1.0
+          answer: '$\sin\angle ABC = \dfrac{5}{13}$, so $\dfrac{3}{BE} = \dfrac{5}{13}$ and $BE = 3 \div \dfrac{5}{13} = 7.8$.'
+    - heading: 'SBA review'
+      cells:
+        - id: pr7
+          prompt: 'A leaf falls 18 feet from a branch to the ground. It falls 5 feet every 2 seconds. Write T (true) or F (false) for each statement.'
+          frame:
+            - ['The leaf starts 18 feet above the ground.', 'T', '', 0.9]
+            - ['The leaf falls $\frac{2}{5}$ foot every second.', 'F', '', 0.9]
+            - ['The leaf is 3 feet above the ground after 6 seconds.', 'T', '', 0.9]
+          work: 0.55
+          answer: 'It falls 2.5 feet per second, not $\frac{2}{5}$. After 6 seconds: $18 - 2.5 \cdot 6 = 3$ feet.'
+  selected: []
+plan: |
+  **Overview.** In 4.6 students used sine, cosine, and tangent on triangles drawn for them. Today the triangle is tilted, given in words, or hidden in a picture of a building. Students sketch it, label it from the angle, and find a height. Calculators in degree mode. Lengths round to the nearest tenth.
+
+  **Core idea.** Students see that a height they can't measure is a leg of a right triangle: the angle of elevation is at the person on the ground, so the height is opposite it and the distance along the ground is adjacent, and $\tan(\text{angle}) = \frac{\text{height}}{\text{distance}}$. Spend whole-class time on the 3-Reads before {ref:burj} and on the {ref:cityhall} share: where did each pair put the right angle, the $23^\circ$ angle, and $h$? Printed so you can move past them: the side names and the three ratios (box above the warm-up), the triangle and every label on the Burj picture, the vocabulary box, and "you" and 1,300 ft on the City Hall picture. Calculators do the arithmetic; the solve is review from 4.6. The in-class practice, {ref:tree}, checks the idea on its own: from words alone, with no picture, students build the triangle, put the $60^\circ$ angle at the person and $h$ opposite it, and use tangent, with only the QuickNotes to lean on.
+
+  **Quick look (30 min).**
+  | Time | Part | Who talks |
+  |---|---|---|
+  | 0-4 | Warm-up | Students, quick share |
+  | 4-8 | Together: Problem {num:abc} | Teacher + class |
+  | 8-20 | With a partner: Problems {num:burj}-{num:cityhall} | Teacher (3-Reads), then pairs, 1 min share |
+  | 20-23 | QuickNotes | Teacher + class |
+  | 23-28 | In-class practice: Problem {num:tree} | Students, on their own |
+  | 28-30 | Collect, assign practice | Teacher |
+
+  **Warm-up (4 min).** Review from 4.5 and 4.6; point at the box. The hypotenuse $AB$ is on top. Ask "Which side is across from the right angle?" Students may turn the paper. Check DEG mode here: $AC \approx 2.1$. A calculator that gives 5.5 is in radians.
+
+  **Together (4 min, doc camera).** {ref:abc}: sketch with the right angle at $C$ first, then $42^\circ$ at $A$ and 4 cm on $AC$. Stand at $A$: "$AC$ touches $A$, so it is adjacent. $AB$ is across from the right angle. I have the adjacent side and I want the hypotenuse, so cosine." Ask "Is 5.4 longer than 4?" (It has to be.) Then read the framing question and start 3-Reads on {ref:burj}.
+
+  **With a partner (12 min).** 3-Reads on {ref:burj} first (2 min, no calculating): (1) What is this about? (2) What are we finding? (3) Which numbers matter? Point at the vocabulary box and act out "look up" with your arm. Then {ref:burj} (4 min) and {ref:cityhall} (5 min), 1 min share. Turn and talk in any language, then share in English.
+  - Assessing: "Where are you standing? Where is the $73^\circ$ angle?" "From that angle, which side is the height? Which side is the 250 m?"
+  - Advancing: "How long is your line of sight to the top?" ($250/\cos 73^\circ \approx 855.1$ m.) "What happens to the angle if you walk closer?"
+  - Watch for: $250\sin 73^\circ \approx 239.1$ m, which makes the ground the hypotenuse. It is shorter than 250 m, so it can't be the tallest building. $250/\tan 73^\circ \approx 76.4$ m swaps the sides. In {ref:cityhall}, a $23^\circ$ angle at the top of the building gives $1300/\tan 23^\circ \approx$ 3,062.6 ft.
+  - Share: one pair shows its {ref:cityhall} triangle at the doc camera. Ask "Where is the right angle? Why is $h$ opposite?"
+  - MLL supports: the vocabulary box, the labeled Burj picture, "you" and 1,300 ft on the City Hall picture, the frame in {ref:burj}, talk in any language. "Angle of elevation" is new; "look up" is the everyday phrase. "Bottom" means where the building meets the ground.
+
+  **QuickNotes (3 min).** Turn to page 3 (the QuickNotes and {ref:tree}) only now: the LT1 bullets answer {ref:burj} and {ref:cityhall}. Use the picture: the angle of elevation is at your eye, measured up from the ground. Height is opposite, distance is adjacent, so tangent. Write the worked line once; don't make it a rule to memorize. Tie the LT2 bullets to the warm-up and {ref:abc}.
+
+  **In-class practice (5 min, on their own).** {ref:tree} with the QuickNotes, no partner. Read the problem aloud once (Read 1 only); give no other help. The QuickNotes picture is the model for the sketch. Look at the sketch first: the $60^\circ$ angle at the person, the right angle at the bottom of the tree, $h$ opposite. Watch for: $220\sin 60^\circ \approx 190.5$ ft, which makes the ground the hypotenuse; a $60^\circ$ angle at the top of the tree ($220/\tan 60^\circ \approx 127.0$ ft). Collect page 3. If many students put the angle at the top of the tree, open the next class with one more labeled picture.
+
+guide_notes: |
+  **v2 (Nov 23).** 30 minutes. {ref:tree} (the old exit item, the last partner problem since Nov 19) is now the in-class practice under the QuickNotes on page 3, done alone. Its two printed steps became one direction line (the QuickNotes picture shows what to label), and it gained an $h$ box and a bigger sketch box. {ref:cityhall} has more work space (0.8 to 1.2 in). The main problems already printed the known steps, so they are unchanged. No item cut: the plan went from 32 to 30 minutes (the tree left the partner block; QuickNotes and collect each lost a minute). Practice unchanged.
+
+  **Nov 19: cut for the core idea.** Warm-up: students name the three sides from $\angle B$ in boxes and find only $AC$ (it asked for $AC$ and $BC$ with no support); the side names and the three ratios are printed in a box above it, and "Turn the page if it helps" moved to the plan. {ref:abc} asks for $AB$ only ($BC$ was a second solve of the same kind). Cut the $\triangle DEF$ problem from words: the same move as {ref:abc} with new letters and numbers. Cut the Check your understanding section: City Hall is now partner {ref:cityhall}, the step where students draw the triangle on the picture themselves, with "you" and 1,300 ft printed. The {ref:burj} and {ref:cityhall} frames lost "because $\tan(\square^\circ) = \frac{\square}{\square}$", which gave away the ratio; {ref:burj} keeps the height frame and {ref:cityhall} has an $h$ box. Also cut: the partner intro (talk move, now in the plan), the section subtitles, the learning target in the framing box (now the LT1 QuickNotes heading), and the Buffer row. No extension items. Practice: cut old practice 7 (graph of $y = \frac{1}{2}x$, the same item as 4.5 practice 7) and renumbered 1-7.
+
+  **Nov 19 (round 2): no exit ticket.** The exit item is now {ref:tree} (the only problem where students build the angle-of-elevation triangle from words alone: {ref:burj} draws it and {ref:cityhall} gives the picture). The handout prints only the Warm-up heading.
+
+  **Source changes.** Burj Khalifa and City Hall photos replaced with black-and-white line drawings so student copies print clearly. City Hall "masonry" reworded as "made of stone and brick". Activity 1 #1 is {ref:abc} (#2, $\triangle DEF$, cut Nov 19). Activity 2 is {ref:burj} and {ref:cityhall}; the cool-down is {ref:tree}. Practice renumbered 1-7 (the source skipped 7 and restarted at 1; the line graph was cut Nov 19). The source key had no answers for the Gateway Arch (practice 3, 528.6 ft) and practice 6 ($BE = 7.8$); both added. Practice 1 now has a picture of the Eiffel Tower, not to scale.
+
+  **Scoring notes.** Formative, no points. Score the math, not grammar or spelling. Accept home-language words, decimal commas, and answers rounded to the hundredth when the method is right.

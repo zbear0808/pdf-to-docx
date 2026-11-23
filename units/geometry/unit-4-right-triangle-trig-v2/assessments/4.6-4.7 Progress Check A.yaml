@@ -1,0 +1,125 @@
+id: '4.6-4.7 Progress Check A'
+doc_type: assessment
+title: 'Progress check: lessons 4.6-4.7'
+directions: Show your work. Use a calculator in degree mode.
+numbering: auto
+set: '4.6-4.7 Progress Check'
+form: 'A'
+source: 'Progress Check 4.6-4.7.md, Version A'
+total_points: 10
+max_pages: 2
+targets:
+  - id: LT1
+    understand: 'Students will understand that opposite and adjacent depend on the angle you look from.'
+    able_to: 'Students will be able to sketch and label a named right triangle and tell if an angle is opposite a side.'
+    standard: G.SRT.6
+  - id: LT2
+    understand: 'Students will understand that sine, cosine, and tangent are fixed ratios for a given acute angle.'
+    able_to: 'Students will be able to choose sin, cos, or tan and find the missing sides and angle of a right triangle.'
+    standard: G.SRT.8
+  - id: LT3
+    understand: 'Students will understand that an angle of elevation and a ground distance make a right triangle with the height.'
+    able_to: 'Students will be able to write and solve a trig equation for a height.'
+    standard: G.SRT.8
+
+sections:
+  - kind: plain
+    target: LT1
+    items:
+      - target: LT1
+        prompt: 'Sketch right triangle $ABC$ with $\angle B = 90^\circ$ in the space at the right.'
+        figure: '4.6-4.7 Progress Check A_1'
+        fig_w: 1.8
+        parts:
+          - label: a.
+            points: 2
+            type: cr
+            demand: pwc
+            prompt: 'Mark the right angle. Label $A$, $B$, and $C$.'
+            work: 0.3
+            answer: 'See the red sketch: right angle at $B$.'
+          - label: b.
+            points: 1
+            type: sr
+            demand: pwc
+            prompt: 'Is $\angle C$ opposite side $\overline{AB}$?'
+            choices: ['YES', 'NO']
+            choice_cols: 2
+            key: A
+            answer: 'YES'
+            work: 0.3
+            frame: [['I know because', 'AB does not touch angle C', '', 2.4]]
+
+  - kind: plain
+    target: LT2
+    box: '$\sin\theta = \dfrac{\text{opposite}}{\text{hypotenuse}} \quad \cos\theta = \dfrac{\text{adjacent}}{\text{hypotenuse}} \quad \tan\theta = \dfrac{\text{opposite}}{\text{adjacent}}$'
+    items:
+      - points: 1
+        target: LT2
+        type: sr
+        demand: pwc
+        prompt: 'Which equation can you use to find $x$?'
+        figure: '4.6-4.7 Progress Check A_2'
+        fig_w: 2.2
+        work: 0.45
+        choices:
+          - '$\sin(74^\circ) = \dfrac{x}{11}$'
+          - '$\sin(74^\circ) = \dfrac{11}{x}$'
+          - '$\cos(74^\circ) = \dfrac{x}{11}$'
+          - '$\cos(74^\circ) = \dfrac{11}{x}$'
+        choice_cols: 2
+        key: C
+        answer: '$x$ is adjacent to $74^\circ$ and 11 is the hypotenuse.'
+        distractors:
+          A: 'uses opposite for the side next to the angle'
+          B: 'uses sine and flips the ratio'
+          D: 'right ratio, flipped'
+      - points: 3
+        target: LT2
+        type: cr
+        demand: pwoc
+        prompt: 'In $\triangle DEF$, $\angle E = 90^\circ$. Find the missing angle and the two missing sides. Round sides to the nearest tenth.'
+        figure: '4.6-4.7 Progress Check A_3'
+        fig_w: 2.2
+        work: 1.8
+        fill:
+          - ['$m\angle F =$', '$35^\circ$']
+          - ['$EF \approx$', '9.0']
+          - ['$DE \approx$', '6.3']
+        fill_cols: 3
+        answer: '$90 - 55 = 35$. $EF = 11\sin(55^\circ)$, $DE = 11\cos(55^\circ)$.'
+
+  - kind: plain
+    target: LT3
+    items:
+      - points: 3
+        target: LT3
+        type: cr
+        demand: pwc
+        prompt:
+          - 'Lin stands 50 ft from an apartment building. She looks up at the top of the building. The angle of elevation is $71^\circ$.'
+          - '*Angle of elevation*: the angle you look up from the ground.'
+          - 'How tall is the building? Round to the nearest foot.'
+        figure: '4.6-4.7 Progress Check A_4'
+        fig_w: 2.0
+        work: 1.6
+        fill:
+          - ['Equation:', '$\tan(71^\circ) = \dfrac{h}{50}$']
+          - ['$h \approx$', '145 ft']
+        fill_cols: 2
+        box_w: 1.6
+        answer: '$h = 50\tan(71^\circ) \approx 145.2$'
+        rubric:
+          - {level: 3, desc: 'Correct tangent equation, correct work, 145 ft.'}
+          - {level: 2, desc: 'Correct equation, small error solving or rounding.'}
+          - {level: 1, desc: 'Sets up a trig ratio with the right sides.'}
+          - {level: 0, desc: 'No correct ratio.'}
+
+guide_notes: |
+  **Scoring notes.** Problem 1a: 1 point for the right angle at $B$, 1 for all three letters. Problem 1b: 1 point for YES; the "I know because" box is an optional start and isn't scored on its own. Problem 3: 1 point each blank. Credit any valid method. Score the math, not English grammar or spelling. Accept home-language words and a decimal comma (9,0 = 9.0). When you go over the check in class, launch Problem 4 with 3-Reads.
+
+  **Nov 19: less is more, no headings.** Nothing cut: items 2 and 3 share LT2 but one picks the equation (MC) and the other solves a whole triangle, and LT2 carries the most points. Scaffolded: a box with the three ratio definitions now sits above item 2 (4.6 and 4.7 print them; recall isn't the target), and the directions say to use a calculator in degree mode. Opposite and adjacent stay open. Cut "Circle one." (1b) and "Write an equation, then solve." (4; the labeled boxes say it). One section per target with no headings, the same layout as the Retake. Total stays 10.
+
+  **Ratio box.** This check prints the sin, cos, and tan definitions because lessons 4.6 and 4.7 print them and its items measure naming the sides and choosing the ratio; the Unit 4 Test prints none on purpose, since its item 1b measures recalling the ratios.
+
+  **Nov 20 (audit fixes).** 1a now says "Mark the right angle." without "at $B$", which repeated the stem and gave away its first point. Item 2's triangle is now $GHR$ (it was $ABC$, the same letters as item 1, printed right under 1b's question about $\angle C$ and $\overline{AB}$).
