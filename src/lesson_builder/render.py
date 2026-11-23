@@ -14,7 +14,8 @@ from .spec import Blank, Item, LessonSpec, Part, UnitSpec, as_list
 
 NAME_LINE = "Name ____________________  Period ____"
 SECTION_TITLES = {"warmup": ("Warm-up", "on your own"), "together": ("Together", None),
-                  "partner": ("With a partner", None), "cyu": ("Check your understanding", None),
+                  "partner": ("With a partner", None), "apply": ("In-class practice", None),
+                  "cyu": ("Check your understanding", None),
                   "exit": ("Exit ticket", None), "plain": (None, None)}
 
 
@@ -88,10 +89,11 @@ def _body(h: Handout, cell, it: Item | Part, scale: float, indent: float, width:
         h._choices(cell, it.choices, it.choice_cols, indent=indent + 0.25)
     if it.fill:
         h.fill_boxes(cell, [tuple(r) for r in it.fill], cols=it.fill_cols or 1, box_w=it.box_w,
-                     indent=indent + 0.25 if isinstance(it, Part) else indent, height=0.38, row_gap=0.08)
+                     indent=indent + 0.25 if isinstance(it, Part) else indent, height=0.38, row_gap=0.08,
+                     where=where)
     if it.frame:
         rows = [tuple(r) for r in it.frame]
-        h.frame(cell, rows, indent=indent + 0.25, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
+        h.frame(cell, rows, indent=indent + 0.25, box_w=it.frame_box_w, height=0.36, row_gap=0.06, where=where)
     if isinstance(it, Part) and it.proof:
         _proof(h, it, cell, width, indent=indent + 0.25)
     if getattr(it, "box", None):
@@ -129,9 +131,10 @@ def _draw(h: Handout, it: Item, figs: Figures, scale: float):
     # fill-ins, frames, and parts go under the steps (left cell); the drawing box stays on the right
     if it.fill:
         h.fill_boxes(a, [tuple(r) for r in it.fill], cols=it.fill_cols or 1, box_w=it.box_w, height=0.38,
-                     row_gap=0.08)
+                     row_gap=0.08, where=f"item {it.n or '(unnumbered)'}")
     if it.frame:
-        h.frame(a, [tuple(r) for r in it.frame], indent=0.55, box_w=it.frame_box_w, height=0.36, row_gap=0.06)
+        h.frame(a, [tuple(r) for r in it.frame], indent=0.55, box_w=it.frame_box_w, height=0.36, row_gap=0.06,
+                where=f"item {it.n or '(unnumbered)'}")
     for p in it.parts:
         h._line(a, f"{p.label} {p.prompt}{_pts(p.points)}", indent=0.3)
         _body(h, a, p, scale, 0.3, d.steps_w, f"item {it.n or '(unnumbered)'} part {p.label}")
@@ -199,8 +202,11 @@ def _proof(h: Handout, it: Item | Part, container=None, width: float | None = No
     line_h = h.size * 1.25 / 72
 
     def need(c, w):
-        txt = f"{c.before} {c.ans}" if isinstance(c, Blank) else c
-        lines = max(1, math.ceil((db._measure_rich("10. " + str(txt), h.size) + 0.15) / max(w - 0.12, 0.5)))
+        if isinstance(c, Blank):   # the key's answer prints bold
+            wide = db._measure_rich(f"10. {c.before}", h.size) + db._measure_rich(f" {c.ans}", h.size, bold=True)
+        else:
+            wide = db._measure_rich(f"10. {c}", h.size)
+        lines = max(1, math.ceil((wide + 0.15) / max(w - 0.12, 0.5)))
         return lines * line_h + 0.12
 
     rows = len(pf.rows) + 1
@@ -226,7 +232,7 @@ def _proof(h: Handout, it: Item | Part, container=None, width: float | None = No
             lead = (f"{r}. {c.before}" if c.before else f"{r}.") if isinstance(c, Blank) else f"{r}. {c}"
             p = h.cell_text(cell, lead, size=h.size)
             if isinstance(c, Blank) and h.key:
-                db.add_rich(p, " " + c.ans, h.size - 0.5, color=db.ANS)
+                db.add_answer(p, " " + c.ans, h.size - 0.5)
     if container is not None:
         db.fmt(container.paragraphs[-1])   # Word needs a paragraph after a nested table
     else:
@@ -247,6 +253,8 @@ def _item(h: Handout, it: Item, figs: Figures, scale: float):
                   choice_cols=it.choice_cols, layout=it.layout)
     cell = t.rows[0].cells[0]
     _body(h, cell, it, scale, 0.3 if it.n else 0, _cell_w(cell, h), f"item {it.n or '(unnumbered)'}")
+    if img and (it.columns or it.table):
+        h.space(2 / 72)   # same gap as before a proof: a figure must not touch the table border under it
     if it.columns:
         _columns(h, it)
     if it.table:
@@ -266,6 +274,15 @@ def _section_sub(s) -> str | None:
     if s.kind in ("together", "partner") and nums:
         return f"Problems {min(nums)}-{max(nums)}" if len(nums) > 1 else f"Problem {nums[0]}"
     return default
+
+
+def _handout_heading(lesson, s) -> tuple[str | None, str | None]:
+    """(title, subtitle) a section prints on the handout and key. `headings: warmup` keeps only a plain
+    "Warm-up" heading (and any title the YAML writes out); problems run on, numbered, with no other labels."""
+    if lesson.headings == "warmup":
+        title = s.title or (SECTION_TITLES[s.kind][0] if s.kind == "warmup" else None)
+        return title, s.sub or None
+    return s.title or SECTION_TITLES[s.kind][0], _section_sub(s)
 
 
 def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures, out: Path,
@@ -305,9 +322,11 @@ def render_handout(unit: UnitSpec, lesson: LessonSpec, key: bool, figs: Figures,
             continue
         if s.page_break_before and not broke:
             h.page_break()
-        title = s.title or SECTION_TITLES[s.kind][0]
+        title, sub = _handout_heading(lesson, s)
         if title:
-            h.section(title, _section_sub(s), before=0 if (s.page_break_before or broke) else 0.06)
+            h.section(title, sub, before=0 if (s.page_break_before or broke) else 0.06)
+        elif not (s.page_break_before or broke):
+            h.space(0.06)
         broke = False
         if s.box:
             h.box(as_list(s.box), size=9.5, after=0.08, pad=50)

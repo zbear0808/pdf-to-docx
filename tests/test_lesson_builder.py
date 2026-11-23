@@ -19,7 +19,7 @@ def _unit(tmp_path: Path):
 def test_template_renders_and_passes_spec_checks(tmp_path):
     from lesson_builder.cli import _figs_for, _figures
     u = _unit(tmp_path)
-    assert u.course == "Algebra 1" and u.budget.minutes == 40
+    assert u.course == "Algebra 1" and u.budget.minutes == 30
     figs = _figures(u)
     assert figs[""]["build_fig"]["key"] is not None
     assert figs["example"]["dilate_abc"]["key"] is not None   # figures/example.py, used by the assessment
@@ -38,12 +38,12 @@ def test_spec_checks_catch_known_problems(tmp_path):
     u = _unit(tmp_path)
     lesson = next(l for l in u.lesson_specs() if l.doc_type == "lesson")
     partner = next(s for s in lesson.sections if s.kind == "partner")
-    partner.items.append(Item(n="9", prompt="Fill in: ___ is congruent. Use your claim from Problem 7.", work=1))
+    partner.items.append(Item(n="9", prompt="Fill in: ___ is congruent. Use your claim from Problem 17.", work=1))
     partner.items.append(Item(n="10", prompt="Draw the image of the triangle.", work=1, answer="see figure"))
     partner.items[0].minutes = 60
     msgs = "\n".join(check_spec(u, lesson, {}))
     assert "'___' blank" in msgs
-    assert "Problem 7, which isn't in this part" in msgs
+    assert "Problem 17, which isn't in this part" in msgs
     assert "item 9: no answer" in msgs
     assert "item 10: drawing task without a key figure" in msgs
-    assert "budget is 40" in msgs
+    assert "budget is 30" in msgs

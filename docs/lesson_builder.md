@@ -161,9 +161,14 @@ in mathtext labels are set as U+2032 so they sit against the letter; mixed prime
 contact sheet) plus lint and printed-size checks (text under 7 pt at the item's `fig_w` is an error).
 
 ### Document YAML (see `templates/unit/lessons/example.yaml` and `templates/unit/assessments/example.yaml`)
-- Sections (`kind`): `warmup`, `together`, `partner`, `notes` (new page: header + printed QuickNotes), `cyu`, `exit`,
-  `plain`. Optional `box`, `bank` (word/move bank), `intro`, `target`, `columns: 2` (assessments: two items per
-  row), `page_break_before`.
+- Sections (`kind`): `warmup`, `together`, `partner`, `notes` (new page: header + printed QuickNotes), `apply` (the
+  in-class practice after the QuickNotes), `plain`, and the legacy `cyu` / `exit` (lessons no longer use closing
+  checks). Optional `box`, `bank` (word/move bank), `intro`, `target`, `columns: 2` (assessments: two items per row),
+  `page_break_before`.
+- `headings: warmup` (document level): the handout and key print only a plain "Warm-up" heading; the other sections
+  print no heading or subtitle, so problems run on, numbered. The teacher guide keeps the part names. Default `all`.
+- `numbering_after_notes: continue` (document level): items after the QuickNotes keep counting (Problem 5, 6) and
+  `{ref:}` can point across the notes. Default `restart` (the old layout, where an exit ticket restarted at 1).
 - Items: `n` (or `numbering: auto`), `id` (for `{ref:id}` / `{num:id}`), `minutes`, `points`, `prompt`, `steps`,
   `figure` / `key_figure`, `fig` (small / medium / wide) or `fig_w`, `layout`, `choices`, `key`, `select_all`,
   `distractors`, `answer`, `rubric`, `scoring: epi`, `target` / `type` / `demand` / `standard`, `source`, `work`,

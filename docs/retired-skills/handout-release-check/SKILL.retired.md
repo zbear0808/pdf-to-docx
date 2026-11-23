@@ -1,6 +1,6 @@
 ---
 name: handout-release-check
-description: Rules and checks that a lesson handout, key, and practice set must pass before release. Covers fill-in blanks and sentence frames (labeled boxes tied to a figure), complete keys (every item, part, and box; drawn answer figures for drawing tasks), valid cross-references, page layout, and duplex packets. Use when drafting scaffolds, building keys, or before handing any student document to the teacher.
+description: Rules and checks that a lesson handout, key, and practice set must pass before release. Covers fill-in blanks and sentence frames (labeled boxes tied to a figure), where scaffolds go (routine steps scaffolded, the lesson's core step left open), complete keys (every item, part, and box; drawn answer figures for drawing tasks), valid cross-references, page layout, and duplex packets. Use when drafting scaffolds, building keys, or before handing any student document to the teacher.
 ---
 
 # Handout release check
@@ -14,6 +14,15 @@ Each rule came from a real problem a teacher hit. Apply them while writing; `les
 - Every frame names its referent: the figure, triangle, or earlier problem ("In Problem 2, ∠ABC landed on ☐").
 - Fill in most of the sentence; one box per idea. A word or move bank lists phrases, never blanks.
 - Each box has exactly one expected answer, written in the key. If the teacher can't fill it at a glance, students can't either.
+
+### Where scaffolds go
+
+Read the `Core idea:` line and the Core vs routine list in `requirements.md` before writing (`lesson-scope` explains them).
+- Give a decent amount of scaffolding: do the work for students where they should already know the content (print it complete, worked, or filled in), and leave blank only the sections that are new information. Test each blank: could a student who missed today but knows everything before it fill it in? If so, print it.
+- Scaffold the steps that aren't the core of the lesson so students don't spend time on basic arithmetic they already know: give computed values, pre-fill table rows, draw the givens, print the formula or earlier fact.
+- Leave the core step open. A frame may start the sentence, but no box, bank, or figure gives the claim or the reason for the core step.
+- Warm-ups are low cognitive tasks and get more scaffolding than the main problems. The last problem keeps routine steps scaffolded and gives no support on the core step. There is no exit ticket.
+- A frame or fill-in on a routine step should take seconds. If it takes longer than the core step, give the value instead.
 
 ## 2. Keys
 

@@ -20,7 +20,7 @@ This skill provides the factual classroom context, instructional environment, co
 
 ## 2. Daily Schedule & Course Profiles
 
-**Lesson format (all periods):** 40-minute periods (budget with `lesson-scope`). No slides: the class works the same handout, with the teacher under the doc camera for short "Together" parts, then long student work time. Keep direct instruction short. Student copies print black and white, double-sided; keys may use red.
+**Lesson format (all periods):** lessons fit 30 minutes (budget with `lesson-style`). No slides: the class works the same handout, with the teacher under the doc camera for short "Together" parts, then long student work time. Keep direct instruction short. Student copies print black and white, double-sided; keys may use red.
 
 **Default deliverables** (built with `lesson-builder` from the unit folder `units/<course>/<unit-slug>/`, into `output/`):
 * **Lesson** (`lessons/<id>.yaml`): student handout, lesson key, practice set, practice key, teacher guide, plus the unit's duplex student and key packets (PDF and DOCX).
@@ -39,7 +39,7 @@ This skill provides the factual classroom context, instructional environment, co
   * **Multimodal Representations:** Heavy use of visual diagrams, color-coding, geometric manipulatives, interactive sketches (e.g., GeoGebra/Desmos), and physical models.
   * **Peer Discourse & Low-Stakes Talk:** Structured partner talk (Turn & Talk, Accountable Talk teacher moves), desk whiteboards for group collaboration, and collective problem-solving to lower affective filters.
   * **Asset-Based Mindset:** Honoring students' home languages, non-verbal geometric intuition, and collaborative cultural orientations (Hammond's collectivist framework) rather than viewing language learning as a deficit.
-  * *Canonical Reading Reference*: See `mll-literacy-scaffolding` (`.agents/skills/mll-literacy-scaffolding/SKILL.md`). For assessment items, see `.agents/skills/assessment-builder/references/item-rules.md`.
+  * *Canonical Reading Reference*: See `mll-literacy-scaffolding` (`.agents/skills/mll-literacy-scaffolding/SKILL.md`). For assessment items, see `.agents/skills/lesson-write-step/references/item-rules.md`.
 
 ### Period 5: AP Statistics
 * **Course:** Advanced Placement Statistics (College Board aligned)

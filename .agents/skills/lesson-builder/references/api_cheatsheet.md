@@ -19,7 +19,7 @@ Checked against `src/lesson_builder/` (Nov 9). If this sheet and the code disagr
 | `integrity UNIT --set GLOB... [--vs GLOB...]` | forms share no letters, numbers, MC key positions; `--vs` docs (review, notes) reuse nothing from the set; also each doc's `do_not_reuse` |
 | `tidy UNIT [--apply]` | lists Word temp files, `__pycache__`, stale diffs (deleted with `--apply`); reports orphan assets, unused figures, unlisted YAML, orphan figure files, redundant `work:` lines (never deleted) |
 | `status UNIT [--checks]` | one row per document: handoffs (req/cha/aud), open Must fix, GAP lines, built x/y, PDFs, stale, figures retained (+ errors/warnings) |
-| `packet UNIT` | rebuild duplex packets from existing outputs |
+| `packet UNIT [-l STEM]... [--order by-lesson\|lessons-first] [--name PREFIX]` | rebuild duplex packets from existing outputs; with `-l`, a packet of just those lessons in that order (`lessons-first`: all handouts, then all practice; keys the same way) |
 
 `-l` matches the file stem or `id`; repeatable. Exit code 1 means errors. Quote stems with spaces.
 
@@ -52,9 +52,9 @@ A document sees `figures.py` names plus its own `figures/<stem>.py` (own file wi
 
 ## 3. YAML quick reference (unknown keys are errors)
 
-**Document:** `id` | `doc_type` lesson*/assessment/reference | `title` | `notes_title`, `framing` (required for lessons) | `materials` | `directions` | `total_points` (= item + part points) | `max_pages` | `numbering: manual*|auto` | `targets: [{id, understand, able_to, standard}]` (adds to unit `targets`) | `set`, `form`, `parallel_to`, `do_not_reuse: [globs]` | `source` | `sections` | `quicknotes` | `notes_height` 2.2 | `notes_figure`, `notes_fig_w` 1.8 (figure inside the QuickNotes box, right of the notes) | `practice` | `plan` | `guide_notes`. `header_right` is deprecated (WARN; the builder prints Name / Per / Score).
+**Document:** `id` | `doc_type` lesson*/assessment/reference | `title` | `notes_title`, `framing` (required for lessons) | `materials` | `directions` | `total_points` (= item + part points) | `max_pages` | `numbering: manual*|auto` | `headings: all*|warmup` (warmup: lessons print only a plain "Warm-up" heading; problems run on with no section headings; use it for every lesson) | `numbering_after_notes: restart*|continue` (continue: the in-class practice after the QuickNotes keeps counting, and `{ref:}` reaches across the notes; use it for every lesson) | `targets: [{id, understand, able_to, standard}]` (adds to unit `targets`) | `set`, `form`, `parallel_to`, `do_not_reuse: [globs]` | `source` | `sections` | `quicknotes` | `notes_height` 2.2 | `notes_figure`, `notes_fig_w` 1.8 (figure inside the QuickNotes box, right of the notes) | `practice` | `plan` | `guide_notes`. `header_right` is deprecated (WARN; the builder prints Name / Per / Score).
 
-**Section:** `kind` warmup/together/partner/notes/cyu/exit/plain | `title` | `sub` | `intro` | `box` | `bank: [...]` (boxed, ` | ` separated) | `target` | `columns: 1|2` (2: items two per row; draw/table/columns items full width) | `items` | `page_break_before`. `notes` starts the QuickNotes page (`new_page: false` keeps QuickNotes on the same page, no second header: use it when a short lesson would otherwise leave a mostly empty page); numbering restarts after it.
+**Section:** `kind` warmup/together/partner/notes/apply/plain (`apply` = the in-class practice after the QuickNotes; cyu/exit are legacy closing checks) | `title` | `sub` | `intro` | `box` | `bank: [...]` (boxed, ` | ` separated) | `target` | `columns: 1|2` (2: items two per row; draw/table/columns items full width) | `items` | `page_break_before`. `notes` starts the QuickNotes page (`new_page: false` keeps QuickNotes on the same page, no second header: use it when a short lesson would otherwise leave a mostly empty page); numbering restarts after it unless `numbering_after_notes: continue`.
 
 **Item** (Part shares the starred fields):
 

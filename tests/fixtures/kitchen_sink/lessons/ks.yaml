@@ -7,6 +7,8 @@ framing: >-
   How can you tell that two figures match without measuring every part?
 materials: patty paper, ruler
 numbering: auto
+headings: all                     # all (default) | warmup: only the Warm-up heading prints
+numbering_after_notes: restart    # restart (default) | continue: problems after the QuickNotes keep counting
 source: 'Kitchen-sink fixture, built from the template lesson'
 max_pages: 3
 notes_height: 2.0
@@ -132,7 +134,7 @@ sections:
         key: 'A, B, C'
         answer: 'Rigid motions keep lengths.'
 
-  - kind: exit
+  - kind: apply                   # in-class practice after the QuickNotes (cyu and exit are legacy)
     items:
       - minutes: 4
         prompt: 'How do you know a reflection keeps lengths?'

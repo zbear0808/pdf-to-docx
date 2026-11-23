@@ -87,6 +87,14 @@ def test_prime_is_superscript_in_fractions():
     assert "<m:sSup>" not in db.latex_to_omml_inner(r"\overline{K'L'}", 11)
 
 
+def test_prime_under_a_bar_is_text_font():
+    # the math font's plain prime prints low like a comma in OnlyOffice PDFs; under a bar it is a text-font run
+    xml = db.latex_to_omml_inner(r"\overline{K'L'}", 11)
+    assert xml.count("<m:nor/>") == 2 and f'w:ascii="{db.FONT}"' in xml and "<m:sSup>" not in xml
+    assert "<m:nor/>" in db.latex_to_omml_inner(r"\dfrac{A'D'}{AD}", 11)
+    assert "<m:nor/>" not in db.latex_to_omml_inner(r"A'B'", 11)   # outside a bar: superscript primes
+
+
 def test_choice_rows_share_a_baseline():
     h = db.Handout()
     cell = h.doc.add_table(rows=1, cols=1).rows[0].cells[0]

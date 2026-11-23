@@ -46,14 +46,28 @@ def _esc(s):
 
 
 def _mrun(text, size, upright=False):
-    sty = '<m:rPr><m:sty m:val="p"/></m:rPr>' if upright else ""
+    # bold math (key answers) needs m:sty: Word and OnlyOffice both ignore w:b on a math run
+    sty = ("b" if upright else "bi") if _MATH_BOLD[0] else ("p" if upright else "")
+    sty = f'<m:rPr><m:sty m:val="{sty}"/></m:rPr>' if sty else ""
+    b = "<w:b/><w:bCs/>" if _MATH_BOLD[0] else ""
     col = f'<w:color w:val="{_MATH_COLOR[0]}"/>' if _MATH_COLOR[0] else ""
-    return (f'<m:r>{sty}<w:rPr><w:rFonts w:ascii="Cambria Math" w:hAnsi="Cambria Math"/>{col}'
+    return (f'<m:r>{sty}<w:rPr><w:rFonts w:ascii="Cambria Math" w:hAnsi="Cambria Math"/>{b}{col}'
             f'<w:sz w:val="{int(size * 2)}"/><w:szCs w:val="{int(size * 2)}"/></w:rPr>'
             f'<m:t xml:space="preserve">{_esc(text)}</m:t></m:r>')
 
 
+def _prime_run(n, size):
+    """A plain (not superscript) prime as normal text in the body font. The math font's ′ prints low, like a
+    comma, in OnlyOffice PDFs (B,C, under a bar); the text-font glyph sits high in Word and OnlyOffice."""
+    b = "<w:b/><w:bCs/>" if _MATH_BOLD[0] else ""   # an m:nor run takes w:b (m:sty isn't allowed with m:nor)
+    col = f'<w:color w:val="{_MATH_COLOR[0]}"/>' if _MATH_COLOR[0] else ""
+    return (f'<m:r><m:rPr><m:nor/></m:rPr><w:rPr><w:rFonts w:ascii="{FONT}" w:hAnsi="{FONT}"/>{b}{col}'
+            f'<w:sz w:val="{int(size * 2)}"/><w:szCs w:val="{int(size * 2)}"/></w:rPr>'
+            f'<m:t xml:space="preserve">{"′" * n}</m:t></m:r>')
+
+
 _MATH_COLOR = [None]
+_MATH_BOLD = [False]   # set by add_answer: math in a key answer prints bold too
 
 
 def _read_group(s, i):
@@ -193,7 +207,8 @@ def latex_to_omml_inner(s, size, bar=False):
                 flush()
                 out.append(f'<m:sSup><m:e>{_mrun(base, size)}</m:e><m:sup>{_mrun("′" * n, size)}</m:sup></m:sSup>')
             else:
-                buf.append("′" * n)
+                flush()
+                out.append(_prime_run(n, size))
         elif ch == "-":
             buf.append("−")
             i += 1
@@ -213,8 +228,9 @@ def add_math(paragraph, latex, size=SIZE):
     if "′" in inner and not inner.startswith("<m:r>"):
         # Word sizes a superscript prime by the first run of the equation; when the equation starts with a
         # structure (A' itself, a fraction, a bar) at any size but 11 pt the prime prints tiny and raised.
-        # A sized zero-width run in front fixes it.
-        inner = _mrun("\u200b", size) + inner
+        # A sized zero-width run in front fixes it. U+200C, not U+200B: OnlyOffice draws U+200B about two spaces
+        # wide, so "the image $C'E'$" printed a gap before the math.
+        inner = _mrun("\u200c", size) + inner
     xml = f'<m:oMath {M_NS}>{inner}</m:oMath>'
     paragraph._p.append(parse_xml(xml))
 
@@ -229,8 +245,10 @@ def add_rich(paragraph, text, size=SIZE, bold=False, italic=False, color=None):
             continue
         if part.startswith("$"):
             _MATH_COLOR[0] = None if color is None else str(color)
-            add_math(paragraph, part[1:-1], size)
-            _MATH_COLOR[0] = None
+            try:
+                add_math(paragraph, part[1:-1], size)
+            finally:
+                _MATH_COLOR[0] = None
         elif part.startswith("**"):
             add_rich(paragraph, part[2:-2], size, bold=True, italic=italic, color=color)
         elif part.startswith("*"):
@@ -247,6 +265,15 @@ def add_rich(paragraph, text, size=SIZE, bold=False, italic=False, color=None):
 ANS = RGBColor(0xC0, 0x00, 0x00)
 
 
+def add_answer(paragraph, text, size=SIZE):
+    """Key-only answer text: bold and red, math included. Student copies never call this."""
+    _MATH_BOLD[0] = True
+    try:
+        return add_rich(paragraph, text, size, bold=True, color=ANS)
+    finally:
+        _MATH_BOLD[0] = False
+
+
 class A:
     """Answer slot: blank workspace of `height` inches on the student copy; answer text on the key."""
 
@@ -259,13 +286,14 @@ TALL_MATH = re.compile(r"\\[dt]?frac|\\sqrt|\\overline|\\overrightarrow|\\overle
 
 
 def answer_height(lines, width_in, size):
-    """Inches the key needs for answer paragraphs at `size` pt in a column `width_in` wide. Errs high: an
-    under-estimate clips the key answer, an over-estimate only adds blank room to both copies."""
+    """Inches the key needs for answer paragraphs at `size` pt in a column `width_in` wide, measured bold (as
+    the key prints them). Errs high: an under-estimate clips the key answer, an over-estimate only adds blank
+    room to both copies."""
     if not lines:
         return 0.0
     total = 0.02
     for text in lines:
-        n = max(1, math.ceil(_measure_rich(str(text), size) * 1.1 / max(width_in - 0.1, 0.5)))
+        n = max(1, math.ceil(_measure_rich(str(text), size, bold=True) * 1.1 / max(width_in - 0.1, 0.5)))
         lead = size * (1.8 if TALL_MATH.search(str(text)) else 1.25) / 72
         total += n * lead + 2 / 72
     return total
@@ -274,7 +302,10 @@ def answer_height(lines, width_in, size):
 _FONTS = {}
 
 
-_FALLBACK = {"calibri.ttf": ["Carlito-Regular.ttf"], "cambria.ttc": ["Caladea-Regular.ttf"]}   # metric twins
+# metric twins; with no bold face installed, bold text is measured in the regular face (2-4% narrower)
+_FALLBACK = {"calibri.ttf": ["Carlito-Regular.ttf"], "cambria.ttc": ["Caladea-Regular.ttf"],
+             "calibrib.ttf": ["Carlito-Bold.ttf", "calibri.ttf", "Carlito-Regular.ttf"]}
+BOLD_MATH = 1.06   # bold math (key answers) prints about 6% wider than regular in Word; less in OnlyOffice
 
 
 def _font(name, size):
@@ -304,9 +335,10 @@ def _math_fonts(size):
     return out or [f for f in (_font("calibri.ttf", size),) if f]
 
 
-def _measure_rich(text, size):
+def _measure_rich(text, size, bold=False):
     """Printed width in inches of a rich string ($math$ and **bold** markup), measured with Calibri and
-    Cambria Math at 10x scale (Carlito / Caladea / Asana Math stand in where those aren't installed)."""
+    Cambria Math at 10x scale (Carlito / Caladea / Asana Math stand in where those aren't installed).
+    bold: all of it bold, as a key answer prints (Calibri Bold, and math BOLD_MATH wider)."""
     total = 0.0
     for k, part in enumerate(text.split("$")):
         if k % 2:
@@ -316,10 +348,10 @@ def _measure_rich(text, size):
             s = s.replace(r"\triangle", "Δ").replace("'", "′")
             s = re.sub(r"[{}\s]", "", s)
             fonts = _math_fonts(size)
-            factor = 1.08
+            factor = 1.08 * (BOLD_MATH if bold else 1)
         else:
             s = part.replace("*", "")
-            fonts = [f for f in (_font("calibri.ttf", size),) if f]
+            fonts = [f for f in (_font("calibrib.ttf" if bold else "calibri.ttf", size),) if f]
             factor = 1.03
         if not s:
             continue
@@ -511,8 +543,9 @@ class Handout:
             cell_bottom_border(c, sz=12)
             c.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.BOTTOM
         p = first_par(a)
-        add_rich(p, lesson + "  ", 10.5, italic=False)
-        p.runs[-1].font.color.rgb = RGBColor(0x40, 0x40, 0x40)
+        if lesson:   # assessments have no "Lesson 3.1" label: no leading spaces before the title
+            add_rich(p, lesson + "  ", 10.5, italic=False)
+            p.runs[-1].font.color.rgb = RGBColor(0x40, 0x40, 0x40)
         add_rich(p, title, 15, bold=True)
         p = first_par(b)
         p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -576,7 +609,7 @@ class Handout:
 
     def answer(self, container, lines, height, indent=0.3, width=None):
         """Workspace of one exact height on both copies: max(height, room the key answer needs). The key prints
-        the red answer inside it; the student copy leaves it blank, so everything after it starts at the same
+        the bold red answer inside it; the student copy leaves it blank, so everything after it starts at the same
         spot on both copies."""
         sz = self.size - 0.5
         need = answer_height(lines or [], (width or self.width) - indent, sz)
@@ -589,7 +622,7 @@ class Handout:
                 text = "\u2009" + text  # leading text run keeps Word from turning lone math into centered display math
             p = first_par(cell) if k == 0 else cell.add_paragraph()
             fmt(p, before=2, left=indent)
-            add_rich(p, text, sz, color=ANS)
+            add_answer(p, text, sz)
         return height
 
     def slot(self, container, height, width=None):
@@ -714,6 +747,8 @@ class Handout:
         return p
 
     def _problem_text(self, cell, num, lines, width=None):
+        if num and not (lines and isinstance(lines[0], str)):
+            lines = [""] + list(lines)   # a problem with no prompt line (figure, parts) still prints its number
         for k, text in enumerate(lines):
             if isinstance(text, (int, float)):
                 self.space(float(text), container=cell)
@@ -821,10 +856,25 @@ class Handout:
         add_rich(p, text, size or self.size, bold, italic)
         return p
 
+    def _box_for(self, answers, box_w, size, pad, room, where, field):
+        """Width for a fill or frame box: box_w, or wider (up to `room`) on both copies so the key's bold answer
+        stays on one line. A wrapped answer can make the key's row taller than the student's."""
+        need = 0.0
+        for a in answers:
+            if a and not re.search(r"\\[dt]?frac|\\sqrt", str(a)):   # stacked math gets a taller row instead
+                w = sum(_measure_rich(f"${p}$" if k % 2 else p, size, bold=True) * (1.05 if k % 2 else 1)
+                        for k, p in enumerate(str(a).split("$")) if p)   # Word spaces out math operators
+                need = max(need, w + pad)
+        if need <= box_w or room <= box_w:
+            return box_w
+        wide = min(need + 0.05, room)
+        self.grown.append((where, field, box_w, wide))
+        return wide
+
     def fill_boxes(self, container, items, cols=None, label_w=None, box_w=1.3, height=0.36, indent=0.3,
-                   size=None, row_gap=0.06):
+                   size=None, row_gap=0.06, where="fill box"):
         """Fill-in-the-blank row(s): each item is (label, answer). The label sits left of a bordered box where
-        students write. The key prints the answer inside the box in red. `container` is a table cell or None.
+        students write. The key prints the answer inside the box in bold red. `container` is a table cell or None.
         Label width defaults to the longest label, so a single box sits right next to its label."""
         sz = size or self.size
         cols = cols or len(items)
@@ -839,6 +889,8 @@ class Handout:
             # or Word cuts the box column (and the key's answers) off at the cell edge
             box_w = min(box_w, max(0.9, avail - 0.25 - 0.8))
             label_w = max(0.6, avail - box_w - 0.25)
+        box_w = self._box_for([a for _, a in items], box_w, sz - 0.5, 80 / 1440,
+                              (avail + 0.01) / cols - label_w - 0.25, where, "box_w")
         widths = []
         for _ in range(cols):
             widths += [label_w, box_w, 0.25]
@@ -870,7 +922,7 @@ class Handout:
                 if self.key and ans:
                     q = first_par(box)
                     q.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                    add_rich(q, ans, sz - 0.5, color=ANS)
+                    add_answer(q, ans, sz - 0.5)
             # gap paragraph after each row (Word also needs a paragraph after a nested table)
             if container is not None:
                 p = container.paragraphs[-1]  # python-docx adds this paragraph after a nested table
@@ -882,9 +934,10 @@ class Handout:
             last = t
         return last
 
-    def frame(self, container, rows, indent=0.3, box_w=1.3, height=0.36, row_gap=0.05, size=None, width=None):
+    def frame(self, container, rows, indent=0.3, box_w=1.3, height=0.36, row_gap=0.05, size=None, width=None,
+              where="frame box"):
         """Sentence frame: each row is (before, answer, after) or (before, answer, after, box_w).
-        Prints `before` [box] `after` on one line, left to right. The key puts `answer` in the box (red).
+        Prints `before` [box] `after` on one line, left to right. The key puts `answer` in the box (bold red).
         Use it for scaffolded explanations so every blank is a real, labeled place to write."""
         sz = size or self.size
         total = (width or ((container.width.inches if container is not None and container.width else self.width))) \
@@ -903,6 +956,8 @@ class Handout:
             tail_need = min(text_w(after) if after else 0.3, 1.2)
             if lw + bw + tail_need > total:  # narrow cell (e.g. next to a figure): let the label wrap instead
                 lw = max(0.8, total - bw - tail_need)
+            bw = self._box_for([ans], bw, sz - 0.5, 60 / 1440, total - lw - tail_need, where,
+                               "frame_box_w" if len(row) < 4 else "w")
             aw = max(0.3, total - lw - bw)
             widths = [lw, bw, aw]
             if container is None:
@@ -934,7 +989,7 @@ class Handout:
             if self.key and ans:
                 q = first_par(box)
                 q.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                add_rich(q, ans, sz - 0.5, color=ANS)
+                add_answer(q, ans, sz - 0.5)
             if container is not None:
                 p = container.paragraphs[-1]  # python-docx adds this paragraph after a nested table
                 fmt(p)
@@ -959,7 +1014,7 @@ class Handout:
         return p
 
     def key_note(self, cell, text, size=None, align=None, before=2):
-        """Red answer text inside a table cell; key only."""
+        """Bold red answer text inside a table cell; key only."""
         if not self.key:
             return None
         empty = not cell.paragraphs[0].runs and not cell.paragraphs[0]._p.findall(qn("m:oMath"))
@@ -967,7 +1022,7 @@ class Handout:
         fmt(p, before=before, align=align)
         if text.lstrip().startswith("$") and align is None:
             text = "\u2009" + text
-        add_rich(p, text, size or self.size - 0.5, color=ANS)
+        add_answer(p, text, size or self.size - 0.5)
         return p
 
     def cell_image(self, cell, image, width, align="center", before=2, after=2):
@@ -1056,7 +1111,8 @@ def practice_grid(h, rows, cols=2, heights=None):
             row_height(t.rows[r], heights[r])
         for c in range(cols):
             cell = t.rows[r].cells[c]
-            cell_margins(cell, 80, 100, 90 if c else 0, 0 if c == cols - 1 else 90)
+            cell_margins(cell, 80, 100, 90 if c else 0, 40 if c == cols - 1 else 90)   # 40: bold key text
+            # wraps a few pt wider in OnlyOffice than measured; a zero right margin let it clip at the page edge
     return t
 
 

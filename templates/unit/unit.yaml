@@ -4,7 +4,7 @@ unit: {unit}
 unit_title: {title}
 period: "{period}"
 budget:
-  minutes: 40          # lesson-scope: every lesson fits a 40-minute period
+  minutes: 30          # lesson-style: every lesson fits a 30-minute class
   handout_pages: 3
   practice_pages: 2
 lessons:               # files in lessons/, in teaching order

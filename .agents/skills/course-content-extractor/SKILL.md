@@ -10,7 +10,7 @@ description: Locates, extracts, and compiles relevant quiz questions, exam probl
 # Purpose
 Locate, extract, and compile source materials (past quizzes, unit assessments, homework problems, CodeHS exercises, lesson notes, diagrams, and answer keys) needed to construct authentic worksheets, exams, retakes, or lesson plans without hallucination.
 
-Serves the **Plan** step: the Plan subagent loads this skill (see `.agents/skills/lesson-builder/references/orchestration.md`). Without subagents, run the steps in sequence with the same files.
+Serves the **Plan** step: the Plan subagent loads this skill (see `lesson-orchestrator`). Without subagents, run the steps in sequence with the same files.
 
 ---
 
@@ -71,7 +71,7 @@ Everything lands in the unit folder `units/<course>/<unit-slug>/` (create it wit
 
 ## 3. Extraction Scope & Provenance
 
-When compiling extracted content, write the package to the unit's `_temp/specs/<stem>/extracted_content.md` (the file `assessment-builder` and the Plan step read):
+When compiling extracted content, write the package to the unit's `_temp/specs/<stem>/extracted_content.md` (the file the Plan step reads):
 
 1. **Problem Stems & Code / Math Notation:**
    - Preserve exact code syntax, indentation, and variable names.
@@ -123,5 +123,5 @@ Always record the provenance of extracted course material at the top of the comp
 > - **Never copy questions exactly or verbatim** into review packets, practice tests, or retakes.
 > - **Mirror the Cognitive Skill**: Keep the targeted standard, cognitive demand level, and question archetype identical.
 > - **Vary Parameters & Scenarios**: Substantially change numerical constants, coordinate values, geometric orientations, variable names, and contextual story problems so students cannot simply memorize answers.
-> - **Form A / Form B Consistency**: In Geometry, study both Form A and Form B in the `Assessments` folder to learn the intended variation scheme (e.g., swapping a translation vector or rotation angle) before generating parallel items. Record the scheme so the Plan step can build the version table in `_temp/specs/<stem>/requirements.md` (`assessment-builder` owns that table).
+> - **Form A / Form B Consistency**: In Geometry, study both Form A and Form B in the `Assessments` folder to learn the intended variation scheme (e.g., swapping a translation vector or rotation angle) before generating parallel items. Record the scheme so the Plan step can build the version table in `_temp/specs/<stem>/requirements.md` (`lesson-plan-step` §4 describes that table).
 > - **Preserve Verified Keys**: Every adapted problem must include a verified step-by-step solution.

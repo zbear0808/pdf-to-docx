@@ -6,7 +6,7 @@ Use this file while drafting and reviewing. Every rule was checked against the r
 
 - Map every item to one learning target before writing it. The most common item flaw is a mismatch with the objective (T&N7 p20).
 - Only test what was taught, at the depth it was taught (T&N1 p29-32).
-- Score only the target skill. No points for neatness, spelling, or nice writing unless that is the target (T&N1 p33; Taylor22 p123).
+- Score only the target skill. No points for neatness, spelling, or nice writing unless that is the target (T&N1 p33; Taylor22 p123). The same goes for steps outside the target: give computed values, labels, and earlier-unit facts when the item doesn't measure them, so an error points to the target skill (`lesson-style` §10).
 - If a student could show the same skill in a different format (oral, drawing, table), don't make the item depend on one format (T&N1 p33).
 - Tell students the scoring criteria up front. "Students should not have to learn teacher expectations during the assessment event" (T&N1 p35-36).
 - Test the standard, not the strategy used to teach it (a tape diagram, a specific organizer) (Taylor22 p159-160).
@@ -63,7 +63,7 @@ Goal: lower the language load without lowering the math. Same mathematical aim, 
 - Pair key text with a visual: labeled diagram, table, or graph. Do not assume students see in a diagram what you see; label what matters (Roberts p460; Lotan p73-74).
 - Leave white space. Math text packs many ideas per sentence, so break items into parts (Zwiers p102).
 - Let students answer with drawings, tables, or labeled diagrams where the target allows (Moschkovich p24-25; T&N8 p14).
-- Sentence starters, if used: optional, matched to the language function (explain, compare, justify), and they start the sentence without giving the claim. "I know the triangles are congruent because ___" is fine. A frame that contains the reasoning is not (Rodriguez-Mojica p399-401). Use them on 1-3 explain items, not every item. On the page, each blank is a labeled box under its own problem, naming the figure it refers to, with the answer in the key (`handout-release-check` §1).
+- Sentence starters, if used: optional, matched to the language function (explain, compare, justify), and they start the sentence without giving the claim. "I know the triangles are congruent because ___" is fine. A frame that contains the reasoning is not (Rodriguez-Mojica p399-401). Use them on 1-3 explain items, not every item. On the page, each blank is a labeled box under its own problem, naming the figure it refers to, with the answer in the key (`lesson-write-step` §1).
 - One version for everyone. Accommodations (extra time, dictionary, reading aloud, oral response) keep the same target. Changing the target is a modification and needs IEP or specialist input (T&N5 p70-71; Guskey & Jung p2; Stigler & Hiebert p4).
 
 ## 7. Contexts and fairness
@@ -85,7 +85,7 @@ Add a short "Scoring notes" block to the key when the class has MLLs (SCASS EL r
 
 ## 9. Grading and retakes (SBG)
 
-- Label each section with its learning target so scores can be reported by target (Scriffiny p72).
+- Report scores by learning target (Scriffiny p72): each section keeps its `target:`; the targets print in the Teacher Notes blueprint, not as section headings (`lesson-style` §10).
 - Report achievement separately from effort and behavior (Guskey & Jung p2).
 - Retakes and alternate versions measure the same target with no penalty for needing more time (Scriffiny p73-74).
 

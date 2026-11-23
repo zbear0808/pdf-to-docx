@@ -294,6 +294,131 @@ def test_frame_rows(tmp_path):   # S4 rows render (3, 4 elements, and mappings)
     assert "A **kite** shape." in R.guide_markdown(l)
 
 
+def _styles(path: Path) -> list[tuple[str, bool, bool, bool, bool]]:
+    """(text, red, bold, any bold markup, math) for every text run and math run, tables included. A math run
+    is bold only with m:sty b/bi (Word and OnlyOffice ignore w:b on math) plus w:b; an m:nor run with w:b."""
+    out = []
+    for r in Document(str(path)).element.body.iter(qn("w:r"), qn("m:r")):
+        rpr = r.find(qn("w:rPr"))
+        b = rpr.find(qn("w:b")) if rpr is not None else None
+        wb = b is not None and b.get(qn("w:val")) not in ("0", "false")
+        red = rpr is not None and any(c.get(qn("w:val")) == RED for c in rpr.iter(qn("w:color")))
+        math = r.tag == qn("m:r")
+        sty = r.find(f"{qn('m:rPr')}/{qn('m:sty')}")
+        sty_b = sty is not None and sty.get(qn("m:val")) in ("b", "bi")
+        nor = r.find(f"{qn('m:rPr')}/{qn('m:nor')}") is not None
+        bold = wb and (sty_b or nor) if math else wb
+        text = "".join(t.text or "" for t in r.iter(qn("w:t"), qn("m:t")))
+        out.append((text, red, bold, wb or sty_b, math))
+    return out
+
+
+EVERY_ANSWER = """\
+id: x
+doc_type: assessment
+title: T
+sections:
+  - kind: plain
+    items:
+      - {n: 1, prompt: p, answer: '$m\\angle B = 52^\\circ$ by the Isosceles Triangle Theorem.', work: 0.6}
+      - {n: 2, prompt: p, choices: [a, b, c], key: B, answer: "$\\\\text{SAS}$ maps $A'B'$ to $\\\\sin 41^\\\\circ$"}
+      - {n: 3, prompt: p, fill: [['$x =$', '$\\sqrt{34} \\approx 5.83$'], ['$y =$', '9 ft']]}
+      - {n: 4, prompt: p, frame: [['The angle is', 'right', '.']]}
+      - {n: 5, prompt: p, box: 1.0, answer: 'Box answer.', rubric: [{level: 2, desc: 'full credit'}]}
+      - {n: 6, prompt: p, draw: {height: 1.5, key_note: 'Draw note.'}, answer: 'drawn'}
+      - {n: 7, prompt: p, table: {header: [V, A], answers: ['$B$']}}
+      - {n: 8, prompt: p, columns: {headers: [x, y], answers: [['col one'], ['$y = 2$']]}}
+      - n: 9
+        prompt: p
+        proof:
+          rows:
+            - ['$AB = CD$', {ans: '$\\overline{AB} \\cong \\overline{CD}$'}]
+            - [{before: '$\\triangle ABD \\cong \\triangle$', ans: '$CDB$'}, {ans: 'SAS'}]
+"""
+
+
+def test_key_answers_print_bold_and_red(tmp_path):
+    """Every red run on a key (text and math) is bold; student copies have no red and no bold math."""
+    docs = [(_load(tmp_path, EVERY_ANSWER, "every.yaml"), "every"), (_load(tmp_path, LESSON), "lesson"),
+            (_load(tmp_path, PROOF, "proof.yaml"), "proof")]
+    u = _unit(tmp_path)
+    red_math = 0
+    for l, name in docs:
+        pairs = [(R.render_handout(u, l, False, R.Figures(u, {}), tmp_path / f"{name}_s.docx"),
+                  R.render_handout(u, l, True, R.Figures(u, {}), tmp_path / f"{name}_k.docx"))]
+        if l.practice:
+            pairs.append((R.render_practice(u, l, False, R.Figures(u, {}), tmp_path / f"{name}_ps.docx"),
+                          R.render_practice(u, l, True, R.Figures(u, {}), tmp_path / f"{name}_pk.docx")))
+        for student, key in pairs:
+            k, s = _styles(key), _styles(student)
+            assert any(x[1] and not x[4] for x in k), key.name
+            red_math += sum(1 for x in k if x[1] and x[4])
+            assert [x[0] for x in k if x[1] and not x[2]] == [], f"{key.name}: red runs that aren't bold"
+            assert not any(x[1] for x in s), student.name
+            assert not any(x[3] for x in s if x[4]), f"{student.name}: bold math on the student copy"
+            # the student copy's bold text is the key's bold text minus the answers (the student practice copy
+            # adds the selected-answers strip at the end)
+            s_bold = [x[0] for x in s if x[2]]
+            if "Answers to selected problems" in s_bold:
+                s_bold = s_bold[:s_bold.index("Answers to selected problems")]
+            assert s_bold == [x[0] for x in k if x[2] and not x[1]], student.name
+    assert red_math > 10
+    bold_red = "".join(x[0] for x in _styles(tmp_path / "every_k.docx") if x[1] and x[2])
+    for a in ("52°", "Isosceles Triangle Theorem.", "[B]", "SAS", "5.83", "9 ft", "right", "Box answer.",
+              "full credit", "Draw note.", "drawn", "col one", "y=2", "≅", "CDB"):
+        assert a in bold_red, a
+
+
+def test_answer_math_is_bold_only_in_answers():
+    """add_answer marks math bold with m:sty (bi for letters, b for upright text and functions) and w:b, an
+    m:nor prime with w:b; bold student text (add_rich bold=True) keeps its math regular."""
+    from docx import Document as New
+    from lesson_builder import docbuilder as db
+    p = New().add_paragraph()
+    db.add_answer(p, r"so $x = 15$, $\text{SAS}$, $\sin 41^\circ$ and $\overline{B'C'}$", 10.5)
+    runs = list(p._p.iter(qn("m:r")))
+    sty = {r.find(qn("m:t")).text: r.find(f"{qn('m:rPr')}/{qn('m:sty')}") for r in runs}
+    assert sty["x=15"].get(qn("m:val")) == "bi" and sty["SAS"].get(qn("m:val")) == "b"
+    assert sty["sin"].get(qn("m:val")) == "b"
+    prime = [r for r in runs if r.find(qn("m:t")).text == "′"]
+    assert prime and all(r.find(f"{qn('m:rPr')}/{qn('m:nor')}") is not None for r in prime)
+    assert all(r.find(f"{qn('w:rPr')}/{qn('w:b')}") is not None for r in runs)
+    assert all(r.find(f"{qn('w:rPr')}/{qn('w:b')}") is not None for r in p._p.iter(qn("w:r")))
+    q = New().add_paragraph()
+    db.add_rich(q, r"**Given:** $x = 15$ and $\text{SAS}$", 11, bold=True)
+    assert not [r for r in q._p.iter(qn("m:r")) if r.find(f"{qn('w:rPr')}/{qn('w:b')}") is not None
+                or (r.find(f"{qn('m:rPr')}/{qn('m:sty')}") is not None
+                    and r.find(f"{qn('m:rPr')}/{qn('m:sty')}").get(qn("m:val")) != "p")]
+    import pytest
+    with pytest.raises(ValueError):
+        db.add_answer(New().add_paragraph(), r"$\nosuchcommand$")
+    assert db._MATH_BOLD[0] is False and db._MATH_COLOR[0] is None   # later (student) math stays plain
+
+
+def test_box_widens_on_both_copies_for_a_bold_answer():
+    """Regression (Unit 4 Review): a bold key answer wider than the 1.3 in fill box wrapped onto two lines in Word
+    ("17.1" / "m"). The box gets wider on both copies, noted in h.grown; short answers keep box_w."""
+    from lesson_builder.docbuilder import Handout
+    long_, short = ("$h \\approx$", "$35\\tan 26^\\circ \\approx 17.1$ m"), ("$x =$", "8")
+
+    def box_ws(key, items, frame=False):
+        h = Handout(key=key)
+        if frame:
+            t = h.frame(None, [("The answer is", items[1], ".")], box_w=1.1)
+        else:
+            t = h.fill_boxes(None, [items])
+        return [c.width.inches for c in t.rows[0].cells], h.grown
+    (ws, grown), (wk, _) = box_ws(False, long_), box_ws(True, long_)
+    assert ws == wk and ws[1] > 1.35 and grown[0][:3] == ("fill box", "box_w", 1.3)
+    assert len(grown) == 1 and abs(grown[0][3] - ws[1]) < 0.01
+    assert box_ws(False, short)[0][1] == 1.3 and box_ws(False, short)[1] == []
+    (fs, fgrown), (fk, _) = box_ws(False, (None, "the angle between the two sides"), True), \
+        box_ws(True, (None, "the angle between the two sides"), True)
+    assert fs == fk and fs[1] > 1.1 and fgrown[0][1] == "frame_box_w"
+    stacked = box_ws(False, ("$x =$", "$\\frac{1234567}{89}$ and some more words"))
+    assert stacked[0][1] == 1.3 and stacked[1] == []   # stacked math gets a taller row instead
+
+
 def test_templates_use_new_fields_and_pass_checks(tmp_path):
     from lesson_builder.check import check_spec
     from lesson_builder.figures import render_all
@@ -499,3 +624,129 @@ def test_inline_quicknotes_skip_the_new_page(tmp_path):
 def test_steps_only_item_has_no_blank_prompt_line():
     it = R.Item(steps=["Draw it.", "Label it."])
     assert R._prompt_lines(it) == ["Step 1: Draw it.", "Step 2: Label it."]
+
+
+def test_headings_warmup_prints_only_the_warmup_heading(tmp_path):
+    text = """\
+    id: '9.3'
+    title: Headings
+    notes_title: Notes
+    numbering: auto
+    headings: HEAD
+    sections:
+      - kind: warmup
+        items:
+          - prompt: 'Warm.'
+            answer: 'W.'
+      - kind: together
+        items:
+          - prompt: 'Together problem.'
+            answer: 'T.'
+      - kind: partner
+        items:
+          - prompt: 'Partner problem.'
+            answer: 'P.'
+      - kind: plain
+        title: 'Ramp rules'
+        items:
+          - prompt: 'Read the rules.'
+            answer: 'R.'
+      - kind: notes
+        new_page: false
+    quicknotes: ['A fact.']
+    """
+    (tmp_path / "a").mkdir(); (tmp_path / "b").mkdir()
+    full = _text(_render(tmp_path / "a", _load(tmp_path, text.replace("HEAD", "all"), "all.yaml"), False))
+    lean = _text(_render(tmp_path / "b", _load(tmp_path, text.replace("HEAD", "warmup"), "lean.yaml"), True))
+    assert "Together" in full and "With a partner" in full and "on your own" in full and "Problem 1" in full
+    assert "Warm-up" in lean and "Ramp rules" in lean   # a title the YAML writes out still prints
+    for label in ("Together", "With a partner", "on your own", "Problem 1", "Problem 2"):
+        assert label not in lean.replace("Together problem.", "").replace("Partner problem.", "")
+    assert "1." in lean and "2." in lean and "3." in lean   # numbering runs on
+
+
+def test_problem_without_a_prompt_keeps_its_number(tmp_path):
+    text = """\
+    id: '9.4'
+    title: No prompt
+    notes_title: Notes
+    numbering: auto
+    sections:
+      - kind: together
+        items:
+          - figure: fig.png
+            fig: small
+            parts:
+              - {label: a., prompt: 'First part.', answer: 'A.'}
+      - kind: notes
+    quicknotes: ['A fact.']
+    practice:
+      title: Practice
+      rows:
+        - cells:
+            - prompt: 'Has a prompt.'
+              answer: 'X.'
+            - figure: fig.png
+              parts:
+                - {label: a., prompt: 'Only parts.', answer: 'Y.'}
+    """
+    lesson = _load(tmp_path, text)
+    handout = _text(_render(tmp_path, lesson, False))
+    assert handout.lstrip().count("1.") >= 1 and "First part." in handout
+    u = _unit(tmp_path)
+    out = R.render_practice(u, lesson, False, R.Figures(u, {}), tmp_path / "pr.docx")
+    paras = [t for t, _ in _paras(out)]
+    assert any(t.startswith("2.") for t in paras), paras   # the prompt-less practice item still prints "2."
+
+
+def test_assessment_title_has_no_leading_spaces(tmp_path):
+    text = """\
+    id: 'Quiz 9'
+    doc_type: assessment
+    title: A long assessment title
+    total_points: 1
+    sections:
+      - kind: plain
+        items:
+          - prompt: 'One.'
+            points: 1
+            answer: 'A.'
+    """
+    out = _render(tmp_path, _load(tmp_path, text), False)
+    first = next(t for t, _ in _paras(out) if t.strip())
+    assert first == "A long assessment title"
+
+
+def test_numbering_after_notes_continue(tmp_path):
+    text = """\
+    id: '9.5'
+    title: In-class practice
+    notes_title: Notes
+    numbering: auto
+    headings: warmup
+    numbering_after_notes: NUM
+    sections:
+      - kind: warmup
+        items:
+          - prompt: 'Warm.'
+            answer: 'W.'
+      - kind: partner
+        items:
+          - id: first
+            prompt: 'Partner problem.'
+            answer: 'P.'
+      - kind: notes
+        new_page: false
+      - kind: apply
+        items:
+          - prompt: 'On your own: like {ref:first}.'
+            answer: 'A.'
+    quicknotes: ['A fact.']
+    """
+    cont = _load(tmp_path, text.replace("NUM", "continue"), "cont.yaml")
+    apply_item = [s for s in cont.sections if s.kind == "apply"][0].items[0]
+    assert apply_item.n == "2" and apply_item.prompt == "On your own: like Problem 1."
+    rest = _load(tmp_path, text.replace("NUM", "restart"), "rest.yaml")
+    assert [s for s in rest.sections if s.kind == "apply"][0].items[0].n == "1"
+    lean = _text(_render(tmp_path, cont, False))
+    assert lean.count("In-class practice") == 1   # only the title; no section heading with headings: warmup

@@ -13,11 +13,12 @@ from typing import Callable, Optional, Union
 from .spec import UnitSpec, load_unit
 
 DOC_TYPES = ("lesson", "assessment", "reference")
-# (plan row, section kind or None for no section, minutes at a 40-minute budget, who talks)
-LESSON_ROWS = [("Warm-up", "warmup", 5, "Students"), ("Together", "together", 7, "Teacher + class"),
-               ("With a partner", "partner", 15, "Students (pairs)"), ("QuickNotes", "notes", 4, "Teacher + class"),
-               ("Check your understanding", "cyu", 3, "Students"), ("Exit ticket", "exit", 4, "Students"),
-               ("Collect, assign practice", None, 2, "Teacher")]
+# (plan row, section kind or None for no section, minutes at a 30-minute budget, who talks)
+LESSON_ROWS = [("Warm-up", "warmup", 3, "Students"), ("Together", "together", 5, "Teacher + class"),
+               ("With a partner", "partner", 11, "Students (pairs)"), ("QuickNotes", "notes", 3, "Teacher + class"),
+               ("In-class practice", "apply", 5, "Students (on their own)"),
+               ("Collect, assign practice", None, 3, "Teacher")]
+BASE_MINUTES = 30
 
 
 def q(s: str) -> str:
@@ -32,7 +33,7 @@ def _unit(unit: Union[str, Path, UnitSpec]) -> UnitSpec:
 def lesson_minutes(budget: int) -> list[int]:
     """Minutes per LESSON_ROWS row, scaled to the budget; the rows end exactly at the budget."""
     base = [r[2] for r in LESSON_ROWS]
-    out = [max(1, round(m * budget / 40)) for m in base[:-1]]
+    out = [max(1, round(m * budget / BASE_MINUTES)) for m in base[:-1]]
     out.append(budget - sum(out))
     while out[-1] < 0:   # tiny budgets: take minutes back from the longest row
         i = out.index(max(out[:-1]))
@@ -57,9 +58,9 @@ def lesson_yaml(unit: UnitSpec, stem: str, title: Optional[str]) -> str:
                      "        prompt: 'TODO prompt.'\n        figure: " + fig + "\n        answer: TODO\n"),
         "partner": ("      - minutes: {m}\n        target: LT1\n"
                     "        prompt: 'TODO prompt. Look back at {{ref:together_1}}.'\n        answer: TODO\n"),
-        "cyu": "      - minutes: {m}\n        target: LT1\n        prompt: 'TODO prompt.'\n        answer: TODO\n",
-        "exit": ("      - minutes: {m}\n        target: LT1\n        prompt: 'TODO prompt.'\n        box: 1.2\n"
-                 "        answer: TODO\n"),
+        "apply": ("      - minutes: {m}\n        target: LT1\n"
+                  "        prompt: 'TODO in-class practice: the core idea on its own, least scaffolded.'\n"
+                  "        box: 1.5\n        answer: TODO\n"),
     }
     out = [f"# Lesson {stem} (scaffold). Replace every TODO, then: uv run lesson-builder check <unit> -l {q(stem)}\n",
            "# Fields: templates/unit/lessons/example.yaml and .agents/skills/lesson-builder/references/api_cheatsheet.md\n",
@@ -68,7 +69,9 @@ def lesson_yaml(unit: UnitSpec, stem: str, title: Optional[str]) -> str:
            "notes_title: 'TODO topic for the QuickNotes page'\n",
            "framing: >-\n  TODO: one or two sentences that pose today's question.\n",
            "materials: TODO\n",
-           "numbering: auto                   # items without n: are numbered; numbering restarts after notes\n",
+           "numbering: auto                   # items without n: are numbered 1, 2, ... (the warm-up stays unnumbered)\n",
+           "numbering_after_notes: continue   # the in-class practice after the QuickNotes keeps counting\n",
+           "headings: warmup                  # the handout prints only the Warm-up heading; problems run on\n",
            _targets_yaml(), "\nsections:\n"]
     for (_, kind, _, _), m in zip(LESSON_ROWS, mins):
         if kind is None:
@@ -135,7 +138,7 @@ def reference_yaml(unit: UnitSpec, doc_id: str, title: Optional[str]) -> str:
 
 
 def requirements_md(unit: UnitSpec, stem: str, doc_type: str, forms: Optional[list[str]] = None) -> str:
-    """The handoff headings from references/orchestration.md (Intake is the orchestrator's; the rest the plan's)."""
+    """The handoff headings from the lesson-orchestrator skill (Intake is the orchestrator's; the rest the plan's)."""
     b = unit.budget
     amount = f"Minutes: {b.minutes}" if doc_type == "lesson" else "Total points: TODO"
     pages = (f"handout {b.handout_pages}, practice {b.practice_pages}" if doc_type == "lesson"

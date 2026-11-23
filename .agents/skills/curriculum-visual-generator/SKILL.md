@@ -9,7 +9,7 @@ Figures for lesson-builder documents are Python functions, not image files. One 
 
 ## When to use
 
-- The "Figures" step of a document (see `.agents/skills/lesson-builder/references/orchestration.md`). Input: the figure plan in `_temp/specs/<stem>/requirements.md` (items, coordinates, values to assert). Output: `figures/<stem>.py` and a clean `figs` run. No document builds in this step.
+- The "Figures" step of a document (dispatched by `lesson-orchestrator`). Input: the figure plan in `_temp/specs/<stem>/requirements.md` (items, coordinates, values to assert). Output: `figures/<stem>.py` and a clean `figs` run. No document builds in this step.
 - Any time a lesson or assessment needs a new drawing, an answer drawing for a key, or a redraw of a weak source image.
 - If subagents aren't available, run the same step in the same session with the same files.
 

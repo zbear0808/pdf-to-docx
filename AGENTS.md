@@ -2,6 +2,8 @@
 
 This repository and all subagents working on document tasks (PDFs, Microsoft Word `.docx`, LaTeX `.tex`, etc.) must strictly follow these workspace organization and file hygiene rules.
 
+**Lessons, assessments, and units (`units/`, lesson-builder):** start with the `lesson-orchestrator` skill. The orchestrator dispatches each step to an independent subagent that loads its own step skill (`lesson-plan-step`, `curriculum-visual-generator`, `lesson-write-step`, `lesson-audit-step`) plus `lesson-style`, the teacher's lesson rules. Use `unit-revision-pass` for a change across many documents.
+
 ---
 
 ## 1. Directory Structure Standard for Document Workflows

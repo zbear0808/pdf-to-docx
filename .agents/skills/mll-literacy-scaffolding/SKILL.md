@@ -1,11 +1,13 @@
 ---
 name: mll-literacy-scaffolding
-description: Classroom and lesson supports for multilingual learners (MLLs / ELs) in secondary math, from EDTEP 575 readings (Moschkovich, Roberts et al., Zwiers, Rodriguez-Mojica, WIDA, 3-Reads, translanguaging). Use when planning lessons, talk routines, worksheets, or assessments for Period 4 Geometry or any class with MLLs. assessment-builder loads it during drafting and checks, alongside the item-level rules in assessment-builder/references/item-rules.md section 6.
+description: Classroom and lesson supports for multilingual learners (MLLs / ELs) in secondary math, from EDTEP 575 readings (Moschkovich, Roberts et al., Zwiers, Rodriguez-Mojica, WIDA, 3-Reads, translanguaging). Use when planning lessons, talk routines, worksheets, or assessments for Period 4 Geometry or any class with MLLs. The plan, write, and audit step subagents load it for Period 4, alongside the item-level rules in lesson-write-step/references/item-rules.md section 6.
 ---
 
 # MLL supports for secondary math
 
 The goal is access to the same math. Lower the language barrier and keep the cognitive demand. Language is a resource, and students' home languages and everyday ways of talking count as mathematical reasoning (Moschkovich 2013).
+
+This fits the lesson's scaffolding plan (`lesson-style` §3): language supports and given values remove routine load, so MLLs spend their effort on the lesson's core idea like everyone else. Supports go heaviest on warm-ups and routine steps; on the core step, stems start the sentence and never supply the reasoning.
 
 Readings are in `C:\Users\zubair\Documents\canvas-extractor\export\edtep-575-a&b-su-26_-language-&-literacy-(l&l)\files\` unless noted:
 

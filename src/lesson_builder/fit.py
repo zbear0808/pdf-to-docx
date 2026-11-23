@@ -78,7 +78,7 @@ def build_lesson(unit: UnitSpec, lesson: LessonSpec, figs: Figures, fit: bool = 
                 shrunk = True
                 log(f"  {lesson.id} {grp}: over {budget[grp]} pages, workspace x{scale[grp]:.2f}")
         if not shrunk:
-            log(f"  {lesson.id}: still over budget at minimum workspace; cut content (lesson-scope)")
+            log(f"  {lesson.id}: still over budget at minimum workspace; cut content (lesson-style section 4)")
             _summary(lesson, rep, budget, scale, log)
             _grown(lesson, grown, log)
             return docx, pdfs, pages

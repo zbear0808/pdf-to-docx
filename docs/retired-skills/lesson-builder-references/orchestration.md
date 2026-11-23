@@ -23,7 +23,7 @@ After each wave, the orchestrator reads the GAP lines and fixes a gap in `src/` 
 | Step | Who | Loads | Reads | Writes | Done when |
 |---|---|---|---|---|---|
 | 0. Intake | orchestrator | `classroom-context` (target period only) | the request, `input/` | unit folder (`lesson-builder new-unit` if new), `_temp/ingest/` (`lesson-builder ingest`), `lesson-builder scaffold <unit> <stem> --type ... [--forms ...]` (YAML, `figures/<stem>.py`, handoff files, `unit.yaml` entry), intake section of `requirements.md`, `_temp/specs/wave.md` | questions asked once, all at the same time |
-| 1. Plan | subagent | `lesson-assessment-designer` (Steps 1-2, 4 for lessons), `lesson-scope` (lessons), `mll-literacy-scaffolding` (Period 4 / MLLs), `course-content-extractor` (only if sources are missing), assessment-builder "Exam integrity" (forms) | requirements.md intake, `_temp/ingest/*.md`, page PNGs as needed | requirements.md: targets, blueprint table, figure plan, version table | blueprint covers the targets; minutes ≤ budget or points = total |
+| 1. Plan | subagent | `lesson-assessment-designer` (Steps 1-2, 4 for lessons), `lesson-scope` (lessons), `mll-literacy-scaffolding` (Period 4 / MLLs), `course-content-extractor` (only if sources are missing), assessment-builder "Exam integrity" (forms) | requirements.md intake, `_temp/ingest/*.md`, page PNGs as needed | requirements.md: targets, core idea and Core vs routine list (lessons), blueprint table, figure plan, version table | blueprint covers the targets; lessons name the core idea; minutes ≤ budget or points = total |
 | 2. Figures | subagent | `curriculum-visual-generator`, `references/api_cheatsheet.md` | requirements.md figure plan | `figures/<stem>.py`, `assets/<stem>/` | `lesson-builder figs <unit> -l <stem>` shows 0 errors and no label warnings |
 | 3. Write + build | subagent | `references/api_cheatsheet.md`, `authentic-writer`, `assessment-builder/references/item-rules.md`, `handout-release-check` §1-2, `mll-literacy-scaffolding` (Period 4 / MLLs) | requirements.md, figure names from step 2 | the YAML, `changes.md` | `lesson-builder build <unit> -l <stem>` shows 0 errors, at most 4 builds |
 | 4. Audit | read-only subagent | `visual-layout-checker`, `handout-release-check`, item-rules, `mll-literacy-scaffolding` checklist, `lesson-assessment-designer` final check | built PDFs, `_temp/renders/current/<stem>/`, the YAML, requirements.md | `audit.md` (Must fix / Should fix / Looks fine) | every page and figure looked at |
@@ -40,8 +40,8 @@ Small jobs (one short item edit, a single label fix) don't need the full chain. 
 
 `_temp/specs/<stem>/requirements.md` (`scaffold` writes the headings; a set of forms shares `_temp/specs/<set stem>/requirements.md`), in this order:
 1. **Intake** (orchestrator): mode (new / rewrite), course and period profile, doc type, source files, page budget, minutes or total points, what the teacher said to keep or change, forms needed.
-2. **Targets** (plan): standards and learning targets in both forms ("understand that..." and "able to...").
-3. **Blueprint** (plan): one row per item: `n | target | type (SR/CR/performance) | demand | minutes or points | figure name`.
+2. **Targets** (plan): standards and learning targets in both forms ("understand that..." and "able to..."). Lessons add a `Core idea:` line (`lesson-scope`).
+3. **Blueprint** (plan): one row per item: `n | target | type (SR/CR/performance) | demand | minutes or points | figure name`. Lessons add a Core vs routine list under the table (which step of each item is the core idea, which steps get scaffolded).
 4. **Figure plan** (plan): per figure: name (`<stem>_<item>`), what it shows, coordinates or measurements, values the code must assert, answer layer contents.
 5. **Version table** (assessment forms): per item and form: letters, numbers, scale factors or side triples, motion types, MC answer position. Plus a "do not reuse" list taken from documents built in earlier waves.
 
@@ -55,7 +55,7 @@ Small jobs (one short item edit, a single label fix) don't need the full chain. 
 The brief carries the details. The prompt only points to it.
 
 ```text
-You are the <Step> step for <doc type> "<stem>" in unit <unit path> (repo C:\Users\zubair\Documents\GitHub\pdf-to-docx, Windows pwsh, Python via `uv run`).
+You are the <Step> step for <doc type> "<stem>" in unit <unit path> (repo <repo path>, <shell: the brief's Repo row says which>, Python via `uv run`).
 Read `_temp/specs/<stem>/brief_<step>.md` first (path inside the unit folder). It lists the skills to load, the files to read, the only files you may write, the done condition, and the reply format.
 Never edit src/, unit.yaml, other documents, or a DOCX.
 <anything the brief can't know: teacher notes from this turn, a GAP the orchestrator fixed>

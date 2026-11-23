@@ -44,8 +44,8 @@ def test_scaffold_lesson(tmp_path):
     assert "  - example.yaml\n  - 4.1.yaml\n" in text and "# files in lessons/" in text
     u, (l,) = _render_and_check(dest, ["4.1"])
     assert l.title == "Pythagoras" and l.minutes <= u.budget.minutes
-    assert [s.kind for s in l.sections] == ["warmup", "together", "partner", "notes", "cyu", "exit"]
-    assert "TODO" in l.raw and "| 38-40 |" in l.plan and "Problem 1" in l.sections[2].items[0].prompt
+    assert [s.kind for s in l.sections] == ["warmup", "together", "partner", "notes", "apply"] and l.headings == "warmup"
+    assert "TODO" in l.raw and "| 27-30 |" in l.plan and "Problem 1" in l.sections[2].items[0].prompt
     req = (dest / "_temp/specs/4.1/requirements.md").read_text(encoding="utf-8")
     for h in ("## 1. Intake", "## 2. Targets", "## 3. Blueprint", "## 4. Figure plan"):
         assert h in req
@@ -128,11 +128,11 @@ def test_brief_sections_per_step(tmp_path):
     plan, figs, write, audit = (texts[k] for k in ("plan", "figures", "write", "audit"))
     assert "## Source text" in plan and "source line 399" in plan and "source line 400" not in plan
     assert "truncated at 400 of 450 lines" in plan and "Lesson 4.1 Handout_pages/` (1 file;" in plan
-    assert "`lesson-scope`" in plan and "`mll-literacy-scaffolding`" in plan and "sections 2-4" in plan
+    assert "`lesson-plan-step`" in plan and "`lesson-style`" in plan and "`mll-literacy-scaffolding`" in plan and "sections 2-4" in plan
     assert "## Figure names" in figs and "`4.1_example`" in figs and "**Draw**" in figs
     assert "lesson-builder figs" in figs and "figures/4.1.py`" in figs
     assert "## Schema (lesson)" in write and "- `notes_title`" in write and "- `total_points`" not in write
-    assert "### Section `kind: warmup`" in write and "### Section `kind: exit`" in write and "### `practice:`" in write
+    assert "### Section `kind: warmup`" in write and "### Section `kind: partner`" in write and "kind: exit" not in write and "### `practice:`" in write
     assert "lesson-builder build" in write and "Student Handout.pdf" in audit and "audit.md` only" in audit
     with pytest.raises(ValueError):
         brief(dest, "4.1", "release")

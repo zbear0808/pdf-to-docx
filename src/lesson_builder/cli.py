@@ -187,25 +187,38 @@ def build(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--le
     raise typer.Exit(1 if e else 0)
 
 
-def _packets(unit):
+def _packet_groups(outs: list[dict], kinds: tuple, order: str = "by-lesson") -> list[list[Path]]:
+    """Packet groups (each starts on a front page). by-lesson: each lesson's documents together (handout +
+    practice). lessons-first: every lesson's first kind (handouts), then every lesson's next kind (practice)."""
+    if order == "lessons-first":
+        return [[o[k]] for k in kinds for o in outs if k in o]
+    return [[o[k] for k in kinds if k in o] for o in outs]
+
+
+def _packets(unit, only: Optional[List[str]] = None, order: str = "by-lesson", name: Optional[str] = None):
     """Duplex packets of the lessons (handout + practice; key + practice key). Assessments stay separate.
+    `only` picks lessons (file stem or id) in that order; `name` replaces the "<course> Unit <n>" file prefix.
     The DOCX packets need Microsoft Word; without it only the PDF packets are built."""
     from .export import word_available
     from .packet import docx_packet, pdf_packet
     from .render import outputs as out_paths
     out = unit.dir / "output"
-    name = f"{unit.course} Unit {unit.unit}"
+    name = name or f"{unit.course} Unit {unit.unit}"
     lessons = [l for l in unit.lesson_specs() if l.doc_type == "lesson"]
+    if only:
+        by_key = {k: l for l in lessons for k in (l.path.stem if l.path else None, str(l.id)) if k}
+        unknown = [k for k in only if k not in by_key]
+        if unknown:
+            _out(f"packet: no lesson {', '.join(unknown)} in {unit.dir}")
+            raise typer.Exit(1)
+        lessons = [by_key[k] for k in only]
     if not lessons:
         return
     word = word_available()
     if not word:
         _out("DOCX packets skipped: merging DOCX files needs Microsoft Word. Building the PDF packets only.")
     for label, kinds in (("Student Packet", ("handout", "practice")), ("Key Packet", ("key", "practice_key"))):
-        groups = []
-        for l in lessons:
-            o = out_paths(unit, l)
-            groups.append([o[k] for k in kinds if k in o])
+        groups = _packet_groups([out_paths(unit, l) for l in lessons], kinds, order)
         missing = [p for g in groups for p in g if not p.with_suffix(".pdf").exists()]
         if missing:
             _out(f"{label}: skipped, not built yet: {', '.join(p.stem for p in missing)}")
@@ -250,9 +263,18 @@ def figs(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--les
 
 
 @app.command()
-def packet(unit_dir: Path):
-    """Rebuild the duplex student and key packets from existing outputs."""
-    _packets(load_unit(unit_dir))
+def packet(unit_dir: Path, lesson: Optional[List[str]] = typer.Option(None, "--lesson", "-l",
+                                                                         help="lessons to include, in this order"),
+           order: str = typer.Option("by-lesson", help="by-lesson (handout, practice per lesson) or lessons-first "
+                                                       "(all handouts, then all practice)"),
+           name: Optional[str] = typer.Option(None, help="file name prefix (default '<course> Unit <n>')")):
+    """Rebuild the duplex student and key packets from existing outputs (each document starts on a front page).
+    With -l, packets of just those lessons, e.g. `packet <unit> -l 2.8 -l 2.9 --order lessons-first
+    --name "Lessons 2.8-2.9"`."""
+    if order not in ("by-lesson", "lessons-first"):
+        _out("--order must be by-lesson or lessons-first")
+        raise typer.Exit(1)
+    _packets(load_unit(unit_dir), only=lesson, order=order, name=name)
 
 
 def _report(issues: list[str]):

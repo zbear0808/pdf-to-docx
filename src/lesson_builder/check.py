@@ -87,7 +87,7 @@ def placed_widths(lesson: LessonSpec, figures: dict, explicit: bool = False) -> 
 
 
 MIN_PT, WARN_PT = 7.0, 8.0
-MIN_BOX_W = 0.9   # inches: narrowest fill-in box a student can write in (handout-release-check)
+MIN_BOX_W = 0.9   # inches: narrowest fill-in box a student can write in (lesson-write-step)
 
 
 def _box_issues(it: Item | Part, label: str) -> list[str]:
@@ -216,7 +216,7 @@ def _printed_len(s: str) -> int:
 
 
 def _mc_issues(p: Item | Part, label: str) -> tuple[list[str], list[str]]:
-    """(issues, key letters) for an item or part with choices (assessment-builder item-rules section 2)."""
+    """(issues, key letters) for an item or part with choices (lesson-write-step item-rules section 2)."""
     raw = [str(c).strip() for c in p.choices]
     n, out = len(raw), []
     key = re.findall(r"[A-Z]", p.key or "")

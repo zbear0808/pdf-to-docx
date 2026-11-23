@@ -47,7 +47,7 @@ def _frame_rows(v):
 
 
 class Target(_M):
-    """Learning target in both forms (lesson-assessment-designer Stage 1)."""
+    """Learning target in both forms (lesson-plan-step, UbD Stage 1)."""
     id: str                          # "LT1"
     understand: Optional[str] = None  # "Students will understand that ..."
     able_to: Optional[str] = None     # "Students will be able to ..."
@@ -199,7 +199,8 @@ class Item(_Scored):
 
 
 class Section(_M):
-    kind: Literal["warmup", "together", "partner", "notes", "cyu", "exit", "plain"]
+    kind: Literal["warmup", "together", "partner", "notes", "apply", "cyu", "exit", "plain"]   # apply: in-class
+    # practice after the QuickNotes (on their own, least scaffolded); cyu and exit are legacy closing checks
     title: Optional[str] = None
     sub: Optional[str] = None
     intro: Optional[str] = None      # one line under the section heading
@@ -240,6 +241,9 @@ class LessonSpec(_M):
     total_points: Optional[float] = None
     max_pages: Optional[int] = None    # overrides the unit's handout page budget
     numbering: Literal["manual", "auto"] = "manual"   # auto: items without `n` are numbered 1, 2, ... per group
+    headings: Literal["all", "warmup"] = "all"   # warmup: the handout prints only a plain "Warm-up" heading
+    numbering_after_notes: Literal["restart", "continue"] = "restart"   # continue: problems after the QuickNotes
+    # (the in-class practice) keep counting (5, 6) and {ref:} can point across the notes
     targets: list[Target] = Field(default_factory=list)   # adds to the unit's targets
     set: Optional[str] = None          # assessment set, e.g. "Unit 3 Test"
     form: Optional[str] = None         # "A", "B", "Retake"

@@ -46,7 +46,7 @@ Fill gaps from the sources and `classroom-context`. Ask the user only about thin
 Use `lesson-assessment-designer` Steps 1-2 before writing the table:
 - Standards and learning targets in both forms (conceptual "understand that..." and skill "able to..."). Rewrite mode: recover them from the source and the unit's lesson YAMLs, and flag any missing ones. Assess what the lessons teach, in their notation, and don't test anything they cut.
 - What evidence each target needs, and whether a selected-response, constructed-response, or performance item gives it. Performance tasks follow its Step 2 rules (purpose and audience, student-facing directions, criteria shared ahead, separate communication score).
-- Standalone worksheets follow its Step 4 structure (warm-up, investigation, check for understanding, exit ticket).
+- Standalone worksheets follow its Step 4 structure (warm-up, then numbered problems; no exit ticket).
 - When you rely on a reading (Smith & Stein levels, T&N, Lotan), pull it from its readings table and cite only what the text says.
 
 Table, one row per item: `n | target | type | demand (memorization / procedures without connections / procedures with connections / doing math) | points | figure name`. Check that it covers the targets and isn't all procedural. Rewrite mode: build it from the existing items and flag any item that doesn't fit a target. Then add the figure plan (coordinates, values to assert, answer layer) and the version table. The Write step copies the targets and each row's `target`, `type`, and `demand` into the YAML, where `check` verifies them and Teacher Notes print the blueprint.
@@ -57,13 +57,20 @@ Start from `templates/unit/assessments/example.yaml`. Apply item-rules and `auth
 
 - Header fields: `id` (same as the file stem), `doc_type`, `title`, `directions`, `total_points` (the check errors if it doesn't equal the item and part points), `max_pages`, and for forms `set`, `form`, `parallel_to`, `do_not_reuse`. Leave `header_right` unset (check WARN); the builder prints Name, Per, and Score.
 - `targets: [{id: LT1, understand: '...', able_to: '...', standard: G.SRT.2}]` (or the unit's `targets`). Each item gets `target`, `type` (`sr`/`cr`/`performance`), and `demand` (`mem`/`pwoc`/`pwc`/`dm`). The check errors on an unknown target and warns on a target with no items or an all-procedural mix.
-- One `section` per target or part, with `target:` and the target in its `title`, so scores can be reported by target. `kind: plain` for no heading. `columns: 2` puts short items two per row.
+- One `section` per target or part, with `target:` set so scores can be reported by target, but no `title` or `sub`: assessments print no section headings, and items just run 1, 2, 3. The targets show in the Teacher Notes blueprint. Use `kind: plain`. `columns: 2` puts short items two per row. (Summary notes and other `reference` sheets may keep one heading per lesson, since they are organized by lesson.)
 - Set `numbering: auto` and leave out `n`; refer to items with `id` + `{ref:id}`. Every item gets `points` (or points on each part). Leave `work:` at its default (0 for boxes, frames, parts; 0.2 for choices) unless the task needs more room. Use `fill:` and `frame:` for answer space, never blank lines or `___`. Name, date, and period go only in the header.
 - Each figure is a registered name from `figures/<stem>.py`, or an `assets/<stem>/` path. Variants redraw rather than reuse: the figure has to match the new numbers and letters.
 - Scaled rectangles support shared problem data: use an item `id` plus `model: {kind: scaled_rectangles, ...}`. Insert `{value:id.scale}` and `{value:id.answer}` in text instead of retyping computed values; use the same model in the figure. `lesson-builder resolve <unit> -l <stem>` shows the resolved text and exact facts. Fields and formats: `docs/lesson_builder.md`, "Shared problem data".
 - Period 4 / MLLs: apply the three Roberts enhancements (connect representations, unpack the language, build up the context), run the WIDA check (words, sentences, discourse) on directions and long stems, and add optional stems by language function on 1-3 explain items.
 - Rewrite mode: keep the item order, numbering, points, figures, and math unless the user asked for changes or an item breaks a rule. Log each change in `changes.md`: `item: what changed | why (rule)`, for example `4: removed 'all of the above' | T&N7`.
 - Standalone worksheet without points: `doc_type: assessment` with no `total_points` and no `points`.
+
+## Less is more, and scaffold what isn't being measured
+
+The lesson rules carry over (`lesson-scope`: "Less is more", "Scaffold around the core idea"), with one change: on an assessment, the "core" of each item is its blueprint target.
+- **Less is more.** Cut an item that repeats another item's move with new numbers or letters when both measure the same target at the same demand. Keep at least one item per target per form (two when the target carries a test's main weight). A cut item is just cut; its points come off `total_points` unless the teacher says to keep the total. In a set of forms, cut the parallel item in every form and update the version table.
+- **Scaffold the steps the item doesn't measure.** Give computed values, labels and tick marks, and earlier-unit facts when they aren't the target, so a wrong answer means the target skill is missing, not the arithmetic or the reading (item-rules §1: score only the target skill). Never scaffold the target step itself: if the item measures finding the scale factor, don't print it. Scaffold every form the same way.
+- **Cut extra wording.** Directions and stems carry only what changes the answer: no "Fill in each box.", hints, pep, or story sentences that do no math, and no all-caps warnings like "NO WORK = NO CREDIT!". Keep givens, constraints, units and rounding rules, and "Show your work." once in `directions` when work is scored.
 
 ## Key, rubric, scoring notes
 
@@ -79,6 +86,8 @@ Start from `templates/unit/assessments/example.yaml`. Apply item-rules and `auth
 `lesson-builder build` and `check` catch missing answers, `___` blanks, narrow boxes, bad references, point totals, MC key letters and patterns, choice count and "all/none of the above", unknown targets and target coverage, banned words, dashes, and exclamation points, print size, and page budgets. `integrity` catches reuse across forms. Read for the rest:
 
 - [ ] Every item matches a blueprint target, and the targets are covered.
+- [ ] No two items in a form make the same move at the same demand with new numbers; steps an item doesn't measure are scaffolded, and the target step isn't.
+- [ ] No section headings print; directions carry only what changes the answer.
 - [ ] Each MC item has one defensible answer, distractors drawn from real errors, parallel options, 3-4 choices, and no "all/none of the above".
 - [ ] Language load is down but the math is the same: math terms kept, dual-meaning words clear, visuals labeled, no idioms or insider contexts.
 - [ ] Contexts are ordinary and every number has a purpose.

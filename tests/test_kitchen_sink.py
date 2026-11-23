@@ -79,7 +79,7 @@ def test_every_field_is_used(ks):
         missing = want - seen.get(cls, set())
         assert not missing, f"{cls.__name__} fields never set in the fixture: {sorted(missing)}"
     kinds = {s.kind for l in docs.values() for s in l.sections}
-    assert kinds == {"warmup", "together", "partner", "notes", "cyu", "exit", "plain"}
+    assert kinds == {"warmup", "together", "partner", "notes", "apply", "cyu", "plain"}
     assert {l.doc_type for l in docs.values()} == {"lesson", "assessment", "reference"}
     assert {it.fig for l in docs.values() for it in l.all_items() if it.fig} == {"small", "medium"}
 
@@ -193,11 +193,11 @@ def test_prime_math_starts_with_a_sized_run():
         db.add_math(p, tex, size)
         return p._p.find(qn("m:oMath"))
     first, second = list(omml("A'", 10.5))[:2]
-    assert first.tag == qn("m:r") and first.find(qn("m:t")).text == "\u200b"
+    assert first.tag == qn("m:r") and first.find(qn("m:t")).text == "\u200c"
     assert first.find(f"{qn('w:rPr')}/{qn('w:sz')}").get(qn("w:val")) == "21" and second.tag == qn("m:sSup")
-    assert omml(r"\frac{A'D'}{AD}", 10)[0].find(qn("m:t")).text == "\u200b"
+    assert omml(r"\frac{A'D'}{AD}", 10)[0].find(qn("m:t")).text == "\u200c"
     for tex in (r"\triangle A'B'C'", "AB"):
-        assert all(t.text != "\u200b" for t in omml(tex, 10).iter(qn("m:t"))), tex
+        assert all(t.text != "\u200c" for t in omml(tex, 10).iter(qn("m:t"))), tex
 
 
 def test_choice_length_reads_printed_text():

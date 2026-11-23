@@ -167,6 +167,28 @@ def test_packets_pdf_only_without_word(tmp_path, monkeypatch, capsys):
     assert "Key Packet.docx is from an older build" in out
 
 
+def test_packets_subset_lessons_first(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(export, "word_available", lambda: False)
+    lessons = [SimpleNamespace(id=i, doc_type="lesson", path=tmp_path / f"{i}.yaml") for i in ("1", "2", "3")]
+    unit = SimpleNamespace(dir=tmp_path, course="Geometry", unit="9", lesson_specs=lambda: lessons)
+    (tmp_path / "output").mkdir()
+
+    def outputs(unit, l):
+        return {k: tmp_path / "output" / f"{l.id} {k}.docx" for k in ("handout", "practice", "key", "practice_key")}
+
+    monkeypatch.setattr("lesson_builder.render.outputs", outputs)
+    for l in lessons:
+        for p in outputs(unit, l).values():
+            _pdf(p.with_suffix(".pdf"), 1)
+    cli._packets(unit, only=["3", "1"], order="lessons-first", name="Lessons 3 and 1")
+    out = capsys.readouterr().out
+    with pymupdf.open(tmp_path / "output" / "Lessons 3 and 1 Student Packet.pdf") as d:
+        assert [t[1] for t in d.get_toc()] == ["3 handout", "1 handout", "3 practice", "1 practice"]
+        assert d.page_count == 7   # four 1-page documents, each starting on a front page
+    assert "Lessons 3 and 1 Key Packet: PDF 7p (lessons start [1, 3, 5, 7])" in out
+    assert cli._packet_groups([{"handout": "h", "practice": "p"}], ("handout", "practice")) == [["h", "p"]]
+
+
 needs_onlyoffice = pytest.mark.skipif(not export.onlyoffice_paths(), reason="OnlyOffice x2t / fonts not available")
 
 

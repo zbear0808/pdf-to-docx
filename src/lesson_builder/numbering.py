@@ -1,7 +1,8 @@
 """Item numbering groups, `numbering: auto`, and {ref:id} / {num:id} references.
 
 Runs on the raw YAML dict before validation (spec.load_lesson), so render and check see final text.
-Numbering restarts after a `notes` section (the QuickNotes page); practice items are their own group.
+Numbering restarts after a `notes` section (the QuickNotes page) unless `numbering_after_notes: continue`;
+practice items are their own group.
 """
 from __future__ import annotations
 
@@ -11,13 +12,23 @@ REF = re.compile(r"\{(ref|num):([^{}\s]+)\}")
 UNNUMBERED_KINDS = {"warmup", "notes"}   # numbering: auto leaves warm-up items unnumbered unless `n` is given
 
 
+def _restart(source) -> bool:
+    """True when numbering restarts after the QuickNotes (the old layout, where an exit ticket followed them).
+    `numbering_after_notes: continue` keeps counting, so the in-class practice after the notes is Problem 5, 6."""
+    v = source.get("numbering_after_notes") if isinstance(source, dict) else getattr(source, "numbering_after_notes",
+                                                                                      None)
+    return (v or "restart") != "continue"
+
+
 def dict_groups(data: dict) -> list[list[dict]]:
-    """Item dicts per numbering group: [before notes, after notes, ..., practice]."""
+    """Item dicts per numbering group: [before notes, after notes, ..., practice] (one group with `continue`)."""
     groups, cur = [], []
+    restart = _restart(data)
     for s in data.get("sections", []) or []:
         if s.get("kind") == "notes":
-            groups.append(cur)
-            cur = []
+            if restart:
+                groups.append(cur)
+                cur = []
             continue
         cur += [(s.get("kind"), it) for it in s.get("items", []) or []]
     groups.append(cur)
@@ -29,10 +40,12 @@ def dict_groups(data: dict) -> list[list[dict]]:
 def spec_groups(lesson) -> list[list]:
     """Item models per numbering group (same grouping as dict_groups)."""
     groups, cur = [], []
+    restart = _restart(lesson)
     for s in lesson.sections:
         if s.kind == "notes":
-            groups.append(cur)
-            cur = []
+            if restart:
+                groups.append(cur)
+                cur = []
             continue
         cur += list(s.items)
     groups.append(cur)
